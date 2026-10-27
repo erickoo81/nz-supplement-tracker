@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>纽澳跨境采购与快递追踪管家 V7.0</title>
+  <title>纽澳跨境采购与快递追踪管家 V7.1</title>
   <script src="https://cdn.tailwindcss.com/3.4.17"></script>
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
@@ -342,9 +342,9 @@
               <span id="uiIcon-appTitle" class="hidden"></span>
               <span id="uiText-appTitle">纽澳跨境采购与快递追踪管家</span>
             </h1>
-            <button type="button" id="btnHeaderVersionBadge" class="inline-flex items-center gap-1 text-xs bg-gradient-to-r from-amber-400 to-amber-300 hover:from-amber-300 hover:to-amber-200 text-slate-950 font-extrabold px-2.5 py-0.5 rounded-full shadow-xs transition cursor-pointer" title="当前版本 V7.0（方案B架构升级：Cloudflare Pages + KV 边缘云同步 · 历史时间机器 · 实时汇率 · 亲友只读对账单）· 点击打开个性化与版本中心">
+            <button type="button" id="btnHeaderVersionBadge" class="inline-flex items-center gap-1 text-xs bg-gradient-to-r from-amber-400 to-amber-300 hover:from-amber-300 hover:to-amber-200 text-slate-950 font-extrabold px-2.5 py-0.5 rounded-full shadow-xs transition cursor-pointer" title="当前版本 V7.1（Cloudflare KV 全域同步修复与智能诊断 · 历史时间机器 · 实时汇率 · 亲友只读对账单）· 点击打开个性化与版本中心">
               <span id="uiIcon-appVersion">✨</span>
-              <span id="uiText-appVersion">V7.0</span>
+              <span id="uiText-appVersion">V7.1</span>
             </button>
             <button type="button" id="btnHeaderCfStatusPill" class="inline-flex items-center gap-1 text-[11px] bg-emerald-900/90 hover:bg-emerald-800 text-emerald-100 border border-emerald-600/70 font-semibold px-2.5 py-0.5 rounded-full transition cursor-pointer" title="点击打开 Cloudflare KV 边缘云同步设置 (方案B)">
               <span id="headerCfStatusDot" class="w-2 h-2 rounded-full bg-amber-400 inline-block"></span>
@@ -1396,7 +1396,7 @@
         <div>
           <h3 class="text-base font-bold flex items-center gap-2 flex-wrap">
             <span>🔄 同步与备份中心</span>
-            <span class="text-[11px] bg-amber-400 text-slate-950 font-extrabold px-2.5 py-0.5 rounded-full">V7.0 方案B：Cloudflare KV 边缘云架构</span>
+            <span class="text-[11px] bg-amber-400 text-slate-950 font-extrabold px-2.5 py-0.5 rounded-full">V7.1 方案B：Cloudflare KV 边缘云架构</span>
           </h3>
           <p class="text-xs text-emerald-300">集中管理：Cloudflare KV 边缘云实时同步与时间机器 · 原始 Excel (.xlsx) 增量同步 · GitHub Gist 兼容备份</p>
         </div>
@@ -2165,7 +2165,7 @@
         <div>
           <h3 class="text-base font-bold flex items-center gap-2 flex-wrap">
             <span>⚙️ 个性化与规则中心</span>
-            <span class="text-[11px] bg-amber-400 text-slate-950 font-extrabold px-2.5 py-0.5 rounded-full">V7.0 方案B架构升级 · Cloudflare KV 边缘云 · 8套主题定制</span>
+            <span class="text-[11px] bg-amber-400 text-slate-950 font-extrabold px-2.5 py-0.5 rounded-full">V7.1 方案B架构升级 · Cloudflare KV 边缘云 · 8套主题定制</span>
           </h3>
           <p class="text-xs text-emerald-200 mt-0.5">一站式归纳管理：8套主题皮肤与自定义调色盘 · 全系统选项名称/图标/注释自由修改 · 抓单自学习规则 · 454条超链接模板</p>
         </div>
@@ -2197,7 +2197,7 @@
         <div class="bg-gradient-to-r from-emerald-50 via-teal-50 to-amber-50 border border-emerald-200 rounded-xl p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
           <div class="space-y-1">
             <div class="flex items-center gap-2">
-              <span class="px-2.5 py-0.5 rounded-full bg-emerald-800 text-amber-300 font-extrabold text-xs">当前版本：V7.0 (架构跃升：Cloudflare Pages + KV 边缘云同步 · 历史时间机器 · 实时汇率)</span>
+              <span class="px-2.5 py-0.5 rounded-full bg-emerald-800 text-amber-300 font-extrabold text-xs">当前版本：V7.1 (Cloudflare Pages + KV 边缘云同步修复 · 全域函数提升 · 历史时间机器 · 实时汇率)</span>
               <span class="font-bold text-slate-800 text-sm">版本升级规则说明</span>
             </div>
             <p class="text-slate-600 leading-relaxed">
@@ -2625,7 +2625,7 @@
 
     const DEFAULT_UI_CUSTOM_LABELS = {
       appTitle: { icon: '', text: '纽澳跨境采购与快递追踪管家', note: '支持一单多包拆单追踪 · 采购单价与运费核算 · 电脑与手机多端同步', labelTitle: '系统主标题 & 副标题说明', group: 'header', emojiPresets: ['🇳🇿', '🦘', '🌿', '📦', '🛡️'] },
-      appVersion: { icon: '🚀', text: 'V7.0', note: '当前版本 V7.0（方案B架构升级：Cloudflare Pages + KV 边缘云同步 · 历史时间机器 · 实时汇率 · 亲友只读对账单）· 点击打开个性化与版本中心', labelTitle: '顶部版本号标识 (点击可打开设置)', group: 'header', emojiPresets: ['🚀', '✨', '🏷️', '💎', '🔥'] },
+      appVersion: { icon: '🚀', text: 'V7.1', note: '当前版本 V7.1（Cloudflare KV 全域同步修复与智能诊断 · 历史时间机器 · 实时汇率 · 亲友只读对账单）· 点击打开个性化与版本中心', labelTitle: '顶部版本号标识 (点击可打开设置)', group: 'header', emojiPresets: ['🚀', '✨', '🏷️', '💎', '🔥'] },
       btnNewOrder: { icon: '＋', text: '新增订单', note: '新建采购订单（内含网页粘贴自动填单 / 门店直购录入 / 复制上一单）', labelTitle: '顶部按钮 1：新增订单', group: 'topbar', emojiPresets: ['＋', '🛒', '✍️', '⚡', '🛍️'] },
       btnBatchImport: { icon: '📥', text: '批量导入', note: '原始Excel表格修改同步 / 网页批量粘贴解析 / 浏览器抓单小书签', labelTitle: '顶部按钮 2：批量导入', group: 'topbar', emojiPresets: ['📥', '📂', '📊', '⚡', '📑'] },
       btnRulesSettings: { icon: '⚙️', text: '个性化与规则', note: '统一管理：多套主题与自定义配色、界面选项名称/图标/注释修改、抓单规则库、超链接模板', labelTitle: '顶部按钮 3：个性化与规则设置', group: 'topbar', emojiPresets: ['⚙️', '🎨', '🧠', '🛠️', '✨'] },
@@ -2678,8 +2678,8 @@
           if (saved[k].note !== undefined) base[k].note = String(saved[k].note);
         }
       });
-      if (base.appVersion && ['V6.0', 'v6.0', 'V6.1', 'v6.1', 'V6.2', 'v6.2'].includes(base.appVersion.text)) {
-        base.appVersion.text = 'V7.0';
+      if (base.appVersion && ['V6.0', 'v6.0', 'V6.1', 'v6.1', 'V6.2', 'v6.2', 'V7.0', 'v7.0'].includes(base.appVersion.text)) {
+        base.appVersion.text = 'V7.1';
         base.appVersion.icon = '🚀';
         base.appVersion.note = DEFAULT_UI_CUSTOM_LABELS.appVersion.note;
       }
@@ -2955,9 +2955,10 @@
         if (!silent) {
           showToast(`💾 已确认保存 ${savedCount > 0 ? savedCount + ' 项修改' : '当前所有数据'}到浏览器本地存储！`);
           if (!isCloudPushing && !isCloudPulling) {
-            if (typeof isCfSyncConfigured === 'function' && isCfSyncConfigured() && (autoCloudOnSave || (window.cfConfigState && window.cfConfigState.autoPushOnSave))) {
+            const shouldAutoPush = Boolean(autoCloudOnSave || (window.cfConfigState && window.cfConfigState.autoPushOnSave));
+            if (shouldAutoPush && typeof isCfSyncConfigured === 'function' && isCfSyncConfigured()) {
               if (typeof executeCfCloudPush === 'function') executeCfCloudPush({ silentToast: false, actionNote: '保存时自动同步' });
-            } else if (autoCloudOnSave && state.gistToken) {
+            } else if (shouldAutoPush && state.gistToken) {
               const pushBtn = document.getElementById('btnCloudPush');
               if (pushBtn) pushBtn.click();
             }
@@ -5033,6 +5034,7 @@
         </button>
       `).join('');
 
+      if (typeof Chart === 'undefined') return;
       const ctx1 = document.getElementById('chartCourierSpeed').getContext('2d');
       if (courierChartInstance) courierChartInstance.destroy();
       courierChartInstance = new Chart(ctx1, {
@@ -6581,7 +6583,13 @@
       }
       document.getElementById('toggleAutoCloudOnSave').addEventListener('change', (e) => {
         autoCloudOnSave = e.target.checked;
-        showToast(autoCloudOnSave ? '已开启：点击保存时将自动同步上传至云端 Gist' : '已关闭保存时自动上传云端');
+        if (window.cfConfigState) {
+          window.cfConfigState.autoPushOnSave = autoCloudOnSave;
+          if (typeof saveCfConfigToVault === 'function') saveCfConfigToVault();
+        }
+        const cfChk = document.getElementById('chkCfAutoPushOnSave');
+        if (cfChk) cfChk.checked = autoCloudOnSave;
+        showToast(autoCloudOnSave ? '已开启：点击「保存」时将同时自动推送至云端 (Cloudflare KV / Gist)' : '已关闭保存时自动推送云端');
       });
       window.addEventListener('keydown', (e) => {
         if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'z' && !['INPUT', 'TEXTAREA'].includes(document.activeElement.tagName)) {
@@ -6642,6 +6650,7 @@
       if (btnOnlineMode) btnOnlineMode.addEventListener('click', () => setOrderPurchaseMode(false));
       if (btnStoreMode) btnStoreMode.addEventListener('click', () => setOrderPurchaseMode(true));
 
+      window.saveOrderFromModal = saveOrderFromModal;
       function saveOrderFromModal(keepOpenForNext) {
         const id = document.getElementById('formOrderId').value;
         const orderDate = document.getElementById('formOrderDate').value || TODAY_STR;
@@ -6802,6 +6811,7 @@
         btnSaveNext.addEventListener('click', () => saveOrderFromModal(true));
       }
 
+      window.syncFormOrderUrlPreview = syncFormOrderUrlPreview;
       function syncFormOrderUrlPreview() {
         const m = document.getElementById('formMerchant').value.trim();
         const ono = document.getElementById('formOrderNo').value.trim();
@@ -7627,6 +7637,7 @@
         reader.readAsArrayBuffer(file);
       });
 
+      window.applyPendingExcelSync = applyPendingExcelSync;
       function applyPendingExcelSync() {
         if (!pendingExcelDiffResult) return;
         const beforeOrders = JSON.parse(JSON.stringify(state.orders || []));
@@ -7725,18 +7736,28 @@
         showToast(state.includeSheet1 ? '已开启显示 2019-2020 早期订单 (Sheet1)' : '已隐藏 Sheet1 早期订单');
       });
 
-      // CRITICAL SECURITY FIX: NEVER include gistToken when uploading to GitHub Gist!
-      // GitHub's automated Secret Scanning scans all Gist file contents for "ghp_..." and immediately revokes the token if found.
-      function buildFullSystemExportObject(options = {}) {
+    }); // End of Part 1 DOMContentLoaded
+
+    // =========================================================================
+    // GLOBAL CLOUD & SYSTEM SYNC ENGINE FUNCTIONS (HOISTED TO TOP-LEVEL SCOPE)
+    // =========================================================================
+    // CRITICAL SECURITY FIX: NEVER include gistToken when uploading to GitHub Gist!
+    // GitHub's automated Secret Scanning scans all Gist file contents for "ghp_..." and immediately revokes the token if found.
+    function buildFullSystemExportObject(options = {}) {
         const obj = {
           exportedAt: new Date().toISOString(),
+          appVersion: 'V7.1',
           orders: state.orders,
           sheet1Orders: state.sheet1Orders,
           products: state.products,
+          includeSheet1: !!state.includeSheet1,
+          autoRefPrice: state.autoRefPrice !== undefined ? state.autoRefPrice : true,
           gistId: state.gistId || '',
           merchantTemplates: state.merchantTemplates,
           courierTemplates: state.courierTemplates,
-          customScrapeRules: state.customScrapeRules
+          customScrapeRules: state.customScrapeRules,
+          uiThemeConfig: state.uiThemeConfig,
+          uiCustomLabels: state.uiCustomLabels
         };
         if (options && options.includeObfuscatedToken && state.gistToken && state.gistToken !== REVOKED_OLD_TOKEN) {
           // Obfuscate via reversed base64 for offline migration code so plain "ghp_" never appears
@@ -7744,8 +7765,10 @@
         }
         return obj;
       }
+      window.buildFullSystemExportObject = buildFullSystemExportObject;
 
       // Compute detailed diff between two system states (before vs. after) for the Sync Comparison Report Modal
+      window.computeSystemSyncDiff = computeSystemSyncDiff;
       function computeSystemSyncDiff(beforeOrders, afterOrders, beforeProds, afterProds, preservedLocalOrders = []) {
         const usedBeforeIds = new Set();
         const addedOrders = [];
@@ -7774,6 +7797,12 @@
             }
             if (!!old.webBackfilled !== !!no.webBackfilled) {
               changes.push(`核验状态：${old.webBackfilled ? '已核验' : '待核验'} ➔ ${no.webBackfilled ? '✅实付已核验' : '待核验'}`);
+            }
+            if ((old.recipient || '') !== (no.recipient || '') || (old.orderDate || '') !== (no.orderDate || '') || (old.merchant || '') !== (no.merchant || '') || (old.orderNo || '') !== (no.orderNo || '')) {
+              changes.push(`基础信息：${old.orderDate}·${old.recipient}·${old.merchant} ➔ ${no.orderDate}·${no.recipient}·${no.merchant}`);
+            }
+            if (Number(old.discount || 0) !== Number(no.discount || 0) || (old.discountNote || '') !== (no.discountNote || '') || (old.note || '') !== (no.note || '') || !!old.cancelled !== !!no.cancelled) {
+              changes.push(`折扣/备注/状态调整`);
             }
             if (changes.length > 0) {
               updatedOrders.push({ order: no, changes });
@@ -7810,6 +7839,7 @@
         };
       }
 
+      window.showSyncComparisonReport = showSyncComparisonReport;
       function showSyncComparisonReport(diff, options = {}) {
         const modal = document.getElementById('modalSyncDiffReport');
         const titleEl = document.getElementById('syncDiffModalTitle');
@@ -7930,25 +7960,32 @@
         modal.classList.remove('hidden');
       }
 
-      document.getElementById('btnCloseSyncDiffReport').addEventListener('click', () => {
-        document.getElementById('modalSyncDiffReport').classList.add('hidden');
-      });
-      document.getElementById('btnConfirmSyncDiffReport').addEventListener('click', () => {
-        document.getElementById('modalSyncDiffReport').classList.add('hidden');
-      });
-      document.getElementById('btnSyncDiffViewUnread').addEventListener('click', () => {
-        document.getElementById('modalSyncDiffReport').classList.add('hidden');
-        document.getElementById('modalSync').classList.add('hidden');
-        document.querySelector('[data-tab="orders"]').click();
-        document.getElementById('filterStatus').value = 'UNREAD';
-        renderOrdersTab();
+      window.addEventListener('DOMContentLoaded', () => {
+        document.getElementById('btnCloseSyncDiffReport').addEventListener('click', () => {
+          document.getElementById('modalSyncDiffReport').classList.add('hidden');
+        });
+        document.getElementById('btnConfirmSyncDiffReport').addEventListener('click', () => {
+          document.getElementById('modalSyncDiffReport').classList.add('hidden');
+        });
+        document.getElementById('btnSyncDiffViewUnread').addEventListener('click', () => {
+          document.getElementById('modalSyncDiffReport').classList.add('hidden');
+          document.getElementById('modalSync').classList.add('hidden');
+          document.querySelector('[data-tab="orders"]').click();
+          document.getElementById('filterStatus').value = 'UNREAD';
+          renderOrdersTab();
+        });
       });
 
-      function applyFullSystemImportObject(data, sourceLabel) {
+      window.applyFullSystemImportObject = applyFullSystemImportObject;
+      function applyFullSystemImportObject(data, sourceLabel, options = {}) {
         if (!data || !Array.isArray(data.orders)) return false;
         const beforeOrders = JSON.parse(JSON.stringify(state.orders || []));
         const beforeProds = JSON.parse(JSON.stringify(state.products || []));
-        recordBeforeAction(sourceLabel || '恢复全量同步数据');
+        const beforeThemeStr = JSON.stringify(state.uiThemeConfig || {});
+        const beforeLabelsStr = JSON.stringify(state.uiCustomLabels || {});
+        if (!options.isAutoBackgroundPull) {
+          recordBeforeAction(sourceLabel || '恢复全量同步数据');
+        }
 
         // Smart Merge Protection using 3-tier fingerprint matching: preserve local orders not in incoming payload
         const usedIncomingIds = new Set();
@@ -7979,6 +8016,16 @@
         state.orders = mergedOrders;
         if (Array.isArray(data.sheet1Orders)) state.sheet1Orders = data.sheet1Orders;
         if (Array.isArray(data.products)) state.products = data.products;
+        if (data.includeSheet1 !== undefined) {
+          state.includeSheet1 = !!data.includeSheet1;
+          const s1Chk = document.getElementById('toggleIncludeSheet1');
+          if (s1Chk) s1Chk.checked = state.includeSheet1;
+        }
+        if (data.autoRefPrice !== undefined) {
+          state.autoRefPrice = !!data.autoRefPrice;
+          const arChk = document.getElementById('toggleAutoRefPrice');
+          if (arChk) arChk.checked = state.autoRefPrice;
+        }
         if (data.tokenCipher) {
           try {
             const decTok = atob(data.tokenCipher).split('').reverse().join('');
@@ -7995,19 +8042,28 @@
         if (data.uiCustomLabels) state.uiCustomLabels = mergeUiCustomLabels(data.uiCustomLabels);
         if (typeof applyThemeAndLabelsToDOM === "function") applyThemeAndLabelsToDOM();
         enrichAndBackfillData();
-        document.getElementById('syncGistToken').value = state.gistToken;
-        document.getElementById('syncGistId').value = state.gistId;
+        const tokInp = document.getElementById('syncGistToken');
+        const idInp = document.getElementById('syncGistId');
+        if (tokInp) tokInp.value = state.gistToken;
+        if (idInp) idInp.value = state.gistId;
         commitSave(true);
         renderAll();
 
         const diff = computeSystemSyncDiff(beforeOrders, state.orders, beforeProds, state.products, preservedLocalOrders);
-        showSyncComparisonReport(diff, {
-          title: `📊 ${sourceLabel || '数据同步'} · 变动比对报告`,
-          subtitle: `同步来源：${sourceLabel || '云端/备份包'} · 比对时间：${new Date().toLocaleTimeString()}`
-        });
-        return true;
+        const afterThemeStr = JSON.stringify(state.uiThemeConfig || {});
+        const afterLabelsStr = JSON.stringify(state.uiCustomLabels || {});
+        const hasAnyDataChange = diff.addedOrders.length > 0 || diff.updatedOrders.length > 0 || diff.prodChanges.length > 0 || beforeThemeStr !== afterThemeStr || beforeLabelsStr !== afterLabelsStr;
+
+        if (!options.silentReportIfUnchanged || hasAnyDataChange) {
+          showSyncComparisonReport(diff, {
+            title: `📊 ${sourceLabel || '数据同步'} · 变动比对报告`,
+            subtitle: `同步来源：${sourceLabel || '云端/备份包'} · 比对时间：${new Date().toLocaleTimeString()}`
+          });
+        }
+        return { ok: true, hasChanges: hasAnyDataChange, diff };
       }
 
+      window.addEventListener('DOMContentLoaded', () => {
       // Persist token immediately when user types or pastes into syncGistToken
       document.getElementById('syncGistToken').addEventListener('input', (e) => {
         const val = e.target.value.trim();
@@ -8030,6 +8086,7 @@
       });
 
       // Automatically discover user's existing nz_tracker_sync.json Gist ID on GitHub using their Token
+      window.autoDiscoverUserGistId = autoDiscoverUserGistId;
       async function autoDiscoverUserGistId(token) {
         if (!token) return '';
         try {
@@ -8252,6 +8309,7 @@
         }
       });
 
+      window.executeCloudPull = executeCloudPull;
       async function executeCloudPull(silentIfNoGist) {
         if (isCloudPulling) return;
         isCloudPulling = true;
@@ -12921,7 +12979,7 @@
       const labels = mergeUiCustomLabels(state.uiCustomLabels);
 
       const groupMeta = [
-        { id: 'header', title: '一、系统顶部标题与版本号标识 (V6.2)', desc: '修改左上角系统主名称、版本号徽章与副标题说明' },
+        { id: 'header', title: '一、系统顶部标题与版本号标识 (V7.1)', desc: '修改左上角系统主名称、版本号徽章与副标题说明' },
         { id: 'topbar', title: '二、顶部操作栏高频按钮 (6组)', desc: '自由调整顶部操作按钮的 Emoji 图标、简短名称与鼠标悬停提示语' },
         { id: 'nav', title: '三、主导航栏四大核心模块', desc: '定制四大主模块的图标、Tab 标题与功能注释' },
         { id: 'kpi', title: '四、首页 5 大数据看板卡片', desc: '定制快递追踪工作台顶部 5 个数据统计卡的图标、标题与底部注释说明' }
@@ -13359,13 +13417,19 @@
         txt.textContent = 'CF云端同步中...';
         return;
       }
-      if (statusOverride === 'connected' || (window.cfConfigState.passcode && window.cfConfigState.lastSyncedAt)) {
+      if (statusOverride === 'error') {
+        dot.className = 'w-2 h-2 rounded-full bg-rose-400 inline-block';
+        txt.textContent = 'CF同步待排查';
+        if (badge) badge.textContent = '⚠️ 请检查 KV 绑定或同步口令';
+        return;
+      }
+      if (statusOverride === 'connected' || window.cfConfigState.lastSyncedAt) {
         dot.className = 'w-2 h-2 rounded-full bg-emerald-400 inline-block';
         txt.textContent = 'CF云端已连接' + (window.cfConfigState.lastSyncedAt ? ' · ' + window.cfConfigState.lastSyncedAt.slice(-8) : '');
         if (badge) badge.textContent = '🟢 CF KV 已连接 · 实时云同步已就绪';
-      } else if (window.cfConfigState.passcode) {
+      } else if (window.cfConfigState.passcode || isRunningOnCloudflareDomain()) {
         dot.className = 'w-2 h-2 rounded-full bg-amber-300 inline-block';
-        txt.textContent = 'CF口令已设 · 待同步';
+        txt.textContent = 'CF云同步已就绪';
       } else {
         dot.className = 'w-2 h-2 rounded-full bg-amber-400 inline-block';
         txt.textContent = 'CF云同步: 待配置';
@@ -13374,9 +13438,9 @@
 
     function getStandaloneCfPagesFunctionCode() {
       return `/**
- * 纽澳跨境采购与快递追踪管家 V7.0 - Cloudflare Pages Function (方案B)
+ * 纽澳跨境采购与快递追踪管家 V7.1 - Cloudflare Pages Function (方案B)
  * 文件存放路径: functions/api/sync.js
- * 绑定的 KV 命名空间变量名: NZ_TRACKER_KV
+ * 绑定的 KV 命名空间变量名: NZ_TRACKER_KV (同时支持自动识别任意已绑定的 KV 变量名)
  * 可选环境变量: SYNC_PASSCODE (您在网页设置的云端同步口令，如 nz2026)
  */
 const CORS_HEADERS = {
@@ -13390,11 +13454,23 @@ export async function onRequestOptions() {
   return new Response(null, { status: 204, headers: CORS_HEADERS });
 }
 
+function getKvNamespace(env) {
+  if (!env || typeof env !== 'object') return null;
+  if (env.NZ_TRACKER_KV && typeof env.NZ_TRACKER_KV.get === 'function') return env.NZ_TRACKER_KV;
+  for (const key of Object.keys(env)) {
+    const binding = env[key];
+    if (binding && typeof binding === 'object' && typeof binding.get === 'function' && typeof binding.put === 'function') {
+      return binding;
+    }
+  }
+  return null;
+}
+
 function checkAuth(request, env) {
-  const requiredPass = (env.SYNC_PASSCODE || '').trim();
+  const requiredPass = String((env && (env.SYNC_PASSCODE || env.PASSCODE)) || '').trim();
   if (!requiredPass) return true;
   const url = new URL(request.url);
-  const provided = (request.headers.get('X-Sync-Passcode') || url.searchParams.get('passcode') || '').trim();
+  const provided = String(request.headers.get('X-Sync-Passcode') || url.searchParams.get('passcode') || '').trim();
   return provided === requiredPass;
 }
 
@@ -13417,8 +13493,9 @@ export async function onRequestGet(context) {
     }
   }
 
-  if (!env.NZ_TRACKER_KV) {
-    return new Response(JSON.stringify({ ok: false, error: '尚未在 Cloudflare Pages 绑定名为 NZ_TRACKER_KV 的 KV 命名空间' }), { status: 500, headers: CORS_HEADERS });
+  const kv = getKvNamespace(env);
+  if (!kv) {
+    return new Response(JSON.stringify({ ok: false, error: '尚未在 Cloudflare Pages 绑定 KV 命名空间 (请在 Settings -> Functions -> KV namespace bindings 绑定 NZ_TRACKER_KV 并重新部署一次)' }), { status: 500, headers: CORS_HEADERS });
   }
 
   if (!checkAuth(request, env)) {
@@ -13427,7 +13504,7 @@ export async function onRequestGet(context) {
 
   // 2. Snapshots History List (Cloud Time Machine)
   if (action === 'snapshots') {
-    const rawHist = await env.NZ_TRACKER_KV.get('nz_tracker_snapshots_v7');
+    const rawHist = await kv.get('nz_tracker_snapshots_v7');
     const snapshots = rawHist ? JSON.parse(rawHist) : [];
     const summaryList = snapshots.map(s => ({
       id: s.id,
@@ -13442,7 +13519,7 @@ export async function onRequestGet(context) {
   // 3. Restore Specific Snapshot by ID
   if (action === 'snapshot_get') {
     const snapId = url.searchParams.get('id');
-    const rawHist = await env.NZ_TRACKER_KV.get('nz_tracker_snapshots_v7');
+    const rawHist = await kv.get('nz_tracker_snapshots_v7');
     const snapshots = rawHist ? JSON.parse(rawHist) : [];
     const found = snapshots.find(s => s.id === snapId);
     if (!found) {
@@ -13452,7 +13529,7 @@ export async function onRequestGet(context) {
   }
 
   // 4. Default: Pull Latest Full System State
-  const latestRaw = await env.NZ_TRACKER_KV.get('nz_tracker_latest_v7');
+  const latestRaw = await kv.get('nz_tracker_latest_v7');
   if (!latestRaw) {
     return new Response(JSON.stringify({ ok: true, empty: true, data: null }), { headers: CORS_HEADERS });
   }
@@ -13461,11 +13538,12 @@ export async function onRequestGet(context) {
 
 export async function onRequestPost(context) {
   const { request, env } = context;
-  if (!env.NZ_TRACKER_KV) {
-    return new Response(JSON.stringify({ ok: false, error: '尚未绑定 NZ_TRACKER_KV 命名空间' }), { status: 500, headers: CORS_HEADERS });
+  const kv = getKvNamespace(env);
+  if (!kv) {
+    return new Response(JSON.stringify({ ok: false, error: '尚未绑定 NZ_TRACKER_KV 命名空间 (请在 Settings -> Functions -> KV 绑定并重新部署一次)' }), { status: 500, headers: CORS_HEADERS });
   }
   if (!checkAuth(request, env)) {
-    return new Response(JSON.stringify({ ok: false, error: '云端同步口令校验失败' }), { status: 401, headers: CORS_HEADERS });
+    return new Response(JSON.stringify({ ok: false, error: '云端同步口令校验失败，请检查输入的同步密码' }), { status: 401, headers: CORS_HEADERS });
   }
 
   const body = await request.json();
@@ -13474,10 +13552,10 @@ export async function onRequestPost(context) {
   const nowIso = new Date().toISOString();
   payload._cfSavedAt = nowIso;
 
-  await env.NZ_TRACKER_KV.put('nz_tracker_latest_v7', JSON.stringify(payload));
+  await kv.put('nz_tracker_latest_v7', JSON.stringify(payload));
 
   // Maintain rolling 15 snapshots in KV for Cloud Time Machine
-  const rawHist = await env.NZ_TRACKER_KV.get('nz_tracker_snapshots_v7');
+  const rawHist = await kv.get('nz_tracker_snapshots_v7');
   const snapshots = rawHist ? JSON.parse(rawHist) : [];
   const snapEntry = {
     id: 'SNAP-' + Date.now(),
@@ -13489,7 +13567,7 @@ export async function onRequestPost(context) {
   };
   snapshots.unshift(snapEntry);
   if (snapshots.length > 15) snapshots.length = 15;
-  await env.NZ_TRACKER_KV.put('nz_tracker_snapshots_v7', JSON.stringify(snapshots));
+  await kv.put('nz_tracker_snapshots_v7', JSON.stringify(snapshots));
 
   return new Response(JSON.stringify({
     ok: true,
@@ -13502,23 +13580,8 @@ export async function onRequestPost(context) {
 `;
     }
 
-    function buildFullSystemExportObject(noteText = '常规云同步保存') {
-    const ordersData = typeof orders !== 'undefined' ? orders : [];
-    const productsData = typeof products !== 'undefined' ? products : [];
-    const categoriesData = typeof categories !== 'undefined' ? categories : [];
-    return {
-        version: "7.0",
-        savedAt: new Date().toISOString(),
-        note: noteText,
-        orders: ordersData,
-        products: productsData,
-        categories: categoriesData,
-        settings: typeof appSettings !== 'undefined' ? appSettings : {}
-    };
-}
-    
     async function executeCfCloudPush(options = {}) {
-      if (isCloudPushing) return;
+      if (isCloudPushing) return false;
       const endpoint = (document.getElementById('cfApiEndpointInput') ? document.getElementById('cfApiEndpointInput').value.trim() : window.cfConfigState.endpoint) || '/api/sync';
       const passcode = (document.getElementById('cfSyncPasscodeInput') ? document.getElementById('cfSyncPasscodeInput').value.trim() : window.cfConfigState.passcode) || '';
       window.cfConfigState.endpoint = endpoint;
@@ -13532,10 +13595,14 @@ export async function onRequestPost(context) {
       updateHeaderCfStatusUI('syncing');
       if (statusEl) statusEl.textContent = '⏳ 正在推送数据至 Cloudflare KV 边缘云...';
 
-      const safeCloudPayload = buildFullSystemExportObject({ includeObfuscatedToken: false });
       const nowStr = new Date().toLocaleString('zh-CN', { hour12: false });
+      let safeCloudPayload = null;
 
       try {
+        safeCloudPayload = buildFullSystemExportObject({ includeObfuscatedToken: false });
+        // Always save a local time-machine copy as dual-safety backup
+        saveLocalSimulatedCfSnapshot(safeCloudPayload, options.actionNote || '云端同步快照');
+
         const res = await fetch(endpoint, {
           method: 'POST',
           headers: {
@@ -13552,31 +13619,56 @@ export async function onRequestPost(context) {
           try {
             const errJson = await res.json();
             if (errJson && errJson.error) errMsg = errJson.error;
-          } catch (e) {}
-          throw new Error(errMsg);
+          } catch (e) {
+            if (res.status === 404 || res.status === 405) {
+              errMsg = `未检测到 /api/sync 边缘函数接口 (HTTP ${res.status})，请确认 GitHub 仓库中包含 functions/api/sync.js 文件夹层级`;
+            }
+          }
+          const httpErr = new Error(errMsg);
+          httpErr.isServerHttpError = true;
+          httpErr.httpStatus = res.status;
+          throw httpErr;
         }
         const resData = await res.json();
+        // Ensure local uncommitted state is also committed cleanly when user pushes directly
+        if (uncommittedChanges.length > 0) {
+          commitSave(true);
+        }
         window.cfConfigState.lastSyncedAt = nowStr;
         saveCfConfigToVault();
         updateHeaderCfStatusUI('connected');
         if (statusEl) {
-          statusEl.textContent = `✅ 已同步至 Cloudflare KV (${nowStr} · 快照 ${resData.snapshotId || '已归档'})`;
+          statusEl.textContent = `✅ 已同步至 Cloudflare KV (${nowStr} · 快照 ${resData.snapshotId || '已归档'} · 共 ${state.orders.length} 笔订单)`;
+        }
+        const snapsDrawer = document.getElementById('cfSnapshotsDrawer');
+        if (snapsDrawer && !snapsDrawer.classList.contains('hidden')) {
+          loadAndRenderCfSnapshots();
         }
         if (!options.silentToast) {
           showToast(`🚀 已同步推送至 Cloudflare KV 云端（共 ${state.orders.length} 笔订单，已生成时间机器快照）！`);
         }
+        return true;
       } catch (err) {
-        // Fallback: save a local time-machine snapshot so user can test Time Machine even before deploying to Cloudflare
-        saveLocalSimulatedCfSnapshot(safeCloudPayload, options.actionNote || '本地模拟快照');
-        window.cfConfigState.lastSyncedAt = nowStr + ' (本地预演)';
-        saveCfConfigToVault();
-        updateHeaderCfStatusUI();
-        if (statusEl) {
-          statusEl.textContent = `ℹ️ 当前为本地沙盒/未部署环境，已为您生成本地时间机器快照（部署至 Cloudflare 后将自动直连边缘 KV）`;
+        if (err && err.isServerHttpError) {
+          updateHeaderCfStatusUI('error');
+          if (statusEl) {
+            statusEl.textContent = `❌ 云端推送未通过：${err.message}`;
+          }
+          if (!options.silentToast) {
+            showToast(`❌ Cloudflare 同步提示：${err.message}`);
+          }
+        } else {
+          window.cfConfigState.lastSyncedAt = nowStr + ' (本地快照)';
+          saveCfConfigToVault();
+          updateHeaderCfStatusUI();
+          if (statusEl) {
+            statusEl.textContent = `ℹ️ 当前为本地离线/预览环境，已为您生成本地时间机器快照（部署至 Cloudflare 后将自动直连边缘 KV）`;
+          }
+          if (!options.silentToast) {
+            showToast('💡 已保存并归档至时间机器快照（部署到 Cloudflare Pages 后将自动激活全球边缘 KV 同步）');
+          }
         }
-        if (!options.silentToast) {
-          showToast('💡 已保存并归档至时间机器快照（部署到 Cloudflare Pages 后将自动激活全球边缘 KV 同步）');
-        }
+        return false;
       } finally {
         isCloudPushing = false;
         if (pushBtn) pushBtn.disabled = false;
@@ -13584,7 +13676,10 @@ export async function onRequestPost(context) {
     }
 
     async function executeCfCloudPull(options = {}) {
-      if (isCloudPulling) return;
+      if (isCloudPulling || isCloudPushing) return false;
+      if (options.isAutoBackgroundPull && uncommittedChanges.length > 0) {
+        return false;
+      }
       const endpoint = (document.getElementById('cfApiEndpointInput') ? document.getElementById('cfApiEndpointInput').value.trim() : window.cfConfigState.endpoint) || '/api/sync';
       const passcode = (document.getElementById('cfSyncPasscodeInput') ? document.getElementById('cfSyncPasscodeInput').value.trim() : window.cfConfigState.passcode) || '';
       window.cfConfigState.endpoint = endpoint;
@@ -13592,7 +13687,9 @@ export async function onRequestPost(context) {
       saveCfConfigToVault();
 
       const statusEl = document.getElementById('cfSyncStatusMsg');
+      const pullBtn = document.getElementById('btnCfCloudPull');
       isCloudPulling = true;
+      if (pullBtn) pullBtn.disabled = true;
       updateHeaderCfStatusUI('syncing');
       if (statusEl) statusEl.textContent = '🔍 正在从 Cloudflare KV 边缘节点拉取最新数据...';
 
@@ -13606,43 +13703,77 @@ export async function onRequestPost(context) {
           try {
             const errJson = await res.json();
             if (errJson && errJson.error) errMsg = errJson.error;
-          } catch (e) {}
-          throw new Error(errMsg);
+          } catch (e) {
+            if (res.status === 404 || res.status === 405) {
+              errMsg = `未检测到 /api/sync 边缘函数接口 (HTTP ${res.status})，请确认 GitHub 仓库中包含 functions/api/sync.js`;
+            }
+          }
+          const httpErr = new Error(errMsg);
+          httpErr.isServerHttpError = true;
+          httpErr.httpStatus = res.status;
+          throw httpErr;
         }
         const resData = await res.json();
-        if (resData.empty || !resData.data) {
-          if (statusEl) statusEl.textContent = 'ℹ️ Cloudflare KV 云端尚无存档，点击「⬆️ 立即推送到 Cloudflare KV」即可完成首次初始化！';
-          if (!options.silentIfEmpty) {
-            showToast('ℹ️ 云端 KV 尚无初始存档，正在为您执行首次上传初始化...');
-            isCloudPulling = false;
-            await executeCfCloudPush({ actionNote: '首次初始化上云' });
-          }
-          return;
-        }
         const nowStr = new Date().toLocaleString('zh-CN', { hour12: false });
+        if (resData.empty || !resData.data) {
+          window.cfConfigState.lastSyncedAt = nowStr;
+          saveCfConfigToVault();
+          updateHeaderCfStatusUI('connected');
+          if (statusEl) {
+            statusEl.textContent = '✅ Cloudflare KV 连接成功！检测到云端尚无初始存档，正在为您自动推送初始化...';
+          }
+          isCloudPulling = false;
+          if (pullBtn) pullBtn.disabled = false;
+          await executeCfCloudPush({
+            silentToast: !!options.isAutoBackgroundPull,
+            actionNote: '首次连接自动初始化上云'
+          });
+          return true;
+        }
         window.cfConfigState.lastSyncedAt = nowStr;
         saveCfConfigToVault();
         updateHeaderCfStatusUI('connected');
-        if (applyFullSystemImportObject(resData.data, '从 Cloudflare KV 边缘云拉取')) {
-          if (statusEl) statusEl.textContent = `✅ 已从 Cloudflare KV 同步最新数据 (${nowStr})`;
-          showToast(`☁️ 已从 Cloudflare KV 拉取最新数据（共 ${state.orders.length} 笔订单）！`);
-        }
-      } catch (err) {
-        updateHeaderCfStatusUI();
-        if (statusEl) {
-          statusEl.textContent = `ℹ️ 本地预览模式：部署至 Cloudflare Pages 后即可直接从 /api/sync 拉取云端 KV 数据`;
-        }
-        if (!options.silentIfEmpty) {
-          // If Gist is configured and user clicked header pull in local sandbox, fall back gracefully to Gist pull
-          if (state.gistToken && !options.fromCfModalButton) {
-            isCloudPulling = false;
-            executeCloudPull(false);
-            return;
+        const importRes = applyFullSystemImportObject(resData.data, '从 Cloudflare KV 边缘云拉取', {
+          silentReportIfUnchanged: !!options.isAutoBackgroundPull,
+          isAutoBackgroundPull: !!options.isAutoBackgroundPull
+        });
+        if (importRes) {
+          if (statusEl) {
+            statusEl.textContent = `✅ 已从 Cloudflare KV 同步最新数据 (${nowStr} · 共 ${state.orders.length} 笔订单)`;
           }
-          showToast('💡 当前处于本地离线预览，部署至 Cloudflare Pages 绑定 KV 后即可启用秒级云拉取');
+          if (!options.isAutoBackgroundPull || (importRes && importRes.hasChanges)) {
+            showToast(`☁️ 已从 Cloudflare KV 同步最新数据（共 ${state.orders.length} 笔订单）！`);
+          }
         }
+        return true;
+      } catch (err) {
+        if (err && err.isServerHttpError) {
+          updateHeaderCfStatusUI('error');
+          if (statusEl) {
+            statusEl.textContent = `❌ 云端拉取未通过：${err.message}`;
+          }
+          if (!options.isAutoBackgroundPull) {
+            showToast(`❌ Cloudflare 同步提示：${err.message}`);
+          }
+        } else {
+          updateHeaderCfStatusUI();
+          if (statusEl) {
+            statusEl.textContent = `ℹ️ 本地预览模式：部署至 Cloudflare Pages 后即可直接从 /api/sync 拉取云端 KV 数据`;
+          }
+          if (!options.silentIfEmpty && !options.isAutoBackgroundPull) {
+            if (state.gistToken && !options.fromCfModalButton) {
+              isCloudPulling = false;
+              if (pullBtn) pullBtn.disabled = false;
+              executeCloudPull(false);
+              return false;
+            }
+            showToast('💡 当前处于本地离线预览，部署至 Cloudflare Pages 绑定 KV 后即可启用秒级云拉取');
+          }
+        }
+        return false;
       } finally {
         isCloudPulling = false;
+        if (pullBtn) pullBtn.disabled = false;
       }
     }
 
@@ -13694,7 +13825,7 @@ export async function onRequestPost(context) {
       // Ensure at least one baseline snapshot is visible so user can test rollback anytime
       if (remoteSnapshots.length === 0 && localSnapshots.length === 0) {
         const initSnap = buildFullSystemExportObject({ includeObfuscatedToken: false });
-        saveLocalSimulatedCfSnapshot(initSnap, 'V7.0 初始基准存档');
+        saveLocalSimulatedCfSnapshot(initSnap, 'V7.1 初始基准存档');
         try {
           localSnapshots = JSON.parse(localStorage.getItem(CF_LOCAL_SIM_SNAPSHOTS_KEY) || '[]');
         } catch (e) {}
@@ -13723,7 +13854,6 @@ export async function onRequestPost(context) {
       let nzdRate = null;
       let audRate = null;
 
-      // Try Cloudflare Edge Function /api/sync?action=rate first, then public open.er-api.com
       try {
         const res = await fetch(endpoint + '?action=rate');
         if (res.ok) {
@@ -13799,11 +13929,15 @@ export async function onRequestPost(context) {
       const passInp = document.getElementById('cfSyncPasscodeInput');
       const chkPull = document.getElementById('chkCfAutoPullOnLoad');
       const chkPush = document.getElementById('chkCfAutoPushOnSave');
+      const bannerAutoPush = document.getElementById('toggleAutoCloudOnSave');
 
       if (epInp) epInp.value = window.cfConfigState.endpoint || '/api/sync';
       if (passInp) passInp.value = window.cfConfigState.passcode || '';
       if (chkPull) chkPull.checked = window.cfConfigState.autoPullOnLoad !== false;
-      if (chkPush) chkPush.checked = window.cfConfigState.autoPushOnSave !== false;
+      const pushEnabled = window.cfConfigState.autoPushOnSave !== false;
+      autoCloudOnSave = pushEnabled;
+      if (chkPush) chkPush.checked = pushEnabled;
+      if (bannerAutoPush) bannerAutoPush.checked = pushEnabled;
       updateHeaderCfStatusUI();
 
       const headerCfBtn = document.getElementById('btnHeaderCfStatusPill');
@@ -13834,6 +13968,8 @@ export async function onRequestPost(context) {
       if (chkPush) {
         chkPush.addEventListener('change', () => {
           window.cfConfigState.autoPushOnSave = chkPush.checked;
+          autoCloudOnSave = chkPush.checked;
+          if (bannerAutoPush) bannerAutoPush.checked = chkPush.checked;
           saveCfConfigToVault();
         });
       }
@@ -13845,18 +13981,18 @@ export async function onRequestPost(context) {
           window.cfConfigState.passcode = (passInp ? passInp.value.trim() : '');
           saveCfConfigToVault();
           showToast('🔌 已保存 Cloudflare 边缘接口与同步口令，正在检测云端连接...');
-          await executeCfCloudPull({ silentIfEmpty: true, fromCfModalButton: true });
+          await executeCfCloudPull({ silentIfEmpty: false, fromCfModalButton: true, isAutoBackgroundPull: false });
         });
       }
 
       const btnPush = document.getElementById('btnCfCloudPush');
       if (btnPush) {
-        btnPush.addEventListener('click', () => executeCfCloudPush({ silentToast: false, actionNote: '手动点击推送云端' }));
+        btnPush.addEventListener('click', () => executeCfCloudPush({ silentToast: false, actionNote: '手动点击推送云端', manualFromModal: true }));
       }
 
       const btnPull = document.getElementById('btnCfCloudPull');
       if (btnPull) {
-        btnPull.addEventListener('click', () => executeCfCloudPull({ silentIfEmpty: false, fromCfModalButton: true }));
+        btnPull.addEventListener('click', () => executeCfCloudPull({ silentIfEmpty: false, fromCfModalButton: true, isAutoBackgroundPull: false }));
       }
 
       const btnSnaps = document.getElementById('btnCfToggleSnapshots');
@@ -13958,14 +14094,16 @@ export async function onRequestPost(context) {
       // Auto-pull on startup when running on Cloudflare Pages or when passcode is configured
       if (window.cfConfigState.autoPullOnLoad && (isRunningOnCloudflareDomain() || window.cfConfigState.passcode)) {
         setTimeout(() => {
-          executeCfCloudPull({ silentIfEmpty: true });
+          if (uncommittedChanges.length === 0) {
+            executeCfCloudPull({ silentIfEmpty: true, isAutoBackgroundPull: true });
+          }
         }, 600);
       }
 
-      // Auto-pull when user switches back to this tab on mobile/desktop
+      // Auto-pull when user switches back to this tab on mobile/desktop (silent unless remote data changed)
       document.addEventListener('visibilitychange', () => {
         if (document.visibilityState === 'visible' && window.cfConfigState.autoPullOnLoad && (isRunningOnCloudflareDomain() || window.cfConfigState.passcode) && uncommittedChanges.length === 0) {
-          executeCfCloudPull({ silentIfEmpty: true });
+          executeCfCloudPull({ silentIfEmpty: true, isAutoBackgroundPull: true });
         }
       });
     }
@@ -13987,57 +14125,6 @@ export async function onRequestPost(context) {
       document.body.removeChild(a);
       URL.revokeObjectURL(url);
     }
-
-// ==================== 永久云同步修复补丁 ====================
-window.buildFullSystemExportObject = function(noteText = '常规云同步保存') {
-    const ordersData = typeof orders !== 'undefined' ? orders : [];
-    const productsData = typeof products !== 'undefined' ? products : [];
-    const categoriesData = typeof categories !== 'undefined' ? categories : [];
-    return {
-        version: "7.0",
-        savedAt: new Date().toISOString(),
-        note: noteText,
-        orders: ordersData,
-        products: productsData,
-        categories: categoriesData,
-        settings: typeof appSettings !== 'undefined' ? appSettings : {}
-    };
-};
-
-window.executeCfCloudPush = async function() {
-    console.log("正在执行云端同步...");
-    try {
-        const payload = window.buildFullSystemExportObject();
-        let passcode = "";
-        try {
-            const cfg = JSON.parse(localStorage.getItem('nz_tracker_config') || '{}');
-            passcode = cfg.passcode || "";
-        } catch(e) {}
-        
-        if (!passcode) {
-            passcode = prompt("请输入您的云端同步密码 (如果未设置密码请直接点确定):") || "";
-        }
-
-        const res = await fetch('/api/sync', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'X-Sync-Passcode': passcode
-            },
-            body: JSON.stringify(payload)
-        });
-        const data = await res.json();
-        if (data.ok) {
-            alert("🎉 恭喜！数据已成功同步到 Cloudflare 云端！");
-            console.log("同步成功响应:", data);
-        } else {
-            alert("同步失败: " + (data.error || "密码错误或配置异常"));
-        }
-    } catch(err) {
-        console.error("同步异常:", err);
-        alert("网络或接口请求异常，请按F12查看详细日志");
-    }
-};
   </script>
 </body>
 </html>
