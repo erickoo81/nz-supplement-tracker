@@ -13987,6 +13987,58 @@ export async function onRequestPost(context) {
       document.body.removeChild(a);
       URL.revokeObjectURL(url);
     }
+ <script>
+// ==================== 永久云同步修复补丁 ====================
+window.buildFullSystemExportObject = function(noteText = '常规云同步保存') {
+    const ordersData = typeof orders !== 'undefined' ? orders : [];
+    const productsData = typeof products !== 'undefined' ? products : [];
+    const categoriesData = typeof categories !== 'undefined' ? categories : [];
+    return {
+        version: "7.0",
+        savedAt: new Date().toISOString(),
+        note: noteText,
+        orders: ordersData,
+        products: productsData,
+        categories: categoriesData,
+        settings: typeof appSettings !== 'undefined' ? appSettings : {}
+    };
+};
+
+window.executeCfCloudPush = async function() {
+    console.log("正在执行云端同步...");
+    try {
+        const payload = window.buildFullSystemExportObject();
+        let passcode = "";
+        try {
+            const cfg = JSON.parse(localStorage.getItem('nz_tracker_config') || '{}');
+            passcode = cfg.passcode || "";
+        } catch(e) {}
+        
+        if (!passcode) {
+            passcode = prompt("请输入您的云端同步密码 (如果未设置密码请直接点确定):") || "";
+        }
+
+        const res = await fetch('/api/sync', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-Sync-Passcode': passcode
+            },
+            body: JSON.stringify(payload)
+        });
+        const data = await res.json();
+        if (data.ok) {
+            alert("🎉 恭喜！数据已成功同步到 Cloudflare 云端！");
+            console.log("同步成功响应:", data);
+        } else {
+            alert("同步失败: " + (data.error || "密码错误或配置异常"));
+        }
+    } catch(err) {
+        console.error("同步异常:", err);
+        alert("网络或接口请求异常，请按F12查看详细日志");
+    }
+};
+</script>
   </script>
 </body>
 </html>
