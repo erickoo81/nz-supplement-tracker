@@ -1,0 +1,9 @@
+{
+  "name": "纽澳跨境采购与快递追踪管家 V7.0",
+  "short_name": "纽澳采购管家",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#022c22",
+  "theme_color": "#022c22",
+  "description": "支持一单多包拆单追踪、采购单价与运费核算、Cloudflare KV 边缘云实时同步"
+}
