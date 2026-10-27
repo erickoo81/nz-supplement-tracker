@@ -1,10 +1,10 @@
 /**
- * 纽澳跨境采购与快递追踪管家 V7.0 - Cloudflare Pages Function (方案B)
+ * 纽澳跨境采购与快递追踪管家 V7.1 - Cloudflare Pages Function (方案B)
  * 文件路径: functions/api/sync.js
  * 对应接口: /api/sync
  *
  * 需要在 Cloudflare Pages -> Settings -> Functions -> KV namespace bindings 绑定:
- *   Variable name (变量名): NZ_TRACKER_KV
+ *   Variable name (变量名): NZ_TRACKER_KV (同时支持自动识别任意已绑定的 KV 变量名)
  *
  * 可选在 Settings -> Environment variables 绑定:
  *   Variable name (变量名): SYNC_PASSCODE (例如 nz2026)
@@ -21,11 +21,23 @@ export async function onRequestOptions() {
   return new Response(null, { status: 204, headers: CORS_HEADERS });
 }
 
+function getKvNamespace(env) {
+  if (!env || typeof env !== 'object') return null;
+  if (env.NZ_TRACKER_KV && typeof env.NZ_TRACKER_KV.get === 'function') return env.NZ_TRACKER_KV;
+  for (const key of Object.keys(env)) {
+    const binding = env[key];
+    if (binding && typeof binding === 'object' && typeof binding.get === 'function' && typeof binding.put === 'function') {
+      return binding;
+    }
+  }
+  return null;
+}
+
 function checkAuth(request, env) {
-  const requiredPass = (env.SYNC_PASSCODE || '').trim();
+  const requiredPass = String((env && (env.SYNC_PASSCODE || env.PASSCODE)) || '').trim();
   if (!requiredPass) return true;
   const url = new URL(request.url);
-  const provided = (request.headers.get('X-Sync-Passcode') || url.searchParams.get('passcode') || '').trim();
+  const provided = String(request.headers.get('X-Sync-Passcode') || url.searchParams.get('passcode') || '').trim();
   return provided === requiredPass;
 }
 
@@ -58,10 +70,11 @@ export async function onRequestGet(context) {
     }
   }
 
-  if (!env.NZ_TRACKER_KV) {
+  const kv = getKvNamespace(env);
+  if (!kv) {
     return new Response(JSON.stringify({
       ok: false,
-      error: '尚未在 Cloudflare Pages 绑定名为 NZ_TRACKER_KV 的 KV 命名空间'
+      error: '尚未在 Cloudflare Pages 绑定 KV 命名空间 (请在 Settings -> Functions -> KV namespace bindings 绑定 NZ_TRACKER_KV 并重新部署一次)'
     }), { status: 500, headers: CORS_HEADERS });
   }
 
@@ -74,7 +87,7 @@ export async function onRequestGet(context) {
 
   // 2. Snapshots History List (Cloud Time Machine)
   if (action === 'snapshots') {
-    const rawHist = await env.NZ_TRACKER_KV.get('nz_tracker_snapshots_v7');
+    const rawHist = await kv.get('nz_tracker_snapshots_v7');
     const snapshots = rawHist ? JSON.parse(rawHist) : [];
     const summaryList = snapshots.map(s => ({
       id: s.id,
@@ -89,7 +102,7 @@ export async function onRequestGet(context) {
   // 3. Restore Specific Snapshot by ID
   if (action === 'snapshot_get') {
     const snapId = url.searchParams.get('id');
-    const rawHist = await env.NZ_TRACKER_KV.get('nz_tracker_snapshots_v7');
+    const rawHist = await kv.get('nz_tracker_snapshots_v7');
     const snapshots = rawHist ? JSON.parse(rawHist) : [];
     const found = snapshots.find(s => s.id === snapId);
     if (!found) {
@@ -99,7 +112,7 @@ export async function onRequestGet(context) {
   }
 
   // 4. Default: Pull Latest Full System State
-  const latestRaw = await env.NZ_TRACKER_KV.get('nz_tracker_latest_v7');
+  const latestRaw = await kv.get('nz_tracker_latest_v7');
   if (!latestRaw) {
     return new Response(JSON.stringify({ ok: true, empty: true, data: null }), { headers: CORS_HEADERS });
   }
@@ -112,16 +125,17 @@ export async function onRequestGet(context) {
 
 export async function onRequestPost(context) {
   const { request, env } = context;
-  if (!env.NZ_TRACKER_KV) {
+  const kv = getKvNamespace(env);
+  if (!kv) {
     return new Response(JSON.stringify({
       ok: false,
-      error: '尚未绑定 NZ_TRACKER_KV 命名空间'
+      error: '尚未绑定 NZ_TRACKER_KV 命名空间 (请在 Settings -> Functions -> KV 绑定并重新部署一次)'
     }), { status: 500, headers: CORS_HEADERS });
   }
   if (!checkAuth(request, env)) {
     return new Response(JSON.stringify({
       ok: false,
-      error: '云端同步口令校验失败'
+      error: '云端同步口令校验失败，请检查输入的同步密码'
     }), { status: 401, headers: CORS_HEADERS });
   }
 
@@ -131,10 +145,10 @@ export async function onRequestPost(context) {
   const nowIso = new Date().toISOString();
   payload._cfSavedAt = nowIso;
 
-  await env.NZ_TRACKER_KV.put('nz_tracker_latest_v7', JSON.stringify(payload));
+  await kv.put('nz_tracker_latest_v7', JSON.stringify(payload));
 
   // Maintain rolling 15 snapshots in KV for Cloud Time Machine
-  const rawHist = await env.NZ_TRACKER_KV.get('nz_tracker_snapshots_v7');
+  const rawHist = await kv.get('nz_tracker_snapshots_v7');
   const snapshots = rawHist ? JSON.parse(rawHist) : [];
   const snapEntry = {
     id: 'SNAP-' + Date.now(),
@@ -146,7 +160,7 @@ export async function onRequestPost(context) {
   };
   snapshots.unshift(snapEntry);
   if (snapshots.length > 15) snapshots.length = 15;
-  await env.NZ_TRACKER_KV.put('nz_tracker_snapshots_v7', JSON.stringify(snapshots));
+  await kv.put('nz_tracker_snapshots_v7', JSON.stringify(snapshots));
 
   return new Response(JSON.stringify({
     ok: true,
