@@ -13502,6 +13502,21 @@ export async function onRequestPost(context) {
 `;
     }
 
+    function buildFullSystemExportObject(noteText = '常规云同步保存') {
+    const ordersData = typeof orders !== 'undefined' ? orders : [];
+    const productsData = typeof products !== 'undefined' ? products : [];
+    const categoriesData = typeof categories !== 'undefined' ? categories : [];
+    return {
+        version: "7.0",
+        savedAt: new Date().toISOString(),
+        note: noteText,
+        orders: ordersData,
+        products: productsData,
+        categories: categoriesData,
+        settings: typeof appSettings !== 'undefined' ? appSettings : {}
+    };
+}
+    
     async function executeCfCloudPush(options = {}) {
       if (isCloudPushing) return;
       const endpoint = (document.getElementById('cfApiEndpointInput') ? document.getElementById('cfApiEndpointInput').value.trim() : window.cfConfigState.endpoint) || '/api/sync';
