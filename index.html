@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>纽澳跨境采购与快递追踪管家 V7.3</title>
+  <title>纽澳跨境采购与快递追踪管家 V7.4</title>
   <script src="https://cdn.tailwindcss.com/3.4.17"></script>
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
@@ -344,7 +344,7 @@
             </h1>
             <button type="button" id="btnHeaderVersionBadge" class="inline-flex items-center gap-1 text-xs bg-gradient-to-r from-amber-400 to-amber-300 hover:from-amber-300 hover:to-amber-200 text-slate-950 font-extrabold px-2.5 py-0.5 rounded-full shadow-xs transition cursor-pointer" title="当前版本 V7.1（Cloudflare KV 全域同步修复与智能诊断 · 历史时间机器 · 实时汇率 · 亲友只读对账单）· 点击打开个性化与版本中心">
               <span id="uiIcon-appVersion">✨</span>
-              <span id="uiText-appVersion">V7.3</span>
+              <span id="uiText-appVersion">V7.4</span>
             </button>
             <button type="button" id="btnHeaderCfStatusPill" class="inline-flex items-center gap-1 text-[11px] bg-emerald-900/90 hover:bg-emerald-800 text-emerald-100 border border-emerald-600/70 font-semibold px-2.5 py-0.5 rounded-full transition cursor-pointer" title="点击打开 Cloudflare KV 边缘云同步设置 (方案B)">
               <span id="headerCfStatusDot" class="w-2 h-2 rounded-full bg-amber-400 inline-block"></span>
@@ -927,6 +927,12 @@
             <button id="btnOpenBackfillWizard" class="bg-gradient-to-r from-emerald-700 to-teal-700 hover:from-emerald-600 hover:to-teal-600 text-white px-3 py-1 rounded-md font-bold shadow-2xs transition flex items-center gap-1" title="打开旧订单网页抓单补全与冲突比对工作台，一键补全历史订单实付单价、运费、优惠券、支付方式与币种">
               <span>⚡ 旧单抓单核验 (<span id="orderTabUnverifiedCount">0</span>待核验)</span>
             </button>
+            <button type="button" id="btnToggleOrdersViewMode" class="bg-teal-50 hover:bg-teal-100 text-teal-900 border border-teal-300 px-2.5 py-1 rounded-md font-bold transition flex items-center gap-1" title="在「📱 手机竖排卡片(免横滑)」与「💻 传统宽表视图」之间一键切换">
+              <span id="lblOrdersViewModeBtn">📱 竖排卡片(免横滑)</span>
+            </button>
+            <button type="button" id="btnOpenCustomerNotifyFromOrdersTab" class="bg-indigo-600 hover:bg-indigo-500 text-white px-2.5 py-1 rounded-md font-bold shadow-2xs transition flex items-center gap-1" title="打开发给客户的微信通知生成器（可选发账单、快递单、下单回执或二合一通知）">
+              <span>📲 发客户通知</span>
+            </button>
             <button id="btnSendFilteredToBill" class="bg-emerald-50 hover:bg-emerald-100 text-emerald-800 border border-emerald-200 px-2.5 py-1 rounded-md font-medium transition">
               🧾 生成对账单
             </button>
@@ -949,8 +955,24 @@
         </div>
       </div>
 
+      <!-- Mobile-First Zero-Horizontal-Scroll Order Cards Container (Auto-active on mobile screens or when toggled) -->
+      <div id="ordersMobileCardsWrap" class="hidden space-y-3 max-w-full overflow-x-hidden">
+        <div class="bg-gradient-to-r from-emerald-900 to-teal-900 text-white rounded-xl px-3.5 py-2.5 flex flex-wrap items-center justify-between gap-2 text-xs shadow-xs">
+          <div class="flex items-center gap-2">
+            <span class="bg-amber-400 text-slate-950 font-extrabold px-2 py-0.5 rounded-full text-[11px]">📱 手机免横滑视图</span>
+            <span class="text-emerald-100">单条订单全部明细上下一屏展示，无需往右拉页面</span>
+          </div>
+          <button type="button" id="btnSwitchToWideTableFromBanner" class="text-[11px] bg-white/15 hover:bg-white/25 text-white px-2.5 py-1 rounded-lg border border-white/20 font-semibold transition">
+            💻 切换为电脑宽表视图
+          </button>
+        </div>
+        <div id="ordersMobileCardsList" class="space-y-3 max-w-full">
+          <!-- Rendered by JS -->
+        </div>
+      </div>
+
       <!-- Orders Table -->
-      <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden max-w-full">
+      <div id="ordersDesktopTableCard" class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden max-w-full">
         <!-- Sticky Top Horizontal Scrollbar (only visible if viewport is narrower than table) -->
         <div id="ordersTableTopScroll" class="overflow-x-auto custom-scroll border-b border-slate-100 bg-slate-50/60 hidden">
           <div id="ordersTableTopScrollInner" class="h-2.5"></div>
@@ -1182,6 +1204,10 @@
               <button type="button" id="btnNewOrderReadClipboard" class="bg-emerald-700 hover:bg-emerald-600 text-white text-xs font-extrabold px-3 py-1.5 rounded-lg shadow-xs transition flex items-center gap-1">
                 <span>📋 粘贴剪贴板</span>
               </button>
+              <label class="cursor-pointer bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-extrabold px-3 py-1.5 rounded-lg shadow-xs transition inline-flex items-center gap-1" title="选取手机订单截图，自动OCR识别商品、单价、收件人与单号填入表单">
+                <span>📸 选截图识别</span>
+                <input type="file" id="newOrderScreenshotInput" accept="image/*" class="hidden" />
+              </label>
               <button type="button" id="btnNewOrderDemo2020Old" class="bg-amber-200 hover:bg-amber-300 text-slate-950 border border-amber-400 text-[11px] font-extrabold px-2.5 py-1.5 rounded-lg transition" title="填入您提供的2020纽澳康源老单 #1031400038710 (含断行小数、4段*6罐、限购2件、4款羊奶皂各1块、支付手续费¥9.46)">
                 🧪 试填老单示例
               </button>
@@ -1940,26 +1966,63 @@
           </div>
 
           <div class="grid grid-cols-1 lg:grid-cols-12 gap-4">
-            <!-- Left 6 cols: Mini-Program Text Paste + Mobile Screenshot Side-by-Side Reference -->
+            <!-- Left 6 cols: Mini-Program Screenshot OCR Auto-Recognition + Text Paste -->
             <div class="lg:col-span-6 border border-slate-200 rounded-xl p-4 bg-white space-y-3 flex flex-col justify-between">
               <div class="space-y-2.5">
-                <div class="flex items-center justify-between">
-                  <span class="text-xs font-bold text-slate-800">方式 A：粘贴微信小程序/微信转发文字 或 截图对照</span>
-                  <label class="cursor-pointer text-[11px] bg-indigo-50 hover:bg-indigo-100 text-indigo-800 border border-indigo-200 px-2.5 py-1 rounded-lg font-semibold transition inline-flex items-center gap-1">
-                    <span>🖼️ 选手机订单截图对照</span>
-                    <input type="file" id="miniProgramScreenshotInput" accept="image/*" class="hidden" />
-                  </label>
-                </div>
-
-                <div id="miniProgramScreenshotPreviewWrap" class="hidden bg-slate-900/5 border border-slate-200 rounded-xl p-2 relative">
-                  <div class="flex items-center justify-between mb-1">
-                    <span class="text-[11px] font-semibold text-slate-600">📱 手机订单截图对照预览（可看着截图在右侧点选商品或核对金额）：</span>
-                    <button type="button" id="btnClearMiniProgramScreenshot" class="text-[11px] text-rose-600 hover:underline">移除截图</button>
+                <div class="flex flex-wrap items-center justify-between gap-2">
+                  <span class="text-xs font-bold text-slate-800">方式 A：📸 选手机订单截图自动识别 或 粘贴文字</span>
+                  <div class="flex flex-wrap items-center gap-1.5">
+                    <label class="cursor-pointer text-xs bg-indigo-600 hover:bg-indigo-500 text-white px-3 py-1.5 rounded-lg font-extrabold shadow-xs transition inline-flex items-center gap-1.5">
+                      <span>📸 选手机订单截图智能识别</span>
+                      <input type="file" id="miniProgramScreenshotInput" accept="image/*" class="hidden" />
+                    </label>
+                    <button type="button" id="btnMpReadClipboardText" class="text-xs bg-emerald-50 hover:bg-emerald-100 text-emerald-800 border border-emerald-300 px-2.5 py-1.5 rounded-lg font-bold transition" title="在微信里长按截图选择「提取文字/识字」复制后，点此一键粘贴并解析">
+                      📋 粘剪贴板
+                    </button>
                   </div>
-                  <img id="miniProgramScreenshotImg" src="" alt="订单截图预览" class="max-h-56 w-auto mx-auto rounded-lg border border-slate-300 object-contain" />
                 </div>
 
-                <textarea id="miniProgramPasteInput" rows="6" placeholder="在手机微信小程序订单详情页长按复制文字（或把小程序订单信息粘到这里）：&#10;例如：&#10;收货人：朱峰 13800000000&#10;Manuka Health 蜜纽康 MGO 263+ 500g&#10;¥167.50 × 2&#10;实付款：¥335.00&#10;订单编号：200032888&#10;快递单号：N640154888" class="w-full text-xs border border-slate-300 rounded-xl p-3 font-mono bg-slate-50 focus:bg-white focus:outline-none focus:border-emerald-600"></textarea>
+                <!-- Screenshot Preview + Live OCR Progress & Recognition Result Card -->
+                <div id="miniProgramScreenshotPreviewWrap" class="hidden bg-slate-50 border border-indigo-200 rounded-xl p-3 space-y-2.5 relative">
+                  <div class="flex items-center justify-between">
+                    <span class="text-xs font-bold text-indigo-950 flex items-center gap-1.5">
+                      <span>📱 手机订单截图识别工作区</span>
+                      <span id="mpOcrBadgePill" class="text-[10px] bg-indigo-100 text-indigo-800 px-2 py-0.5 rounded-full font-semibold">准备识别</span>
+                    </span>
+                    <div class="flex items-center gap-2">
+                      <button type="button" id="btnReRunMiniProgramOcr" class="text-[11px] bg-indigo-50 hover:bg-indigo-100 text-indigo-700 border border-indigo-200 px-2 py-0.5 rounded font-semibold">🔄 重新识别截图</button>
+                      <button type="button" id="btnClearMiniProgramScreenshot" class="text-[11px] text-rose-600 hover:underline font-medium">移除截图</button>
+                    </div>
+                  </div>
+
+                  <!-- OCR Progress Bar -->
+                  <div id="mpOcrStatusBox" class="bg-white border border-indigo-200 rounded-lg p-2.5 space-y-1.5">
+                    <div class="flex items-center justify-between text-[11px]">
+                      <span id="mpOcrStatusText" class="font-semibold text-indigo-900">🔄 正在启动 OCR 引擎识别截图文字...</span>
+                      <span id="mpOcrProgressPct" class="font-mono font-bold text-indigo-600">0%</span>
+                    </div>
+                    <div class="w-full h-2 bg-slate-100 rounded-full overflow-hidden">
+                      <div id="mpOcrProgressBar" class="h-full bg-gradient-to-r from-indigo-600 to-emerald-500 transition-all duration-300 rounded-full" style="width: 8%"></div>
+                    </div>
+                  </div>
+
+                  <!-- OCR Auto-Extracted Summary & 1-Tap Save Banner -->
+                  <div id="mpOcrResultSummary" class="hidden bg-emerald-50 border border-emerald-300 rounded-lg p-2.5 space-y-2 text-xs">
+                    <div id="mpOcrResultSummaryText" class="text-emerald-950 font-semibold leading-relaxed"></div>
+                    <div class="flex flex-wrap items-center gap-2 pt-1">
+                      <button type="button" id="btnMpOcrSaveDirect" class="bg-emerald-700 hover:bg-emerald-600 text-white font-bold px-3 py-1.5 rounded-lg shadow-2xs transition">
+                        ✅ 识别无误 · 直接入库保存
+                      </button>
+                      <button type="button" id="btnMpOcrSaveAndNotify" class="bg-indigo-600 hover:bg-indigo-500 text-white font-bold px-3 py-1.5 rounded-lg shadow-2xs transition">
+                        📲 入库并发客户微信通知
+                      </button>
+                    </div>
+                  </div>
+
+                  <img id="miniProgramScreenshotImg" src="" alt="订单截图预览" class="max-h-52 w-auto mx-auto rounded-lg border border-slate-300 object-contain bg-white" />
+                </div>
+
+                <textarea id="miniProgramPasteInput" rows="6" placeholder="选手机截图后会自动将识别出的文字填入此处；您也可以在微信小程序订单页长按复制文字（或微信长按截图「提取文字」）粘到这里：&#10;例如：&#10;收货人：朱峰 13800000000&#10;Manuka Health 蜜纽康 MGO 263+ 500g&#10;¥167.50 × 2&#10;实付款：¥335.00&#10;订单编号：200032888&#10;快递单号：N640154888" class="w-full text-xs border border-slate-300 rounded-xl p-3 font-mono bg-slate-50 focus:bg-white focus:outline-none focus:border-emerald-600"></textarea>
               </div>
 
               <div class="flex flex-wrap items-center justify-between gap-2 pt-2 border-t border-slate-100">
@@ -2739,6 +2802,28 @@
     </div>
   </div>
 
+  <!-- MODAL 11: SINGLE ORDER MOBILE-FRIENDLY FULL OVERVIEW SHEET (V7.4) -->
+  <div id="modalOrderQuickView" class="fixed inset-0 bg-slate-900/65 backdrop-blur-xs z-50 hidden flex items-end sm:items-center justify-center p-0 sm:p-4">
+    <div class="bg-white rounded-t-2xl sm:rounded-2xl shadow-2xl border border-slate-200 max-w-lg w-full max-h-[90vh] flex flex-col overflow-hidden">
+      <div class="px-4 py-3.5 bg-gradient-to-r from-emerald-950 via-teal-900 to-slate-900 text-white flex items-center justify-between">
+        <div class="flex items-center gap-2">
+          <span class="text-lg">📱</span>
+          <div>
+            <h3 class="text-sm font-extrabold" id="qvModalTitle">单条订单一屏全览</h3>
+            <p class="text-[11px] text-emerald-200">上下滑动即可查看完整商品、实付账单与快递单号，免左右拉动</p>
+          </div>
+        </div>
+        <button type="button" id="btnCloseOrderQuickView" class="text-slate-300 hover:text-white text-xl leading-none px-2 py-1">✕</button>
+      </div>
+      <div id="orderQuickViewBody" class="p-4 overflow-y-auto custom-scroll space-y-3 text-xs flex-1">
+        <!-- Populated by JS -->
+      </div>
+      <div id="orderQuickViewFooter" class="px-4 py-3 bg-slate-50 border-t border-slate-200 flex flex-wrap items-center justify-between gap-2">
+        <!-- Populated by JS -->
+      </div>
+    </div>
+  </div>
+
   <div id="toastBox" class="fixed bottom-5 right-5 z-50 hidden bg-slate-900 text-white text-xs sm:text-sm px-4 py-2.5 rounded-xl shadow-lg border border-slate-700 flex items-center gap-2">
     <span id="toastMsg">操作成功</span>
   </div>
@@ -2917,7 +3002,7 @@
 
     const DEFAULT_UI_CUSTOM_LABELS = {
       appTitle: { icon: '', text: '纽澳跨境采购与快递追踪管家', note: '支持一单多包拆单追踪 · 采购单价与运费核算 · 电脑与手机多端同步', labelTitle: '系统主标题 & 副标题说明', group: 'header', emojiPresets: ['🇳🇿', '🦘', '🌿', '📦', '🛡️'] },
-      appVersion: { icon: '🚀', text: 'V7.3', note: '当前版本 V7.3（客户微信通知中心 · 微信小程序导单 · 订单备注净化 · 亲友只读查件门户）· 点击打开个性化与版本中心', labelTitle: '顶部版本号标识 (点击可打开设置)', group: 'header', emojiPresets: ['🚀', '✨', '🏷️', '💎', '🔥'] },
+      appVersion: { icon: '🚀', text: 'V7.4', note: '当前版本 V7.4（手机截图OCR智能识别 · 发客户通知修复 · 手机端免横滑竖排卡片视图）· 点击打开个性化与版本中心', labelTitle: '顶部版本号标识 (点击可打开设置)', group: 'header', emojiPresets: ['🚀', '✨', '🏷️', '💎', '🔥'] },
       btnNewOrder: { icon: '＋', text: '新增订单', note: '新建采购订单（内含网页粘贴自动填单 / 门店直购录入 / 复制上一单）', labelTitle: '顶部按钮 1：新增订单', group: 'topbar', emojiPresets: ['＋', '🛒', '✍️', '⚡', '🛍️'] },
       btnBatchImport: { icon: '📥', text: '智能导单', note: '专用于导入新采购订单：Excel表格差异导入 / 网页订单粘贴解析 / 浏览器抓单小书签', labelTitle: '顶部按钮 2：智能导单', group: 'topbar', emojiPresets: ['📥', '📂', '📊', '⚡', '📑'] },
       btnSyncBackup: { icon: '☁️', text: '云端与备份', note: '专用于多端云同步与备份：Cloudflare KV 实时云同步 / 历史时间机器回滚 / 本地 JSON 备份包', labelTitle: '顶部按钮 3：云端与备份', group: 'topbar', emojiPresets: ['☁️', '🔄', '📲', '💾', '🛡️'] },
@@ -5831,6 +5916,9 @@
       const tbody = document.getElementById('ordersTableBody');
       if (filtered.length === 0) {
         tbody.innerHTML = `<tr><td colspan="7" class="py-10 text-center text-slate-400">没有符合筛选条件的订单记录</td></tr>`;
+        if (typeof renderOrdersMobileCardsList === 'function') {
+          renderOrdersMobileCardsList([]);
+        }
         return;
       }
 
@@ -5989,16 +6077,19 @@
                   </button>
                 </div>
                 <div class="flex items-center gap-1 justify-end">
-                  <button data-notify-order="${o.id}" class="px-1.5 py-0.5 rounded bg-indigo-50 hover:bg-indigo-100 text-indigo-800 border border-indigo-200 text-[11px] font-bold whitespace-nowrap transition" title="生成发给客户（${o.recipient}）的微信通知：可选下单回执、快递单号、采购账单或二合一卡片">
+                  <button type="button" data-quickview-order="${o.id}" class="px-1.5 py-0.5 rounded bg-emerald-50 hover:bg-emerald-100 text-emerald-800 border border-emerald-200 text-[11px] font-bold whitespace-nowrap transition" title="打开单条订单竖向一屏全览卡片">
+                    🔍详情
+                  </button>
+                  <button type="button" data-notify-order="${o.id}" class="px-1.5 py-0.5 rounded bg-indigo-50 hover:bg-indigo-100 text-indigo-800 border border-indigo-200 text-[11px] font-bold whitespace-nowrap transition" title="生成发给客户（${o.recipient}）的微信通知：可选下单回执、快递单号、采购账单或二合一卡片">
                     📲发客户
                   </button>
-                  <button data-clone-order="${o.id}" class="px-1.5 py-0.5 rounded bg-amber-50 hover:bg-amber-100 text-amber-900 border border-amber-200 text-[11px] font-medium whitespace-nowrap" title="按此单商品复制再来一单">
+                  <button type="button" data-clone-order="${o.id}" class="px-1.5 py-0.5 rounded bg-amber-50 hover:bg-amber-100 text-amber-900 border border-amber-200 text-[11px] font-medium whitespace-nowrap" title="按此单商品复制再来一单">
                     复制
                   </button>
-                  <button data-edit-order="${o.id}" class="px-1.5 py-0.5 rounded bg-slate-100 hover:bg-slate-200 text-slate-700 text-[11px] font-medium whitespace-nowrap">
+                  <button type="button" data-edit-order="${o.id}" class="px-1.5 py-0.5 rounded bg-slate-100 hover:bg-slate-200 text-slate-700 text-[11px] font-medium whitespace-nowrap">
                     编辑
                   </button>
-                  <button data-delete-order="${o.id}" class="px-1.5 py-0.5 rounded bg-rose-50 hover:bg-rose-100 text-rose-700 text-[11px] whitespace-nowrap">
+                  <button type="button" data-delete-order="${o.id}" class="px-1.5 py-0.5 rounded bg-rose-50 hover:bg-rose-100 text-rose-700 text-[11px] whitespace-nowrap">
                     删除
                   </button>
                 </div>
@@ -6008,6 +6099,9 @@
         `;
       }).join('');
 
+      if (typeof renderOrdersMobileCardsList === 'function') {
+        renderOrdersMobileCardsList(filtered);
+      }
       syncOrdersTableTopScrollbar();
     }
 
@@ -7486,9 +7580,20 @@
           return;
         }
 
+        const quickViewOrdBtn = e.target.closest('[data-quickview-order]');
+        if (quickViewOrdBtn) {
+          const ordId = quickViewOrdBtn.getAttribute('data-quickview-order');
+          if (typeof openOrderQuickViewModal === 'function') {
+            openOrderQuickViewModal(ordId);
+          }
+          return;
+        }
+
         const notifyOrdBtn = e.target.closest('[data-notify-order]');
         if (notifyOrdBtn) {
           const ordId = notifyOrdBtn.getAttribute('data-notify-order');
+          const qvModal = document.getElementById('modalOrderQuickView');
+          if (qvModal) qvModal.classList.add('hidden');
           if (typeof openCustomerNotifyModal === 'function') {
             openCustomerNotifyModal(ordId);
           }
@@ -8179,7 +8284,7 @@
     function buildFullSystemExportObject(options = {}) {
         const obj = {
           exportedAt: new Date().toISOString(),
-          appVersion: 'V7.3',
+          appVersion: 'V7.4',
           orders: state.orders,
           sheet1Orders: state.sheet1Orders,
           products: state.products,
@@ -14508,43 +14613,62 @@ export async function onRequestPost(context) {
       renderCustomerNotifyText();
     }
 
+    function getOrderFinancials(order) {
+      return calcOrderMoney(order);
+    }
+
     function openCustomerNotifyModal(orderIdOrNull, preferredRecipient) {
-      const allOrds = state.orders.filter(o => !o.cancelled);
-      let targetOrd = orderIdOrNull ? allOrds.find(o => o.id === orderIdOrNull) : null;
-      let rec = preferredRecipient || (targetOrd ? targetOrd.recipient : null);
-      if (!rec) {
-        const billRec = document.getElementById('billRecipientSelect');
-        rec = (billRec && billRec.value && billRec.value !== 'ALL') ? billRec.value : (allOrds[0] ? allOrds[0].recipient : '朱峰');
-      }
+      const modalEl = document.getElementById('modalCustomerNotify');
+      if (modalEl) modalEl.classList.remove('hidden');
 
-      currentNotifyState.recipient = rec;
-      currentNotifyState.focalOrderId = targetOrd ? targetOrd.id : null;
-      currentNotifyState.selectedOrderIds = new Set();
+      try {
+        const allOrds = state.orders.filter(o => !o.cancelled);
+        let targetOrd = orderIdOrNull
+          ? (allOrds.find(o => String(o.id) === String(orderIdOrNull)) || state.orders.find(o => String(o.id) === String(orderIdOrNull)))
+          : null;
+        let rec = preferredRecipient || (targetOrd ? targetOrd.recipient : null);
+        if (!rec) {
+          const ordFilterRec = document.getElementById('filterRecipient');
+          const billRec = document.getElementById('billRecipientSelect');
+          if (ordFilterRec && ordFilterRec.value && ordFilterRec.value !== 'ALL') {
+            rec = ordFilterRec.value;
+          } else if (billRec && billRec.value && billRec.value !== 'ALL') {
+            rec = billRec.value;
+          } else {
+            rec = allOrds[0] ? allOrds[0].recipient : '朱峰';
+          }
+        }
 
-      const recOrds = allOrds
-        .filter(o => o.recipient === rec)
-        .sort((a, b) => String(b.orderDate).localeCompare(String(a.orderDate)));
+        currentNotifyState.recipient = rec;
+        currentNotifyState.focalOrderId = targetOrd ? targetOrd.id : null;
+        currentNotifyState.selectedOrderIds = new Set();
 
-      if (targetOrd) {
-        currentNotifyState.selectedOrderIds.add(targetOrd.id);
-        // Smart default mode based on order state
-        const hasTracks = Array.isArray(targetOrd.parcels) && targetOrd.parcels.some(p => p.trackingNo);
-        const allDelivered = hasTracks && targetOrd.parcels.every(p => !!p.deliveredDate);
-        if (allDelivered) {
-          applyNotifyModePreset('arrival_remind');
-        } else if (!hasTracks) {
-          applyNotifyModePreset('order_confirm');
+        const recOrds = allOrds
+          .filter(o => o.recipient === rec)
+          .sort((a, b) => String(b.orderDate).localeCompare(String(a.orderDate)));
+
+        if (targetOrd) {
+          currentNotifyState.selectedOrderIds.add(targetOrd.id);
+          const hasTracks = Array.isArray(targetOrd.parcels) && targetOrd.parcels.some(p => p.trackingNo);
+          const allDelivered = hasTracks && targetOrd.parcels.every(p => !!p.deliveredDate);
+          if (allDelivered) {
+            applyNotifyModePreset('arrival_remind');
+          } else if (!hasTracks) {
+            applyNotifyModePreset('order_confirm');
+          } else {
+            applyNotifyModePreset('full_combined');
+          }
         } else {
+          recOrds.slice(0, 3).forEach(o => currentNotifyState.selectedOrderIds.add(o.id));
           applyNotifyModePreset('full_combined');
         }
-      } else {
-        recOrds.slice(0, 3).forEach(o => currentNotifyState.selectedOrderIds.add(o.id));
-        applyNotifyModePreset('full_combined');
-      }
 
-      populateNotifyCustomerModalUI();
-      document.getElementById('modalCustomerNotify').classList.remove('hidden');
+        populateNotifyCustomerModalUI();
+      } catch (err) {
+        console.error('openCustomerNotifyModal error:', err);
+      }
     }
+    window.openCustomerNotifyModal = openCustomerNotifyModal;
 
     function populateNotifyCustomerModalUI() {
       const allOrds = state.orders.filter(o => !o.cancelled);
@@ -14571,7 +14695,7 @@ export async function onRequestPost(context) {
 
       box.innerHTML = recOrds.map(o => {
         const checked = currentNotifyState.selectedOrderIds.has(o.id);
-        const m = getOrderFinancials(o);
+        const m = calcOrderMoney(o);
         const itemsText = (o.items || []).map(i => `${i.product}×${i.qty}`).join('、');
         const tracksText = (o.parcels || []).filter(p => p.trackingNo).map(p => `${p.courier}:${p.trackingNo}`).join(' ') || '暂未出单号';
         return `
@@ -14645,7 +14769,7 @@ export async function onRequestPost(context) {
       let totalItemUnits = 0;
 
       selectedOrds.forEach((o, idx) => {
-        const m = getOrderFinancials(o);
+        const m = calcOrderMoney(o);
         const ordRate = Number(o.exchangeRate) || liveNzdRate;
 
         // Determine display currency for this order
@@ -14901,76 +15025,267 @@ export async function onRequestPost(context) {
       }
     }
 
-    function parseMiniProgramTextToBuilder(rawText) {
-      const text = String(rawText || '').trim();
-      if (!text) {
-        showToast('请先在左侧文本框粘贴微信小程序订单文字');
-        return;
+    // Clean OCR artifacts (spaces between Chinese characters, full-width symbols, broken decimals)
+    function cleanOcrRawText(rawText) {
+      let s = String(rawText || '');
+      // Remove spaces between CJK characters repeatedly
+      for (let pass = 0; pass < 3; pass++) {
+        s = s.replace(/([\u4e00-\u9fa5])\s+([\u4e00-\u9fa5])/g, '$1$2');
       }
-      // First run the existing smart web parser
-      const parsed = parseWebOrderForBackfill(text, null);
-      if (parsed) {
-        if (parsed.merchant) mpBuilderState.merchant = parsed.merchant;
-        const recCands = inferSmartRecipientCandidates(parsed.recipient, parsed.recipientAddress);
-        if (recCands && recCands.length > 0) {
-          mpBuilderState.recipient = recCands[0].tag;
+      // Fix common OCR symbol & number confusions
+      s = s.replace(/[￥¥]\s*(\d+)\s*[.。·]\s*(\d{1,2})/g, '¥$1.$2');
+      s = s.replace(/\$\s*(\d+)\s*[.。·]\s*(\d{1,2})/g, '$$$1.$2');
+      s = s.replace(/(\d)\s*[xX×＊*]\s*(\d{1,3})(?!\d)/g, '$1 × $2');
+      s = s.replace(/MG0/gi, 'MGO');
+      s = s.replace(/UMF\s*1O/gi, 'UMF10');
+      return s;
+    }
+
+    // Fuzzy match products from state.products when OCR text has partial or noisy product titles
+    function extractFuzzyCatalogItemsFromOcrText(cleanedText, preferredCurrency) {
+      const lines = String(cleanedText || '').split(/\r?\n/).map(l => l.trim()).filter(Boolean);
+      const cur = preferredCurrency || 'CNY';
+      const keywordRules = [
+        { keys: ['263', '1kg'], targetSub: 'MGO263+ UMF10+ 1kg' },
+        { keys: ['263', '1000g'], targetSub: 'MGO263+ UMF10+ 1kg' },
+        { keys: ['263'], targetSub: 'MGO263+ UMF10+ 500g' },
+        { keys: ['蜜纽康', '400'], targetSub: 'Mgo400+' },
+        { keys: ['mgo', '400'], targetSub: 'Mgo400+' },
+        { keys: ['蜜纽康', '250'], targetSub: 'Mgo250+' },
+        { keys: ['蜜纽康', '100'], targetSub: 'Mgo100+' },
+        { keys: ['蜜纽康'], targetSub: 'MGO263+ UMF10+ 500g' },
+        { keys: ['好健康', '1500'], targetSub: '好健康 深海鱼油胶囊 1500mg' },
+        { keys: ['goodhealth', '1500'], targetSub: '好健康 深海鱼油胶囊 1500mg' },
+        { keys: ['好健康', '鱼油'], targetSub: '好健康 深海鱼油胶囊 1000mg' },
+        { keys: ['好健康', '液体钙'], targetSub: '好健康 液体钙' },
+        { keys: ['澳佳宝', '三倍'], targetSub: '澳佳宝 三倍鱼油' },
+        { keys: ['澳佳宝', '鱼油'], targetSub: '澳佳宝 深海鱼油胶囊1000mg' },
+        { keys: ['blackmores', '鱼油'], targetSub: '澳佳宝 深海鱼油胶囊1000mg' },
+        { keys: ['钙镁'], targetSub: '活性钙镁片+D3' },
+        { keys: ['澳佳宝', '维', 'c'], targetSub: '活性维生素C 1000mg' },
+        { keys: ['绵羊油'], targetSub: '绵羊油保湿霜' },
+        { keys: ['安佳', '脱脂'], targetSub: '贵族高钙成人脱脂奶粉' },
+        { keys: ['安佳', '贵族', '全脂'], targetSub: '贵族高钙成人全脂奶粉' },
+        { keys: ['安佳', '儿童'], targetSub: '安佳 儿童 益生菌' },
+        { keys: ['安佳'], targetSub: '安佳 成人全脂奶粉 1kg*6袋' },
+        { keys: ['a2', '4段'], targetSub: 'A2 白金版婴幼儿配方奶粉 4段' },
+        { keys: ['爱他美', '白金', '4段'], targetSub: '爱他美 白金版铂金装 婴幼儿配方奶粉 4段' },
+        { keys: ['爱他美', '铂金', '4段'], targetSub: '爱他美 白金版铂金装 婴幼儿配方奶粉 4段' },
+        { keys: ['爱他美', '1段'], targetSub: '爱他美 金装婴儿配方奶粉(0-6月) 1段' },
+        { keys: ['爱他美', '2段'], targetSub: '爱他美 金装澳洲版 婴幼儿配方奶粉 2段' },
+        { keys: ['爱他美', '3段'], targetSub: '爱他美 金装澳洲版 婴幼儿配方奶粉 3段' },
+        { keys: ['爱他美', '4段'], targetSub: '爱他美 金装澳洲版 婴幼儿配方奶粉 4段' },
+        { keys: ['乳钙'], targetSub: '天然乳钙液体钙' },
+        { keys: ['bioisland'], targetSub: '天然乳钙液体钙' },
+        { keys: ['卵磷脂'], targetSub: '大豆卵磷脂软胶囊' },
+        { keys: ['奶蓟草', '120'], targetSub: '奶蓟草护肝片 护肝宝 120粒' },
+        { keys: ['护肝', '120'], targetSub: '奶蓟草护肝片 护肝宝 120粒' },
+        { keys: ['奶蓟草'], targetSub: '奶蓟草护肝片 护肝宝 200粒' },
+        { keys: ['护肝'], targetSub: '奶蓟草护肝片 护肝宝 200粒' },
+        { keys: ['蔓越莓'], targetSub: '蔓越莓胶囊' },
+        { keys: ['汤普森', '免疫'], targetSub: '儿童营养免疫片' },
+        { keys: ['贺寿利', '咀嚼'], targetSub: '儿童综合维生素及矿物质咀嚼片' },
+        { keys: ['贺寿利', '牛奶片'], targetSub: '牛奶片 香草味' },
+        { keys: ['益生菌', '500亿'], targetSub: '益生菌胶囊 500亿' },
+        { keys: ['益生菌'], targetSub: '日常呵护益生菌胶囊' },
+        { keys: ['辅酶'], targetSub: '辅酶Q10' },
+        { keys: ['q10'], targetSub: '辅酶Q10' },
+        { keys: ['芦荟'], targetSub: '97%芦荟凝胶' },
+        { keys: ['木瓜膏'], targetSub: '神奇番木瓜膏' },
+        { keys: ['泡腾片'], targetSub: '高含量维生素C泡腾片' },
+        { keys: ['润喉糖'], targetSub: '蜂胶润喉糖' },
+        { keys: ['蜂胶牙膏'], targetSub: '天然蜂胶牙膏' },
+        { keys: ['红印'], targetSub: '天然蜂胶牙膏' },
+        { keys: ['4倍', '鱼油'], targetSub: '4倍浓缩野生深海无腥味鱼油' },
+        { keys: ['扑热息痛'], targetSub: 'Maxigesic 扑热息痛' },
+        { keys: ['maxigesic'], targetSub: 'Maxigesic 扑热息痛' },
+        { keys: ['补钙', '150'], targetSub: '钙+维生素D 成人孕妇老人补钙' }
+      ];
+
+      const results = [];
+      const usedLines = new Set();
+
+      for (let i = 0; i < lines.length; i++) {
+        if (usedLines.has(i)) continue;
+        const lineLower = lines[i].toLowerCase();
+        // Skip pure summary lines
+        if (/^(收货人|收件人|订单编号|订单号|下单时间|创建时间|支付方式|快递公司|物流单号|实付款|商品总额|运费)/.test(lines[i])) {
+          continue;
         }
-        if (parsed.orderDate) {
+
+        let matchedProd = null;
+        for (const rule of keywordRules) {
+          if (rule.keys.every(k => lineLower.includes(k))) {
+            matchedProd = state.products.find(p => p.name.includes(rule.targetSub)) || { name: rule.targetSub };
+            break;
+          }
+        }
+
+        if (!matchedProd) {
+          // Direct substring check against state.products
+          for (const p of state.products) {
+            const coreTokens = p.name.split(/\s+/).filter(t => t.length >= 2 && !/^(\d+g|\d+粒|\d+片)$/i.test(t));
+            const hitCount = coreTokens.filter(t => lineLower.includes(t.toLowerCase())).length;
+            if (hitCount >= 2) {
+              matchedProd = p;
+              break;
+            }
+          }
+        }
+
+        if (matchedProd) {
+          // Look for price & qty on this line or the next 1-2 lines
+          const windowText = [lines[i], lines[i + 1] || '', lines[i + 2] || ''].join(' ');
+          let qty = 1;
+          let unitPrice = 0;
+
+          const pqMatch = windowText.match(/(?:¥|￥|NZ\$|\$)?\s*(\d{1,4}(?:\.\d{1,2})?)\s*[x×*]\s*(\d{1,3})(?!\d)/i);
+          if (pqMatch) {
+            unitPrice = parseFloat(pqMatch[1]) || 0;
+            qty = parseInt(pqMatch[2], 10) || 1;
+          } else {
+            const qtyMatch = windowText.match(/(?:[x×*]\s*(\d{1,3})|数量\s*[:：]?\s*(\d{1,3})|(\d{1,2})\s*(?:件|罐|瓶|盒|支|袋))(?!\d)/i);
+            if (qtyMatch) {
+              qty = parseInt(qtyMatch[1] || qtyMatch[2] || qtyMatch[3], 10) || 1;
+            }
+            const priceMatch = windowText.match(/(?:¥|￥|NZ\$|\$)\s*(\d{1,4}(?:\.\d{1,2})?)/i);
+            if (priceMatch) {
+              unitPrice = parseFloat(priceMatch[1]) || 0;
+            }
+          }
+
+          if (!unitPrice || unitPrice <= 0) {
+            const pInfo = getProductInfo(matchedProd.name);
+            unitPrice = getHistoricalPriceByDate(matchedProd.name, TODAY_STR, cur) ||
+              (cur === 'CNY' ? (pInfo && pInfo.rmbPrice ? pInfo.rmbPrice : 0) : (pInfo && pInfo.nzdPrice ? pInfo.nzdPrice : 0)) || 0;
+          }
+
+          results.push({
+            product: matchedProd.name,
+            qty,
+            unitPrice: Number(unitPrice) || 0
+          });
+          usedLines.add(i);
+        }
+      }
+      return results;
+    }
+
+    function parseMiniProgramTextToBuilder(rawText, options = {}) {
+      const cleaned = cleanOcrRawText(rawText).trim();
+      if (!cleaned) {
+        showToast('请先粘贴微信小程序订单文字或选择手机订单截图');
+        return null;
+      }
+
+      const parsed = parseWebOrderForBackfill(cleaned, null) || {};
+      if (parsed.merchant) mpBuilderState.merchant = parsed.merchant;
+      else if (/易康|ezhealth/i.test(cleaned)) mpBuilderState.merchant = '易康';
+      else if (/华洋|hyhealth/i.test(cleaned)) mpBuilderState.merchant = '华洋';
+      else if (/纽澳康源|healthelement/i.test(cleaned)) mpBuilderState.merchant = '纽澳康源';
+
+      // Recipient matching (direct name or address keyword)
+      const recCands = inferSmartRecipientCandidates(parsed.recipient, parsed.recipientAddress || cleaned);
+      if (recCands && recCands.length > 0) {
+        mpBuilderState.recipient = recCands[0].tag;
+      } else {
+        const knownRecs = ['朱峰', '朱莉', '王超', '顾婷', '朱欢', '泗泾', 'HOME'];
+        const foundRec = knownRecs.find(r => cleaned.includes(r));
+        if (foundRec) mpBuilderState.recipient = foundRec;
+      }
+
+      if (parsed.orderDate) {
+        const dEl = document.getElementById('mpQuickDate');
+        if (dEl) dEl.value = parsed.orderDate;
+      } else {
+        const dateM = cleaned.match(/(202\d[-/.年]\d{1,2}[-/.月]\d{1,2})/);
+        if (dateM) {
+          const normD = dateM[1].replace(/[/.年月]/g, '-').replace(/日$/, '').replace(/-(\d)(?=-|$)/g, '-0$1');
           const dEl = document.getElementById('mpQuickDate');
-          if (dEl) dEl.value = parsed.orderDate;
-        }
-        if (parsed.orderNo) {
-          const noEl = document.getElementById('mpQuickOrderNo');
-          if (noEl) noEl.value = parsed.orderNo;
-        }
-        if (parsed.currency) {
-          const cEl = document.getElementById('mpQuickCurrency');
-          if (cEl) cEl.value = parsed.currency === 'CNY' ? 'CNY' : 'NZD';
-        }
-        if (parsed.shippingFee !== null && parsed.shippingFee !== undefined) {
-          const sEl = document.getElementById('mpQuickShippingFee');
-          if (sEl) sEl.value = parsed.shippingFee;
-        }
-        if (parsed.parcels && parsed.parcels.length > 0) {
-          const p0 = parsed.parcels[0];
-          const courEl = document.getElementById('mpQuickCourier');
-          const trkEl = document.getElementById('mpQuickTrackingNo');
-          if (courEl && p0.courier) courEl.value = p0.courier;
-          if (trkEl && p0.trackingNo) trkEl.value = p0.trackingNo;
-        }
-        if (parsed.items && parsed.items.length > 0) {
-          mpBuilderState.items = parsed.items.map(it => ({
-            product: it.product,
-            qty: Number(it.qty) || 1,
-            unitPrice: Number(it.unitPrice) || 0
-          }));
+          if (dEl && /^\d{4}-\d{2}-\d{2}$/.test(normD)) dEl.value = normD;
         }
       }
 
-      // Additional fallback for multi-line WeChat Mini Program cards
-      if (!mpBuilderState.items || mpBuilderState.items.length === 0) {
-        const lines = text.split(/\r?\n/).map(l => l.trim()).filter(Boolean);
-        const extracted = [];
+      if (parsed.orderNo) {
+        const noEl = document.getElementById('mpQuickOrderNo');
+        if (noEl) noEl.value = parsed.orderNo;
+      } else {
+        const noM = cleaned.match(/(?:订单编号|订单号|单号)\s*[:：]?\s*([A-Za-z0-9-]{6,22})/);
+        if (noM) {
+          const noEl = document.getElementById('mpQuickOrderNo');
+          if (noEl) noEl.value = noM[1];
+        }
+      }
+
+      let detectedCurrency = parsed.currency || ((/¥|￥|人民币|微信支付/.test(cleaned) && !/NZ\$/i.test(cleaned)) ? 'CNY' : 'CNY');
+      const cEl = document.getElementById('mpQuickCurrency');
+      if (cEl) cEl.value = detectedCurrency === 'NZD' ? 'NZD' : 'CNY';
+
+      if (parsed.shippingFee !== null && parsed.shippingFee !== undefined) {
+        const sEl = document.getElementById('mpQuickShippingFee');
+        if (sEl) sEl.value = parsed.shippingFee;
+      }
+
+      if (parsed.parcels && parsed.parcels.length > 0) {
+        const p0 = parsed.parcels[0];
+        const courEl = document.getElementById('mpQuickCourier');
+        const trkEl = document.getElementById('mpQuickTrackingNo');
+        if (courEl && p0.courier) courEl.value = p0.courier;
+        if (trkEl && p0.trackingNo) trkEl.value = p0.trackingNo;
+      } else {
+        const trkM = cleaned.match(/\b(N64[A-Z0-9]{8,14}|175\d{6,7}|10023\d{5}|3675\d{6}|HE\d{7}|ZH5\d{10}|YT\d{11,14}|SF\d{11,14}|7712\d{10})\b/i);
+        if (trkM) {
+          const trkEl = document.getElementById('mpQuickTrackingNo');
+          if (trkEl) trkEl.value = trkM[1].toUpperCase();
+        }
+      }
+
+      let extractedItems = [];
+      if (parsed.items && parsed.items.length > 0) {
+        extractedItems = parsed.items.map(it => ({
+          product: it.product,
+          qty: Number(it.qty) || 1,
+          unitPrice: Number(it.unitPrice) || 0
+        }));
+      }
+
+      // Multi-line WeChat Mini Program card fallback
+      if (extractedItems.length === 0) {
+        const lines = cleaned.split(/\r?\n/).map(l => l.trim()).filter(Boolean);
         for (let i = 0; i < lines.length; i++) {
           const line = lines[i];
-          const inlineMatch = line.match(/^(?:¥|￥|NZ\$|\$)\s*([\d.]+)\s*[x×*]\s*(\d+)$/i);
+          const inlineMatch = line.match(/^(?:¥|￥|NZ\$|\$)?\s*([\d.]+)\s*[x×*]\s*(\d+)$/i);
           if (inlineMatch && i > 0) {
             const prevTitle = lines[i - 1].replace(/^规格[:：].*$/, '').trim() || (i >= 2 ? lines[i - 2] : '保健品');
             const normName = normalizeScrapedProductName(prevTitle);
-            extracted.push({
+            extractedItems.push({
               product: normName,
               unitPrice: parseFloat(inlineMatch[1]),
               qty: parseInt(inlineMatch[2], 10)
             });
           }
         }
-        if (extracted.length > 0) {
-          mpBuilderState.items = extracted;
-        }
+      }
+
+      // Fuzzy catalog matching fallback (especially powerful for OCR text from screenshots)
+      if (extractedItems.length === 0) {
+        extractedItems = extractFuzzyCatalogItemsFromOcrText(cleaned, detectedCurrency);
+      }
+
+      if (extractedItems.length > 0) {
+        mpBuilderState.items = extractedItems;
       }
 
       renderMiniProgramQuickBuilder();
-      showToast(`✅ 已解析小程序订单文字（识别出 ${mpBuilderState.items.length} 项商品），请核对右侧快录板！`);
+      if (!options.silentToast) {
+        showToast(`✅ 已智能解析订单信息（识别出 ${mpBuilderState.items.length} 项商品 · 收件人: ${mpBuilderState.recipient}）！`);
+      }
+      return {
+        recipient: mpBuilderState.recipient,
+        merchant: mpBuilderState.merchant,
+        itemsCount: mpBuilderState.items.length,
+        items: mpBuilderState.items
+      };
     }
 
     function saveOrderFromMiniProgramBuilder(openNotifyAfter) {
@@ -15050,12 +15365,356 @@ export async function onRequestPost(context) {
       }
     }
 
+
+    // =========================================================================
+    // V7.4 MODULE 5: MOBILE ZERO-HORIZONTAL-SCROLL ORDER CARDS & SINGLE ORDER QUICK VIEW
+    // =========================================================================
+    let ordersDisplayMode = (typeof window !== 'undefined' && window.innerWidth < 768) ? 'cards' : 'table';
+
+    function applyOrdersDisplayModeUI() {
+      const mobileWrap = document.getElementById('ordersMobileCardsWrap');
+      const desktopCard = document.getElementById('ordersDesktopTableCard');
+      const lblBtn = document.getElementById('lblOrdersViewModeBtn');
+      if (!mobileWrap || !desktopCard) return;
+
+      if (ordersDisplayMode === 'cards') {
+        mobileWrap.classList.remove('hidden');
+        desktopCard.classList.add('hidden');
+        if (lblBtn) lblBtn.textContent = '💻 切换为传统宽表';
+      } else {
+        mobileWrap.classList.add('hidden');
+        desktopCard.classList.remove('hidden');
+        if (lblBtn) lblBtn.textContent = '📱 竖排卡片(免横滑)';
+        syncOrdersTableTopScrollbar();
+      }
+    }
+
+    function renderOrdersMobileCardsList(filteredOrders) {
+      const listEl = document.getElementById('ordersMobileCardsList');
+      if (!listEl) return;
+
+      if (!filteredOrders || filteredOrders.length === 0) {
+        listEl.innerHTML = `<div class="bg-white rounded-xl p-8 text-center text-slate-400 border border-slate-200 text-xs">没有符合筛选条件的订单记录</div>`;
+        applyOrdersDisplayModeUI();
+        return;
+      }
+
+      listEl.innerHTML = filteredOrders.map(o => {
+        const m = calcOrderMoney(o);
+        const isStoreOrd = !!(o.isStoreOrder || String(o.orderNo || '').startsWith('门店订单') || String(o.orderNo || '').startsWith('无单号'));
+        const ordUrl = resolveOrderUrl(o);
+
+        const recBadgeClass = o.recipient === 'HOME'
+          ? 'bg-emerald-100 text-emerald-900 border-emerald-200'
+          : (o.recipient === '朱峰' ? 'bg-blue-100 text-blue-900 border-blue-200' : 'bg-purple-100 text-purple-900 border-purple-200');
+
+        const unreadTag = o.isUnread
+          ? `<span class="inline-flex items-center gap-1 text-[10px] bg-amber-400 text-slate-950 font-extrabold px-2 py-0.5 rounded-full"><span class="w-1.5 h-1.5 rounded-full bg-rose-600 animate-ping"></span>📬 新单</span>`
+          : '';
+
+        const verifyTag = o.webBackfilled
+          ? `<span class="text-[10px] bg-emerald-50 text-emerald-800 border border-emerald-200 px-1.5 py-0.5 rounded font-semibold">✅ 已核验</span>`
+          : (isStoreOrd
+            ? `<span class="text-[10px] bg-slate-100 text-slate-600 px-1.5 py-0.5 rounded">🏪 门店直购</span>`
+            : `<button type="button" data-backfill-order="${o.id}" class="text-[10px] bg-amber-50 text-amber-800 border border-amber-300 px-1.5 py-0.5 rounded font-bold">⏳ 待核验·点此核验</button>`);
+
+        const itemsRowsHtml = (o.items || []).map(it => {
+          const up = getOrderItemPrice(it, m.currency, o.orderDate);
+          const dualStr = (it.origUnitPrice && it.origCurrency && it.origCurrency !== m.currency)
+            ? ` <span class="text-[10px] text-teal-700">(原价${it.origCurrency === 'NZD' ? 'NZ$' : '¥'}${it.origUnitPrice})</span>`
+            : '';
+          return `
+            <div class="flex items-start justify-between gap-2 py-1 border-b last:border-b-0 border-slate-200/60 text-xs">
+              <span class="font-semibold text-slate-800 break-words flex-1">${it.product}</span>
+              <span class="whitespace-nowrap font-bold text-emerald-800 bg-white px-2 py-0.5 rounded border border-emerald-200 font-mono text-[11px]">
+                ×${it.qty}${up > 0 ? ` · ${m.symbol}${up}${dualStr}` : ''}
+              </span>
+            </div>
+          `;
+        }).join('');
+
+        let parcelsRowsHtml = '';
+        if (o.cancelled) {
+          parcelsRowsHtml = `<span class="inline-block text-xs bg-rose-100 text-rose-800 font-semibold px-2 py-0.5 rounded">🚫 订单已取消</span>`;
+        } else if (o.storeDeliveryMode === 'SELF_CARRY' || (o.parcels && o.parcels.length === 1 && (o.parcels[0].courier === '门店自提' || o.parcels[0].courier === '自提/免单号'))) {
+          parcelsRowsHtml = `
+            <div class="flex flex-wrap items-center justify-between gap-1.5">
+              <span class="text-xs bg-emerald-50 text-emerald-800 border border-emerald-200 font-bold px-2 py-0.5 rounded">🛍️ 自提/免单号 · ✅ ${o.orderDate} 已交付</span>
+              <button type="button" data-revert-selfpickup="${o.id}" class="text-[11px] text-slate-500 underline">改填快递单号</button>
+            </div>`;
+        } else if (!o.parcels || o.parcels.length === 0) {
+          parcelsRowsHtml = `
+            <div class="flex flex-wrap items-center justify-between gap-1.5">
+              <span class="text-xs bg-amber-100 text-amber-800 px-2 py-0.5 rounded font-medium">📦 暂未出快递运单号</span>
+              <div class="flex items-center gap-1.5">
+                <button type="button" data-quick-selfpickup="${o.id}" class="text-[11px] bg-emerald-50 text-emerald-800 border border-emerald-300 px-2 py-0.5 rounded font-semibold">🛍️ 设为自提</button>
+                <button type="button" data-edit-order="${o.id}" class="text-[11px] bg-amber-500 text-slate-950 px-2 py-0.5 rounded font-bold">＋ 补填单号</button>
+              </div>
+            </div>`;
+        } else {
+          parcelsRowsHtml = o.parcels.map((p, idx) => {
+            const dSpent = daysBetween(o.orderDate, p.deliveredDate);
+            const tUrl = resolveTrackingUrl(p);
+            return `
+              <div class="flex flex-wrap items-center justify-between gap-1.5 py-1 border-b last:border-b-0 border-slate-100">
+                <div class="flex flex-wrap items-center gap-1 min-w-0">
+                  <span class="text-[11px] font-bold px-1.5 py-0.5 rounded badge-courier-${p.courier}">${p.courier}</span>
+                  <a href="${tUrl}" target="_blank" rel="noopener noreferrer" data-copy-track="${p.trackingNo}" class="font-mono text-xs font-bold text-emerald-800 underline break-all">
+                    ${p.trackingNo} ↗
+                  </a>
+                  <button type="button" data-copy-track="${p.trackingNo}" class="text-[11px] text-slate-500 px-1" title="复制运单号">📋</button>
+                </div>
+                <div class="flex items-center gap-1.5">
+                  ${p.deliveredDate
+                    ? `<span class="text-[11px] text-emerald-700 bg-emerald-50 px-1.5 py-0.5 rounded font-medium">✅ ${p.deliveredDate}${dSpent !== null ? ` (${dSpent}天)` : ''}</span>`
+                    : `<span class="text-[11px] text-amber-800 bg-amber-100 px-1.5 py-0.5 rounded font-semibold">🚚 在途待签收</span>`
+                  }
+                  <button type="button" data-sign-order="${o.id}" data-sign-idx="${idx}" class="text-[11px] px-2 py-0.5 rounded border border-slate-300 bg-white hover:bg-slate-100 text-slate-700 font-semibold">
+                    ${p.deliveredDate ? '改期' : '✍️签收'}
+                  </button>
+                </div>
+              </div>
+            `;
+          }).join('');
+        }
+
+        const rateBadges = [];
+        if (o.exchangeRate && o.origPaidTotal && o.origCurrency !== m.currency) {
+          rateBadges.push(`<span class="text-[10px] bg-teal-50 text-teal-900 border border-teal-200 px-1.5 py-0.5 rounded font-semibold">💱 原价 ${o.origCurrency === 'NZD' ? 'NZ$' : '¥'}${Number(o.origPaidTotal).toFixed(2)} · 汇率 ${o.exchangeRate}</span>`);
+        }
+        if (o.exchangeRate && o.settledAmount && o.settledCurrency && o.settledCurrency !== m.currency) {
+          rateBadges.push(`<span class="text-[10px] bg-teal-50 text-teal-900 border border-teal-200 px-1.5 py-0.5 rounded font-semibold">💱 实付 ¥${Number(o.settledAmount).toFixed(2)} · 汇率 ${o.exchangeRate}</span>`);
+        }
+        if (o.paymentMethod) {
+          rateBadges.push(`<span class="text-[10px] bg-blue-50 text-blue-800 border border-blue-200 px-1.5 py-0.5 rounded font-medium">💳 ${o.paymentMethod}</span>`);
+        }
+
+        return `
+          <div class="bg-white rounded-xl border ${o.isUnread ? 'border-amber-400 ring-2 ring-amber-200/70' : 'border-slate-200'} p-3.5 shadow-2xs space-y-2.5 max-w-full overflow-hidden ${o.cancelled ? 'opacity-60' : ''}">
+            <!-- Row 1: Header (Date + Recipient + Merchant + OrderNo + Status) -->
+            <div class="flex flex-wrap items-center justify-between gap-1.5 border-b border-slate-100 pb-2">
+              <div class="flex flex-wrap items-center gap-1.5">
+                ${unreadTag}
+                <span class="font-mono text-xs font-bold text-slate-800">${o.orderDate || '-'}</span>
+                <span class="text-xs font-extrabold px-2 py-0.5 rounded-full border ${recBadgeClass}">${o.recipient}</span>
+                <span class="text-xs font-bold text-slate-800">${o.merchant}</span>
+              </div>
+              <div class="flex flex-wrap items-center gap-1.5">
+                ${isStoreOrd
+                  ? `<span class="text-[11px] text-slate-400 font-mono">线下门店</span>`
+                  : (ordUrl
+                    ? `<a href="${ordUrl}" target="_blank" rel="noopener noreferrer" class="font-mono text-xs font-bold text-emerald-700 underline">#${o.orderNo} ↗</a>`
+                    : `<span class="font-mono text-xs text-slate-500">#${o.orderNo}</span>`)
+                }
+                ${verifyTag}
+              </div>
+            </div>
+
+            <!-- Row 2: Items List (Full Width, No Horizontal Scroll) -->
+            <div class="bg-slate-50 rounded-lg px-2.5 py-1.5 border border-slate-200/80">
+              ${itemsRowsHtml}
+            </div>
+
+            ${o.note ? `<div class="text-[11px] text-amber-800 bg-amber-50/70 border border-amber-200/70 rounded-lg px-2.5 py-1">📝 备注：${o.note}</div>` : ''}
+
+            <!-- Row 3: Financial & Exchange Rate Strip -->
+            <div class="flex flex-wrap items-center justify-between gap-1.5 bg-emerald-50/40 border border-emerald-200/70 rounded-lg px-2.5 py-1.5 text-xs">
+              <div class="flex flex-wrap items-center gap-1.5">
+                <span class="text-slate-600">实付总计:</span>
+                <span class="font-extrabold text-sm text-emerald-900 font-mono">${m.grandTotal > 0 ? `${m.symbol}${m.grandTotal.toFixed(2)} ${m.currency}` : '未填单价'}</span>
+                <span class="text-[11px] text-slate-500">(商品${m.symbol}${m.itemTotal.toFixed(2)} + 运费${m.symbol}${m.shippingFee.toFixed(2)}${m.discount > 0 ? ` - 优惠${m.symbol}${m.discount.toFixed(2)}` : ''})</span>
+              </div>
+              ${rateBadges.length > 0 ? `<div class="flex flex-wrap items-center gap-1">${rateBadges.join('')}</div>` : ''}
+            </div>
+
+            <!-- Row 4: Courier & Parcels Tracking -->
+            <div class="bg-white rounded-lg border border-slate-200 px-2.5 py-1.5">
+              ${parcelsRowsHtml}
+            </div>
+
+            <!-- Row 5: Thumb-Friendly Action Buttons Bar -->
+            <div class="flex flex-wrap items-center justify-between gap-1.5 pt-1 border-t border-slate-100">
+              <div class="flex flex-wrap items-center gap-1.5">
+                <button type="button" data-notify-order="${o.id}" class="px-2.5 py-1.5 rounded-lg bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-extrabold shadow-2xs transition flex items-center gap-1">
+                  <span>📲 发客户通知</span>
+                </button>
+                <button type="button" data-quickview-order="${o.id}" class="px-2.5 py-1.5 rounded-lg bg-emerald-50 hover:bg-emerald-100 text-emerald-900 border border-emerald-200 text-xs font-bold transition">
+                  🔍 单条全览
+                </button>
+                ${(!o.webBackfilled && !isStoreOrd) ? `
+                <button type="button" data-backfill-order="${o.id}" class="px-2.5 py-1.5 rounded-lg bg-teal-700 hover:bg-teal-600 text-white text-xs font-bold transition">
+                  ⚡ 抓单核验
+                </button>` : ''}
+              </div>
+              <div class="flex flex-wrap items-center gap-1">
+                <button type="button" data-toggle-read="${o.id}" class="px-2 py-1 rounded-lg ${o.isUnread ? 'bg-amber-400 text-slate-950 font-bold' : 'bg-slate-100 text-slate-600'} text-xs">
+                  ${o.isUnread ? '✓已读' : '标未读'}
+                </button>
+                <button type="button" data-clone-order="${o.id}" class="px-2 py-1 rounded-lg bg-amber-50 text-amber-900 border border-amber-200 text-xs font-medium">
+                  复制
+                </button>
+                <button type="button" data-edit-order="${o.id}" class="px-2.5 py-1 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-800 text-xs font-bold">
+                  编辑
+                </button>
+                <button type="button" data-delete-order="${o.id}" class="px-2 py-1 rounded-lg bg-rose-50 text-rose-700 text-xs">
+                  删除
+                </button>
+              </div>
+            </div>
+          </div>
+        `;
+      }).join('');
+
+      applyOrdersDisplayModeUI();
+    }
+
+    function openOrderQuickViewModal(orderId) {
+      const ord = getActiveOrders().find(o => String(o.id) === String(orderId)) || state.orders.find(o => String(o.id) === String(orderId));
+      if (!ord) return;
+      const modal = document.getElementById('modalOrderQuickView');
+      const body = document.getElementById('orderQuickViewBody');
+      const footer = document.getElementById('orderQuickViewFooter');
+      const title = document.getElementById('qvModalTitle');
+      if (!modal || !body || !footer) return;
+
+      const m = calcOrderMoney(ord);
+      const ordUrl = resolveOrderUrl(ord);
+      if (title) title.textContent = `${ord.recipient} · ${ord.merchant} 订单详情 (#${ord.orderNo})`;
+
+      const itemsListHtml = (ord.items || []).map(it => {
+        const up = getOrderItemPrice(it, m.currency, ord.orderDate);
+        const sub = (Number(it.qty) || 0) * up;
+        return `
+          <div class="flex items-center justify-between gap-2 py-1.5 border-b last:border-b-0 border-slate-200">
+            <div class="font-bold text-slate-800 flex-1">${it.product}</div>
+            <div class="font-mono text-right whitespace-nowrap">
+              <span class="text-slate-600">${m.symbol}${up.toFixed(2)} × ${it.qty}</span>
+              <span class="ml-1.5 font-extrabold text-emerald-800">${m.symbol}${sub.toFixed(2)}</span>
+            </div>
+          </div>
+        `;
+      }).join('');
+
+      const parcelsListHtml = (!ord.parcels || ord.parcels.length === 0)
+        ? `<div class="text-amber-800 bg-amber-50 border border-amber-200 rounded-lg p-2.5">📦 暂未录入国际快递运单号</div>`
+        : ord.parcels.map((p, idx) => {
+            const tUrl = resolveTrackingUrl(p);
+            return `
+              <div class="flex flex-wrap items-center justify-between gap-2 p-2.5 rounded-lg border border-slate-200 bg-slate-50">
+                <div>
+                  <span class="font-bold px-2 py-0.5 rounded badge-courier-${p.courier}">${p.courier}</span>
+                  <a href="${tUrl}" target="_blank" rel="noopener noreferrer" class="ml-1.5 font-mono font-bold text-emerald-800 underline break-all">${p.trackingNo} ↗</a>
+                </div>
+                <div class="flex items-center gap-1.5">
+                  ${p.deliveredDate
+                    ? `<span class="text-emerald-700 font-bold">✅ ${p.deliveredDate} 已签收</span>`
+                    : `<span class="text-amber-800 font-bold">🚚 运输中</span>`}
+                  <button type="button" data-sign-order="${ord.id}" data-sign-idx="${idx}" class="px-2.5 py-1 rounded bg-emerald-700 text-white font-bold">
+                    ${p.deliveredDate ? '修改日期' : '✍️ 签收'}
+                  </button>
+                </div>
+              </div>
+            `;
+          }).join('');
+
+      body.innerHTML = `
+        <div class="bg-slate-50 border border-slate-200 rounded-xl p-3 grid grid-cols-2 gap-2">
+          <div><span class="text-slate-400">收件客户：</span><strong class="text-slate-900 text-sm">${ord.recipient}</strong></div>
+          <div><span class="text-slate-400">下单日期：</span><strong class="font-mono text-slate-900">${ord.orderDate}</strong></div>
+          <div><span class="text-slate-400">采购商家：</span><strong class="text-slate-900">${ord.merchant}</strong></div>
+          <div><span class="text-slate-400">订单编号：</span>${ordUrl ? `<a href="${ordUrl}" target="_blank" rel="noopener noreferrer" class="font-mono font-bold text-emerald-700 underline">#${ord.orderNo} ↗</a>` : `<span class="font-mono font-bold">#${ord.orderNo}</span>`}</div>
+        </div>
+        <div class="space-y-1.5">
+          <div class="font-bold text-slate-700">🛒 购买商品明细（共 ${m.totalQty} 件）：</div>
+          <div class="bg-white border border-slate-200 rounded-xl px-3 py-1">${itemsListHtml}</div>
+        </div>
+        <div class="bg-emerald-50/70 border border-emerald-200 rounded-xl p-3 space-y-1">
+          <div class="flex items-center justify-between">
+            <span class="font-bold text-emerald-950">💰 订单实付总计：</span>
+            <span class="text-base font-extrabold text-emerald-800 font-mono">${m.symbol}${m.grandTotal.toFixed(2)} (${m.currency})</span>
+          </div>
+          <div class="text-[11px] text-slate-600">商品合计: ${m.symbol}${m.itemTotal.toFixed(2)} | 运费: ${m.symbol}${m.shippingFee.toFixed(2)}${m.paymentFee > 0 ? ` | 手续费: ${m.symbol}${m.paymentFee.toFixed(2)}` : ''}${m.discount > 0 ? ` | 优惠: -${m.symbol}${m.discount.toFixed(2)}` : ''}</div>
+          ${ord.exchangeRate && ord.origPaidTotal ? `<div class="text-[11px] text-teal-900 font-semibold">💱 网页原标价: NZ$${Number(ord.origPaidTotal).toFixed(2)} · 折算汇率: ${ord.exchangeRate} · 实付人民币: ¥${Number(ord.settledAmount || (m.grandTotal * ord.exchangeRate)).toFixed(2)}</div>` : ''}
+          ${ord.paymentMethod ? `<div class="text-[11px] text-blue-800 font-medium">💳 支付方式: ${ord.paymentMethod}</div>` : ''}
+        </div>
+        <div class="space-y-1.5">
+          <div class="font-bold text-slate-700">🚚 国际快递包裹与签收状态：</div>
+          <div class="space-y-1.5">${parcelsListHtml}</div>
+        </div>
+        ${ord.note ? `<div class="bg-amber-50 border border-amber-200 rounded-xl p-2.5 text-amber-900">📝 订单备注：${ord.note}</div>` : ''}
+      `;
+
+      footer.innerHTML = `
+        <div class="flex flex-wrap items-center gap-2">
+          <button type="button" data-notify-order="${ord.id}" class="bg-indigo-600 hover:bg-indigo-500 text-white font-extrabold text-xs px-4 py-2 rounded-xl shadow-xs transition">
+            📲 发客户微信通知 (账单/快递单)
+          </button>
+          <button type="button" data-edit-order="${ord.id}" class="bg-slate-800 hover:bg-slate-700 text-white font-bold text-xs px-3.5 py-2 rounded-xl transition">
+            ✏️ 编辑此订单
+          </button>
+        </div>
+        <button type="button" id="btnCloseOrderQuickViewBottom" class="bg-slate-200 hover:bg-slate-300 text-slate-700 font-bold text-xs px-3.5 py-2 rounded-xl">
+          关闭
+        </button>
+      `;
+
+      modal.classList.remove('hidden');
+      const btnBot = document.getElementById('btnCloseOrderQuickViewBottom');
+      if (btnBot) btnBot.addEventListener('click', () => modal.classList.add('hidden'));
+    }
+    window.openOrderQuickViewModal = openOrderQuickViewModal;
+
     function initV73CustomerNotifyAndMiniProgramEvents() {
+      // Initialize Mobile vs Wide Table view mode & listeners
+      applyOrdersDisplayModeUI();
+      const btnToggleViewMode = document.getElementById('btnToggleOrdersViewMode');
+      if (btnToggleViewMode) {
+        btnToggleViewMode.addEventListener('click', () => {
+          ordersDisplayMode = ordersDisplayMode === 'cards' ? 'table' : 'cards';
+          applyOrdersDisplayModeUI();
+          showToast(ordersDisplayMode === 'cards' ? '📱 已切换为「手机竖排卡片视图」（单条信息一屏全览，免横滑）' : '💻 已切换为「传统多列宽表视图」');
+        });
+      }
+      const btnSwitchWideBanner = document.getElementById('btnSwitchToWideTableFromBanner');
+      if (btnSwitchWideBanner) {
+        btnSwitchWideBanner.addEventListener('click', () => {
+          ordersDisplayMode = 'table';
+          applyOrdersDisplayModeUI();
+          showToast('💻 已切换为「传统多列宽表视图」（可随时点上方「📱 竖排卡片」切回免横滑模式）');
+        });
+      }
+      const btnCloseQv = document.getElementById('btnCloseOrderQuickView');
+      if (btnCloseQv) {
+        btnCloseQv.addEventListener('click', () => {
+          document.getElementById('modalOrderQuickView').classList.add('hidden');
+        });
+      }
+      const modalQv = document.getElementById('modalOrderQuickView');
+      if (modalQv) {
+        modalQv.addEventListener('click', (e) => {
+          if (e.target === modalQv) modalQv.classList.add('hidden');
+        });
+      }
+
       // Customer Notify Modal close & buttons
       const btnCloseNotify = document.getElementById('btnCloseCustomerNotifyModal');
       if (btnCloseNotify) {
         btnCloseNotify.addEventListener('click', () => {
           document.getElementById('modalCustomerNotify').classList.add('hidden');
+        });
+      }
+      const modalNotifyEl = document.getElementById('modalCustomerNotify');
+      if (modalNotifyEl) {
+        modalNotifyEl.addEventListener('click', (e) => {
+          if (e.target === modalNotifyEl) modalNotifyEl.classList.add('hidden');
+        });
+      }
+      const btnOpenFromOrdersTab = document.getElementById('btnOpenCustomerNotifyFromOrdersTab');
+      if (btnOpenFromOrdersTab) {
+        btnOpenFromOrdersTab.addEventListener('click', () => {
+          const recFilter = document.getElementById('filterRecipient');
+          const rec = (recFilter && recFilter.value && recFilter.value !== 'ALL') ? recFilter.value : '朱峰';
+          openCustomerNotifyModal(null, rec);
         });
       }
 
@@ -15264,23 +15923,314 @@ export async function onRequestPost(context) {
         });
       }
 
+      // =====================================================================
+      // V7.4 SMART SCREENSHOT OCR ENGINE (Supports Mobile Mini-Program & Order Screenshots)
+      // =====================================================================
+      let lastLoadedScreenshotDataUrl = '';
+      let tesseractLoadPromise = null;
+
+      function ensureTesseractLoaded(onProgress) {
+        if (window.Tesseract) return Promise.resolve(window.Tesseract);
+        if (tesseractLoadPromise) return tesseractLoadPromise;
+        const cdnUrls = [
+          'https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js',
+          'https://unpkg.com/tesseract.js@5/dist/tesseract.min.js',
+          'https://cdnjs.cloudflare.com/ajax/libs/tesseract.js/5.0.4/tesseract.min.js'
+        ];
+        tesseractLoadPromise = new Promise((resolve, reject) => {
+          let idx = 0;
+          function tryNext() {
+            if (idx >= cdnUrls.length) {
+              tesseractLoadPromise = null;
+              reject(new Error('OCR_CDN_UNAVAILABLE'));
+              return;
+            }
+            const s = document.createElement('script');
+            s.src = cdnUrls[idx++];
+            s.async = true;
+            s.onload = () => {
+              if (window.Tesseract) resolve(window.Tesseract);
+              else tryNext();
+            };
+            s.onerror = () => tryNext();
+            document.head.appendChild(s);
+          }
+          if (onProgress) onProgress('正在加载中文+英文 OCR 视觉识别引擎...', 18);
+          tryNext();
+        });
+        return tesseractLoadPromise;
+      }
+
+      function preprocessScreenshotForOcr(dataUrl) {
+        return new Promise((resolve) => {
+          const image = new Image();
+          image.onload = () => {
+            try {
+              const canvas = document.createElement('canvas');
+              const maxDim = 1600;
+              let w = image.naturalWidth || image.width || 800;
+              let h = image.naturalHeight || image.height || 1200;
+              if (w < 900) {
+                const scale = 1200 / Math.max(w, 1);
+                w = Math.round(w * scale);
+                h = Math.round(h * scale);
+              } else if (Math.max(w, h) > maxDim) {
+                const scale = maxDim / Math.max(w, h);
+                w = Math.round(w * scale);
+                h = Math.round(h * scale);
+              }
+              canvas.width = w;
+              canvas.height = h;
+              const ctx = canvas.getContext('2d');
+              ctx.fillStyle = '#FFFFFF';
+              ctx.fillRect(0, 0, w, h);
+              ctx.drawImage(image, 0, 0, w, h);
+
+              // Gentle contrast enhancement for WeChat Mini-Program gray text
+              const imgData = ctx.getImageData(0, 0, w, h);
+              const d = imgData.data;
+              for (let i = 0; i < d.length; i += 4) {
+                const lum = 0.299 * d[i] + 0.587 * d[i + 1] + 0.114 * d[i + 2];
+                const v = lum < 165 ? Math.max(0, (lum - 30) * 0.75) : Math.min(255, lum * 1.08);
+                d[i] = v;
+                d[i + 1] = v;
+                d[i + 2] = v;
+              }
+              ctx.putImageData(imgData, 0, 0);
+              resolve(canvas.toDataURL('image/png'));
+            } catch (e) {
+              resolve(dataUrl);
+            }
+          };
+          image.onerror = () => resolve(dataUrl);
+          image.src = dataUrl;
+        });
+      }
+
+      async function extractTextFromImageDataUrl(dataUrl, onProgress) {
+        // 1. Try Browser Native TextDetector first if available and non-empty
+        if ('TextDetector' in window) {
+          try {
+            if (onProgress) onProgress('正在调用设备原生视觉引擎识别文字...', 35);
+            const img = new Image();
+            await new Promise((res, rej) => { img.onload = res; img.onerror = rej; img.src = dataUrl; });
+            const detector = new window.TextDetector();
+            const blocks = await detector.detect(img);
+            if (blocks && blocks.length > 0) {
+              const nativeTxt = blocks.map(b => b.rawValue).filter(Boolean).join('\n');
+              // If native detector captured Chinese characters or enough lines, use it
+              if (/[\u4e00-\u9fa5]/.test(nativeTxt) || nativeTxt.length > 35) {
+                if (onProgress) onProgress('设备原生 OCR 识别完成！', 100);
+                return nativeTxt;
+              }
+            }
+          } catch (e) {}
+        }
+
+        // 2. Preprocess image on canvas & run Tesseract.js (chi_sim + eng)
+        if (onProgress) onProgress('正在增强手机截图文字对比度...', 25);
+        const enhancedUrl = await preprocessScreenshotForOcr(dataUrl);
+        const TesseractLib = await ensureTesseractLoaded(onProgress);
+        if (onProgress) onProgress('正在识别截图中的中文商品、金额与单号...', 40);
+
+        const result = await TesseractLib.recognize(enhancedUrl, 'chi_sim+eng', {
+          logger: (m) => {
+            if (m && typeof m.progress === 'number' && onProgress) {
+              const pct = Math.min(98, Math.max(40, Math.round(40 + m.progress * 58)));
+              onProgress(`正在智能识别截图文字 (${pct}%)...`, pct);
+            }
+          }
+        });
+        const text = (result && result.data && result.data.text) ? result.data.text.trim() : '';
+        if (onProgress) onProgress('OCR 识别完成！', 100);
+        return text;
+      }
+
+      async function processOrderScreenshotDataUrl(dataUrl, targetMode = 'miniprogram', fileName = '') {
+        lastLoadedScreenshotDataUrl = dataUrl;
+        const img = document.getElementById('miniProgramScreenshotImg');
+        const wrap = document.getElementById('miniProgramScreenshotPreviewWrap');
+        const statusBox = document.getElementById('mpOcrStatusBox');
+        const statusTxt = document.getElementById('mpOcrStatusText');
+        const pctEl = document.getElementById('mpOcrProgressPct');
+        const barEl = document.getElementById('mpOcrProgressBar');
+        const badgeEl = document.getElementById('mpOcrBadgePill');
+        const summaryBox = document.getElementById('mpOcrResultSummary');
+        const summaryTxt = document.getElementById('mpOcrResultSummaryText');
+
+        if (img && wrap) {
+          img.src = dataUrl;
+          wrap.classList.remove('hidden');
+          wrap.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }
+        if (statusBox) statusBox.classList.remove('hidden');
+        if (summaryBox) summaryBox.classList.add('hidden');
+        if (badgeEl) {
+          badgeEl.textContent = '🔄 识别中...';
+          badgeEl.className = 'text-[10px] bg-amber-100 text-amber-900 px-2 py-0.5 rounded-full font-bold';
+        }
+
+        const updateProgress = (msg, pct) => {
+          if (statusTxt) statusTxt.textContent = msg;
+          if (pctEl) pctEl.textContent = pct + '%';
+          if (barEl) barEl.style.width = pct + '%';
+        };
+
+        updateProgress('🔄 已读取手机截图，正在启动智能 OCR 文字与商品识别...', 12);
+        showToast('📸 正在为您智能识别手机订单截图，请稍候...');
+
+        try {
+          const ocrText = await extractTextFromImageDataUrl(dataUrl, updateProgress);
+          const cleaned = cleanOcrRawText(ocrText).trim();
+
+          if (targetMode === 'newOrder') {
+            const scrapeInp = document.getElementById('newOrderScrapeInput');
+            if (scrapeInp && cleaned) {
+              scrapeInp.value = cleaned;
+              const parseBtn = document.getElementById('btnParseNewOrderScrape');
+              if (parseBtn) parseBtn.click();
+            }
+            // Also fallback to fuzzy catalog items if standard parser found 0 items
+            const existingRows = document.querySelectorAll('#formItemsContainer .form-item-row');
+            if (existingRows.length <= 1) {
+              const fuzzyItems = extractFuzzyCatalogItemsFromOcrText(cleaned, 'CNY');
+              if (fuzzyItems.length > 0) {
+                const container = document.getElementById('formItemsContainer');
+                if (container) {
+                  container.innerHTML = '';
+                  fuzzyItems.forEach(it => addFormItemRow(it.product, it.qty, it.unitPrice));
+                  recalcOrderFormNetTotal();
+                }
+              }
+            }
+            showToast('✅ 手机订单截图识别完成！已自动填入订单表单');
+            return;
+          }
+
+          const pasteInp = document.getElementById('miniProgramPasteInput');
+          if (pasteInp && cleaned) {
+            pasteInp.value = cleaned;
+          }
+
+          const res = parseMiniProgramTextToBuilder(cleaned || fileName, { silentToast: true });
+          const count = (res && res.itemsCount) || mpBuilderState.items.length;
+          const cur = document.getElementById('mpQuickCurrency') ? document.getElementById('mpQuickCurrency').value : 'CNY';
+          const sym = cur === 'CNY' ? '¥' : 'NZ$';
+          const itemSum = mpBuilderState.items.reduce((acc, it) => acc + (Number(it.unitPrice) || 0) * (Number(it.qty) || 1), 0);
+
+          if (badgeEl) {
+            badgeEl.textContent = count > 0 ? `✅ 已识别 ${count} 款商品` : '⚠️ 请核对补全';
+            badgeEl.className = count > 0
+              ? 'text-[10px] bg-emerald-100 text-emerald-800 px-2 py-0.5 rounded-full font-bold'
+              : 'text-[10px] bg-amber-100 text-amber-800 px-2 py-0.5 rounded-full font-bold';
+          }
+
+          if (summaryBox && summaryTxt) {
+            summaryBox.classList.remove('hidden');
+            if (count > 0) {
+              const itemsPreview = mpBuilderState.items.map(i => `${i.product} ×${i.qty}`).join('、');
+              summaryTxt.innerHTML = `🎉 <strong>截图自动识别成功！</strong><br/>👤 收件客户：<strong>${mpBuilderState.recipient}</strong> · 渠道：<strong>${mpBuilderState.merchant}</strong><br/>🛒 识别商品 (${count}款)：<span class="text-emerald-800">${itemsPreview}</span><br/>💰 识别总额：<strong class="font-mono">${sym}${itemSum.toFixed(2)}</strong>（已自动填入下方快录板，可直接点下方按钮一键入库！）`;
+              showToast(`🎉 截图识别成功！已自动提取 ${count} 款商品到快录板`);
+            } else {
+              summaryTxt.innerHTML = `💡 <strong>已提取截图文字到下方文本框</strong>（未完全匹配到标准商品名）。<br/>您可以直接在下方<strong>「方式 B：5秒点选快录板」</strong>对着截图点一下对应商品按钮，或使用微信长按图片「提取文字」后点击上方「📋 粘剪贴板」秒速入库！`;
+              showToast('💡 已提取截图文字，请在快录板点选确认商品');
+            }
+          }
+        } catch (err) {
+          console.warn('Screenshot OCR fallback:', err);
+          if (badgeEl) {
+            badgeEl.textContent = '🖼️ 截图已就绪';
+            badgeEl.className = 'text-[10px] bg-amber-100 text-amber-900 px-2 py-0.5 rounded-full font-bold';
+          }
+          updateProgress('⚡ 当前网络无法连接云端OCR字库，已为您开启「截图同屏快点模式」', 100);
+          if (summaryBox && summaryTxt) {
+            summaryBox.classList.remove('hidden');
+            summaryTxt.innerHTML = `💡 <strong>手机极速识图技巧：</strong><br/>1️⃣ 在微信/相册中<strong>长按该订单截图 → 点「提取文字/全选复制」</strong>，再点上方 <strong>「📋 粘剪贴板」</strong> 即可 100% 精准秒填！<br/>2️⃣ 或者直接看着下方截图预览，在<strong>「方式 B：5秒点选快录板」</strong>点一下商品名称即可入库。`;
+          }
+          showToast('🖼️ 截图已加载！可微信长按识字后点「粘剪贴板」或直接在快录板点选商品');
+        }
+      }
+
       const mpScreenInp = document.getElementById('miniProgramScreenshotInput');
       if (mpScreenInp) {
         mpScreenInp.addEventListener('change', (e) => {
           const file = e.target.files && e.target.files[0];
           if (!file) return;
+          const fileName = file.name || '';
           const reader = new FileReader();
           reader.onload = (ev) => {
-            const img = document.getElementById('miniProgramScreenshotImg');
-            const wrap = document.getElementById('miniProgramScreenshotPreviewWrap');
-            if (img && wrap) {
-              img.src = ev.target.result;
-              wrap.classList.remove('hidden');
-              showToast('🖼️ 手机订单截图已加载！您可对照截图在右侧点选商品与数量快速入库');
-            }
+            processOrderScreenshotDataUrl(ev.target.result, 'miniprogram', fileName);
           };
           reader.readAsDataURL(file);
+          // Reset input so selecting the same screenshot again still triggers change
+          e.target.value = '';
         });
+      }
+
+      const newOrdScreenInp = document.getElementById('newOrderScreenshotInput');
+      if (newOrdScreenInp) {
+        newOrdScreenInp.addEventListener('change', (e) => {
+          const file = e.target.files && e.target.files[0];
+          if (!file) return;
+          const fileName = file.name || '';
+          const reader = new FileReader();
+          reader.onload = (ev) => {
+            processOrderScreenshotDataUrl(ev.target.result, 'newOrder', fileName);
+          };
+          reader.readAsDataURL(file);
+          e.target.value = '';
+        });
+      }
+
+      const btnReRunOcr = document.getElementById('btnReRunMiniProgramOcr');
+      if (btnReRunOcr) {
+        btnReRunOcr.addEventListener('click', () => {
+          if (lastLoadedScreenshotDataUrl) {
+            processOrderScreenshotDataUrl(lastLoadedScreenshotDataUrl, 'miniprogram', '');
+          } else {
+            showToast('请先选择一张手机订单截图');
+          }
+        });
+      }
+
+      const btnMpClip = document.getElementById('btnMpReadClipboardText');
+      if (btnMpClip) {
+        btnMpClip.addEventListener('click', async () => {
+          try {
+            const clipTxt = await navigator.clipboard.readText();
+            if (clipTxt && clipTxt.trim()) {
+              const inp = document.getElementById('miniProgramPasteInput');
+              if (inp) inp.value = clipTxt;
+              parseMiniProgramTextToBuilder(clipTxt);
+              return;
+            }
+          } catch (e) {}
+          const inp = document.getElementById('miniProgramPasteInput');
+          if (inp) {
+            inp.focus();
+            showToast('请在下方文本框长按选择「粘贴」即可自动解析');
+          }
+        });
+      }
+
+      const mpPasteInpEl = document.getElementById('miniProgramPasteInput');
+      if (mpPasteInpEl) {
+        mpPasteInpEl.addEventListener('paste', () => {
+          setTimeout(() => {
+            if (mpPasteInpEl.value && mpPasteInpEl.value.trim()) {
+              parseMiniProgramTextToBuilder(mpPasteInpEl.value);
+            }
+          }, 80);
+        });
+      }
+
+      const btnOcrSaveDirect = document.getElementById('btnMpOcrSaveDirect');
+      if (btnOcrSaveDirect) {
+        btnOcrSaveDirect.addEventListener('click', () => saveOrderFromMiniProgramBuilder(false));
+      }
+      const btnOcrSaveNotify = document.getElementById('btnMpOcrSaveAndNotify');
+      if (btnOcrSaveNotify) {
+        btnOcrSaveNotify.addEventListener('click', () => saveOrderFromMiniProgramBuilder(true));
       }
 
       const btnClearScreen = document.getElementById('btnClearMiniProgramScreenshot');
@@ -15290,6 +16240,7 @@ export async function onRequestPost(context) {
           const img = document.getElementById('miniProgramScreenshotImg');
           if (img) img.src = '';
           if (wrap) wrap.classList.add('hidden');
+          lastLoadedScreenshotDataUrl = '';
         });
       }
 
