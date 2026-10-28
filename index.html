@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>纽澳跨境采购与快递追踪管家 V7.2</title>
+  <title>纽澳跨境采购与快递追踪管家 V7.3</title>
   <script src="https://cdn.tailwindcss.com/3.4.17"></script>
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
@@ -344,7 +344,7 @@
             </h1>
             <button type="button" id="btnHeaderVersionBadge" class="inline-flex items-center gap-1 text-xs bg-gradient-to-r from-amber-400 to-amber-300 hover:from-amber-300 hover:to-amber-200 text-slate-950 font-extrabold px-2.5 py-0.5 rounded-full shadow-xs transition cursor-pointer" title="当前版本 V7.1（Cloudflare KV 全域同步修复与智能诊断 · 历史时间机器 · 实时汇率 · 亲友只读对账单）· 点击打开个性化与版本中心">
               <span id="uiIcon-appVersion">✨</span>
-              <span id="uiText-appVersion">V7.2</span>
+              <span id="uiText-appVersion">V7.3</span>
             </button>
             <button type="button" id="btnHeaderCfStatusPill" class="inline-flex items-center gap-1 text-[11px] bg-emerald-900/90 hover:bg-emerald-800 text-emerald-100 border border-emerald-600/70 font-semibold px-2.5 py-0.5 rounded-full transition cursor-pointer" title="点击打开 Cloudflare KV 边缘云同步设置 (方案B)">
               <span id="headerCfStatusDot" class="w-2 h-2 rounded-full bg-amber-400 inline-block"></span>
@@ -425,6 +425,36 @@
       </div>
     </div>
   </header>
+
+  <!-- Read-Only Customer Share Portal Banner (Shown only when ?readonly_recipient=XX is active) -->
+  <div id="readonlyCustomerBanner" class="hidden bg-gradient-to-r from-indigo-900 via-teal-900 to-emerald-900 text-white border-b border-indigo-400/30 shadow-md">
+    <div class="max-w-7xl mx-auto px-3 sm:px-6 py-3 flex flex-wrap items-center justify-between gap-3">
+      <div class="flex items-center gap-2.5">
+        <span class="text-xl">🔒</span>
+        <div>
+          <div class="text-xs sm:text-sm font-extrabold flex items-center gap-2">
+            <span>客户专属包裹追踪与对账单门户</span>
+            <span id="readonlyCustomerNameBadge" class="bg-amber-400 text-slate-950 px-2.5 py-0.5 rounded-full text-xs font-black">当前客户：朱峰</span>
+          </div>
+          <p class="text-[11px] text-emerald-200 mt-0.5">您可以直接点击下方运单号查看实时国际快递进度，或核对您的专属采购结算明细（只读保护模式）</p>
+        </div>
+      </div>
+      <div class="flex flex-wrap items-center gap-2">
+        <button type="button" id="btnRoViewParcels" class="bg-white/15 hover:bg-white/25 text-white text-xs font-bold px-3 py-1.5 rounded-lg border border-white/20 transition">
+          🚚 查看我的包裹物流
+        </button>
+        <button type="button" id="btnRoViewOrders" class="bg-white/15 hover:bg-white/25 text-white text-xs font-bold px-3 py-1.5 rounded-lg border border-white/20 transition">
+          📋 查看我的订单明细
+        </button>
+        <button type="button" id="btnRoViewBill" class="bg-amber-400 hover:bg-amber-300 text-slate-950 text-xs font-extrabold px-3 py-1.5 rounded-lg shadow-2xs transition">
+          🧾 查看我的结算账单
+        </button>
+        <button type="button" id="btnExitReadonlyMode" class="text-[11px] text-emerald-200 hover:text-white underline ml-1" title="如果您是管理员本人，点击可退出客户只读预览回到完整总表">
+          🔓 管理员退出只读
+        </button>
+      </div>
+    </div>
+  </div>
 
   <!-- Main Workspace -->
   <main class="flex-1 max-w-7xl w-full mx-auto px-3 sm:px-6 py-5 space-y-5 overflow-x-hidden">
@@ -992,6 +1022,9 @@
               <button type="button" id="btnFetchLiveRateAnalytics" class="bg-teal-50 hover:bg-teal-100 text-teal-900 border border-teal-300 text-xs px-2.5 py-1.5 rounded-lg font-bold transition flex items-center gap-1" title="从 Cloudflare 边缘接口或实时汇率源获取今日 NZD/CNY 与 AUD/CNY 汇率">
                 <span>💱</span><span id="lblLiveRateAnalytics">实时汇率: NZ$1≈¥4.35</span>
               </button>
+              <button type="button" id="btnOpenCustomerNotifyFromAnalytics" class="bg-indigo-600 hover:bg-indigo-500 text-white text-xs px-3 py-1.5 rounded-lg font-bold shadow-2xs transition flex items-center gap-1" title="打开客户微信通知生成器：自由选择发送下单回执、快递单号、采购账单或二合一通知">
+                <span>📲 发客户微信通知 (账单/快递单)</span>
+              </button>
               <button type="button" id="btnShareRecipientReadonlyLink" class="bg-indigo-50 hover:bg-indigo-100 text-indigo-900 border border-indigo-300 text-xs px-2.5 py-1.5 rounded-lg font-bold transition" title="生成当前收件人的专属只读查件与对账分享链接（发给亲友直接点开查看，无法修改您的总表）">
                 🔗 生成亲友只读对账/查件链接
               </button>
@@ -1380,9 +1413,10 @@
         <div class="text-[11px] text-slate-500">
           💡 提示：新下单尚无快递单号也可直接保存；待商家发货后再次复制订单页粘贴即可自动补齐单号
         </div>
-        <div class="flex items-center gap-2">
-          <button type="button" id="btnCancelOrderModal" class="px-4 py-2 rounded-lg text-xs sm:text-sm font-medium text-slate-600 hover:bg-slate-200">取消</button>
-          <button type="button" id="btnSaveAndNextOrder" class="px-4 py-2 rounded-lg text-xs sm:text-sm font-bold bg-amber-500 hover:bg-amber-400 text-slate-950 shadow-xs transition">💾 保存并记下一单</button>
+        <div class="flex flex-wrap items-center gap-2">
+          <button type="button" id="btnCancelOrderModal" class="px-3.5 py-2 rounded-lg text-xs sm:text-sm font-medium text-slate-600 hover:bg-slate-200">取消</button>
+          <button type="button" id="btnSaveAndNotifyOrder" class="px-3.5 py-2 rounded-lg text-xs sm:text-sm font-bold bg-indigo-600 hover:bg-indigo-500 text-white shadow-xs transition" title="保存当前订单并立即打开发给客户的微信通知生成器（可选发回执、快递单或账单）">📲 保存并发客户</button>
+          <button type="button" id="btnSaveAndNextOrder" class="px-3.5 py-2 rounded-lg text-xs sm:text-sm font-bold bg-amber-500 hover:bg-amber-400 text-slate-950 shadow-xs transition">💾 保存并记下一单</button>
           <button type="button" id="btnSaveOrder" class="px-5 py-2 rounded-lg text-xs sm:text-sm font-semibold bg-emerald-700 hover:bg-emerald-600 text-white shadow">💾 保存订单</button>
         </div>
       </div>
@@ -1761,6 +1795,10 @@
           <button type="button" data-imptab="paste" class="imp-tab-btn bg-white text-slate-700 hover:bg-slate-50 text-xs sm:text-sm font-bold px-3.5 py-2 rounded-lg border border-slate-300 transition flex items-center gap-1.5">
             <span>📋 网页粘贴导入</span>
           </button>
+          <button type="button" data-imptab="miniprogram" class="imp-tab-btn bg-white text-slate-700 hover:bg-slate-50 text-xs sm:text-sm font-bold px-3.5 py-2 rounded-lg border border-slate-300 transition flex items-center gap-1.5">
+            <span>📱 手机/小程序导单</span>
+            <span class="text-[10px] bg-emerald-100 text-emerald-800 px-1.5 py-0.2 rounded-full font-extrabold">易康小程序适配</span>
+          </button>
           <button type="button" data-imptab="bookmarklet" class="imp-tab-btn bg-white text-slate-700 hover:bg-slate-50 text-xs sm:text-sm font-bold px-3.5 py-2 rounded-lg border border-slate-300 transition flex items-center gap-1.5">
             <span>🔖 浏览器抓单小书签</span>
           </button>
@@ -1884,14 +1922,151 @@
           </div>
         </div>
 
-        <!-- PANEL 3: METHOD 2 - BROWSER BOOKMARKLET -->
+        <!-- PANEL 3A: WECHAT MINI-PROGRAM & MOBILE ORDER QUICK IMPORT -->
+        <div id="impPanel-miniprogram" class="hidden space-y-4">
+          <div class="bg-gradient-to-r from-emerald-50 via-teal-50 to-indigo-50 border border-emerald-200 rounded-xl p-4 space-y-2">
+            <div class="flex flex-wrap items-center justify-between gap-2">
+              <h4 class="font-bold text-emerald-950 text-sm flex items-center gap-2">
+                <span>📱 易康微信小程序 / 手机端订单专属导入工作台</span>
+                <span class="text-[11px] bg-emerald-700 text-white px-2.5 py-0.5 rounded-full font-semibold">解决小程序与网页端数据不通问题</span>
+              </h4>
+              <button type="button" id="btnLoadMiniProgramSample" class="text-xs bg-white hover:bg-emerald-50 text-emerald-800 border border-emerald-300 px-2.5 py-1 rounded-lg font-semibold transition">
+                ✨ 载入易康小程序订单示例体验
+              </button>
+            </div>
+            <p class="text-xs text-slate-600 leading-relaxed">
+              易康等商家的<strong>微信小程序与电脑网页端账号/订单不互通</strong>，且微信小程序内无法使用电脑浏览器书签。您可以在手机端打开本网页，使用下方<strong>「方式 A：复制小程序文字/上传截图对照」</strong>或<strong>「方式 B：5秒点选常买商品快录板」</strong>，无需打字即可快速入库并一键生成发给客户的微信通知！
+            </p>
+          </div>
+
+          <div class="grid grid-cols-1 lg:grid-cols-12 gap-4">
+            <!-- Left 6 cols: Mini-Program Text Paste + Mobile Screenshot Side-by-Side Reference -->
+            <div class="lg:col-span-6 border border-slate-200 rounded-xl p-4 bg-white space-y-3 flex flex-col justify-between">
+              <div class="space-y-2.5">
+                <div class="flex items-center justify-between">
+                  <span class="text-xs font-bold text-slate-800">方式 A：粘贴微信小程序/微信转发文字 或 截图对照</span>
+                  <label class="cursor-pointer text-[11px] bg-indigo-50 hover:bg-indigo-100 text-indigo-800 border border-indigo-200 px-2.5 py-1 rounded-lg font-semibold transition inline-flex items-center gap-1">
+                    <span>🖼️ 选手机订单截图对照</span>
+                    <input type="file" id="miniProgramScreenshotInput" accept="image/*" class="hidden" />
+                  </label>
+                </div>
+
+                <div id="miniProgramScreenshotPreviewWrap" class="hidden bg-slate-900/5 border border-slate-200 rounded-xl p-2 relative">
+                  <div class="flex items-center justify-between mb-1">
+                    <span class="text-[11px] font-semibold text-slate-600">📱 手机订单截图对照预览（可看着截图在右侧点选商品或核对金额）：</span>
+                    <button type="button" id="btnClearMiniProgramScreenshot" class="text-[11px] text-rose-600 hover:underline">移除截图</button>
+                  </div>
+                  <img id="miniProgramScreenshotImg" src="" alt="订单截图预览" class="max-h-56 w-auto mx-auto rounded-lg border border-slate-300 object-contain" />
+                </div>
+
+                <textarea id="miniProgramPasteInput" rows="6" placeholder="在手机微信小程序订单详情页长按复制文字（或把小程序订单信息粘到这里）：&#10;例如：&#10;收货人：朱峰 13800000000&#10;Manuka Health 蜜纽康 MGO 263+ 500g&#10;¥167.50 × 2&#10;实付款：¥335.00&#10;订单编号：200032888&#10;快递单号：N640154888" class="w-full text-xs border border-slate-300 rounded-xl p-3 font-mono bg-slate-50 focus:bg-white focus:outline-none focus:border-emerald-600"></textarea>
+              </div>
+
+              <div class="flex flex-wrap items-center justify-between gap-2 pt-2 border-t border-slate-100">
+                <button type="button" id="btnClearMiniProgramText" class="text-xs text-slate-500 hover:text-slate-700 px-2 py-1">清空文本</button>
+                <div class="flex items-center gap-2">
+                  <button type="button" id="btnParseMiniProgramToQuickBuilder" class="bg-emerald-700 hover:bg-emerald-600 text-white text-xs font-bold px-3.5 py-2 rounded-lg shadow-2xs transition">
+                    🔍 解析文字到右侧快录板 ➔
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Right 6 cols: 5-Second Quick-Tap Mobile Order Builder -->
+            <div class="lg:col-span-6 border border-emerald-200 rounded-xl p-4 bg-emerald-50/30 space-y-3 flex flex-col justify-between">
+              <div class="space-y-3">
+                <div class="flex items-center justify-between">
+                  <span class="text-xs font-bold text-emerald-950">方式 B：⚡ 5秒点选快录板（手机免打字直接点商品+数量）</span>
+                  <span class="text-[11px] text-emerald-700 font-semibold">自动记忆历史单价</span>
+                </div>
+
+                <!-- Step 1: Recipient & Merchant Quick Chips -->
+                <div class="space-y-1.5">
+                  <div class="text-[11px] font-semibold text-slate-600">1. 点选收件客户与下单渠道：</div>
+                  <div id="mpQuickRecipientPills" class="flex flex-wrap gap-1.5"></div>
+                  <div id="mpQuickMerchantPills" class="flex flex-wrap gap-1.5 pt-1"></div>
+                </div>
+
+                <!-- Step 2: Order No, Date, Currency, Settled Total, Tracking -->
+                <div class="grid grid-cols-2 sm:grid-cols-3 gap-2 bg-white p-2.5 rounded-xl border border-slate-200">
+                  <div>
+                    <label class="block text-[10px] text-slate-500">下单日期</label>
+                    <input type="date" id="mpQuickDate" class="w-full text-xs border border-slate-300 rounded px-2 py-1" />
+                  </div>
+                  <div>
+                    <label class="block text-[10px] text-slate-500">小程序订单号 (选填)</label>
+                    <input type="text" id="mpQuickOrderNo" placeholder="不填自动生成" class="w-full text-xs border border-slate-300 rounded px-2 py-1 font-mono" />
+                  </div>
+                  <div>
+                    <label class="block text-[10px] text-slate-500">记账币种</label>
+                    <select id="mpQuickCurrency" class="w-full text-xs border border-slate-300 rounded px-2 py-1 bg-white font-semibold">
+                      <option value="CNY">CNY (¥ 人民币)</option>
+                      <option value="NZD">NZD ($ 纽币)</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label class="block text-[10px] text-slate-500">快递公司</label>
+                    <select id="mpQuickCourier" class="w-full text-xs border border-slate-300 rounded px-2 py-1 bg-white">
+                      <option value="纽oz">纽oz</option>
+                      <option value="富腾达">富腾达</option>
+                      <option value="程光">程光</option>
+                      <option value="易达通">易达通</option>
+                      <option value="顺丰">顺丰</option>
+                      <option value="其他快递">暂未发货/其他</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label class="block text-[10px] text-slate-500">快递单号 (可发货后补)</label>
+                    <input type="text" id="mpQuickTrackingNo" placeholder="如 N64015..." class="w-full text-xs border border-slate-300 rounded px-2 py-1 font-mono" />
+                  </div>
+                  <div>
+                    <label class="block text-[10px] text-slate-500">运费 / 实付微调</label>
+                    <input type="number" step="0.01" id="mpQuickShippingFee" value="0" placeholder="运费" class="w-full text-xs border border-slate-300 rounded px-2 py-1 font-mono" />
+                  </div>
+                </div>
+
+                <!-- Step 3: Frequent Products Tap Grid -->
+                <div class="space-y-1.5">
+                  <div class="flex items-center justify-between">
+                    <span class="text-[11px] font-semibold text-slate-600">2. 点击常买商品立即加入清单（支持搜索）：</span>
+                    <input type="text" id="mpQuickProdSearch" placeholder="🔍 搜商品名..." class="text-[11px] border border-slate-300 rounded-md px-2 py-0.5 bg-white w-36" />
+                  </div>
+                  <div id="mpQuickProductTapGrid" class="flex flex-wrap gap-1.5 max-h-32 overflow-y-auto custom-scroll p-1.5 bg-white rounded-xl border border-slate-200"></div>
+                </div>
+
+                <!-- Step 4: Selected Items List -->
+                <div class="space-y-1">
+                  <div class="flex items-center justify-between text-[11px]">
+                    <span class="font-bold text-slate-700">3. 已选商品明细：</span>
+                    <span id="mpQuickTotalPreview" class="font-extrabold text-emerald-800 font-mono">总计: ¥0.00</span>
+                  </div>
+                  <div id="mpQuickSelectedItemsList" class="space-y-1.5 max-h-36 overflow-y-auto custom-scroll bg-white p-2 rounded-xl border border-slate-200"></div>
+                </div>
+              </div>
+
+              <div class="flex flex-wrap items-center justify-end gap-2 pt-2 border-t border-emerald-200/80">
+                <button type="button" id="btnMpSaveAndNotifyCustomer" class="bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-bold px-3.5 py-2 rounded-lg shadow-xs transition">
+                  📲 立即入库并生成发客户微信通知
+                </button>
+                <button type="button" id="btnMpSaveOrderDirect" class="bg-emerald-700 hover:bg-emerald-600 text-white text-xs font-bold px-4 py-2 rounded-lg shadow-xs transition">
+                  ✅ 立即入库保存订单
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- PANEL 3: METHOD 2 - BROWSER BOOKMARKLET (UPGRADED WITH 1-CLICK DIRECT CLOUD/URL DELIVERY) -->
         <div id="impPanel-bookmarklet" class="hidden space-y-4">
           <div class="bg-blue-50/70 border border-blue-200 rounded-xl p-4 space-y-2">
-            <h4 class="font-bold text-blue-950 text-sm flex items-center gap-2">
-              <span>🔖 浏览器「一键抓单小书签」(Bookmarklet) —— 无需安装插件，突破跨域限制</span>
-            </h4>
+            <div class="flex flex-wrap items-center justify-between gap-2">
+              <h4 class="font-bold text-blue-950 text-sm flex items-center gap-2">
+                <span>🔖 浏览器「一键抓单直投小书签」(V7.3 升级版) —— 无需复制粘贴，点一下直接投递入库</span>
+              </h4>
+              <span class="text-[11px] bg-blue-700 text-white px-2.5 py-0.5 rounded-full font-semibold">支持一键直投管家 + 剪贴板双保险</span>
+            </div>
             <p class="text-xs text-slate-600 leading-relaxed">
-              由于华洋、纽澳康源、易康等网站需要登录账号且有浏览器的安全跨域保护（CORS），外部网页无法在后台偷偷读取您的账号。但通过<strong>浏览器书签脚本</strong>，当您在电脑浏览器打开商家「订单详情页」时，<strong>点一下收藏夹上的按钮</strong>，脚本就会在当前页面自动提取订单号、当前网址链接、日期、商品和快递单号，并生成数据包供本软件一键导入！
+              当您在电脑浏览器打开 <strong>华洋 / 易康 / 纽澳康源 / CW</strong> 订单详情页时，点一下浏览器书签栏上的 <strong>「⚡ 抓取纽澳订单到追踪管家」</strong>，页面右上角会弹出绿色的抓单成功浮窗：不仅自动复制到剪贴板，还提供 <strong>「🚀 一键直投到追踪管家并打开」</strong> 按钮，点一下即可免粘贴直接跳回本系统完成自动填单！
             </p>
           </div>
 
@@ -1902,7 +2077,7 @@
                 <a id="bookmarkletDragLink" href="#" class="bg-amber-400 hover:bg-amber-300 text-slate-950 font-extrabold text-xs sm:text-sm px-4 py-2.5 rounded-xl shadow-md border border-amber-500 cursor-move inline-flex items-center gap-1.5" onclick="event.preventDefault(); showToast('请用鼠标按住此按钮，直接拖拽到浏览器顶部的书签栏（收藏夹栏）！');">
                   <span>⚡ 抓取纽澳订单到追踪管家</span>
                 </a>
-                <span class="text-[11px] text-slate-500">👆 按住此按钮往浏览器地址栏下方的「书签栏」拖放即可</span>
+                <span class="text-[11px] text-slate-500">👆 按住此按钮往浏览器地址栏下方的「书签栏」拖放即可（已绑定当前站点地址）</span>
               </div>
               <div class="space-y-1.5">
                 <div class="flex items-center justify-between">
@@ -1920,8 +2095,8 @@
               <ol class="list-decimal list-inside space-y-2 text-xs text-slate-600 leading-relaxed">
                 <li>在电脑上登录 <strong>华洋 / 纽澳康源 / 易康 / CW</strong>，进入任意一笔订单详情页面。</li>
                 <li>点击浏览器书签栏上的 <strong>「⚡ 抓取纽澳订单到追踪管家」</strong>。</li>
-                <li>小书签会自动读取当前网页的 <strong>真实订单链接 (URL)、订单号、商品明细、快递追踪单号与追踪超链接</strong>，并自动复制到您的剪贴板。</li>
-                <li>回到本软件，切到 <strong>「📋 网页粘贴导入」</strong> 粘贴确认，该笔新订单即刻入库并显示为 <span class="bg-amber-200 text-amber-950 font-bold px-1.5 py-0.2 rounded">📬 未读新订单</span>！</li>
+                <li>页面右上角会弹出浮窗：点击浮窗上的 <strong>「🚀 一键直投到追踪管家」</strong>，系统会自动打开本管家并把抓到的订单号、商品、纽币/人民币双币种汇率、运单号全部填入表单！</li>
+                <li>您也可以直接回到已打开的管家窗口，在新增订单或智能导单处粘贴确认即可。</li>
               </ol>
             </div>
           </div>
@@ -2134,7 +2309,7 @@
         <div>
           <h3 class="text-base font-bold flex items-center gap-2 flex-wrap">
             <span>⚙️ 个性化与规则中心</span>
-            <span class="text-[11px] bg-amber-400 text-slate-950 font-extrabold px-2.5 py-0.5 rounded-full">V7.2 架构精简与防丢保护 · 8套主题定制 · 智能规则引擎</span>
+            <span class="text-[11px] bg-amber-400 text-slate-950 font-extrabold px-2.5 py-0.5 rounded-full">V7.3 客户微信通知中心 · 小程序导单 · 洁净备注与只读查件门户</span>
           </h3>
           <p class="text-xs text-emerald-200 mt-0.5">一站式归纳管理：8套主题皮肤与自定义调色盘 · 全系统选项名称/图标/注释自由修改 · 抓单自学习规则 · 454条超链接模板</p>
         </div>
@@ -2166,7 +2341,7 @@
         <div class="bg-gradient-to-r from-emerald-50 via-teal-50 to-amber-50 border border-emerald-200 rounded-xl p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
           <div class="space-y-1">
             <div class="flex items-center gap-2">
-              <span class="px-2.5 py-0.5 rounded-full bg-emerald-800 text-amber-300 font-extrabold text-xs">当前版本：V7.2 (顶栏与弹窗去重精简 · 云端防空数据保护锁 · 动态实时日期与多币种折算修复)</span>
+              <span class="px-2.5 py-0.5 rounded-full bg-emerald-800 text-amber-300 font-extrabold text-xs">当前版本：V7.3 (客户微信通知生成器 · 微信小程序/手机端快录 · 订单备注去重净化 · 专属只读门户)</span>
               <span class="font-bold text-slate-800 text-sm">版本升级规则说明</span>
             </div>
             <p class="text-slate-600 leading-relaxed">
@@ -2423,6 +2598,147 @@
   </div>
   <div id="modalLinkRules" class="hidden" aria-hidden="true"><button id="btnCloseLinkRulesModal" type="button"></button></div>
 
+  <!-- ===================================================================== -->
+  <!-- MODAL 8: CUSTOMER WECHAT NOTIFICATION & BILL/TRACKING SLIP GENERATOR  -->
+  <!-- ===================================================================== -->
+  <div id="modalCustomerNotify" class="fixed inset-0 bg-slate-900/65 backdrop-blur-xs z-50 hidden flex items-center justify-center p-2 sm:p-4">
+    <div class="bg-white rounded-2xl shadow-2xl border border-slate-200 max-w-5xl w-full max-h-[94vh] flex flex-col overflow-hidden">
+      <div class="px-5 py-3.5 bg-gradient-to-r from-indigo-950 via-emerald-950 to-teal-900 text-white flex flex-wrap items-center justify-between gap-2">
+        <div>
+          <h3 class="text-base sm:text-lg font-bold flex items-center gap-2">
+            <span>📲 给客户发送微信通知生成器（下单回执 / 快递发货单 / 采购账单 / 签收提醒）</span>
+            <span class="text-xs bg-amber-400 text-slate-950 font-extrabold px-2.5 py-0.5 rounded-full">自由勾选发送内容</span>
+          </h3>
+          <p class="text-xs text-emerald-200 mt-0.5">支持单笔订单或同客户多笔订单合并生成：可单独发快递单（隐藏价格）、单独发结算账单、或发送快递+账单二合一完整通知</p>
+        </div>
+        <button type="button" id="btnCloseCustomerNotifyModal" class="text-emerald-200 hover:text-white text-2xl leading-none px-2">×</button>
+      </div>
+
+      <div class="p-4 sm:p-5 overflow-y-auto custom-scroll flex-1 grid grid-cols-1 lg:grid-cols-12 gap-4 text-xs">
+        <!-- Left 6 cols: Template Selector, Customer/Order Checklist & Content Checkboxes -->
+        <div class="lg:col-span-6 space-y-3.5">
+          <!-- Step 1: 5 Template Mode Pills -->
+          <div class="bg-slate-50 border border-slate-200 rounded-xl p-3 space-y-2">
+            <div class="font-bold text-slate-800 flex items-center justify-between">
+              <span>1. 选择要发给客户的通知类型（点击即刻切换模板）：</span>
+              <span class="text-[11px] text-indigo-700 font-semibold">下方细项仍可自由增减</span>
+            </div>
+            <div class="grid grid-cols-2 sm:grid-cols-3 gap-1.5" id="notifyTemplateModeButtons">
+              <button type="button" data-notify-mode="full_combined" class="notify-mode-btn bg-indigo-600 text-white font-bold px-2.5 py-2 rounded-lg border border-indigo-700 text-left transition flex flex-col gap-0.5">
+                <span>📦 快递+账单完整单</span>
+                <span class="text-[10px] opacity-85 font-normal">含商品+单号+账单金额</span>
+              </button>
+              <button type="button" data-notify-mode="shipping_only" class="notify-mode-btn bg-white hover:bg-slate-100 text-slate-700 font-bold px-2.5 py-2 rounded-lg border border-slate-300 text-left transition flex flex-col gap-0.5">
+                <span>✈️ 仅发快递发货单</span>
+                <span class="text-[10px] text-slate-500 font-normal">含运单号+查件链接(不含价格)</span>
+              </button>
+              <button type="button" data-notify-mode="bill_only" class="notify-mode-btn bg-white hover:bg-slate-100 text-slate-700 font-bold px-2.5 py-2 rounded-lg border border-slate-300 text-left transition flex flex-col gap-0.5">
+                <span>🧾 仅发采购对账单</span>
+                <span class="text-[10px] text-slate-500 font-normal">含单价+数量+汇率+实付总额</span>
+              </button>
+              <button type="button" data-notify-mode="order_confirm" class="notify-mode-btn bg-white hover:bg-slate-100 text-slate-700 font-bold px-2.5 py-2 rounded-lg border border-slate-300 text-left transition flex flex-col gap-0.5">
+                <span>🛒 下单确认回执</span>
+                <span class="text-[10px] text-slate-500 font-normal">刚买好未出单号时告知客户</span>
+              </button>
+              <button type="button" data-notify-mode="arrival_remind" class="notify-mode-btn bg-white hover:bg-slate-100 text-slate-700 font-bold px-2.5 py-2 rounded-lg border border-slate-300 text-left transition flex flex-col gap-0.5">
+                <span>✅ 到货签收提醒</span>
+                <span class="text-[10px] text-slate-500 font-normal">包裹已送达提醒客户查收</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Step 2: Granular Checkboxes (Let user choose exactly what to include) -->
+          <div class="bg-emerald-50/50 border border-emerald-200 rounded-xl p-3 space-y-2.5">
+            <div class="font-bold text-emerald-950 flex items-center justify-between">
+              <span>2. 自由勾选通知中包含的具体项：</span>
+              <select id="notifyPriceCurrencyMode" class="text-[11px] border border-emerald-300 rounded-md px-2 py-1 bg-white font-semibold text-emerald-900">
+                <option value="auto">💰 金额按订单实付币种显示 (推荐)</option>
+                <option value="CNY">🇨🇳 统一折算为人民币 (¥ RMB) 结算</option>
+                <option value="NZD">🇳🇿 统一按纽币 ($ NZD) 标价显示</option>
+              </select>
+            </div>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 text-slate-700">
+              <label class="flex items-center gap-2 bg-white px-2.5 py-1.5 rounded-lg border border-slate-200 cursor-pointer hover:border-emerald-400">
+                <input type="checkbox" id="chkNotifyItems" checked class="rounded text-emerald-600" />
+                <span class="font-semibold">包含购买商品名称与数量</span>
+              </label>
+              <label class="flex items-center gap-2 bg-white px-2.5 py-1.5 rounded-lg border border-slate-200 cursor-pointer hover:border-emerald-400">
+                <input type="checkbox" id="chkNotifyPrices" checked class="rounded text-emerald-600" />
+                <span class="font-semibold">包含单价、运费与总金额账单</span>
+              </label>
+              <label class="flex items-center gap-2 bg-white px-2.5 py-1.5 rounded-lg border border-slate-200 cursor-pointer hover:border-emerald-400">
+                <input type="checkbox" id="chkNotifyTracking" checked class="rounded text-emerald-600" />
+                <span class="font-semibold">包含快递公司与物流运单号</span>
+              </label>
+              <label class="flex items-center gap-2 bg-white px-2.5 py-1.5 rounded-lg border border-slate-200 cursor-pointer hover:border-emerald-400">
+                <input type="checkbox" id="chkNotifyTrackUrl" checked class="rounded text-emerald-600" />
+                <span class="font-semibold">附上快递官网一键查件链接</span>
+              </label>
+              <label class="flex items-center gap-2 bg-white px-2.5 py-1.5 rounded-lg border border-slate-200 cursor-pointer hover:border-emerald-400">
+                <input type="checkbox" id="chkNotifyDualRate" checked class="rounded text-emerald-600" />
+                <span class="font-semibold">显示原标价与汇率折算说明</span>
+              </label>
+              <label class="flex items-center gap-2 bg-white px-2.5 py-1.5 rounded-lg border border-slate-200 cursor-pointer hover:border-emerald-400">
+                <input type="checkbox" id="chkNotifyOrderMeta" checked class="rounded text-emerald-600" />
+                <span class="font-semibold">显示下单日期与商家订单号</span>
+              </label>
+              <label class="sm:col-span-2 flex items-center gap-2 bg-indigo-50/80 px-2.5 py-1.5 rounded-lg border border-indigo-200 cursor-pointer hover:border-indigo-400">
+                <input type="checkbox" id="chkNotifyReadonlyLink" checked class="rounded text-indigo-600" />
+                <span class="font-bold text-indigo-950">🔗 底部附上该客户的「专属只读查件/对账网页链接」（客户点开仅能看他自己的包裹与账单）</span>
+              </label>
+            </div>
+          </div>
+
+          <!-- Step 3: Select Customer & Check 1 or Multiple Orders to Merge -->
+          <div class="bg-white border border-slate-200 rounded-xl p-3 space-y-2">
+            <div class="flex flex-wrap items-center justify-between gap-2">
+              <div class="flex items-center gap-2">
+                <span class="font-bold text-slate-800">3. 客户与关联订单：</span>
+                <select id="notifyCustomerSelect" class="text-xs border border-slate-300 rounded-lg px-2.5 py-1 bg-slate-50 font-bold text-slate-800"></select>
+              </div>
+              <div class="flex flex-wrap items-center gap-1">
+                <button type="button" id="btnNotifySelectSingle" class="text-[11px] bg-slate-100 hover:bg-slate-200 text-slate-700 px-2 py-0.5 rounded font-medium">仅当前单</button>
+                <button type="button" id="btnNotifySelectSameDay" class="text-[11px] bg-emerald-50 hover:bg-emerald-100 text-emerald-800 border border-emerald-200 px-2 py-0.5 rounded font-semibold">勾选同日订单</button>
+                <button type="button" id="btnNotifySelectInTransit" class="text-[11px] bg-amber-50 hover:bg-amber-100 text-amber-900 border border-amber-200 px-2 py-0.5 rounded font-semibold">勾选全部在途单</button>
+              </div>
+            </div>
+            <div id="notifyOrdersChecklist" class="max-h-44 overflow-y-auto custom-scroll space-y-1.5 pr-1"></div>
+          </div>
+        </div>
+
+        <!-- Right 6 cols: Live Editable WeChat Preview & 1-Click Copy -->
+        <div class="lg:col-span-6 flex flex-col justify-between bg-slate-900 text-slate-100 rounded-xl p-4 space-y-3">
+          <div class="space-y-2 flex-1 flex flex-col">
+            <div class="flex flex-wrap items-center justify-between gap-2">
+              <div class="flex items-center gap-2">
+                <span class="w-2.5 h-2.5 rounded-full bg-emerald-400"></span>
+                <span class="font-bold text-sm text-white">💬 微信发送内容实时预览（可直接在此框内修改文字）</span>
+              </div>
+              <span id="notifySummaryBadge" class="text-[11px] bg-emerald-500/20 text-emerald-300 border border-emerald-400/30 px-2 py-0.5 rounded-full font-mono">已选 1 笔订单</span>
+            </div>
+            <textarea id="customerNotifyTextarea" class="w-full flex-1 min-h-[320px] bg-slate-950/90 text-emerald-100 border border-slate-700 rounded-xl p-3.5 font-mono text-xs leading-relaxed focus:outline-none focus:border-emerald-400 custom-scroll"></textarea>
+          </div>
+
+          <div class="space-y-2 pt-2 border-t border-slate-800">
+            <div class="flex flex-wrap items-center justify-between gap-2">
+              <button type="button" id="btnCopyCustomerReadonlyUrlModal" class="bg-slate-800 hover:bg-slate-700 text-indigo-300 border border-slate-700 text-xs font-semibold px-3 py-2 rounded-xl transition flex items-center gap-1.5">
+                <span>🔗 仅复制客户只读网页链接</span>
+              </button>
+              <div class="flex items-center gap-2">
+                <button type="button" id="btnRegenerateCustomerNotify" class="bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs px-3 py-2 rounded-xl transition">
+                  🔄 重新生成
+                </button>
+                <button type="button" id="btnCopyCustomerNotifyText" class="bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-extrabold text-xs sm:text-sm px-5 py-2.5 rounded-xl shadow-lg transition flex items-center gap-1.5">
+                  <span>📋 一键复制微信通知全文</span>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <div id="toastBox" class="fixed bottom-5 right-5 z-50 hidden bg-slate-900 text-white text-xs sm:text-sm px-4 py-2.5 rounded-xl shadow-lg border border-slate-700 flex items-center gap-2">
     <span id="toastMsg">操作成功</span>
   </div>
@@ -2601,7 +2917,7 @@
 
     const DEFAULT_UI_CUSTOM_LABELS = {
       appTitle: { icon: '', text: '纽澳跨境采购与快递追踪管家', note: '支持一单多包拆单追踪 · 采购单价与运费核算 · 电脑与手机多端同步', labelTitle: '系统主标题 & 副标题说明', group: 'header', emojiPresets: ['🇳🇿', '🦘', '🌿', '📦', '🛡️'] },
-      appVersion: { icon: '🚀', text: 'V7.2', note: '当前版本 V7.2（精简顶栏与去重整合 · 云端防空数据保护锁 · 历史时间机器 · 实时汇率）· 点击打开个性化与版本中心', labelTitle: '顶部版本号标识 (点击可打开设置)', group: 'header', emojiPresets: ['🚀', '✨', '🏷️', '💎', '🔥'] },
+      appVersion: { icon: '🚀', text: 'V7.3', note: '当前版本 V7.3（客户微信通知中心 · 微信小程序导单 · 订单备注净化 · 亲友只读查件门户）· 点击打开个性化与版本中心', labelTitle: '顶部版本号标识 (点击可打开设置)', group: 'header', emojiPresets: ['🚀', '✨', '🏷️', '💎', '🔥'] },
       btnNewOrder: { icon: '＋', text: '新增订单', note: '新建采购订单（内含网页粘贴自动填单 / 门店直购录入 / 复制上一单）', labelTitle: '顶部按钮 1：新增订单', group: 'topbar', emojiPresets: ['＋', '🛒', '✍️', '⚡', '🛍️'] },
       btnBatchImport: { icon: '📥', text: '智能导单', note: '专用于导入新采购订单：Excel表格差异导入 / 网页订单粘贴解析 / 浏览器抓单小书签', labelTitle: '顶部按钮 2：智能导单', group: 'topbar', emojiPresets: ['📥', '📂', '📊', '⚡', '📑'] },
       btnSyncBackup: { icon: '☁️', text: '云端与备份', note: '专用于多端云同步与备份：Cloudflare KV 实时云同步 / 历史时间机器回滚 / 本地 JSON 备份包', labelTitle: '顶部按钮 3：云端与备份', group: 'topbar', emojiPresets: ['☁️', '🔄', '📲', '💾', '🛡️'] },
@@ -2653,8 +2969,8 @@
           if (saved[k].note !== undefined) base[k].note = String(saved[k].note);
         }
       });
-      if (base.appVersion && ['V6.0', 'v6.0', 'V6.1', 'v6.1', 'V6.2', 'v6.2', 'V7.0', 'v7.0', 'V7.1', 'v7.1'].includes(base.appVersion.text)) {
-        base.appVersion.text = 'V7.2';
+      if (base.appVersion && ['V6.0', 'v6.0', 'V6.1', 'v6.1', 'V6.2', 'v6.2', 'V7.0', 'v7.0', 'V7.1', 'v7.1', 'V7.2', 'v7.2'].includes(base.appVersion.text)) {
+        base.appVersion.text = 'V7.3';
         base.appVersion.icon = '🚀';
         base.appVersion.note = DEFAULT_UI_CUSTOM_LABELS.appVersion.note;
       }
@@ -3386,12 +3702,34 @@
             p.commentNote = seedCommentMap[p.trackingNo].commentNote;
           }
         });
-        // Clean redundant "含支付手续费..." from order note since paymentFee is already shown in the fee breakdown column
-        if (o.note && o.note.includes('含支付手续费')) {
-          o.note = o.note
+        // Backfill dual-currency & shippedDate from legacy auto-generated notes (e.g., #200032517), then strip redundant scrape clutter from o.note
+        if (o.note) {
+          const dualMatch = String(o.note).match(/原价(NZ\$|\$)([\d.]+)\s*[·•]\s*汇率([\d.]+)\s*[·•]\s*实付¥([\d.]+)/i);
+          if (dualMatch) {
+            const origTot = parseFloat(dualMatch[2]);
+            const exRate = parseFloat(dualMatch[3]);
+            const setAmt = parseFloat(dualMatch[4]);
+            if (!o.exchangeRate && exRate > 0) o.exchangeRate = exRate;
+            if (!o.origPaidTotal && origTot > 0) o.origPaidTotal = origTot;
+            if (!o.origCurrency) o.origCurrency = 'NZD';
+            if (!o.settledAmount && setAmt > 0) o.settledAmount = setAmt;
+            if (!o.settledCurrency) o.settledCurrency = 'CNY';
+          }
+          const shipMatch = String(o.note).match(/创建:\s*(\d{4}-\d{2}-\d{2})\s*\/\s*发货:\s*(\d{4}-\d{2}-\d{2})/);
+          if (shipMatch && !o.shippedDate) {
+            o.shippedDate = shipMatch[2];
+          }
+          o.note = String(o.note)
             .split('|')
             .map(s => s.trim())
-            .filter(s => s && !s.startsWith('含支付手续费'))
+            .filter(s => {
+              if (!s) return false;
+              if (s.startsWith('含支付手续费')) return false;
+              if (/^创建:\s*\d{4}-\d{2}-\d{2}\s*\/\s*发货:/.test(s)) return false;
+              if (/^(双币种实付导入[:：]?\s*)?原价(NZ\$|\$)[\d.]+\s*[·•]\s*汇率[\d.]+/.test(s)) return false;
+              if (/^通过网页智能解析导入/.test(s)) return false;
+              return true;
+            })
             .join(' | ');
         }
         (o.items || []).forEach(it => {
@@ -3473,10 +3811,11 @@
     }
 
     function getActiveOrders() {
-      if (state.includeSheet1) {
-        return [...state.orders, ...state.sheet1Orders];
+      const baseList = state.includeSheet1 ? [...state.orders, ...state.sheet1Orders] : state.orders;
+      if (window.readonlyCustomerRecipient) {
+        return baseList.filter(o => o && o.recipient === window.readonlyCustomerRecipient);
       }
-      return state.orders;
+      return baseList;
     }
 
     function getProductInfo(prodName) {
@@ -4948,10 +5287,15 @@
               </div>
               <div class="text-xs text-slate-700 font-medium line-clamp-2">${itemsSummary}</div>
               <div class="flex items-center justify-between pt-2 border-t border-amber-200/60">
-                <span class="text-xs text-amber-800">原表未填写快递及运单号</span>
-                <button data-edit-order="${o.id}" class="bg-amber-500 hover:bg-amber-400 text-slate-950 text-xs font-semibold px-3 py-1 rounded-lg transition">
-                  ＋ 补填运单号/签收
-                </button>
+                <span class="text-xs text-amber-800">暂未出运单号</span>
+                <div class="flex items-center gap-1.5">
+                  <button data-notify-order="${o.id}" class="bg-indigo-50 hover:bg-indigo-100 text-indigo-800 border border-indigo-200 text-xs font-bold px-2.5 py-1 rounded-lg transition" title="给客户发送下单确认或采购账单">
+                    📲 发客户
+                  </button>
+                  <button data-edit-order="${o.id}" class="bg-amber-500 hover:bg-amber-400 text-slate-950 text-xs font-semibold px-3 py-1 rounded-lg transition">
+                    ＋ 补填运单号/签收
+                  </button>
+                </div>
               </div>
             </div>
           `;
@@ -5038,6 +5382,9 @@
                 <a href="${trackUrl}" target="_blank" rel="noopener noreferrer" data-copy-track="${p.trackingNo}" class="px-2.5 py-1 rounded bg-emerald-50 hover:bg-emerald-100 text-emerald-800 border border-emerald-200 font-medium transition" title="直达原表导入的专属物流追踪链接：${trackUrl}">
                   🔍 直达查物流 ↗
                 </a>
+                <button data-notify-order="${o.id}" class="px-2 py-1 rounded bg-indigo-50 hover:bg-indigo-100 text-indigo-800 border border-indigo-200 font-bold transition" title="生成发给 ${o.recipient} 的快递发货单/账单通知">
+                  📲 发客户
+                </button>
                 ${orderUrl ? `<a href="${orderUrl}" target="_blank" rel="noopener noreferrer" class="px-2 py-1 rounded border border-slate-200 hover:bg-slate-100 text-slate-600 transition" title="查看 ${o.merchant} 订单详情">🛍️ 查订单 ↗</a>` : ''}
                 <button data-sign-order="${o.id}" data-sign-idx="${item.pIdx}" class="px-2.5 py-1 rounded font-semibold ${p.deliveredDate ? 'bg-slate-100 text-slate-700 hover:bg-slate-200' : 'bg-emerald-700 text-white hover:bg-emerald-600'} transition">
                   ${p.deliveredDate ? '修改日期' : '✍️ 一键签收'}
@@ -5642,7 +5989,10 @@
                   </button>
                 </div>
                 <div class="flex items-center gap-1 justify-end">
-                  <button data-clone-order="${o.id}" class="px-2 py-0.5 rounded bg-amber-50 hover:bg-amber-100 text-amber-900 border border-amber-200 text-[11px] font-medium whitespace-nowrap" title="按此单商品复制再来一单">
+                  <button data-notify-order="${o.id}" class="px-1.5 py-0.5 rounded bg-indigo-50 hover:bg-indigo-100 text-indigo-800 border border-indigo-200 text-[11px] font-bold whitespace-nowrap transition" title="生成发给客户（${o.recipient}）的微信通知：可选下单回执、快递单号、采购账单或二合一卡片">
+                    📲发客户
+                  </button>
+                  <button data-clone-order="${o.id}" class="px-1.5 py-0.5 rounded bg-amber-50 hover:bg-amber-100 text-amber-900 border border-amber-200 text-[11px] font-medium whitespace-nowrap" title="按此单商品复制再来一单">
                     复制
                   </button>
                   <button data-edit-order="${o.id}" class="px-1.5 py-0.5 rounded bg-slate-100 hover:bg-slate-200 text-slate-700 text-[11px] font-medium whitespace-nowrap">
@@ -6681,7 +7031,7 @@
       if (btnStoreMode) btnStoreMode.addEventListener('click', () => setOrderPurchaseMode(true));
 
       window.saveOrderFromModal = saveOrderFromModal;
-      function saveOrderFromModal(keepOpenForNext) {
+      function saveOrderFromModal(keepOpenForNext, openNotifyAfterSave) {
         const id = document.getElementById('formOrderId').value;
         const orderDate = document.getElementById('formOrderDate').value || TODAY_STR;
         const recipient = document.getElementById('formRecipient').value.trim() || 'HOME';
@@ -6831,11 +7181,20 @@
           showToast(`✅ 订单 #${orderNo} 已保存并同步单价库！表单已清空，请直接粘贴或录入下一笔新订单`);
         } else {
           document.getElementById('modalOrder').classList.add('hidden');
-          showToast(`✅ 订单 #${orderNo} 已保存并同步单价与汇率时间档案！`);
+          if (openNotifyAfterSave && typeof openCustomerNotifyModal === 'function') {
+            openCustomerNotifyModal(orderObj.id);
+            showToast(`✅ 订单 #${orderNo} 已保存！已为您打开客户微信通知生成器`);
+          } else {
+            showToast(`✅ 订单 #${orderNo} 已保存并同步单价与汇率时间档案！`);
+          }
         }
       }
 
-      document.getElementById('btnSaveOrder').addEventListener('click', () => saveOrderFromModal(false));
+      document.getElementById('btnSaveOrder').addEventListener('click', () => saveOrderFromModal(false, false));
+      const btnSaveNotify = document.getElementById('btnSaveAndNotifyOrder');
+      if (btnSaveNotify) {
+        btnSaveNotify.addEventListener('click', () => saveOrderFromModal(false, true));
+      }
       const btnSaveNext = document.getElementById('btnSaveAndNextOrder');
       if (btnSaveNext) {
         btnSaveNext.addEventListener('click', () => saveOrderFromModal(true));
@@ -7127,6 +7486,15 @@
           return;
         }
 
+        const notifyOrdBtn = e.target.closest('[data-notify-order]');
+        if (notifyOrdBtn) {
+          const ordId = notifyOrdBtn.getAttribute('data-notify-order');
+          if (typeof openCustomerNotifyModal === 'function') {
+            openCustomerNotifyModal(ordId);
+          }
+          return;
+        }
+
         const editOrdBtn = e.target.closest('[data-edit-order]');
         if (editOrdBtn) {
           const ordId = editOrdBtn.getAttribute('data-edit-order');
@@ -7414,9 +7782,13 @@
           });
           btn.classList.add('import-tab-active');
           btn.classList.remove('bg-white', 'text-slate-700');
-          ['excel', 'paste', 'bookmarklet'].forEach(p => {
-            document.getElementById('impPanel-' + p).classList.toggle('hidden', p !== t);
+          ['excel', 'paste', 'miniprogram', 'bookmarklet'].forEach(p => {
+            const el = document.getElementById('impPanel-' + p);
+            if (el) el.classList.toggle('hidden', p !== t);
           });
+          if (t === 'miniprogram' && typeof renderMiniProgramQuickBuilder === 'function') {
+            renderMiniProgramQuickBuilder();
+          }
         });
       });
 
@@ -7807,7 +8179,7 @@
     function buildFullSystemExportObject(options = {}) {
         const obj = {
           exportedAt: new Date().toISOString(),
-          appVersion: 'V7.2',
+          appVersion: 'V7.3',
           orders: state.orders,
           sheet1Orders: state.sheet1Orders,
           products: state.products,
@@ -8472,7 +8844,8 @@
     let pendingExcelDiffResult = null;
 
     function getBookmarkletCode() {
-      const code = `javascript:(function(){try{var u=location.href,t=document.body.innerText||'',h=location.hostname;var m=h.includes('hyhealth')?'华洋':(h.includes('healthelement')?'纽澳康源':(h.includes('ezhealth')?'易康':(h.includes('chemistwarehouse')?'CW':'华洋')));var om=t.match(/(20408\\d{8}|10314\\d{8}|20003\\d{4}|CW\\d+)/i);var ono=om?om[1]:'';var dm=t.match(/(202\\d[-/.]\\d{1,2}[-/.]\\d{1,2})/);var dt=dm?dm[1].replace(/[/.]/g,'-'):new Date().toISOString().slice(0,10);var links=[];document.querySelectorAll('a[href]').forEach(function(a){var tx=(a.innerText||'').trim();if(/^(1751\\d{5}|10023\\d{5}|N64[A-Z0-9]{11}|3675\\d{6}|7712\\d{10}|HE\\d{7}|ZH\\d{11}|NZ\\d{7}|SF\\d{13}|YT\\d{13})$/i.test(tx)){links.push({trackingNo:tx,trackingUrl:a.href});}});var trLines=[];document.querySelectorAll('tr').forEach(function(tr){var cells=Array.from(tr.querySelectorAll('th,td')).map(function(c){return (c.innerText||'').replace(/\\s+/g,' ').trim();}).filter(Boolean);if(cells.length>=2)trLines.push(cells.join(' \\t '));});var combinedText=(trLines.length>0?trLines.join('\\n')+'\\n':'')+t.slice(0,15000);var payload={_nzTrackerBookmarklet:true,merchant:m,orderNo:ono,orderUrl:u,orderDate:dt,extractedTracks:links,rawText:combinedText};var str=JSON.stringify(payload,null,2);navigator.clipboard.writeText(str).then(function(){var d=document.createElement('div');d.style.cssText='position:fixed;top:20px;right:20px;z-index:999999;background:#065f46;color:#fff;padding:12px 18px;border-radius:10px;font-size:14px;box-shadow:0 8px 24px rgba(0,0,0,0.25);';d.innerText='✅ 订单与表格明细已成功抓取到剪贴板！请回到【纽澳跨境采购与快递追踪管家】粘贴导入。';document.body.appendChild(d);setTimeout(function(){d.remove();},3500);});}catch(e){console.error(e);}})();`;
+      const appUrl = (window.location.origin && window.location.origin !== 'null' ? (window.location.origin + window.location.pathname) : 'https://nz-tracker.pages.dev/');
+      const code = `javascript:(function(){try{var app='${appUrl}';var u=location.href,t=document.body.innerText||'',h=location.hostname;var m=h.includes('hyhealth')?'华洋':(h.includes('healthelement')?'纽澳康源':(h.includes('ezhealth')?'易康':(h.includes('chemistwarehouse')?'CW':'华洋')));var om=t.match(/(20408\\d{8}|10314\\d{8}|20003\\d{4}|CW\\d+)/i);var ono=om?om[1]:'';var dm=t.match(/(202\\d[-/.]\\d{1,2}[-/.]\\d{1,2})/);var dt=dm?dm[1].replace(/[/.]/g,'-'):new Date().toISOString().slice(0,10);var links=[];document.querySelectorAll('a[href]').forEach(function(a){var tx=(a.innerText||'').trim();if(/^(1751\\d{5}|10023\\d{5}|N64[A-Z0-9]{11}|3675\\d{6}|7712\\d{10}|HE\\d{7}|ZH\\d{11}|NZ\\d{7}|SF\\d{13}|YT\\d{13})$/i.test(tx)){links.push({trackingNo:tx,trackingUrl:a.href});}});var trLines=[];document.querySelectorAll('tr').forEach(function(tr){var cells=Array.from(tr.querySelectorAll('th,td')).map(function(c){return (c.innerText||'').replace(/\\s+/g,' ').trim();}).filter(Boolean);if(cells.length>=2)trLines.push(cells.join(' \\t '));});var combinedText=(trLines.length>0?trLines.join('\\n')+'\\n':'')+t.slice(0,12000);var payload={_nzTrackerBookmarklet:true,merchant:m,orderNo:ono,orderUrl:u,orderDate:dt,extractedTracks:links,rawText:combinedText};var str=JSON.stringify(payload);try{navigator.clipboard.writeText(str);}catch(e){}var b64=btoa(unescape(encodeURIComponent(str)));var jumpUrl=app+'#quick_import='+encodeURIComponent(b64);var d=document.createElement('div');d.style.cssText='position:fixed;top:20px;right:20px;z-index:999999;background:#022c22;color:#fff;padding:14px 18px;border-radius:12px;font-size:13px;box-shadow:0 12px 32px rgba(0,0,0,0.35);border:1px solid #10b981;max-width:360px;line-height:1.5;';d.innerHTML='<div style="font-weight:bold;color:#34d399;margin-bottom:6px;">⚡ 纽澳订单抓取成功 (#'+(ono||'新订单')+')</div><div style="font-size:12px;color:#d1fae5;margin-bottom:10px;">已同时复制到剪贴板，您可点击下方按钮免粘贴直接投递到管家：</div><div style="display:flex;gap:8px;"><a href="'+jumpUrl+'" target="_blank" style="background:#f59e0b;color:#0f172a;font-weight:800;padding:6px 12px;border-radius:8px;text-decoration:none;font-size:12px;">🚀 一键直投到追踪管家 ↗</a><button onclick="this.parentElement.parentElement.remove()" style="background:#064e3b;color:#a7f3d0;border:none;padding:6px 10px;border-radius:8px;cursor:pointer;font-size:12px;">关闭</button></div>';document.body.appendChild(d);setTimeout(function(){if(d&&d.parentNode)d.remove();},9000);}catch(e){console.error(e);}})();`;
       return code;
     }
 
@@ -9456,17 +9829,14 @@
         addFormParcelRow(parsed.deliveryMethodCourier, '', '');
       }
 
-      // 5. Populate Note with Dual-Currency, Shipped Date, or Payment Fee audit trail
-      const noteParts = [];
-      if (parsed.createdDate && parsed.shippedDate && parsed.createdDate !== parsed.shippedDate) {
-        noteParts.push(`创建:${parsed.createdDate} / 发货:${parsed.shippedDate}`);
-      }
-      if (parsed.isDualCurrency && parsed.origPaidTotal && parsed.settledAmount && parsed.exchangeRate) {
-        noteParts.push(`原价NZ$${Number(parsed.origPaidTotal).toFixed(2)} · 汇率${parsed.exchangeRate} · 实付¥${Number(parsed.settledAmount).toFixed(2)}`);
-      }
-      // Payment fee is already stored in formPaymentFee and shown in the fee column; do not duplicate in noteParts
-      if (noteParts.length > 0) {
-        document.getElementById('formOrderNote').value = noteParts.join(' | ');
+      // 5. Keep formOrderNote clean for manual user remarks only (Dual-Currency, Exchange Rate, Payment Fee & Shipped Date are stored in structured fields and displayed in the payment column)
+      const noteEl = document.getElementById('formOrderNote');
+      if (noteEl && noteEl.value) {
+        noteEl.value = noteEl.value
+          .split('|')
+          .map(s => s.trim())
+          .filter(s => s && !s.startsWith('含支付手续费') && !/^创建:\s*\d{4}-\d{2}-\d{2}/.test(s) && !/^(双币种实付导入[:：]?\s*)?原价(NZ\$|\$)[\d.]+/.test(s) && !/^通过网页智能解析导入/.test(s))
+          .join(' | ');
       }
 
       // 6. Store dual-currency & initial scrape metadata on window.currentModalOrderDualMeta
@@ -9900,9 +10270,7 @@
         webBackfilledAt: TODAY_STR,
         currency,
         cancelled: false,
-        note: bfParsed && bfParsed.isDualCurrency
-          ? `双币种实付导入：原价NZ$${Number(bfParsed.origPaidTotal).toFixed(2)} · 汇率${bfParsed.exchangeRate} · 实付¥${Number(bfParsed.settledAmount).toFixed(2)}`
-          : (discount > 0 ? `通过网页智能解析导入（含优惠 -${currency === 'CNY' ? '¥' : '$'}${discount}）` : '通过网页智能解析导入'),
+        note: '',
         isUnread: true,
         importSource: '网页粘贴解析'
       };
@@ -13051,7 +13419,7 @@
       const labels = mergeUiCustomLabels(state.uiCustomLabels);
 
       const groupMeta = [
-        { id: 'header', title: '一、系统顶部标题与版本号标识 (V7.2)', desc: '修改左上角系统主名称、版本号徽章与副标题说明' },
+        { id: 'header', title: '一、系统顶部标题与版本号标识 (V7.3)', desc: '修改左上角系统主名称、版本号徽章与副标题说明' },
         { id: 'topbar', title: '二、顶部操作栏高频按钮 (6组)', desc: '自由调整顶部操作按钮的 Emoji 图标、简短名称与鼠标悬停提示语' },
         { id: 'nav', title: '三、主导航栏四大核心模块', desc: '定制四大主模块的图标、Tab 标题与功能注释' },
         { id: 'kpi', title: '四、首页 5 大数据看板卡片', desc: '定制快递追踪工作台顶部 5 个数据统计卡的图标、标题与底部注释说明' }
@@ -13510,7 +13878,7 @@
 
     function getStandaloneCfPagesFunctionCode() {
       return `/**
- * 纽澳跨境采购与快递追踪管家 V7.2 - Cloudflare Pages Function
+ * 纽澳跨境采购与快递追踪管家 V7.3 - Cloudflare Pages Function
  * 文件存放路径: functions/api/sync.js
  * 绑定的 KV 命名空间变量名: NZ_TRACKER_KV (同时支持自动识别任意已绑定的 KV 变量名)
  * 可选环境变量: SYNC_PASSCODE (您在网页设置的云端同步口令，如 nz2026)
@@ -13653,6 +14021,10 @@ export async function onRequestPost(context) {
     }
 
     async function executeCfCloudPush(options = {}) {
+      if (window.readonlyCustomerRecipient) {
+        if (!options.silentToast) showToast('🔒 当前为客户专属只读查件/对账模式，不允许修改或推送到云端');
+        return false;
+      }
       if (isCloudPushing) return false;
       if (!Array.isArray(state.orders) || state.orders.length === 0) {
         showToast('⚠️ 当前本地订单为空，已阻止空数据覆盖云端数据库！');
@@ -13901,7 +14273,7 @@ export async function onRequestPost(context) {
       // Ensure at least one baseline snapshot is visible so user can test rollback anytime
       if (remoteSnapshots.length === 0 && localSnapshots.length === 0) {
         const initSnap = buildFullSystemExportObject({ includeObfuscatedToken: false });
-        saveLocalSimulatedCfSnapshot(initSnap, 'V7.2 初始基准存档');
+        saveLocalSimulatedCfSnapshot(initSnap, 'V7.3 初始基准存档');
         try {
           localSnapshots = JSON.parse(localStorage.getItem(CF_LOCAL_SIM_SNAPSHOTS_KEY) || '[]');
         } catch (e) {}
@@ -13982,11 +14354,54 @@ export async function onRequestPost(context) {
       copyTextToClipboard(shareUrl, `「${recipient}」专属只读查件与对账分享链接`);
     }
 
+    // =========================================================================
+    // V7.3 MODULE 1: PRIVACY-ISOLATED CUSTOMER READONLY PORTAL (?readonly_recipient=XX)
+    // =========================================================================
+    window.readonlyCustomerRecipient = null;
+
+    function applyReadonlyCustomerUiLock(roRec) {
+      window.readonlyCustomerRecipient = roRec || null;
+      const banner = document.getElementById('readonlyCustomerBanner');
+      const badge = document.getElementById('readonlyCustomerNameBadge');
+      const adminIdsToHide = [
+        'btnOpenNewOrderModal',
+        'btnOpenSmartImportModal',
+        'btnOpenSyncModal',
+        'btnOpenAppSettingsModal',
+        'btnTopUndo',
+        'btnTopRedo',
+        'btnTopCommitSave',
+        'btnTopDiscardChanges',
+        'unsavedChangesBanner',
+        'unreadGlobalBanner',
+        'filterRecipient'
+      ];
+      if (roRec) {
+        if (banner) banner.classList.remove('hidden');
+        if (badge) badge.textContent = `当前客户：${roRec}`;
+        adminIdsToHide.forEach(id => {
+          const el = document.getElementById(id);
+          if (el) el.classList.add('hidden');
+        });
+        const prodTabBtn = document.querySelector('.nav-tab[data-tab="products"]');
+        if (prodTabBtn) prodTabBtn.classList.add('hidden');
+      } else {
+        if (banner) banner.classList.add('hidden');
+        ['btnOpenNewOrderModal', 'btnOpenSmartImportModal', 'btnOpenSyncModal', 'btnOpenAppSettingsModal', 'btnTopUndo', 'btnTopRedo', 'btnTopCommitSave', 'filterRecipient'].forEach(id => {
+          const el = document.getElementById(id);
+          if (el) el.classList.remove('hidden');
+        });
+        const prodTabBtn = document.querySelector('.nav-tab[data-tab="products"]');
+        if (prodTabBtn) prodTabBtn.classList.remove('hidden');
+      }
+    }
+
     function checkAndApplyReadonlyRecipientMode() {
       try {
         const params = new URLSearchParams(window.location.search);
         const roRec = params.get('readonly_recipient');
         if (!roRec) return;
+        applyReadonlyCustomerUiLock(roRec);
         populateRecipientSelects();
         const recFilter = document.getElementById('filterRecipient');
         if (recFilter) recFilter.value = roRec;
@@ -13996,9 +14411,973 @@ export async function onRequestPost(context) {
         if (validOrds.length > 0) {
           extractBillFromOrderRange(validOrds, `${roRec} 采购结算对账单`);
         }
-        renderOrdersTab();
-        showToast(`🔒 当前为「${roRec}」专属查件与对账视图（共 ${validOrds.length} 笔有效订单）`);
+        renderAll();
+        showToast(`🔒 欢迎查看「${roRec}」专属包裹物流与对账门户（共 ${validOrds.length} 笔订单）`);
       } catch (e) {}
+    }
+
+    // =========================================================================
+    // V7.3 MODULE 2: URL HASH #quick_import= AUTO-RECEIVER FROM BOOKMARKLET
+    // =========================================================================
+    function checkAndHandleUrlQuickImportHash() {
+      try {
+        const h = window.location.hash || '';
+        if (!h.startsWith('#quick_import=')) return;
+        const b64 = decodeURIComponent(h.slice('#quick_import='.length));
+        const jsonStr = decodeURIComponent(escape(atob(b64)));
+        // Clean hash so refreshing doesn't re-trigger
+        if (window.history && window.history.replaceState) {
+          window.history.replaceState(null, '', window.location.pathname + window.location.search);
+        }
+        openOrderModal(null, false);
+        const scrapeBox = document.getElementById('newOrderScrapeInput');
+        if (scrapeBox) {
+          scrapeBox.value = jsonStr;
+          applyWebScrapeToNewOrderModal(jsonStr);
+          showToast('🚀 已从浏览器小书签自动接收抓单数据并填入表单，请核对后点击保存！');
+        }
+      } catch (e) {
+        console.warn('Quick import hash decode error:', e);
+      }
+    }
+
+    // =========================================================================
+    // V7.3 MODULE 3: CUSTOMER WECHAT NOTIFICATION & BILL/TRACKING GENERATOR
+    // =========================================================================
+    let currentNotifyState = {
+      mode: 'full_combined', // 'full_combined' | 'shipping_only' | 'bill_only' | 'order_confirm' | 'arrival_remind'
+      recipient: '朱峰',
+      focalOrderId: null,
+      selectedOrderIds: new Set()
+    };
+
+    function applyNotifyModePreset(mode) {
+      currentNotifyState.mode = mode;
+      document.querySelectorAll('.notify-mode-btn').forEach(btn => {
+        const m = btn.getAttribute('data-notify-mode');
+        const active = m === mode;
+        btn.className = active
+          ? 'notify-mode-btn bg-indigo-600 text-white font-bold px-2.5 py-2 rounded-lg border border-indigo-700 text-left transition flex flex-col gap-0.5 shadow-xs'
+          : 'notify-mode-btn bg-white hover:bg-slate-100 text-slate-700 font-bold px-2.5 py-2 rounded-lg border border-slate-300 text-left transition flex flex-col gap-0.5';
+      });
+
+      const chkItems = document.getElementById('chkNotifyItems');
+      const chkPrices = document.getElementById('chkNotifyPrices');
+      const chkTracking = document.getElementById('chkNotifyTracking');
+      const chkTrackUrl = document.getElementById('chkNotifyTrackUrl');
+      const chkDualRate = document.getElementById('chkNotifyDualRate');
+      const chkOrderMeta = document.getElementById('chkNotifyOrderMeta');
+
+      if (mode === 'shipping_only') {
+        if (chkItems) chkItems.checked = true;
+        if (chkPrices) chkPrices.checked = false;
+        if (chkTracking) chkTracking.checked = true;
+        if (chkTrackUrl) chkTrackUrl.checked = true;
+        if (chkDualRate) chkDualRate.checked = false;
+        if (chkOrderMeta) chkOrderMeta.checked = true;
+      } else if (mode === 'bill_only') {
+        if (chkItems) chkItems.checked = true;
+        if (chkPrices) chkPrices.checked = true;
+        if (chkTracking) chkTracking.checked = false;
+        if (chkTrackUrl) chkTrackUrl.checked = false;
+        if (chkDualRate) chkDualRate.checked = true;
+        if (chkOrderMeta) chkOrderMeta.checked = true;
+      } else if (mode === 'order_confirm') {
+        if (chkItems) chkItems.checked = true;
+        if (chkPrices) chkPrices.checked = false;
+        if (chkTracking) chkTracking.checked = false;
+        if (chkTrackUrl) chkTrackUrl.checked = false;
+        if (chkDualRate) chkDualRate.checked = false;
+        if (chkOrderMeta) chkOrderMeta.checked = true;
+      } else if (mode === 'arrival_remind') {
+        if (chkItems) chkItems.checked = true;
+        if (chkPrices) chkPrices.checked = false;
+        if (chkTracking) chkTracking.checked = true;
+        if (chkTrackUrl) chkTrackUrl.checked = false;
+        if (chkDualRate) chkDualRate.checked = false;
+        if (chkOrderMeta) chkOrderMeta.checked = false;
+      } else {
+        // full_combined
+        if (chkItems) chkItems.checked = true;
+        if (chkPrices) chkPrices.checked = true;
+        if (chkTracking) chkTracking.checked = true;
+        if (chkTrackUrl) chkTrackUrl.checked = true;
+        if (chkDualRate) chkDualRate.checked = true;
+        if (chkOrderMeta) chkOrderMeta.checked = true;
+      }
+      renderCustomerNotifyText();
+    }
+
+    function openCustomerNotifyModal(orderIdOrNull, preferredRecipient) {
+      const allOrds = state.orders.filter(o => !o.cancelled);
+      let targetOrd = orderIdOrNull ? allOrds.find(o => o.id === orderIdOrNull) : null;
+      let rec = preferredRecipient || (targetOrd ? targetOrd.recipient : null);
+      if (!rec) {
+        const billRec = document.getElementById('billRecipientSelect');
+        rec = (billRec && billRec.value && billRec.value !== 'ALL') ? billRec.value : (allOrds[0] ? allOrds[0].recipient : '朱峰');
+      }
+
+      currentNotifyState.recipient = rec;
+      currentNotifyState.focalOrderId = targetOrd ? targetOrd.id : null;
+      currentNotifyState.selectedOrderIds = new Set();
+
+      const recOrds = allOrds
+        .filter(o => o.recipient === rec)
+        .sort((a, b) => String(b.orderDate).localeCompare(String(a.orderDate)));
+
+      if (targetOrd) {
+        currentNotifyState.selectedOrderIds.add(targetOrd.id);
+        // Smart default mode based on order state
+        const hasTracks = Array.isArray(targetOrd.parcels) && targetOrd.parcels.some(p => p.trackingNo);
+        const allDelivered = hasTracks && targetOrd.parcels.every(p => !!p.deliveredDate);
+        if (allDelivered) {
+          applyNotifyModePreset('arrival_remind');
+        } else if (!hasTracks) {
+          applyNotifyModePreset('order_confirm');
+        } else {
+          applyNotifyModePreset('full_combined');
+        }
+      } else {
+        recOrds.slice(0, 3).forEach(o => currentNotifyState.selectedOrderIds.add(o.id));
+        applyNotifyModePreset('full_combined');
+      }
+
+      populateNotifyCustomerModalUI();
+      document.getElementById('modalCustomerNotify').classList.remove('hidden');
+    }
+
+    function populateNotifyCustomerModalUI() {
+      const allOrds = state.orders.filter(o => !o.cancelled);
+      const recipients = Array.from(new Set(allOrds.map(o => o.recipient).filter(Boolean)));
+      const sel = document.getElementById('notifyCustomerSelect');
+      if (sel) {
+        sel.innerHTML = recipients.map(r => `<option value="${r}" ${r === currentNotifyState.recipient ? 'selected' : ''}>${r}</option>`).join('');
+      }
+      renderNotifyOrdersChecklist();
+      renderCustomerNotifyText();
+    }
+
+    function renderNotifyOrdersChecklist() {
+      const box = document.getElementById('notifyOrdersChecklist');
+      if (!box) return;
+      const recOrds = state.orders
+        .filter(o => !o.cancelled && o.recipient === currentNotifyState.recipient)
+        .sort((a, b) => String(b.orderDate).localeCompare(String(a.orderDate)));
+
+      if (recOrds.length === 0) {
+        box.innerHTML = `<div class="text-slate-400 py-4 text-center">该客户名下暂无有效订单</div>`;
+        return;
+      }
+
+      box.innerHTML = recOrds.map(o => {
+        const checked = currentNotifyState.selectedOrderIds.has(o.id);
+        const m = getOrderFinancials(o);
+        const itemsText = (o.items || []).map(i => `${i.product}×${i.qty}`).join('、');
+        const tracksText = (o.parcels || []).filter(p => p.trackingNo).map(p => `${p.courier}:${p.trackingNo}`).join(' ') || '暂未出单号';
+        return `
+          <label class="flex items-start gap-2 p-2 rounded-lg border ${checked ? 'bg-indigo-50/70 border-indigo-300' : 'bg-slate-50 border-slate-200'} cursor-pointer hover:border-indigo-400 transition">
+            <input type="checkbox" data-notify-ord-chk="${o.id}" ${checked ? 'checked' : ''} class="mt-0.5 rounded text-indigo-600" />
+            <div class="flex-1 min-w-0">
+              <div class="flex items-center justify-between gap-1">
+                <span class="font-bold text-slate-800">${o.orderDate} · ${o.merchant} <span class="font-mono text-[11px] text-slate-500">#${o.orderNo}</span></span>
+                <span class="font-mono font-bold text-emerald-800">${m.symbol}${m.grandTotal.toFixed(2)}</span>
+              </div>
+              <div class="text-[11px] text-slate-600 truncate">${itemsText}</div>
+              <div class="text-[10px] text-slate-500 font-mono truncate">🚚 ${tracksText}</div>
+            </div>
+          </label>
+        `;
+      }).join('');
+    }
+
+    function renderCustomerNotifyText() {
+      const rec = currentNotifyState.recipient;
+      const mode = currentNotifyState.mode;
+      const incItems = document.getElementById('chkNotifyItems') ? document.getElementById('chkNotifyItems').checked : true;
+      const incPrices = document.getElementById('chkNotifyPrices') ? document.getElementById('chkNotifyPrices').checked : true;
+      const incTracking = document.getElementById('chkNotifyTracking') ? document.getElementById('chkNotifyTracking').checked : true;
+      const incTrackUrl = document.getElementById('chkNotifyTrackUrl') ? document.getElementById('chkNotifyTrackUrl').checked : true;
+      const incDualRate = document.getElementById('chkNotifyDualRate') ? document.getElementById('chkNotifyDualRate').checked : true;
+      const incOrderMeta = document.getElementById('chkNotifyOrderMeta') ? document.getElementById('chkNotifyOrderMeta').checked : true;
+      const incReadonlyLink = document.getElementById('chkNotifyReadonlyLink') ? document.getElementById('chkNotifyReadonlyLink').checked : true;
+      const curMode = document.getElementById('notifyPriceCurrencyMode') ? document.getElementById('notifyPriceCurrencyMode').value : 'auto';
+
+      const selectedOrds = state.orders
+        .filter(o => !o.cancelled && o.recipient === rec && currentNotifyState.selectedOrderIds.has(o.id))
+        .sort((a, b) => String(a.orderDate).localeCompare(String(b.orderDate)));
+
+      const badge = document.getElementById('notifySummaryBadge');
+      if (badge) badge.textContent = `已选 ${selectedOrds.length} 笔订单`;
+
+      const textarea = document.getElementById('customerNotifyTextarea');
+      if (!textarea) return;
+
+      if (selectedOrds.length === 0) {
+        textarea.value = '⚠️ 请在左侧至少勾选 1 笔要发送给客户的订单。';
+        return;
+      }
+
+      const liveNzdRate = (window.cfConfigState && window.cfConfigState.liveRates && Number(window.cfConfigState.liveRates.NZD)) || 4.35;
+      const lines = [];
+
+      // Header greeting by mode
+      if (mode === 'order_confirm') {
+        lines.push(`🛒【纽澳跨境代购 · 下单确认回执】`);
+        lines.push(`${rec} 您好！您的纽澳保健品订单已为您成功下单采购，具体明细如下：`);
+      } else if (mode === 'shipping_only') {
+        lines.push(`✈️【纽澳直邮包裹 · 发货与物流单号通知】`);
+        lines.push(`${rec} 您好！您的纽澳直邮包裹已寄出，物流及包裹明细如下：`);
+      } else if (mode === 'bill_only') {
+        lines.push(`🧾【纽澳跨境采购 · 结算对账单】`);
+        lines.push(`${rec} 您好！为您整理本次纽澳采购账单明细如下：`);
+      } else if (mode === 'arrival_remind') {
+        lines.push(`✅【纽澳直邮包裹 · 到货签收提醒】`);
+        lines.push(`${rec} 您好！物流显示您的纽澳直邮包裹已送达，请留意查收：`);
+      } else {
+        lines.push(`📦【纽澳跨境采购 · 物流与结算通知单】`);
+        lines.push(`${rec} 您好！您的纽澳采购商品、国际快递单号及结算明细如下：`);
+      }
+      lines.push(`─────────────────────`);
+
+      let totalRmbSum = 0;
+      let totalNzdSum = 0;
+      let totalParcelsCount = 0;
+      let totalItemUnits = 0;
+
+      selectedOrds.forEach((o, idx) => {
+        const m = getOrderFinancials(o);
+        const ordRate = Number(o.exchangeRate) || liveNzdRate;
+
+        // Determine display currency for this order
+        let dispSym = m.symbol;
+        let dispCur = m.currency;
+        let convFactor = 1;
+        if (curMode === 'CNY' && m.currency !== 'CNY') {
+          dispSym = '¥';
+          dispCur = 'CNY';
+          convFactor = ordRate;
+        } else if (curMode === 'NZD' && m.currency !== 'NZD') {
+          dispSym = 'NZ$';
+          dispCur = 'NZD';
+          convFactor = ordRate > 0 ? (1 / ordRate) : (1 / liveNzdRate);
+        } else if (m.currency === 'NZD') {
+          dispSym = 'NZ$';
+        }
+
+        if (selectedOrds.length > 1 || incOrderMeta) {
+          const ordTitleParts = [];
+          if (selectedOrds.length > 1) ordTitleParts.push(`🔹 订单 ${idx + 1}`);
+          if (incOrderMeta) {
+            ordTitleParts.push(`日期: ${o.orderDate}`);
+            ordTitleParts.push(`渠道: ${o.merchant}`);
+            if (!isStoreOrNoNumberOrder(o)) ordTitleParts.push(`单号: #${o.orderNo}`);
+          }
+          if (ordTitleParts.length > 0) {
+            lines.push(ordTitleParts.join(' | '));
+          }
+        }
+
+        // Items
+        if (incItems && Array.isArray(o.items) && o.items.length > 0) {
+          o.items.forEach(it => {
+            const q = Number(it.qty) || 0;
+            totalItemUnits += q;
+            if (incPrices) {
+              let up = Number(it.unitPrice) || 0;
+              if (curMode === 'CNY' && m.currency !== 'CNY') {
+                up = it.rmbUnitPrice ? Number(it.rmbUnitPrice) : Number((up * convFactor).toFixed(2));
+              } else if (curMode === 'NZD' && m.currency !== 'NZD') {
+                up = it.origUnitPrice ? Number(it.origUnitPrice) : Number((up * convFactor).toFixed(2));
+              }
+              const sub = Number((up * q).toFixed(2));
+              lines.push(`  • ${it.product} × ${q}件  (单价 ${dispSym}${up.toFixed(2)} · 小计 ${dispSym}${sub.toFixed(2)})`);
+            } else {
+              lines.push(`  • ${it.product} × ${q}件`);
+            }
+          });
+        }
+
+        // Prices & Fees for this order
+        let ordDisplayTotal = Number((m.grandTotal * convFactor).toFixed(2));
+        if (curMode === 'CNY' && o.settledAmount && o.settledCurrency === 'CNY') {
+          ordDisplayTotal = Number(o.settledAmount);
+        } else if (curMode === 'NZD' && o.origPaidTotal && o.origCurrency === 'NZD') {
+          ordDisplayTotal = Number(o.origPaidTotal);
+        }
+
+        // Accumulate totals in both RMB and NZD
+        const ordRmb = m.currency === 'CNY'
+          ? m.grandTotal
+          : (o.settledAmount && o.settledCurrency === 'CNY' ? Number(o.settledAmount) : Number((m.grandTotal * ordRate).toFixed(2)));
+        const ordNzd = m.currency === 'NZD'
+          ? m.grandTotal
+          : (o.origPaidTotal && o.origCurrency === 'NZD' ? Number(o.origPaidTotal) : Number((m.grandTotal / ordRate).toFixed(2)));
+        totalRmbSum += ordRmb;
+        totalNzdSum += ordNzd;
+
+        if (incPrices) {
+          const feeParts = [];
+          const shipDisp = Number((m.shippingFee * convFactor).toFixed(2));
+          const payFeeDisp = Number((m.paymentFee * convFactor).toFixed(2));
+          const discDisp = Number((m.discount * convFactor).toFixed(2));
+          if (shipDisp > 0) feeParts.push(`直邮运费: ${dispSym}${shipDisp.toFixed(2)}`);
+          else feeParts.push(`运费: 包邮/免运费`);
+          if (payFeeDisp > 0) feeParts.push(`支付手续费: ${dispSym}${payFeeDisp.toFixed(2)}`);
+          if (discDisp > 0) feeParts.push(`优惠减免: -${dispSym}${discDisp.toFixed(2)}`);
+          lines.push(`  💰 本单费用：${feeParts.join(' | ')} ➔ 实付小计：${dispSym}${ordDisplayTotal.toFixed(2)}`);
+
+          if (incDualRate && o.exchangeRate && o.origPaidTotal) {
+            lines.push(`  💱 汇率折算明细：网页原标价 NZ$${Number(o.origPaidTotal).toFixed(2)} × 结算汇率 ${o.exchangeRate} = 实付 ¥${Number(o.settledAmount || ordRmb).toFixed(2)}`);
+          }
+        }
+
+        // Parcels & Tracking
+        if (incTracking) {
+          const validParcels = (o.parcels || []).filter(p => p && p.trackingNo);
+          if (validParcels.length === 0) {
+            lines.push(`  🚚 物流状态：商家正在打包配货，出国际运单号后第一时间发给您`);
+          } else {
+            validParcels.forEach((p, pIdx) => {
+              totalParcelsCount += 1;
+              const statusStr = p.deliveredDate ? `✅ 已签收 (${p.deliveredDate})` : `✈️ 国际直邮运输中`;
+              const packLabel = validParcels.length > 1 ? `包裹${pIdx + 1}` : `快递`;
+              lines.push(`  🚚 ${packLabel}：${p.courier} 【${p.trackingNo}】 (${statusStr})`);
+              if (incTrackUrl) {
+                const tUrl = resolveTrackingUrl(p);
+                if (tUrl) lines.push(`     🔍 实时查件链接：${tUrl}`);
+              }
+            });
+          }
+        }
+
+        if (idx < selectedOrds.length - 1) {
+          lines.push(` - - - - - - - - - - -`);
+        }
+      });
+
+      lines.push(`─────────────────────`);
+      if (incPrices) {
+        if (curMode === 'CNY') {
+          lines.push(`💴 本次应结总计：¥${totalRmbSum.toFixed(2)} RMB （共 ${selectedOrds.length} 单 / ${totalItemUnits} 件商品）`);
+        } else if (curMode === 'NZD') {
+          lines.push(`💵 本次应结总计：NZ$${totalNzdSum.toFixed(2)} （约合人民币 ¥${totalRmbSum.toFixed(2)}，共 ${selectedOrds.length} 单 / ${totalItemUnits} 件商品）`);
+        } else {
+          const allCny = selectedOrds.every(o => (o.currency || 'NZD') === 'CNY');
+          const allNzd = selectedOrds.every(o => (o.currency || 'NZD') === 'NZD');
+          if (allCny) {
+            lines.push(`💴 本次实付总计：¥${totalRmbSum.toFixed(2)} RMB （共 ${selectedOrds.length} 单 / ${totalItemUnits} 件商品）`);
+          } else if (allNzd) {
+            lines.push(`💵 本次实付总计：NZ$${totalNzdSum.toFixed(2)} （折合人民币约 ¥${totalRmbSum.toFixed(2)}，共 ${selectedOrds.length} 单 / ${totalItemUnits} 件商品）`);
+          } else {
+            lines.push(`💴 本次折算人民币总计：¥${totalRmbSum.toFixed(2)} RMB （共 ${selectedOrds.length} 单 / ${totalItemUnits} 件商品）`);
+          }
+        }
+      } else {
+        lines.push(`📦 共计：${selectedOrds.length} 笔订单 · ${totalItemUnits} 件商品${totalParcelsCount > 0 ? ` · ${totalParcelsCount} 个直邮包裹` : ''}`);
+      }
+
+      if (mode === 'order_confirm') {
+        lines.push(`💡 备注：待新西兰仓库打包发出国际快递单号后，我会再把物流追踪链接发给您！`);
+      } else if (mode === 'arrival_remind') {
+        lines.push(`💡 温馨提示：国际包裹已顺利签收，开箱后请核对商品数量，如有任何问题随时微信联系我！`);
+      }
+
+      if (incReadonlyLink) {
+        const baseUrl = window.location.origin && window.location.origin !== 'null'
+          ? (window.location.origin + window.location.pathname)
+          : 'https://nz-tracker.pages.dev/';
+        const shareUrl = `${baseUrl}?readonly_recipient=${encodeURIComponent(rec)}`;
+        lines.push(`🔗 您的专属实时查件与对账网页（点开即可查物流与历史明细）：`);
+        lines.push(shareUrl);
+      }
+
+      textarea.value = lines.join('\n');
+    }
+
+    // =========================================================================
+    // V7.3 MODULE 4: WECHAT MINI-PROGRAM & MOBILE QUICK ORDER BUILDER
+    // =========================================================================
+    let mpBuilderState = {
+      recipient: '朱峰',
+      merchant: '易康',
+      items: []
+    };
+
+    function renderMiniProgramQuickBuilder() {
+      const dateInp = document.getElementById('mpQuickDate');
+      if (dateInp && !dateInp.value) dateInp.value = TODAY_STR;
+
+      // 1. Recipient pills
+      const recCont = document.getElementById('mpQuickRecipientPills');
+      const allRecs = Array.from(new Set(['朱峰', 'HOME', '泗泾', '朱莉', '王超', '顾婷', '朱欢', ...state.orders.map(o => o.recipient).filter(Boolean)]));
+      if (recCont) {
+        recCont.innerHTML = allRecs.map(r => {
+          const active = r === mpBuilderState.recipient;
+          return `<button type="button" data-mp-rec="${r}" class="px-2.5 py-1 rounded-lg text-xs font-bold border transition ${active ? 'bg-emerald-700 text-white border-emerald-800 shadow-2xs' : 'bg-white text-slate-700 border-slate-300 hover:bg-slate-50'}">👤 ${r}</button>`;
+        }).join('');
+      }
+
+      // 2. Merchant pills
+      const merCont = document.getElementById('mpQuickMerchantPills');
+      const merchants = ['易康', '华洋', '纽澳康源', 'CW'];
+      if (merCont) {
+        merCont.innerHTML = merchants.map(m => {
+          const active = m === mpBuilderState.merchant;
+          return `<button type="button" data-mp-mer="${m}" class="px-2.5 py-1 rounded-lg text-xs font-bold border transition ${active ? 'bg-indigo-600 text-white border-indigo-700 shadow-2xs' : 'bg-white text-slate-700 border-slate-300 hover:bg-slate-50'}">🛍️ ${m}</button>`;
+        }).join('');
+      }
+
+      renderMpProductTapGrid();
+      renderMpSelectedItems();
+    }
+
+    function renderMpProductTapGrid() {
+      const grid = document.getElementById('mpQuickProductTapGrid');
+      if (!grid) return;
+      const q = (document.getElementById('mpQuickProdSearch') ? document.getElementById('mpQuickProdSearch').value : '').trim().toLowerCase();
+      const cur = document.getElementById('mpQuickCurrency') ? document.getElementById('mpQuickCurrency').value : 'CNY';
+
+      // Rank products by purchase frequency
+      const freqMap = {};
+      state.orders.forEach(o => {
+        (o.items || []).forEach(it => {
+          freqMap[it.product] = (freqMap[it.product] || 0) + (Number(it.qty) || 1);
+        });
+      });
+
+      const prodList = [...state.products]
+        .filter(p => !q || p.name.toLowerCase().includes(q) || (p.category && p.category.toLowerCase().includes(q)))
+        .sort((a, b) => (freqMap[b.name] || 0) - (freqMap[a.name] || 0));
+
+      grid.innerHTML = prodList.slice(0, 28).map(p => {
+        const refPrice = getHistoricalPriceByDate(p.name, TODAY_STR, cur) || (cur === 'CNY' ? (p.rmbPrice || 0) : (p.nzdPrice || 0));
+        const sym = cur === 'CNY' ? '¥' : '$';
+        return `
+          <div class="inline-flex items-center bg-slate-50 hover:bg-emerald-50 border border-slate-200 hover:border-emerald-300 rounded-lg overflow-hidden text-[11px] transition">
+            <button type="button" data-mp-addprod="${p.name}" data-mp-addqty="1" class="px-2 py-1 font-semibold text-slate-800 hover:text-emerald-900 text-left">
+              ${p.name} <span class="text-[10px] text-slate-400 font-mono">${refPrice ? sym + Number(refPrice).toFixed(0) : ''}</span>
+            </button>
+            <button type="button" data-mp-addprod="${p.name}" data-mp-addqty="2" class="px-1.5 py-1 bg-emerald-100/70 hover:bg-emerald-200 text-emerald-900 font-bold border-l border-slate-200" title="直接+2件">+2</button>
+            <button type="button" data-mp-addprod="${p.name}" data-mp-addqty="6" class="px-1.5 py-1 bg-amber-100/70 hover:bg-amber-200 text-amber-900 font-bold border-l border-slate-200" title="直接+6件">+6</button>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function renderMpSelectedItems() {
+      const cont = document.getElementById('mpQuickSelectedItemsList');
+      const totEl = document.getElementById('mpQuickTotalPreview');
+      if (!cont) return;
+      const cur = document.getElementById('mpQuickCurrency') ? document.getElementById('mpQuickCurrency').value : 'CNY';
+      const sym = cur === 'CNY' ? '¥' : 'NZ$';
+      const ship = Number(document.getElementById('mpQuickShippingFee') ? document.getElementById('mpQuickShippingFee').value : 0) || 0;
+
+      if (mpBuilderState.items.length === 0) {
+        cont.innerHTML = `<div class="text-slate-400 text-center py-3 text-[11px]">👆 点击上方常买商品即可加入清单，或在左侧粘贴微信小程序文字自动解析</div>`;
+        if (totEl) totEl.textContent = `总计: ${sym}${ship.toFixed(2)}`;
+        return;
+      }
+
+      let itemSum = 0;
+      cont.innerHTML = mpBuilderState.items.map((it, idx) => {
+        const sub = (Number(it.unitPrice) || 0) * (Number(it.qty) || 1);
+        itemSum += sub;
+        return `
+          <div class="flex items-center justify-between gap-1.5 bg-slate-50 px-2 py-1 rounded-lg border border-slate-200 text-xs">
+            <span class="font-semibold text-slate-800 truncate flex-1">${it.product}</span>
+            <div class="flex items-center gap-1">
+              <span class="text-[10px] text-slate-400">单价</span>
+              <input type="number" step="0.01" data-mp-item-price="${idx}" value="${Number(it.unitPrice || 0)}" class="w-16 text-xs border border-slate-300 rounded px-1.5 py-0.5 font-mono text-right bg-white" />
+              <span class="text-[10px] text-slate-400">×</span>
+              <input type="number" min="1" data-mp-item-qty="${idx}" value="${Number(it.qty || 1)}" class="w-11 text-xs border border-slate-300 rounded px-1 py-0.5 font-mono text-center bg-white font-bold" />
+              <button type="button" data-mp-del-item="${idx}" class="text-rose-500 hover:text-rose-700 px-1 font-bold" title="移除">×</button>
+            </div>
+          </div>
+        `;
+      }).join('');
+
+      if (totEl) {
+        totEl.textContent = `商品 ${sym}${itemSum.toFixed(2)} + 运费 ${sym}${ship.toFixed(2)} = 总计 ${sym}${(itemSum + ship).toFixed(2)}`;
+      }
+    }
+
+    function parseMiniProgramTextToBuilder(rawText) {
+      const text = String(rawText || '').trim();
+      if (!text) {
+        showToast('请先在左侧文本框粘贴微信小程序订单文字');
+        return;
+      }
+      // First run the existing smart web parser
+      const parsed = parseWebOrderForBackfill(text, null);
+      if (parsed) {
+        if (parsed.merchant) mpBuilderState.merchant = parsed.merchant;
+        const recCands = inferSmartRecipientCandidates(parsed.recipient, parsed.recipientAddress);
+        if (recCands && recCands.length > 0) {
+          mpBuilderState.recipient = recCands[0].tag;
+        }
+        if (parsed.orderDate) {
+          const dEl = document.getElementById('mpQuickDate');
+          if (dEl) dEl.value = parsed.orderDate;
+        }
+        if (parsed.orderNo) {
+          const noEl = document.getElementById('mpQuickOrderNo');
+          if (noEl) noEl.value = parsed.orderNo;
+        }
+        if (parsed.currency) {
+          const cEl = document.getElementById('mpQuickCurrency');
+          if (cEl) cEl.value = parsed.currency === 'CNY' ? 'CNY' : 'NZD';
+        }
+        if (parsed.shippingFee !== null && parsed.shippingFee !== undefined) {
+          const sEl = document.getElementById('mpQuickShippingFee');
+          if (sEl) sEl.value = parsed.shippingFee;
+        }
+        if (parsed.parcels && parsed.parcels.length > 0) {
+          const p0 = parsed.parcels[0];
+          const courEl = document.getElementById('mpQuickCourier');
+          const trkEl = document.getElementById('mpQuickTrackingNo');
+          if (courEl && p0.courier) courEl.value = p0.courier;
+          if (trkEl && p0.trackingNo) trkEl.value = p0.trackingNo;
+        }
+        if (parsed.items && parsed.items.length > 0) {
+          mpBuilderState.items = parsed.items.map(it => ({
+            product: it.product,
+            qty: Number(it.qty) || 1,
+            unitPrice: Number(it.unitPrice) || 0
+          }));
+        }
+      }
+
+      // Additional fallback for multi-line WeChat Mini Program cards
+      if (!mpBuilderState.items || mpBuilderState.items.length === 0) {
+        const lines = text.split(/\r?\n/).map(l => l.trim()).filter(Boolean);
+        const extracted = [];
+        for (let i = 0; i < lines.length; i++) {
+          const line = lines[i];
+          const inlineMatch = line.match(/^(?:¥|￥|NZ\$|\$)\s*([\d.]+)\s*[x×*]\s*(\d+)$/i);
+          if (inlineMatch && i > 0) {
+            const prevTitle = lines[i - 1].replace(/^规格[:：].*$/, '').trim() || (i >= 2 ? lines[i - 2] : '保健品');
+            const normName = normalizeScrapedProductName(prevTitle);
+            extracted.push({
+              product: normName,
+              unitPrice: parseFloat(inlineMatch[1]),
+              qty: parseInt(inlineMatch[2], 10)
+            });
+          }
+        }
+        if (extracted.length > 0) {
+          mpBuilderState.items = extracted;
+        }
+      }
+
+      renderMiniProgramQuickBuilder();
+      showToast(`✅ 已解析小程序订单文字（识别出 ${mpBuilderState.items.length} 项商品），请核对右侧快录板！`);
+    }
+
+    function saveOrderFromMiniProgramBuilder(openNotifyAfter) {
+      if (!mpBuilderState.items || mpBuilderState.items.length === 0) {
+        showToast('⚠️ 请先在快录板点选至少 1 件商品，或从左侧粘贴小程序文字解析');
+        return;
+      }
+      const orderDate = (document.getElementById('mpQuickDate') ? document.getElementById('mpQuickDate').value : '') || TODAY_STR;
+      const year = parseInt(orderDate.slice(0, 4), 10) || 2026;
+      const rawNo = (document.getElementById('mpQuickOrderNo') ? document.getElementById('mpQuickOrderNo').value.trim() : '');
+      const orderNo = rawNo || `MP${orderDate.replace(/-/g, '')}-${String(Date.now()).slice(-4)}`;
+      const currency = (document.getElementById('mpQuickCurrency') ? document.getElementById('mpQuickCurrency').value : 'CNY');
+      const courier = (document.getElementById('mpQuickCourier') ? document.getElementById('mpQuickCourier').value : '纽oz');
+      const trackingNo = (document.getElementById('mpQuickTrackingNo') ? document.getElementById('mpQuickTrackingNo').value.trim() : '');
+      const shippingFee = Math.max(0, Number(document.getElementById('mpQuickShippingFee') ? document.getElementById('mpQuickShippingFee').value : 0) || 0);
+
+      const parcels = [];
+      if (trackingNo) {
+        parcels.push({
+          courier,
+          trackingNo,
+          trackingUrl: resolveTrackingUrl({ courier, trackingNo }),
+          deliveredDate: null
+        });
+      }
+
+      const newOrder = {
+        id: 'ORD-' + Date.now(),
+        year,
+        recipient: mpBuilderState.recipient,
+        orderDate,
+        merchant: mpBuilderState.merchant,
+        orderNo,
+        orderUrl: resolveOrderUrl({ merchant: mpBuilderState.merchant, orderNo }),
+        items: mpBuilderState.items.map(it => ({
+          product: it.product,
+          qty: Number(it.qty) || 1,
+          unitPrice: Number(it.unitPrice) || 0,
+          priceDate: orderDate
+        })),
+        parcels,
+        shippingFee,
+        paymentFee: 0,
+        discount: 0,
+        discountNote: '',
+        paymentMethod: '微信小程序支付',
+        webBackfilled: true,
+        webBackfilledAt: TODAY_STR,
+        currency,
+        cancelled: false,
+        note: '',
+        isUnread: true,
+        importSource: '📱 手机/小程序快录'
+      };
+
+      recordBeforeAction(`小程序快录新订单 #${orderNo}`);
+      state.orders.unshift(newOrder);
+      syncOrderPricesToCatalog(newOrder);
+      saveState(`小程序快录新订单 #${orderNo}`);
+      renderAll();
+
+      // Clear builder items for next time
+      mpBuilderState.items = [];
+      const trkInp = document.getElementById('mpQuickTrackingNo');
+      if (trkInp) trkInp.value = '';
+      const noInp = document.getElementById('mpQuickOrderNo');
+      if (noInp) noInp.value = '';
+      renderMiniProgramQuickBuilder();
+
+      document.getElementById('modalSmartImport').classList.add('hidden');
+      if (openNotifyAfter) {
+        openCustomerNotifyModal(newOrder.id);
+        showToast(`🎉 小程序订单 #${orderNo} 已入库！已为您打开客户微信通知生成器`);
+      } else {
+        document.querySelector('[data-tab="orders"]').click();
+        showToast(`🎉 小程序订单 #${orderNo} 已成功入库并同步单价档案！`);
+      }
+    }
+
+    function initV73CustomerNotifyAndMiniProgramEvents() {
+      // Customer Notify Modal close & buttons
+      const btnCloseNotify = document.getElementById('btnCloseCustomerNotifyModal');
+      if (btnCloseNotify) {
+        btnCloseNotify.addEventListener('click', () => {
+          document.getElementById('modalCustomerNotify').classList.add('hidden');
+        });
+      }
+
+      const btnOpenFromAnalytics = document.getElementById('btnOpenCustomerNotifyFromAnalytics');
+      if (btnOpenFromAnalytics) {
+        btnOpenFromAnalytics.addEventListener('click', () => {
+          const billRec = document.getElementById('billRecipientSelect');
+          const rec = (billRec && billRec.value && billRec.value !== 'ALL') ? billRec.value : '朱峰';
+          openCustomerNotifyModal(null, rec);
+        });
+      }
+
+      // 5 Template mode buttons
+      document.querySelectorAll('.notify-mode-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const m = btn.getAttribute('data-notify-mode');
+          if (m) applyNotifyModePreset(m);
+        });
+      });
+
+      // Checkboxes & Currency selector in Customer Notify Modal
+      ['chkNotifyItems', 'chkNotifyPrices', 'chkNotifyTracking', 'chkNotifyTrackUrl', 'chkNotifyDualRate', 'chkNotifyOrderMeta', 'chkNotifyReadonlyLink', 'notifyPriceCurrencyMode'].forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.addEventListener('change', () => renderCustomerNotifyText());
+      });
+
+      // Recipient selector in Customer Notify Modal
+      const notifyRecSel = document.getElementById('notifyCustomerSelect');
+      if (notifyRecSel) {
+        notifyRecSel.addEventListener('change', () => {
+          currentNotifyState.recipient = notifyRecSel.value;
+          const recOrds = state.orders
+            .filter(o => !o.cancelled && o.recipient === currentNotifyState.recipient)
+            .sort((a, b) => String(b.orderDate).localeCompare(String(a.orderDate)));
+          currentNotifyState.selectedOrderIds = new Set(recOrds.length > 0 ? [recOrds[0].id] : []);
+          currentNotifyState.focalOrderId = recOrds.length > 0 ? recOrds[0].id : null;
+          renderNotifyOrdersChecklist();
+          renderCustomerNotifyText();
+        });
+      }
+
+      // Order checklist toggle in Customer Notify Modal
+      const notifyChecklist = document.getElementById('notifyOrdersChecklist');
+      if (notifyChecklist) {
+        notifyChecklist.addEventListener('change', (e) => {
+          const chk = e.target.closest('[data-notify-ord-chk]');
+          if (!chk) return;
+          const oid = chk.getAttribute('data-notify-ord-chk');
+          if (chk.checked) currentNotifyState.selectedOrderIds.add(oid);
+          else currentNotifyState.selectedOrderIds.delete(oid);
+          renderNotifyOrdersChecklist();
+          renderCustomerNotifyText();
+        });
+      }
+
+      // Quick multi-order selection buttons
+      const btnSingle = document.getElementById('btnNotifySelectSingle');
+      if (btnSingle) {
+        btnSingle.addEventListener('click', () => {
+          const recOrds = state.orders
+            .filter(o => !o.cancelled && o.recipient === currentNotifyState.recipient)
+            .sort((a, b) => String(b.orderDate).localeCompare(String(a.orderDate)));
+          const targetId = currentNotifyState.focalOrderId || (recOrds[0] && recOrds[0].id);
+          currentNotifyState.selectedOrderIds = new Set(targetId ? [targetId] : []);
+          renderNotifyOrdersChecklist();
+          renderCustomerNotifyText();
+        });
+      }
+
+      const btnSameDay = document.getElementById('btnNotifySelectSameDay');
+      if (btnSameDay) {
+        btnSameDay.addEventListener('click', () => {
+          const recOrds = state.orders
+            .filter(o => !o.cancelled && o.recipient === currentNotifyState.recipient)
+            .sort((a, b) => String(b.orderDate).localeCompare(String(a.orderDate)));
+          const focal = state.orders.find(o => o.id === currentNotifyState.focalOrderId) || recOrds[0];
+          if (!focal) return;
+          const sameDayIds = recOrds.filter(o => o.orderDate === focal.orderDate).map(o => o.id);
+          currentNotifyState.selectedOrderIds = new Set(sameDayIds);
+          renderNotifyOrdersChecklist();
+          renderCustomerNotifyText();
+          showToast(`📅 已勾选 ${currentNotifyState.recipient} 在 ${focal.orderDate} 下单的全部 ${sameDayIds.length} 笔订单`);
+        });
+      }
+
+      const btnTransit = document.getElementById('btnNotifySelectInTransit');
+      if (btnTransit) {
+        btnTransit.addEventListener('click', () => {
+          const recOrds = state.orders
+            .filter(o => !o.cancelled && o.recipient === currentNotifyState.recipient)
+            .filter(o => !o.parcels || o.parcels.length === 0 || o.parcels.some(p => !p.deliveredDate));
+          if (recOrds.length === 0) {
+            showToast(`🎉 ${currentNotifyState.recipient} 当前没有未签收的在途订单`);
+            return;
+          }
+          currentNotifyState.selectedOrderIds = new Set(recOrds.map(o => o.id));
+          renderNotifyOrdersChecklist();
+          renderCustomerNotifyText();
+          showToast(`🚚 已勾选 ${currentNotifyState.recipient} 的全部 ${recOrds.length} 笔在途/待发货订单`);
+        });
+      }
+
+      const btnRegen = document.getElementById('btnRegenerateCustomerNotify');
+      if (btnRegen) {
+        btnRegen.addEventListener('click', () => {
+          renderCustomerNotifyText();
+          showToast('🔄 已重新生成微信通知文本');
+        });
+      }
+
+      const btnCopyNotify = document.getElementById('btnCopyCustomerNotifyText');
+      if (btnCopyNotify) {
+        btnCopyNotify.addEventListener('click', () => {
+          const txt = document.getElementById('customerNotifyTextarea') ? document.getElementById('customerNotifyTextarea').value : '';
+          copyTextToClipboard(txt, `发给「${currentNotifyState.recipient}」的微信通知`);
+        });
+      }
+
+      const btnCopyRoModal = document.getElementById('btnCopyCustomerReadonlyUrlModal');
+      if (btnCopyRoModal) {
+        btnCopyRoModal.addEventListener('click', () => {
+          const baseUrl = window.location.origin && window.location.origin !== 'null'
+            ? (window.location.origin + window.location.pathname)
+            : 'https://nz-tracker.pages.dev/';
+          const shareUrl = `${baseUrl}?readonly_recipient=${encodeURIComponent(currentNotifyState.recipient)}`;
+          copyTextToClipboard(shareUrl, `「${currentNotifyState.recipient}」专属只读查件与对账网页链接`);
+        });
+      }
+
+      // Readonly Banner Navigation Buttons
+      const btnRoParcels = document.getElementById('btnRoViewParcels');
+      if (btnRoParcels) {
+        btnRoParcels.addEventListener('click', () => {
+          const tabBtn = document.querySelector('.nav-tab[data-tab="dashboard"]');
+          if (tabBtn) tabBtn.click();
+        });
+      }
+      const btnRoOrders = document.getElementById('btnRoViewOrders');
+      if (btnRoOrders) {
+        btnRoOrders.addEventListener('click', () => {
+          const tabBtn = document.querySelector('.nav-tab[data-tab="orders"]');
+          if (tabBtn) tabBtn.click();
+        });
+      }
+      const btnRoBill = document.getElementById('btnRoViewBill');
+      if (btnRoBill) {
+        btnRoBill.addEventListener('click', () => {
+          const tabBtn = document.querySelector('.nav-tab[data-tab="analytics"]');
+          if (tabBtn) tabBtn.click();
+        });
+      }
+      const btnExitRo = document.getElementById('btnExitReadonlyMode');
+      if (btnExitRo) {
+        btnExitRo.addEventListener('click', () => {
+          applyReadonlyCustomerUiLock(null);
+          if (window.history && window.history.replaceState) {
+            window.history.replaceState(null, '', window.location.pathname);
+          }
+          const recFilter = document.getElementById('filterRecipient');
+          if (recFilter) recFilter.value = 'ALL';
+          renderAll();
+          showToast('🔓 已退出客户只读预览模式，恢复管理员完整总表视图');
+        });
+      }
+
+      // Mini-Program & Mobile Quick Builder Events
+      const btnLoadMpSample = document.getElementById('btnLoadMiniProgramSample');
+      if (btnLoadMpSample) {
+        btnLoadMpSample.addEventListener('click', () => {
+          const sampleTxt = [
+            '易康微商城 小程序订单详情',
+            '订单状态：已发货',
+            '收货人：朱峰  13800138000',
+            '收货地址：上海市松江区泗泾镇...',
+            '订单编号：200032899',
+            '下单时间：' + TODAY_STR,
+            '商品明细：',
+            'Manuka Health 蜜纽康 MGO 400+ 麦卢卡蜂蜜 250g',
+            '¥185.00 × 2',
+            'Goodhealth 好健康 高含量深海鱼油 1500mg 400粒',
+            '¥135.00 × 2',
+            '运费：¥0.00',
+            '实付款：¥640.00 (原价 NZ$160.00 · 汇率 4.0)',
+            '快递公司：纽oz',
+            '物流单号：N640154998'
+          ].join('\n');
+          const inp = document.getElementById('miniProgramPasteInput');
+          if (inp) inp.value = sampleTxt;
+          parseMiniProgramTextToBuilder(sampleTxt);
+        });
+      }
+
+      const btnClearMpText = document.getElementById('btnClearMiniProgramText');
+      if (btnClearMpText) {
+        btnClearMpText.addEventListener('click', () => {
+          const inp = document.getElementById('miniProgramPasteInput');
+          if (inp) inp.value = '';
+        });
+      }
+
+      const btnParseMp = document.getElementById('btnParseMiniProgramToQuickBuilder');
+      if (btnParseMp) {
+        btnParseMp.addEventListener('click', () => {
+          const inp = document.getElementById('miniProgramPasteInput');
+          parseMiniProgramTextToBuilder(inp ? inp.value : '');
+        });
+      }
+
+      const mpScreenInp = document.getElementById('miniProgramScreenshotInput');
+      if (mpScreenInp) {
+        mpScreenInp.addEventListener('change', (e) => {
+          const file = e.target.files && e.target.files[0];
+          if (!file) return;
+          const reader = new FileReader();
+          reader.onload = (ev) => {
+            const img = document.getElementById('miniProgramScreenshotImg');
+            const wrap = document.getElementById('miniProgramScreenshotPreviewWrap');
+            if (img && wrap) {
+              img.src = ev.target.result;
+              wrap.classList.remove('hidden');
+              showToast('🖼️ 手机订单截图已加载！您可对照截图在右侧点选商品与数量快速入库');
+            }
+          };
+          reader.readAsDataURL(file);
+        });
+      }
+
+      const btnClearScreen = document.getElementById('btnClearMiniProgramScreenshot');
+      if (btnClearScreen) {
+        btnClearScreen.addEventListener('click', () => {
+          const wrap = document.getElementById('miniProgramScreenshotPreviewWrap');
+          const img = document.getElementById('miniProgramScreenshotImg');
+          if (img) img.src = '';
+          if (wrap) wrap.classList.add('hidden');
+        });
+      }
+
+      const mpPanel = document.getElementById('impPanel-miniprogram');
+      if (mpPanel) {
+        mpPanel.addEventListener('click', (e) => {
+          const recBtn = e.target.closest('[data-mp-rec]');
+          if (recBtn) {
+            mpBuilderState.recipient = recBtn.getAttribute('data-mp-rec');
+            renderMiniProgramQuickBuilder();
+            return;
+          }
+          const merBtn = e.target.closest('[data-mp-mer]');
+          if (merBtn) {
+            mpBuilderState.merchant = merBtn.getAttribute('data-mp-mer');
+            renderMiniProgramQuickBuilder();
+            return;
+          }
+          const addProdBtn = e.target.closest('[data-mp-addprod]');
+          if (addProdBtn) {
+            const pname = addProdBtn.getAttribute('data-mp-addprod');
+            const addQty = parseInt(addProdBtn.getAttribute('data-mp-addqty') || '1', 10) || 1;
+            const cur = document.getElementById('mpQuickCurrency') ? document.getElementById('mpQuickCurrency').value : 'CNY';
+            const existing = mpBuilderState.items.find(x => x.product === pname);
+            if (existing) {
+              existing.qty = (Number(existing.qty) || 0) + addQty;
+            } else {
+              const pInfo = getProductInfo(pname);
+              const refPrice = getHistoricalPriceByDate(pname, TODAY_STR, cur) || (cur === 'CNY' ? (pInfo && pInfo.rmbPrice ? pInfo.rmbPrice : 0) : (pInfo && pInfo.nzdPrice ? pInfo.nzdPrice : 0));
+              mpBuilderState.items.push({
+                product: pname,
+                qty: addQty,
+                unitPrice: Number(refPrice) || 0
+              });
+            }
+            renderMpSelectedItems();
+            return;
+          }
+          const delBtn = e.target.closest('[data-mp-del-item]');
+          if (delBtn) {
+            const idx = parseInt(delBtn.getAttribute('data-mp-del-item'), 10);
+            mpBuilderState.items.splice(idx, 1);
+            renderMpSelectedItems();
+            return;
+          }
+        });
+
+        mpPanel.addEventListener('input', (e) => {
+          if (e.target.id === 'mpQuickProdSearch') {
+            renderMpProductTapGrid();
+            return;
+          }
+          if (e.target.id === 'mpQuickCurrency' || e.target.id === 'mpQuickShippingFee') {
+            renderMpProductTapGrid();
+            renderMpSelectedItems();
+            return;
+          }
+          const pIdx = e.target.getAttribute('data-mp-item-price');
+          if (pIdx !== null && mpBuilderState.items[pIdx]) {
+            mpBuilderState.items[pIdx].unitPrice = parseFloat(e.target.value) || 0;
+            const totEl = document.getElementById('mpQuickTotalPreview');
+            const cur = document.getElementById('mpQuickCurrency') ? document.getElementById('mpQuickCurrency').value : 'CNY';
+            const sym = cur === 'CNY' ? '¥' : 'NZ$';
+            const ship = Number(document.getElementById('mpQuickShippingFee') ? document.getElementById('mpQuickShippingFee').value : 0) || 0;
+            const itemSum = mpBuilderState.items.reduce((acc, it) => acc + (Number(it.unitPrice) || 0) * (Number(it.qty) || 1), 0);
+            if (totEl) totEl.textContent = `商品 ${sym}${itemSum.toFixed(2)} + 运费 ${sym}${ship.toFixed(2)} = 总计 ${sym}${(itemSum + ship).toFixed(2)}`;
+            return;
+          }
+          const qIdx = e.target.getAttribute('data-mp-item-qty');
+          if (qIdx !== null && mpBuilderState.items[qIdx]) {
+            mpBuilderState.items[qIdx].qty = Math.max(1, parseInt(e.target.value, 10) || 1);
+            renderMpSelectedItems();
+            return;
+          }
+        });
+      }
+
+      const btnMpSaveDirect = document.getElementById('btnMpSaveOrderDirect');
+      if (btnMpSaveDirect) {
+        btnMpSaveDirect.addEventListener('click', () => saveOrderFromMiniProgramBuilder(false));
+      }
+      const btnMpSaveNotify = document.getElementById('btnMpSaveAndNotifyCustomer');
+      if (btnMpSaveNotify) {
+        btnMpSaveNotify.addEventListener('click', () => saveOrderFromMiniProgramBuilder(true));
+      }
+
+      checkAndHandleUrlQuickImportHash();
+      window.addEventListener('hashchange', checkAndHandleUrlQuickImportHash);
     }
 
     function initCfV7EngineEvents() {
@@ -14168,6 +15547,7 @@ export async function onRequestPost(context) {
       }
 
       checkAndApplyReadonlyRecipientMode();
+      initV73CustomerNotifyAndMiniProgramEvents();
 
       // Auto-pull on startup when running on Cloudflare Pages or when passcode is configured
       if (window.cfConfigState.autoPullOnLoad && (isRunningOnCloudflareDomain() || window.cfConfigState.passcode)) {
