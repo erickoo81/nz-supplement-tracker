@@ -344,7 +344,7 @@
             </h1>
             <button type="button" id="btnHeaderVersionBadge" class="inline-flex items-center gap-1 text-xs bg-gradient-to-r from-amber-400 to-amber-300 hover:from-amber-300 hover:to-amber-200 text-slate-950 font-extrabold px-2.5 py-0.5 rounded-full shadow-xs transition cursor-pointer" title="当前版本 V7.1（Cloudflare KV 全域同步修复与智能诊断 · 历史时间机器 · 实时汇率 · 亲友只读对账单）· 点击打开个性化与版本中心">
               <span id="uiIcon-appVersion">✨</span>
-              <span id="uiText-appVersion">V7.6</span>
+              <span id="uiText-appVersion">V7.7</span>
             </button>
             <button type="button" id="btnHeaderCfStatusPill" class="inline-flex items-center gap-1 text-[11px] bg-emerald-900/90 hover:bg-emerald-800 text-emerald-100 border border-emerald-600/70 font-semibold px-2.5 py-0.5 rounded-full transition cursor-pointer" title="点击打开 Cloudflare KV 边缘云同步设置 (方案B)">
               <span id="headerCfStatusDot" class="w-2 h-2 rounded-full bg-amber-400 inline-block"></span>
@@ -721,7 +721,29 @@
             <span class="bg-emerald-700 text-white font-bold px-2 py-0.5 rounded text-[11px]">📝 原表深度梳理成果</span>
             <span class="text-slate-700">已自动从您 Excel 的<strong>单元格批注 (Comments)</strong>中提取并补齐了 <strong>13 个拆包包裹的送达日期</strong>（如 2025年 <code>175146837~840</code>、<code>175154742~743</code> 等）及全部商品的<strong>下单日期单价</strong>！</span>
           </div>
-          <div id="customsCollisionBadge" class="text-xs font-medium text-emerald-800"></div>
+          <div class="flex flex-wrap items-center gap-2">
+            <div id="customsCollisionBadge" class="text-xs font-medium text-emerald-800"></div>
+            <button type="button" id="btnToggleCustomsRadarDrawer" class="text-[11px] bg-indigo-600 hover:bg-indigo-500 text-white font-bold px-2.5 py-1 rounded-lg shadow-2xs transition flex items-center gap-1">
+              <span>🪪 收件人清关防撞车雷达</span>
+              <span id="customsRadarArrow">▾</span>
+            </button>
+          </div>
+        </div>
+        <!-- V7.7 Feature 4: Recipient Customs Clearance Frequency & Collision Radar Drawer -->
+        <div id="customsRecipientRadarPanel" class="hidden px-4 sm:px-5 py-3.5 bg-gradient-to-r from-slate-50 via-indigo-50/40 to-emerald-50/40 border-b border-slate-200 space-y-2.5">
+          <div class="flex flex-wrap items-center justify-between gap-2">
+            <div>
+              <h4 class="text-xs sm:text-sm font-bold text-slate-800 flex items-center gap-1.5">
+                <span class="bg-indigo-600 text-white text-[10px] px-1.5 py-0.5 rounded font-extrabold">V7.7 清关雷达</span>
+                <span>🪪 各收件人清关频次监测、同批防撞车预警与年度额度看板</span>
+              </h4>
+              <p class="text-[11px] text-slate-500">自动统计每位收件人当前在途包裹、近30天发件密度及本年度累计包裹与金额（跨境个人年度参考额度 ¥26,000），智能推荐下一单最安全的收件人。</p>
+            </div>
+            <div id="customsBestRecipientQuickTip" class="text-xs font-bold text-emerald-800 bg-emerald-100/90 border border-emerald-300 px-3 py-1 rounded-lg"></div>
+          </div>
+          <div id="customsRecipientRadarGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2.5">
+            <!-- Rendered by JS -->
+          </div>
         </div>
         <div id="parcelTrackingCards" class="p-4 sm:p-5 grid grid-cols-1 md:grid-cols-2 gap-3.5 max-h-[520px] overflow-y-auto custom-scroll">
           <!-- Rendered by JS -->
@@ -819,15 +841,25 @@
       <div class="bg-white rounded-xl p-4 sm:p-5 shadow-sm border border-slate-200">
         <div class="flex flex-wrap items-center justify-between gap-2 mb-3">
           <div>
-            <h3 class="text-sm sm:text-base font-bold text-slate-800 flex items-center gap-2">
-              <span>🔔 常购营养品耗尽周期预测与智能复购建议</span>
-              <span class="text-[11px] bg-amber-100 text-amber-900 px-2 py-0.5 rounded-full font-medium">借鉴家庭常备药箱 & 复购助手</span>
+            <h3 class="text-sm sm:text-base font-bold text-slate-800 flex items-center gap-2 flex-wrap">
+              <span>💊 自用家庭药箱余量/临期追踪 & 亲友复购预测工作台</span>
+              <span class="text-[11px] bg-emerald-700 text-white px-2 py-0.5 rounded-full font-bold">V7.7 家庭药箱+CW自用整合</span>
             </h3>
-            <p class="text-xs text-slate-500">基于各位收件人历史购买频次、单次采购量与距今天数，自动识别可能需要补货的常购商品，支持一键带入「再来一单」</p>
+            <p class="text-xs text-slate-500">自动识别商品规格（如400粒/200粒/500g），支持设定每日服用量与保质期，追踪「🏠 HOME/CW自用保健品开瓶余量与临期日」及「🤝 亲友复购周期」</p>
           </div>
-          <button id="btnOpenLinkRulesInline" class="text-xs text-emerald-700 hover:text-emerald-900 font-semibold border border-emerald-200 bg-emerald-50 px-3 py-1.5 rounded-lg transition">
-            ⚙️ 规则设置 (超链接模板)
-          </button>
+          <div class="flex flex-wrap items-center gap-1.5">
+            <div class="inline-flex rounded-lg border border-slate-300 bg-slate-100 p-0.5 text-xs">
+              <button type="button" data-cabinet-mode="ALL" class="cabinet-mode-btn px-2.5 py-1 rounded-md font-bold bg-emerald-700 text-white transition">🔄 全部混排</button>
+              <button type="button" data-cabinet-mode="SELF_CABINET" class="cabinet-mode-btn px-2.5 py-1 rounded-md font-medium text-slate-700 hover:bg-white transition">🏠 自用家庭药箱 (余量/保质期)</button>
+              <button type="button" data-cabinet-mode="FRIEND_RESTOCK" class="cabinet-mode-btn px-2.5 py-1 rounded-md font-medium text-slate-700 hover:bg-white transition">🤝 亲友代购复购预测</button>
+            </div>
+            <button type="button" id="btnQuickRecordCWFromCabinet" class="text-xs bg-blue-600 hover:bg-blue-500 text-white font-bold px-2.5 py-1.5 rounded-lg shadow-2xs transition">
+              💊 记一笔CW/门店自用
+            </button>
+            <button id="btnOpenLinkRulesInline" class="text-xs text-emerald-700 hover:text-emerald-900 font-semibold border border-emerald-200 bg-emerald-50 px-2.5 py-1.5 rounded-lg transition">
+              ⚙️ 规则设置
+            </button>
+          </div>
         </div>
         <div id="restockForecastGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3">
           <!-- Rendered by JS -->
@@ -839,6 +871,29 @@
     <section id="tab-orders" class="hidden space-y-4">
       <!-- Filter Toolbar -->
       <div class="bg-white rounded-xl p-4 shadow-sm border border-slate-200 space-y-3">
+        <!-- V7.7: Self-Use (HOME/CW) vs Friend Daigou vs Stockpile Quick Switcher Bar -->
+        <div class="flex flex-wrap items-center justify-between gap-2 pb-2.5 border-b border-slate-100">
+          <div class="flex flex-wrap items-center gap-1.5 text-xs" id="orderPurposeQuickFilterBar">
+            <span class="font-bold text-slate-600 mr-1">🧭 账本视角分流：</span>
+            <button type="button" data-order-scope="ALL" class="order-scope-btn px-3 py-1 rounded-full font-bold bg-emerald-800 text-white shadow-2xs transition">
+              🌐 全部订单 (<span id="scopeCountAll">0</span>)
+            </button>
+            <button type="button" data-order-scope="DAIGOU" class="order-scope-btn px-3 py-1 rounded-full font-medium bg-slate-100 hover:bg-emerald-50 text-slate-700 border border-slate-200 transition">
+              🤝 亲友代购直邮 (<span id="scopeCountDaigou">0</span>)
+            </button>
+            <button type="button" data-order-scope="SELF_CW" class="order-scope-btn px-3 py-1 rounded-full font-medium bg-blue-50 hover:bg-blue-100 text-blue-900 border border-blue-200 transition" title="筛选您自己在 CW (Chemist Warehouse) 官网/门店或本地购买的 HOME 自用订单">
+              🏠 本地自用 / CW采购 (<span id="scopeCountSelfCw">0</span>)
+            </button>
+            <button type="button" data-order-scope="STOCKPILE" class="order-scope-btn px-3 py-1 rounded-full font-medium bg-amber-50 hover:bg-amber-100 text-amber-900 border border-amber-200 transition" title="筛选在 CW 或门店买回家暂存、等待后续拼箱寄回国或人肉带回的订单">
+              📦 囤货待拼箱寄回 (<span id="scopeCountStockpile">0</span>)
+            </button>
+          </div>
+          <div class="flex items-center gap-1.5">
+            <button type="button" id="btnQuickNewCWOrderFromTab" class="text-xs bg-blue-600 hover:bg-blue-500 text-white font-bold px-3 py-1 rounded-lg shadow-2xs transition flex items-center gap-1" title="一键打开 CW (Chemist Warehouse) 官网/门店自用快录窗口，自动设商家=CW、收件人=HOME、免国际单号">
+              <span>💊 ＋记一笔CW/门店自用</span>
+            </button>
+          </div>
+        </div>
         <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2.5">
           <div>
             <label class="block text-xs font-medium text-slate-500 mb-1">年份筛选</label>
@@ -1022,6 +1077,12 @@
           <button id="btnTogglePriceTrendStudio" type="button" class="bg-indigo-600 hover:bg-indigo-500 text-white text-xs sm:text-sm px-3 py-1.5 rounded-lg font-medium transition shadow-sm">
             📈 价格趋势与比价大屏
           </button>
+          <button id="btnToggleSmartCartOptimizer" type="button" class="bg-teal-700 hover:bg-teal-600 text-white text-xs sm:text-sm px-3 py-1.5 rounded-lg font-bold transition shadow-sm">
+            🛒 跨店比价与凑单拆箱计算器
+          </button>
+          <button id="btnAutoSetTargetPrices" type="button" class="bg-rose-50 hover:bg-rose-100 text-rose-800 border border-rose-300 text-xs sm:text-sm px-2.5 py-1.5 rounded-lg font-bold transition" title="按每款商品的历史最低核实价+3%自动设定心愿单目标好价提醒阈值">
+            🎯 智能设目标好价(<span id="goodPriceHitCountBadge">0</span>达标)
+          </button>
           <button id="btnAddNewProductModal" class="bg-emerald-700 hover:bg-emerald-600 text-white text-xs sm:text-sm px-3 py-1.5 rounded-lg font-medium transition">
             ＋ 新增商品/单价
           </button>
@@ -1128,6 +1189,75 @@
         </div>
       </div>
 
+      <!-- V7.7 Feature 1: Pre-Purchase Multi-Merchant Price Comparison & Parcel Split Optimizer Studio -->
+      <div id="smartCartOptimizerStudio" class="bg-white rounded-xl p-4 sm:p-5 shadow-sm border-2 border-teal-200 space-y-4">
+        <div class="flex flex-wrap items-center justify-between gap-3 border-b border-slate-100 pb-3">
+          <div>
+            <div class="flex items-center gap-2 flex-wrap">
+              <span class="bg-teal-700 text-white text-[11px] font-extrabold px-2 py-0.5 rounded">V7.7 采购决策引擎</span>
+              <h3 class="text-sm sm:text-base font-bold text-slate-800">🛒 采购前「四大渠道跨店智能比价 & 国际快递防税拆箱计算器」</h3>
+            </div>
+            <p class="text-xs text-slate-500 mt-0.5">勾选本次准备采购的商品与数量，系统自动对比 <strong>华洋 vs 纽澳康源 vs 易康 vs CW (Chemist Warehouse)</strong> 的已核实低价/最新价，算出<strong>最优跨店拆单方案</strong>、<strong>预估包裹总净重</strong>与<strong>海关防撞车分箱建议</strong>，支持一键转入新采购单！</p>
+          </div>
+          <div class="flex flex-wrap items-center gap-1.5">
+            <select id="cartOptPriceBasis" class="text-xs border border-teal-300 rounded-lg px-2.5 py-1.5 bg-teal-50/50 font-semibold text-slate-800">
+              <option value="LOWEST">🟢 按各店历史最低核实价对比</option>
+              <option value="LATEST">⏱️ 按各店最新一期核实价对比</option>
+            </select>
+            <button type="button" id="btnCartPresetHotCombo" class="text-xs bg-amber-100 hover:bg-amber-200 text-amber-950 border border-amber-300 px-2.5 py-1.5 rounded-lg font-bold transition">
+              🔥 载入常买爆款组合
+            </button>
+            <button type="button" id="btnCartPresetSelfCW" class="text-xs bg-blue-50 hover:bg-blue-100 text-blue-900 border border-blue-200 px-2.5 py-1.5 rounded-lg font-bold transition">
+              💊 载入CW自用常备组合
+            </button>
+            <button type="button" id="btnClearCartOptimizer" class="text-xs bg-slate-100 hover:bg-slate-200 text-slate-600 px-2.5 py-1.5 rounded-lg font-medium transition">
+              清空清单
+            </button>
+          </div>
+        </div>
+
+        <!-- Add item bar -->
+        <div class="bg-slate-50 p-3 rounded-xl border border-slate-200 flex flex-wrap items-center gap-2">
+          <span class="text-xs font-bold text-slate-700">＋ 加入比价清单：</span>
+          <select id="cartOptAddProdSelect" class="flex-1 min-w-[220px] text-xs border border-slate-300 rounded-lg px-2.5 py-1.5 bg-white"></select>
+          <div class="flex items-center gap-1">
+            <span class="text-xs text-slate-500">数量:</span>
+            <input type="number" id="cartOptAddQtyInput" value="2" min="1" max="99" class="w-16 text-xs border border-slate-300 rounded-lg px-2 py-1.5 bg-white font-bold text-center" />
+          </div>
+          <button type="button" id="btnAddProdToCartOpt" class="bg-teal-700 hover:bg-teal-600 text-white text-xs font-bold px-3 py-1.5 rounded-lg transition">
+            ＋ 添加到比价台
+          </button>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-4 items-start">
+          <!-- Left 7 cols: Itemized 4-Merchant Price Matrix -->
+          <div class="lg:col-span-7 overflow-x-auto border border-slate-200 rounded-xl">
+            <table class="w-full text-left border-collapse text-xs">
+              <thead>
+                <tr class="bg-slate-100 text-slate-600 border-b border-slate-200">
+                  <th class="py-2 px-2.5">拟购商品 / 预估单重</th>
+                  <th class="py-2 px-2 w-20 text-center">数量</th>
+                  <th class="py-2 px-2 text-center">华洋</th>
+                  <th class="py-2 px-2 text-center">纽澳康源</th>
+                  <th class="py-2 px-2 text-center">易康</th>
+                  <th class="py-2 px-2 text-center">CW自购</th>
+                  <th class="py-2 px-2 text-right">最优渠道小计</th>
+                  <th class="py-2 px-1.5 w-8"></th>
+                </tr>
+              </thead>
+              <tbody id="cartOptimizerTableBody" class="divide-y divide-slate-200">
+                <!-- Rendered by JS -->
+              </tbody>
+            </table>
+          </div>
+
+          <!-- Right 5 cols: Optimal Split Plan + Weight & Box Split Recommendation -->
+          <div class="lg:col-span-5 space-y-3" id="cartOptimizerRecommendationPanel">
+            <!-- Rendered by JS -->
+          </div>
+        </div>
+      </div>
+
       <div id="productsGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
         <!-- Rendered by JS -->
       </div>
@@ -1201,6 +1331,41 @@
                   <option value="¥">人民币 (¥ RMB)</option>
                   <option value="$">纽币 ($ NZD)</option>
                 </select>
+              </div>
+            </div>
+
+            <!-- V7.7 Feature 3: Smart Freight/Discount Apportionment & Admin-Only Dual-Ledger Profit/Subsidy Calculator -->
+            <div id="dualLedgerAndApportionPanel" class="bg-gradient-to-r from-indigo-50/70 via-emerald-50/60 to-amber-50/60 border border-indigo-200/90 rounded-xl p-3 space-y-2.5">
+              <div class="flex flex-wrap items-center justify-between gap-2">
+                <div class="flex items-center gap-1.5">
+                  <span class="bg-indigo-600 text-white text-[10px] font-extrabold px-1.5 py-0.5 rounded">V7.7 算账神器</span>
+                  <span class="text-xs font-bold text-slate-800">🧮 运费/折扣一键分摊器 & 店主私密双账本 (实付成本 vs 亲友报价)</span>
+                </div>
+                <span class="text-[10px] text-slate-500">🔒 下方成本与结余对比仅您自己可见，复制发微信账单时绝不会带出</span>
+              </div>
+
+              <!-- Apportionment Controls -->
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs">
+                <div class="bg-white/90 p-2 rounded-lg border border-slate-200 flex flex-wrap items-center gap-1.5">
+                  <span class="font-semibold text-slate-700">🚚 整单运费分摊:</span>
+                  <input type="number" id="billBatchShipInput" value="120" step="1" class="w-16 border border-slate-300 rounded px-1.5 py-1 text-xs font-bold text-center" placeholder="总运费" />
+                  <button type="button" id="btnApportionShipByQty" class="bg-emerald-700 hover:bg-emerald-600 text-white px-2 py-1 rounded text-[11px] font-bold transition" title="将输入的总运费按各商品的件数比例自动平摊到每行运费栏">按件数平摊</button>
+                  <button type="button" id="btnApportionShipByVal" class="bg-teal-700 hover:bg-teal-600 text-white px-2 py-1 rounded text-[11px] font-bold transition" title="将输入的总运费按各商品的货值金额占比自动分摊">按货值平摊</button>
+                  <button type="button" id="btnClearAllBillShip" class="bg-slate-100 hover:bg-slate-200 text-slate-700 px-2 py-1 rounded text-[11px] font-medium transition" title="一键将所有行运费设为0（包邮对账）">免运费(清零)</button>
+                </div>
+
+                <div class="bg-white/90 p-2 rounded-lg border border-slate-200 flex flex-wrap items-center gap-1.5">
+                  <span class="font-semibold text-slate-700">🏷️ 报价一键调价:</span>
+                  <button type="button" id="btnBillUseActualCost" class="bg-indigo-50 hover:bg-indigo-100 text-indigo-900 border border-indigo-200 px-2 py-1 rounded text-[11px] font-bold transition" title="按关联订单的真实网页实付核验单价填入（原价实报实销）">按实付成本价</button>
+                  <button type="button" id="btnBillMarkup5Pct" class="bg-amber-50 hover:bg-amber-100 text-amber-900 border border-amber-200 px-2 py-1 rounded text-[11px] font-bold transition" title="在当前单价基础上+5%（覆盖信用卡手续费/汇率磨损）">+5%汇率磨损</button>
+                  <button type="button" id="btnBillDiscount95Pct" class="bg-rose-50 hover:bg-rose-100 text-rose-900 border border-rose-200 px-2 py-1 rounded text-[11px] font-bold transition" title="给亲友打95折友情价">亲友95折</button>
+                  <button type="button" id="btnBillRoundInt" class="bg-slate-100 hover:bg-slate-200 text-slate-700 px-2 py-1 rounded text-[11px] font-medium transition" title="将所有商品单价四舍五入为整数，方便微信转账">单价取整</button>
+                </div>
+              </div>
+
+              <!-- Admin-Only Dual-Ledger Profit / Family Subsidy Bar -->
+              <div id="dualLedgerSummaryBar" class="bg-slate-900 text-white rounded-lg px-3 py-2 flex flex-wrap items-center justify-between gap-2 text-xs">
+                <!-- Populated by renderBillTable() -->
               </div>
             </div>
 
@@ -1341,25 +1506,38 @@
           <div id="newOrderScrapeFeedback" class="hidden space-y-2"></div>
         </div>
 
-        <!-- Row 0: Online Order vs In-Store Purchase Mode Switch -->
-        <div class="bg-slate-100/90 border border-slate-200 rounded-xl p-2.5 flex flex-wrap items-center justify-between gap-2">
-          <div class="flex items-center gap-2 text-xs">
-            <span class="font-bold text-slate-700">🏪 采购方式：</span>
-            <div class="inline-flex rounded-lg border border-slate-300 bg-white p-0.5 shadow-2xs">
-              <button type="button" id="btnOrderTypeOnline" class="px-3 py-1 rounded-md text-xs font-bold bg-emerald-700 text-white transition">
-                🌐 网购订单
+        <!-- Row 0: Online Order vs In-Store Purchase Mode Switch + V7.7 CW Self-Use & Stockpile Quick Presets -->
+        <div class="bg-slate-100/90 border border-slate-200 rounded-xl p-2.5 space-y-2">
+          <div class="flex flex-wrap items-center justify-between gap-2">
+            <div class="flex flex-wrap items-center gap-2 text-xs">
+              <span class="font-bold text-slate-700">🏪 采购方式与场景快选：</span>
+              <div class="inline-flex rounded-lg border border-slate-300 bg-white p-0.5 shadow-2xs">
+                <button type="button" id="btnOrderTypeOnline" class="px-3 py-1 rounded-md text-xs font-bold bg-emerald-700 text-white transition">
+                  🌐 跨境网购直邮
+                </button>
+                <button type="button" id="btnOrderTypeStore" class="px-3 py-1 rounded-md text-xs font-bold text-slate-600 hover:bg-slate-100 transition" title="线下实体门店或本地自用采购">
+                  🏪 门店/本地自购
+                </button>
+              </div>
+              <button type="button" id="btnQuickPresetCW" class="bg-blue-600 hover:bg-blue-500 text-white text-xs font-bold px-2.5 py-1 rounded-lg shadow-2xs transition flex items-center gap-1" title="一键设置为：商家=CW (Chemist Warehouse)、收件人=HOME(自用)、币种=NZD、免填中国国际快递单号，并自动归入自用家庭药箱">
+                <span>💊 CW官网/门店自用快录</span>
               </button>
-              <button type="button" id="btnOrderTypeStore" class="px-3 py-1 rounded-md text-xs font-bold text-slate-600 hover:bg-slate-100 transition" title="线下实体门店采购，免填网站订单号">
-                🏪 门店直购
+              <button type="button" id="btnQuickPresetStockpile" class="bg-amber-500 hover:bg-amber-400 text-slate-950 text-xs font-bold px-2.5 py-1 rounded-lg shadow-2xs transition flex items-center gap-1" title="在CW或门店先买回家囤着，等待后续拼箱寄回国或人肉带回（标记为📦囤货待拼箱）">
+                <span>📦 买回家囤货待寄</span>
               </button>
             </div>
+            <div id="storeDeliveryModeWrap" class="hidden flex flex-wrap items-center gap-2 text-xs">
+              <span class="text-amber-900 font-semibold">提货/履约状态：</span>
+              <select id="formStoreDeliveryMode" class="border border-amber-300 rounded-lg px-2.5 py-1 bg-amber-50 text-amber-950 font-bold text-xs">
+                <option value="COURIER">✈️ 门店现场代发国际快递 (下方填国际运单号)</option>
+                <option value="SELF_CARRY">🏠 本地自用 / 门店自提 / CW快递到家 (免国际单号·直接入药箱)</option>
+                <option value="STOCKPILE_WAIT">📦 本地囤货待寄 (先买回家暂存·后续拼箱寄回国或人肉带回)</option>
+              </select>
+            </div>
           </div>
-          <div id="storeDeliveryModeWrap" class="hidden flex flex-wrap items-center gap-2 text-xs">
-            <span class="text-amber-900 font-semibold">门店提货/寄送方式：</span>
-            <select id="formStoreDeliveryMode" class="border border-amber-300 rounded-lg px-2.5 py-1 bg-amber-50 text-amber-950 font-bold text-xs">
-              <option value="COURIER">📦 门店现场代发国际快递 (下方填快递单号)</option>
-              <option value="SELF_CARRY">🛍️ 门店自提 / 随身带回 (免物流单号·直接已交付)</option>
-            </select>
+          <div id="cwSelfUseHelperTip" class="hidden text-[11px] bg-blue-50 text-blue-900 border border-blue-200 rounded-lg px-2.5 py-1.5 flex items-center justify-between gap-2">
+            <span>💊 <strong>CW (Chemist Warehouse) / 本地自用模式已开启：</strong>支持直接粘贴 CW 官网订单邮件或小票文本，无需填写中国国际快递单号，保存后自动同步至首页「🏠 自用家庭药箱余量与保质期看板」及「📈 价格趋势库」。</span>
+            <button type="button" id="btnFillCWDemoText" class="shrink-0 bg-blue-600 hover:bg-blue-500 text-white px-2 py-0.5 rounded font-bold text-[10px]">🧪 试填CW官网订单示例</button>
           </div>
         </div>
 
@@ -1858,9 +2036,29 @@
             <input type="number" step="0.01" id="editProdRmbPrice" placeholder="如 199" class="w-full border border-slate-300 rounded-lg px-3 py-2" />
           </div>
         </div>
-        <div>
-          <label class="block text-xs font-medium text-slate-600 mb-1">单件预估人民币运费 (¥ RMB)</label>
-          <input type="number" step="0.1" id="editProdRmbShip" placeholder="如 22.5" class="w-full border border-slate-300 rounded-lg px-3 py-2" />
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="block text-xs font-medium text-slate-600 mb-1">单件预估人民币运费 (¥ RMB)</label>
+            <input type="number" step="0.1" id="editProdRmbShip" placeholder="如 22.5" class="w-full border border-slate-300 rounded-lg px-3 py-2" />
+          </div>
+          <div>
+            <label class="block text-xs font-bold text-rose-700 mb-1">🎯 心愿单目标好价 ($ NZD)</label>
+            <input type="number" step="0.01" id="editProdTargetNzd" placeholder="低于此纽币价高亮提醒" class="w-full border border-rose-300 bg-rose-50/40 rounded-lg px-3 py-2 font-semibold text-rose-900" />
+          </div>
+        </div>
+        <div class="grid grid-cols-3 gap-2 pt-1 border-t border-slate-100">
+          <div>
+            <label class="block text-[11px] font-medium text-slate-600 mb-1">⚖️ 单件净重(克g)</label>
+            <input type="number" step="10" id="editProdWeightG" placeholder="如 500" class="w-full border border-slate-300 rounded-lg px-2.5 py-1.5 text-xs" />
+          </div>
+          <div>
+            <label class="block text-[11px] font-medium text-slate-600 mb-1">💊 自用每日量(粒/g)</label>
+            <input type="number" step="0.5" id="editProdDailyDose" placeholder="如 2" class="w-full border border-slate-300 rounded-lg px-2.5 py-1.5 text-xs" />
+          </div>
+          <div>
+            <label class="block text-[11px] font-medium text-slate-600 mb-1">📅 自用保质期至</label>
+            <input type="date" id="editProdExpiryDate" class="w-full border border-slate-300 rounded-lg px-2 py-1.5 text-xs" />
+          </div>
         </div>
       </div>
       <div class="px-5 py-3 bg-slate-100 border-t border-slate-200 flex items-center justify-between gap-2">
@@ -3103,7 +3301,7 @@
       cardRadius: '1rem'
     };
 
-    const CURRENT_APP_VERSION = 'V7.6';
+    const CURRENT_APP_VERSION = 'V7.7';
     const DEFAULT_UI_CUSTOM_LABELS = {
       appTitle: { icon: '', text: '纽澳跨境采购与快递追踪管家', note: '支持一单多包拆单追踪 · 采购单价与运费核算 · 电脑与手机多端同步', labelTitle: '系统主标题 & 副标题说明', group: 'header', emojiPresets: ['🇳🇿', '🦘', '🌿', '📦', '🛡️'] },
             appVersion: { icon: '🚀', text: 'V7.5', note: '当前版本 V7.5（高精手机截图OCR商品库匹配 · 云端拉取版本号防回退锁 · 发客户通知与手机竖排卡片）· 点击打开个性化与版本中心', labelTitle: '顶部版本号标识 (点击可打开设置)', group: 'header', emojiPresets: ['🚀', '✨', '🏷️', '💎', '🔥'] },
@@ -5394,7 +5592,7 @@
       }
     }
 
-    function renderCustomsCollisionCheck(validOrders) {
+    function renderCustomsCollisionCheck_LegacyV76(validOrders) {
       const badgeEl = document.getElementById('customsCollisionBadge');
       if (!badgeEl) return;
       const transitByRec = {};
@@ -5934,7 +6132,11 @@
       const fStatus = document.getElementById('filterStatus').value;
       const fSearch = (document.getElementById('filterSearch').value || '').trim().toLowerCase();
 
+      const scopeFilter = state.orderScopeFilter || 'ALL';
       return getActiveOrders().filter(o => {
+        if (scopeFilter === 'DAIGOU' && isSelfOrCWOrder(o)) return false;
+        if (scopeFilter === 'SELF_CW' && !isSelfOrCWOrder(o)) return false;
+        if (scopeFilter === 'STOCKPILE' && !isStockpileOrder(o)) return false;
         if (fYear !== 'ALL' && String(o.year) !== fYear) return false;
         if (fRec !== 'ALL' && o.recipient !== fRec) return false;
         if (fMerch !== 'ALL' && o.merchant !== fMerch) return false;
@@ -5970,6 +6172,7 @@
     }
 
     function renderOrdersTab() {
+      if (typeof updateOrderScopeCounts === 'function') updateOrderScopeCounts();
       const filtered = getFilteredOrders();
       let itemSum = 0;
       let parcelSum = 0;
@@ -6063,10 +6266,18 @@
         let parcelsHtml = '';
         if (o.cancelled) {
           parcelsHtml = `<span class="inline-block text-xs bg-rose-100 text-rose-800 font-semibold px-2 py-0.5 rounded">🚫 订单已取消</span>`;
-        } else if (o.storeDeliveryMode === 'SELF_CARRY' || (o.parcels && o.parcels.length === 1 && (o.parcels[0].courier === '门店自提' || o.parcels[0].courier === '自提/免单号'))) {
+        } else if (o.storeDeliveryMode === 'STOCKPILE_WAIT' || (o.parcels && o.parcels.length === 1 && o.parcels[0].courier === '本地囤货待寄')) {
           parcelsHtml = `
             <div class="flex flex-wrap items-center gap-1.5">
-              <span class="inline-flex items-center gap-1 text-xs bg-emerald-50 text-emerald-800 border border-emerald-200 font-bold px-2 py-0.5 rounded">🛍️ 自提/免单号 · ✅ ${o.orderDate} 已交付</span>
+              <span class="inline-flex items-center gap-1 text-xs bg-amber-100 text-amber-950 border border-amber-300 font-bold px-2 py-0.5 rounded">📦 家中囤货暂存 · 待拼箱寄回</span>
+              <button type="button" data-ship-stockpile="${o.id}" class="text-[10px] bg-emerald-700 hover:bg-emerald-600 text-white px-2 py-0.5 rounded font-bold transition" title="已拼箱寄出？点击补填国际快递单号">✈️ 填单号寄出</button>
+              <button type="button" data-convert-stockpile-self="${o.id}" class="text-[10px] text-blue-700 hover:underline" title="改为本地自用入药箱">转自用</button>
+            </div>`;
+        } else if (o.storeDeliveryMode === 'SELF_CARRY' || (o.parcels && o.parcels.length === 1 && (o.parcels[0].courier === '门店自提' || o.parcels[0].courier === '自提/免单号' || o.parcels[0].courier === 'CW本地自用'))) {
+          const isCwSelf = String(o.merchant || '').toUpperCase().includes('CW') || o.recipient === 'HOME';
+          parcelsHtml = `
+            <div class="flex flex-wrap items-center gap-1.5">
+              <span class="inline-flex items-center gap-1 text-xs ${isCwSelf ? 'bg-blue-50 text-blue-900 border-blue-200' : 'bg-emerald-50 text-emerald-800 border-emerald-200'} border font-bold px-2 py-0.5 rounded">${isCwSelf ? '🏠 本地自用/已入家庭药箱' : '🛍️ 自提/免单号'} · ✅ ${o.orderDate}</span>
               <button type="button" data-revert-selfpickup="${o.id}" class="text-[10px] text-slate-400 hover:text-slate-700 underline" title="切换回需要填写快递运单号状态">改填单号</button>
             </div>`;
         } else if (!o.parcels || o.parcels.length === 0) {
@@ -6850,6 +7061,9 @@
         const rateBadge = p.lastExchangeRate
           ? `<span class="text-[10px] bg-teal-50 text-teal-800 border border-teal-200 px-1.5 py-0.2 rounded font-mono">💱 记录汇率 ${p.lastExchangeRate}</span>`
           : '';
+        const targetBadgeHtml = typeof buildProductTargetPriceBadge === 'function'
+          ? buildProductTargetPriceBadge(p, verifiedSeries, minPrice)
+          : '';
 
         return `
           <div class="bg-white rounded-xl p-4 shadow-sm border border-slate-200 flex flex-col justify-between gap-3 hover:border-emerald-400 transition">
@@ -6859,6 +7073,7 @@
                   <span class="text-[11px] font-semibold px-2 py-0.5 rounded bg-emerald-50 text-emerald-800 border border-emerald-200">${p.category || '保健品'}</span>
                   ${priceTrendBadge}
                   ${rateBadge}
+                  ${targetBadgeHtml}
                 </div>
                 <span class="text-xs font-bold text-slate-700 whitespace-nowrap">已买: <strong class="text-emerald-700 text-sm">${st.qty}</strong> 件 (${st.orders}单)</span>
               </div>
@@ -6880,11 +7095,14 @@
                     <strong class="text-amber-700 ml-0.5">${p.rmbPrice ? '¥' + p.rmbPrice : '未设'}</strong>
                   </div>
                 </div>
-                <div class="flex items-center gap-1.5 shrink-0">
-                  <button type="button" data-trend-prod="${p.name.replace(/"/g, '&quot;')}" class="text-xs bg-indigo-50 hover:bg-indigo-600 hover:text-white text-indigo-700 border border-indigo-200 font-semibold px-2 py-1 rounded-lg transition">
-                    📈 趋势比价
+                <div class="flex flex-wrap items-center gap-1 shrink-0">
+                  <button type="button" data-add-cart-opt="${p.name.replace(/"/g, '&quot;')}" class="text-[11px] bg-teal-50 hover:bg-teal-600 hover:text-white text-teal-800 border border-teal-200 font-bold px-2 py-1 rounded-lg transition" title="加入上方跨店凑单比价与拆箱计算器">
+                    🛒 比价凑单
                   </button>
-                  <button data-edit-prod="${p.name.replace(/"/g, '&quot;')}" class="text-xs bg-slate-100 hover:bg-emerald-700 hover:text-white text-slate-700 font-medium px-2.5 py-1 rounded-lg transition">
+                  <button type="button" data-trend-prod="${p.name.replace(/"/g, '&quot;')}" class="text-[11px] bg-indigo-50 hover:bg-indigo-600 hover:text-white text-indigo-700 border border-indigo-200 font-semibold px-2 py-1 rounded-lg transition">
+                    📈 趋势
+                  </button>
+                  <button data-edit-prod="${p.name.replace(/"/g, '&quot;')}" class="text-[11px] bg-slate-100 hover:bg-emerald-700 hover:text-white text-slate-700 font-medium px-2 py-1 rounded-lg transition">
                     ✎ 编辑
                   </button>
                 </div>
@@ -6896,6 +7114,8 @@
       }).join('');
 
       renderProductPriceTrendStudio(currentTrendProductName);
+      if (typeof renderSmartCartOptimizerStudio === 'function') renderSmartCartOptimizerStudio();
+      if (typeof updateGoodPriceHitBadgeCount === 'function') updateGoodPriceHitBadgeCount();
     }
 
     function load20251101Preset() {
@@ -6994,6 +7214,7 @@
       document.getElementById('billTotalQty').textContent = totalQty;
       document.getElementById('billTotalShipping').textContent = sym + totalShip.toFixed(2);
       document.getElementById('billGrandTotal').textContent = sym + grandTotal.toFixed(2);
+      if (typeof updateDualLedgerSummaryBar === 'function') updateDualLedgerSummaryBar();
     }
 
     function renderAnalyticsTab(validOrders) {
@@ -7043,7 +7264,7 @@
         }).join('');
     }
 
-    function renderRestockForecast(validOrders) {
+    function renderRestockForecast_LegacyV76(validOrders) {
       const container = document.getElementById('restockForecastGrid');
       if (!container) return;
 
@@ -7946,11 +8167,19 @@
         });
 
         if (isStoreOrder && storeDeliveryMode === 'SELF_CARRY' && parcels.length === 0) {
+          const isCw = String(merchant || '').toUpperCase().includes('CW');
           parcels.push({
-            courier: '门店自提',
-            trackingNo: '门店当场自提',
+            courier: isCw ? 'CW本地自用' : '门店自提',
+            trackingNo: isCw ? 'CW到家/自提(已入药箱)' : '门店当场自提',
             trackingUrl: '',
             deliveredDate: orderDate
+          });
+        } else if (isStoreOrder && storeDeliveryMode === 'STOCKPILE_WAIT' && parcels.length === 0) {
+          parcels.push({
+            courier: '本地囤货待寄',
+            trackingNo: '家中暂存·待拼箱寄出',
+            trackingUrl: '',
+            deliveredDate: null
           });
         }
 
@@ -8430,6 +8659,10 @@
             document.getElementById('editProdNzdPrice').value = p.nzdPrice || '';
             document.getElementById('editProdRmbPrice').value = p.rmbPrice || '';
             document.getElementById('editProdRmbShip').value = p.rmbShipPerUnit || '';
+            if (document.getElementById('editProdTargetNzd')) document.getElementById('editProdTargetNzd').value = p.targetNzdPrice || '';
+            if (document.getElementById('editProdWeightG')) document.getElementById('editProdWeightG').value = p.unitWeightG || estimateProductUnitWeightG(p.name) || '';
+            if (document.getElementById('editProdDailyDose')) document.getElementById('editProdDailyDose').value = p.dailyDose || parseProductUnitCapacity(p.name).defaultDaily || '';
+            if (document.getElementById('editProdExpiryDate')) document.getElementById('editProdExpiryDate').value = p.expiryDate || '';
             const delProdBtn = document.getElementById('btnDeleteProductModal');
             if (delProdBtn) delProdBtn.classList.remove('hidden');
             document.getElementById('modalProduct').classList.remove('hidden');
@@ -8494,6 +8727,10 @@
         document.getElementById('editProdNzdPrice').value = '';
         document.getElementById('editProdRmbPrice').value = '';
         document.getElementById('editProdRmbShip').value = '';
+        if (document.getElementById('editProdTargetNzd')) document.getElementById('editProdTargetNzd').value = '';
+        if (document.getElementById('editProdWeightG')) document.getElementById('editProdWeightG').value = '';
+        if (document.getElementById('editProdDailyDose')) document.getElementById('editProdDailyDose').value = '';
+        if (document.getElementById('editProdExpiryDate')) document.getElementById('editProdExpiryDate').value = '';
         const delProdBtn = document.getElementById('btnDeleteProductModal');
         if (delProdBtn) delProdBtn.classList.add('hidden');
         document.getElementById('modalProduct').classList.remove('hidden');
@@ -8511,6 +8748,10 @@
         const nzd = document.getElementById('editProdNzdPrice').value ? Number(document.getElementById('editProdNzdPrice').value) : null;
         const rmb = document.getElementById('editProdRmbPrice').value ? Number(document.getElementById('editProdRmbPrice').value) : null;
         const ship = document.getElementById('editProdRmbShip').value ? Number(document.getElementById('editProdRmbShip').value) : 0;
+        const targetNzd = (document.getElementById('editProdTargetNzd') && document.getElementById('editProdTargetNzd').value) ? Number(document.getElementById('editProdTargetNzd').value) : null;
+        const weightG = (document.getElementById('editProdWeightG') && document.getElementById('editProdWeightG').value) ? Number(document.getElementById('editProdWeightG').value) : null;
+        const dailyDose = (document.getElementById('editProdDailyDose') && document.getElementById('editProdDailyDose').value) ? Number(document.getElementById('editProdDailyDose').value) : null;
+        const expiryDate = (document.getElementById('editProdExpiryDate') && document.getElementById('editProdExpiryDate').value) ? document.getElementById('editProdExpiryDate').value : '';
 
         if (!newName) {
           showToast('商品名称不能为空');
@@ -8526,6 +8767,10 @@
             p.nzdPrice = nzd;
             p.rmbPrice = rmb;
             p.rmbShipPerUnit = ship;
+            if (targetNzd !== null) p.targetNzdPrice = targetNzd;
+            if (weightG !== null) p.unitWeightG = weightG;
+            if (dailyDose !== null) p.dailyDose = dailyDose;
+            p.expiryDate = expiryDate;
             if (nzd) {
               p.priceHistory = p.priceHistory || [];
               p.priceHistory.push({ merchant: '手动更新', price: nzd, currency: 'NZD', date: TODAY_STR });
@@ -8606,6 +8851,7 @@
           document.getElementById('billTotalQty').textContent = totalQty;
           document.getElementById('billTotalShipping').textContent = sym + totalShip.toFixed(2);
           document.getElementById('billGrandTotal').textContent = sym + grandTotal.toFixed(2);
+          if (typeof updateDualLedgerSummaryBar === 'function') updateDualLedgerSummaryBar();
         }
       });
 
@@ -14682,6 +14928,1151 @@
       });
     }
 
+    // ============================================================================
+    // V7.7 COMPREHENSIVE SUITE:
+    // 1. CW (Chemist Warehouse) & Self-Use (HOME) vs Daigou Separation & Stockpile Workflow
+    // 2. Pre-Purchase Multi-Merchant Price Comparison & Box-Splitting Calculator (#smartCartOptimizerStudio)
+    // 3. Wishlist Target Good Price Radar & Alert Badges
+    // 4. Dual-Ledger (Actual Verified Cost vs Client Statement) & 1-Click Freight/Discount Apportionment
+    // 5. Recipient Customs Clearance Frequency & Collision Radar (#customsRecipientRadarPanel)
+    // 6. Dual-Mode Family Supplement Cabinet (Pill/Gram Progress + Expiry Alert) & Friend Restock Forecast
+    // ============================================================================
+
+    function isSelfOrCWOrder(o) {
+      if (!o) return false;
+      const rec = String(o.recipient || '').trim().toUpperCase();
+      const merch = String(o.merchant || '').trim().toUpperCase();
+      if (rec === 'HOME' || rec === '自用' || rec.includes('HOME')) return true;
+      if (merch === 'CW' || merch.includes('CHEMIST WAREHOUSE')) return true;
+      if (o.storeDeliveryMode === 'SELF_CARRY') return true;
+      return false;
+    }
+
+    function isStockpileOrder(o) {
+      if (!o || o.cancelled) return false;
+      if (o.storeDeliveryMode === 'STOCKPILE_WAIT') return true;
+      if (o.parcels && o.parcels.some(p => p.courier === '本地囤货待寄' || String(p.trackingNo || '').includes('待拼箱'))) return true;
+      return false;
+    }
+
+    function updateOrderScopeCounts() {
+      const active = getActiveOrders().filter(o => !o.cancelled);
+      const allCnt = active.length;
+      const selfCwCnt = active.filter(o => isSelfOrCWOrder(o)).length;
+      const daigouCnt = active.filter(o => !isSelfOrCWOrder(o)).length;
+      const stockCnt = active.filter(o => isStockpileOrder(o)).length;
+
+      const setTxt = (id, v) => { const el = document.getElementById(id); if (el) el.textContent = v; };
+      setTxt('scopeCountAll', allCnt);
+      setTxt('scopeCountDaigou', daigouCnt);
+      setTxt('scopeCountSelfCw', selfCwCnt);
+      setTxt('scopeCountStockpile', stockCnt);
+    }
+
+    // Estimate unit gross weight (in grams) from product name or saved property
+    function estimateProductUnitWeightG(prodName) {
+      const p = getProductInfo(prodName);
+      if (p && Number(p.unitWeightG) > 0) return Number(p.unitWeightG);
+      const s = String(prodName || '');
+      // Multi-pack e.g. 1kg*6袋 or 900g*6罐
+      const multiKg = s.match(/(\d+(?:\.\d+)?)\s*kg\s*[*×xX]\s*(\d+)/i);
+      if (multiKg) return Math.round(parseFloat(multiKg[1]) * 1000 * parseInt(multiKg[2], 10) * 1.08);
+      const multiG = s.match(/(\d+(?:\.\d+)?)\s*g\s*[*×xX]\s*(\d+)/i);
+      if (multiG) return Math.round(parseFloat(multiG[1]) * parseInt(multiG[2], 10) * 1.12);
+      // Single kg / g / ml
+      const singleKg = s.match(/(\d+(?:\.\d+)?)\s*kg/i);
+      if (singleKg) return Math.round(parseFloat(singleKg[1]) * 1000 * 1.1);
+      const singleG = s.match(/(\d{2,4})\s*(?:g|克|ml|毫升)/i);
+      if (singleG) return Math.round(parseInt(singleG[1], 10) * 1.18);
+      // Capsules / Tablets e.g. 400粒, 200粒, 150片, 90粒, 60粒, 30粒
+      const pills = s.match(/(\d{2,4})\s*(?:粒|片|颗|丸|袋|包)/);
+      if (pills) {
+        const cnt = parseInt(pills[1], 10);
+        return Math.max(85, Math.round(cnt * 1.15 + 65)); // bottle + capsules weight
+      }
+      return 260; // sensible default supplement bottle weight
+    }
+
+    // Parse pill/gram capacity for Family Supplement Cabinet tracker
+    function parseProductUnitCapacity(prodName) {
+      const s = String(prodName || '');
+      const pillMatch = s.match(/(\d{2,4})\s*(粒|片|颗|丸|袋)/);
+      if (pillMatch) {
+        const cap = parseInt(pillMatch[1], 10);
+        const unit = pillMatch[2];
+        const defDaily = cap >= 300 ? 3 : (cap >= 120 ? 2 : 1);
+        return { capacity: cap, unit, defaultDaily: defDaily };
+      }
+      const kgMatch = s.match(/(\d+(?:\.\d+)?)\s*kg/i);
+      if (kgMatch) {
+        return { capacity: Math.round(parseFloat(kgMatch[1]) * 1000), unit: 'g', defaultDaily: 25 };
+      }
+      const gMatch = s.match(/(\d{2,4})\s*(?:g|克|ml|毫升)/i);
+      if (gMatch) {
+        const gVal = parseInt(gMatch[1], 10);
+        return { capacity: gVal, unit: 'g', defaultDaily: gVal >= 400 ? 12 : 8 };
+      }
+      return { capacity: 90, unit: '粒', defaultDaily: 2 };
+    }
+
+    // Build Target Good Price badge for Product Cards
+    function buildProductTargetPriceBadge(p, verifiedSeries, minNzdPrice) {
+      if (!p) return '';
+      const latestPt = verifiedSeries && verifiedSeries.length > 0 ? verifiedSeries[verifiedSeries.length - 1] : null;
+      const curNzd = (latestPt && latestPt.nzdPrice) ? Number(latestPt.nzdPrice) : (Number(p.nzdPrice) || 0);
+      const targetNzd = Number(p.targetNzdPrice) || 0;
+
+      if (targetNzd > 0 && curNzd > 0 && curNzd <= targetNzd) {
+        return `<span class="text-[10px] bg-rose-600 text-white px-2 py-0.5 rounded-full font-extrabold shadow-2xs animate-pulse" title="当前核实价 NZ$${curNzd} 已低于或等于您设定的心愿目标好价 NZ$${targetNzd}！">🎉 已达目标好价 (≤NZ$${targetNzd})</span>`;
+      }
+      if (targetNzd > 0) {
+        return `<span class="text-[10px] bg-rose-50 text-rose-800 border border-rose-200 px-1.5 py-0.2 rounded font-semibold" title="心愿目标好价提醒线">🎯 目标好价: NZ$${targetNzd}</span>`;
+      }
+      if (verifiedSeries && verifiedSeries.length >= 2 && curNzd > 0 && minNzdPrice > 0 && curNzd <= minNzdPrice * 1.01) {
+        return `<span class="text-[10px] bg-emerald-600 text-white px-1.5 py-0.2 rounded font-bold" title="最新一期核实单价正处于历史最低价">🟢 当前处于史低价</span>`;
+      }
+      return '';
+    }
+
+    function updateGoodPriceHitBadgeCount() {
+      const badge = document.getElementById('goodPriceHitCountBadge');
+      if (!badge) return;
+      let hitCount = 0;
+      (state.products || []).forEach(p => {
+        const series = collectProductVerifiedPriceSeries(p.name, 'ALL_VERIFIED');
+        const nzdArr = series.map(x => Number(x.nzdPrice || 0)).filter(v => v > 0);
+        const minNzd = nzdArr.length > 0 ? Math.min(...nzdArr) : (Number(p.nzdPrice) || 0);
+        const curNzd = nzdArr.length > 0 ? nzdArr[nzdArr.length - 1] : (Number(p.nzdPrice) || 0);
+        const target = Number(p.targetNzdPrice) || 0;
+        if ((target > 0 && curNzd > 0 && curNzd <= target) || (nzdArr.length >= 2 && curNzd > 0 && curNzd <= minNzd * 1.01)) {
+          hitCount += 1;
+        }
+      });
+      badge.textContent = hitCount;
+    }
+
+    // Feature 1: Smart Pre-Purchase Multi-Merchant Price Comparison & Box-Splitting Calculator
+    function ensureDefaultV77CartItems() {
+      if (!Array.isArray(state.v77CartItems) || state.v77CartItems.length === 0) {
+        const defaults = [
+          { product: 'Manuka Health 蜜纽康 麦卢卡活性蜂蜜 MGO263+ UMF10+ 500g', qty: 2 },
+          { product: 'goodhealth 好健康 深海鱼油胶囊 1000mg 400粒', qty: 3 },
+          { product: 'Clinicians 科立纯 鼻炎益生菌 30粒', qty: 2 },
+          { product: 'Swisse 斯维诗 钙+维生素D片 150片', qty: 2 }
+        ].filter(item => state.products.some(p => p.name === item.product));
+        if (defaults.length === 0 && state.products.length > 0) {
+          state.products.slice(0, 3).forEach(p => defaults.push({ product: p.name, qty: 2 }));
+        }
+        state.v77CartItems = defaults;
+      }
+    }
+
+    function getMerchantPricesForProduct(prodName, basis) {
+      const p = getProductInfo(prodName);
+      const series = collectProductVerifiedPriceSeries(prodName, 'ALL_VERIFIED');
+      const liveRate = (window.cfConfigState && window.cfConfigState.liveRates && Number(window.cfConfigState.liveRates.NZD)) || 4.35;
+      const merchants = ['华洋', '纽澳康源', '易康', 'CW'];
+      const result = {};
+
+      merchants.forEach(m => {
+        const pts = series.filter(s => {
+          const sm = String(s.merchant || '').toUpperCase();
+          if (m === 'CW') return sm.includes('CW') || sm.includes('CHEMIST');
+          if (m === '纽澳康源') return sm.includes('纽澳');
+          return sm.includes(m);
+        }).map(s => {
+          if (s.nzdPrice && s.nzdPrice > 0) return Number(s.nzdPrice);
+          if (s.rmbPrice && s.rmbPrice > 0) return Number((s.rmbPrice / (s.exchangeRate || liveRate)).toFixed(2));
+          return 0;
+        }).filter(v => v > 0);
+
+        if (pts.length > 0) {
+          result[m] = {
+            nzd: basis === 'LATEST' ? pts[pts.length - 1] : Math.min(...pts),
+            verified: true,
+            count: pts.length
+          };
+        } else {
+          result[m] = null;
+        }
+      });
+
+      // If no specific merchant point exists for CW or catalog default exists, provide catalog fallback only when needed
+      const baseNzd = (p && Number(p.nzdPrice) > 0)
+        ? Number(p.nzdPrice)
+        : ((p && Number(p.rmbPrice) > 0) ? Number((p.rmbPrice / liveRate).toFixed(2)) : 0);
+
+      if (baseNzd > 0 && !Object.values(result).some(x => x !== null)) {
+        result['纽澳康源'] = { nzd: baseNzd, verified: false, count: 1 };
+      }
+      return { byMerchant: result, baseNzd, liveRate };
+    }
+
+    function renderSmartCartOptimizerStudio() {
+      const tbody = document.getElementById('cartOptimizerTableBody');
+      const recPanel = document.getElementById('cartOptimizerRecommendationPanel');
+      const prodSel = document.getElementById('cartOptAddProdSelect');
+      const basisSel = document.getElementById('cartOptPriceBasis');
+      if (!tbody || !recPanel) return;
+
+      ensureDefaultV77CartItems();
+      const basis = basisSel ? basisSel.value : 'LOWEST';
+      const liveRate = (window.cfConfigState && window.cfConfigState.liveRates && Number(window.cfConfigState.liveRates.NZD)) || 4.35;
+
+      if (prodSel && prodSel.options.length !== state.products.length) {
+        prodSel.innerHTML = state.products.map(p => `<option value="${p.name.replace(/"/g, '&quot;')}">${p.name} ${p.nzdPrice ? '(NZ$' + p.nzdPrice + ')' : ''}</option>`).join('');
+      }
+
+      if (state.v77CartItems.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="8" class="py-8 text-center text-slate-400">当前比价清单为空，请从上方下拉框选择商品或点击「🔥 载入常买爆款组合」</td></tr>`;
+        recPanel.innerHTML = `<div class="bg-slate-50 border border-slate-200 rounded-xl p-4 text-xs text-slate-400 text-center">添加拟购商品后，将在此自动生成跨店最优拆单方案与快递拆箱建议</div>`;
+        return;
+      }
+
+      const merchants = ['华洋', '纽澳康源', '易康', 'CW'];
+      let optimalTotalNzd = 0;
+      let highestSingleTotalNzd = 0;
+      let totalNetWeightG = 0;
+      let totalUnits = 0;
+      const splitGroups = {};
+
+      tbody.innerHTML = state.v77CartItems.map((item, idx) => {
+        const qty = Math.max(1, Number(item.qty) || 1);
+        totalUnits += qty;
+        const unitWeightG = estimateProductUnitWeightG(item.product);
+        totalNetWeightG += unitWeightG * qty;
+
+        const priceInfo = getMerchantPricesForProduct(item.product, basis);
+        const validMerchants = merchants
+          .map(m => ({ merchant: m, data: priceInfo.byMerchant[m] }))
+          .filter(x => x.data && x.data.nzd > 0);
+
+        let bestMerchant = '纽澳康源';
+        let bestUnitNzd = priceInfo.baseNzd || 0;
+        let worstUnitNzd = priceInfo.baseNzd || 0;
+
+        if (validMerchants.length > 0) {
+          validMerchants.sort((a, b) => a.data.nzd - b.data.nzd);
+          bestMerchant = validMerchants[0].merchant;
+          bestUnitNzd = validMerchants[0].data.nzd;
+          worstUnitNzd = validMerchants[validMerchants.length - 1].data.nzd;
+        }
+
+        const lineBestNzd = bestUnitNzd * qty;
+        const lineWorstNzd = worstUnitNzd * qty;
+        optimalTotalNzd += lineBestNzd;
+        highestSingleTotalNzd += lineWorstNzd;
+
+        if (!splitGroups[bestMerchant]) {
+          splitGroups[bestMerchant] = { merchant: bestMerchant, items: [], subtotalNzd: 0, totalQty: 0, weightG: 0 };
+        }
+        splitGroups[bestMerchant].items.push({ product: item.product, qty, unitPrice: bestUnitNzd });
+        splitGroups[bestMerchant].subtotalNzd += lineBestNzd;
+        splitGroups[bestMerchant].totalQty += qty;
+        splitGroups[bestMerchant].weightG += unitWeightG * qty;
+
+        const cellsHtml = merchants.map(m => {
+          const cell = priceInfo.byMerchant[m];
+          if (!cell || !cell.nzd) {
+            return `<td class="py-2 px-1.5 text-center text-slate-300">-</td>`;
+          }
+          const isBest = m === bestMerchant && validMerchants.length > 1;
+          return `<td class="py-2 px-1.5 text-center ${isBest ? 'bg-emerald-50 font-extrabold text-emerald-800' : 'text-slate-600'}">
+            <div>NZ$${cell.nzd.toFixed(2)}</div>
+            <div class="text-[10px] ${isBest ? 'text-emerald-600' : 'text-slate-400'}">${isBest ? '★最低' : '≈¥' + Math.round(cell.nzd * liveRate)}</div>
+          </td>`;
+        }).join('');
+
+        return `
+          <tr class="hover:bg-slate-50/80">
+            <td class="py-2 px-2.5">
+              <div class="font-bold text-slate-800 leading-snug">${item.product}</div>
+              <div class="text-[10px] text-slate-400">单件预估净重 ~${unitWeightG}g · 最优渠道: <strong class="text-teal-700">${bestMerchant}</strong></div>
+            </td>
+            <td class="py-2 px-2 text-center">
+              <input type="number" min="1" max="99" data-cart-opt-qty="${idx}" value="${qty}" class="w-14 border border-slate-300 rounded px-1.5 py-1 text-xs font-bold text-center bg-white" />
+            </td>
+            ${cellsHtml}
+            <td class="py-2 px-2 text-right font-extrabold text-emerald-800 whitespace-nowrap">
+              <div>NZ$${lineBestNzd.toFixed(2)}</div>
+              <div class="text-[10px] text-slate-400 font-normal">≈ ¥${Math.round(lineBestNzd * liveRate)}</div>
+            </td>
+            <td class="py-2 px-1.5 text-center">
+              <button type="button" data-del-cart-opt="${idx}" class="text-rose-500 hover:text-rose-700 font-bold text-sm">×</button>
+            </td>
+          </tr>
+        `;
+      }).join('');
+
+      const savedNzd = Math.max(0, highestSingleTotalNzd - optimalTotalNzd);
+      const grossWeightKg = ((totalNetWeightG * 1.15) / 1000).toFixed(2); // +15% box & bubble wrap
+      const estBoxesByWeight = Math.max(1, Math.ceil((totalNetWeightG * 1.15) / 3600)); // ~3.6kg safe per cross-border box
+      const estBoxesByValue = Math.max(1, Math.ceil((optimalTotalNzd * liveRate) / 1000)); // ~1000 RMB per parcel safe threshold
+      const recommendedBoxes = Math.max(estBoxesByWeight, estBoxesByValue);
+
+      const groupCardsHtml = Object.values(splitGroups).map(g => {
+        const itemSummary = g.items.map(i => `${i.product.split(' ')[0]}×${i.qty}`).join('、');
+        return `
+          <div class="bg-white border border-teal-200 rounded-lg p-2.5 flex flex-wrap items-center justify-between gap-2">
+            <div>
+              <div class="flex items-center gap-1.5">
+                <span class="bg-teal-700 text-white text-[10px] font-bold px-2 py-0.5 rounded">🏪 ${g.merchant}</span>
+                <span class="text-xs font-extrabold text-slate-800">${g.totalQty} 件 · 小计 NZ$${g.subtotalNzd.toFixed(2)} <span class="text-[11px] font-normal text-slate-500">(≈¥${Math.round(g.subtotalNzd * liveRate)})</span></span>
+              </div>
+              <div class="text-[11px] text-slate-500 mt-0.5">含：${itemSummary} · 净重约 ${(g.weightG / 1000).toFixed(2)}kg</div>
+            </div>
+            <button type="button" data-create-order-from-cart="${g.merchant}" class="bg-emerald-700 hover:bg-emerald-600 text-white text-[11px] font-bold px-2.5 py-1.5 rounded-lg shadow-2xs transition shrink-0">
+              ⚡ 一键生成【${g.merchant}】采购单
+            </button>
+          </div>
+        `;
+      }).join('');
+
+      recPanel.innerHTML = `
+        <div class="bg-gradient-to-br from-teal-950 to-emerald-900 text-white rounded-xl p-3.5 space-y-2 shadow-sm">
+          <div class="flex items-center justify-between">
+            <span class="text-[11px] text-teal-200 font-semibold">🏆 跨店最优拆单总计 (${totalUnits}件商品)</span>
+            <span class="text-[11px] bg-amber-400 text-slate-950 font-extrabold px-2 py-0.5 rounded-full">
+              ${savedNzd > 0 ? `比高价店立省 NZ$${savedNzd.toFixed(2)} (≈¥${Math.round(savedNzd * liveRate)})` : '已锁定历史最优核实价'}
+            </span>
+          </div>
+          <div class="flex items-baseline justify-between">
+            <div class="text-xl font-extrabold text-amber-300">NZ$${optimalTotalNzd.toFixed(2)}</div>
+            <div class="text-xs text-emerald-200">折合人民币约 <strong>¥${Math.round(optimalTotalNzd * liveRate)}</strong> (按1:${liveRate})</div>
+          </div>
+        </div>
+
+        <div class="bg-slate-50 border border-slate-200 rounded-xl p-3 space-y-2">
+          <div class="text-xs font-bold text-slate-800 flex items-center justify-between">
+            <span>📦 智能跨店拆单采购方案 (点击直接带入录单)</span>
+            <button type="button" data-create-order-from-cart="ALL" class="text-[11px] text-teal-700 hover:underline font-bold">合并生成单笔总单 ↗</button>
+          </div>
+          <div class="space-y-2">${groupCardsHtml}</div>
+        </div>
+
+        <div class="bg-amber-50/80 border border-amber-200 rounded-xl p-3 space-y-1.5 text-xs">
+          <div class="font-bold text-amber-950 flex items-center justify-between">
+            <span>⚖️ 国际快递净重估算 & 防税分箱建议</span>
+            <span class="bg-amber-200 text-amber-950 px-2 py-0.5 rounded text-[11px] font-extrabold">含包装毛重 ≈ ${grossWeightKg} kg</span>
+          </div>
+          <p class="text-[11px] text-slate-700 leading-relaxed">
+            • 商品纯净重合计 <strong>${(totalNetWeightG / 1000).toFixed(2)} kg</strong>，加气泡膜与纸箱后预估计费重 <strong>${grossWeightKg} kg</strong>。<br/>
+            • <strong>海关清关与拆包建议：</strong>按跨境个人邮递安全经验（单箱建议 ≤3.6kg、单票货值 ≤¥1,000），本批商品建议拆分为 <strong class="text-rose-700">${recommendedBoxes} 个快递包裹</strong>寄出${recommendedBoxes >= 2 ? '（若在同一店下单，可使用录单弹窗中的「⚡连号拆包神器」一键生成连号运单）' : '（1箱即可安全通关）'}。
+          </p>
+        </div>
+      `;
+    }
+
+    // Feature 3: Dual-Ledger Cost vs Quote Summary & Freight/Discount Apportionment
+    function updateDualLedgerSummaryBar() {
+      const bar = document.getElementById('dualLedgerSummaryBar');
+      if (!bar) return;
+      const sym = (document.getElementById('billCurrencySelect') && document.getElementById('billCurrencySelect').value) || '¥';
+      const isRmb = sym === '¥';
+      const liveRate = (window.cfConfigState && window.cfConfigState.liveRates && Number(window.cfConfigState.liveRates.NZD)) || 4.35;
+
+      let quoteTotal = 0;
+      let estActualCostTotal = 0;
+
+      (state.billItems || []).forEach(r => {
+        const qty = Number(r.qty) || 0;
+        const up = Number(r.unitPrice) || 0;
+        const ship = Number(r.shipping) || 0;
+        quoteTotal += up * qty + ship;
+
+        // Estimate actual verified purchase cost for this product
+        const series = collectProductVerifiedPriceSeries(r.product, 'ALL_VERIFIED');
+        const pInfo = getProductInfo(r.product);
+        let unitCost = up;
+        if (series.length > 0) {
+          const latest = series[series.length - 1];
+          if (isRmb) {
+            unitCost = latest.rmbPrice ? Number(latest.rmbPrice) : (latest.nzdPrice ? Number(latest.nzdPrice) * (latest.exchangeRate || liveRate) : up);
+          } else {
+            unitCost = latest.nzdPrice ? Number(latest.nzdPrice) : (latest.rmbPrice ? Number(latest.rmbPrice) / (latest.exchangeRate || liveRate) : up);
+          }
+        } else if (pInfo) {
+          if (isRmb) {
+            unitCost = pInfo. nzdPrice ? Number(pInfo.nzdPrice) * liveRate : (Number(pInfo.rmbPrice) || up);
+          } else {
+            unitCost = Number(pInfo.nzdPrice) || up;
+          }
+        }
+        const estShipCost = isRmb ? ((pInfo && Number(pInfo.rmbShipPerUnit) > 0 ? Number(pInfo.rmbShipPerUnit) * qty : ship)) : ship;
+        estActualCostTotal += unitCost * qty + estShipCost;
+      });
+
+      const diff = quoteTotal - estActualCostTotal;
+      const diffPct = estActualCostTotal > 0 ? ((diff / estActualCostTotal) * 100).toFixed(1) : '0.0';
+      const statusBadge = diff >= 1
+        ? `<span class="bg-emerald-500/20 text-emerald-300 border border-emerald-400/40 px-2 py-0.5 rounded font-bold">📈 代购结余 +${sym}${diff.toFixed(2)} (+${diffPct}% · 可覆盖汇率与打包磨损)</span>`
+        : (diff <= -1
+            ? `<span class="bg-amber-500/20 text-amber-300 border border-amber-400/40 px-2 py-0.5 rounded font-bold">🎁 亲友友情补贴 ${sym}${diff.toFixed(2)} (${diffPct}% · 低于历史实付成本)</span>`
+            : `<span class="bg-blue-500/20 text-blue-200 border border-blue-400/40 px-2 py-0.5 rounded font-bold">⚖️ 原价实报实销 (零差价平进平出)</span>`);
+
+      bar.innerHTML = `
+        <div class="flex flex-wrap items-center gap-3">
+          <span>🔒 <strong>店主双账本私密核对：</strong></span>
+          <span class="text-slate-300">预估实付总成本(含运费): <strong class="text-white font-mono">${sym}${estActualCostTotal.toFixed(2)}</strong></span>
+          <span class="text-slate-400">|</span>
+          <span class="text-slate-300">当前账单应收总计: <strong class="text-amber-300 font-mono">${sym}${quoteTotal.toFixed(2)}</strong></span>
+        </div>
+        <div>${statusBadge}</div>
+      `;
+    }
+
+    // Feature 4: Enhanced Recipient Customs Clearance Frequency & Collision Radar
+    function renderCustomsCollisionCheck(validOrders) {
+      renderCustomsCollisionCheck_LegacyV76(validOrders);
+
+      const gridEl = document.getElementById('customsRecipientRadarGrid');
+      const tipEl = document.getElementById('customsBestRecipientQuickTip');
+      if (!gridEl) return;
+
+      const liveRate = (window.cfConfigState && window.cfConfigState.liveRates && Number(window.cfConfigState.liveRates.NZD)) || 4.35;
+      const recipients = ['朱峰', '朱莉', '王超', '顾婷', '朱欢', '泗泾', 'HOME'];
+      const statsByRec = {};
+      recipients.forEach(r => {
+        statsByRec[r] = {
+          recipient: r,
+          inTransitParcels: 0,
+          inTransitCouriers: new Set(),
+          recent30dParcels: 0,
+          year2026Parcels: 0,
+          year2026Orders: 0,
+          year2026Rmb: 0,
+          lastOrderDate: ''
+        };
+      });
+
+      (validOrders || []).forEach(o => {
+        if (o.cancelled) return;
+        const rec = o.recipient || 'HOME';
+        if (!statsByRec[rec]) {
+          statsByRec[rec] = {
+            recipient: rec,
+            inTransitParcels: 0,
+            inTransitCouriers: new Set(),
+            recent30dParcels: 0,
+            year2026Parcels: 0,
+            year2026Orders: 0,
+            year2026Rmb: 0,
+            lastOrderDate: ''
+          };
+        }
+        const st = statsByRec[rec];
+        if (o.orderDate && o.orderDate > st.lastOrderDate) st.lastOrderDate = o.orderDate;
+
+        const daysAgo = o.orderDate ? (daysBetween(o.orderDate, TODAY_STR) || 999) : 999;
+        const pList = o.parcels || [];
+        const isSelfNoCustoms = isSelfOrCWOrder(o) && (o.storeDeliveryMode === 'SELF_CARRY' || o.recipient === 'HOME');
+
+        if (o.year >= 2025) {
+          st.year2026Orders += 1;
+          st.year2026Parcels += Math.max(1, pList.length);
+          const nzdEq = getOrderEquivalentNzd(o);
+          st.year2026Rmb += Math.round(nzdEq * liveRate);
+        }
+        if (daysAgo <= 35 && !isSelfNoCustoms) {
+          st.recent30dParcels += Math.max(1, pList.length);
+        }
+        if (o.year >= 2026 && !isSelfNoCustoms) {
+          pList.forEach(p => {
+            if (!p.deliveredDate && p.courier !== '门店自提' && p.courier !== 'CW本地自用' && p.courier !== '本地囤货待寄') {
+              st.inTransitParcels += 1;
+              if (p.courier) st.inTransitCouriers.add(p.courier);
+            }
+          });
+        }
+      });
+
+      const recCards = Object.values(statsByRec);
+      // Find safest China recipient for next cross-border order
+      const chinaRecs = recCards.filter(r => r.recipient !== 'HOME');
+      chinaRecs.sort((a, b) => {
+        if (a.inTransitParcels !== b.inTransitParcels) return a.inTransitParcels - b.inTransitParcels;
+        if (a.recent30dParcels !== b.recent30dParcels) return a.recent30dParcels - b.recent30dParcels;
+        return a.year2026Rmb - b.year2026Rmb;
+      });
+      const safest = chinaRecs[0];
+      if (tipEl && safest) {
+        tipEl.innerHTML = `🌟 下一单最稳妥收件人推荐：<strong>${safest.recipient}</strong> (${safest.inTransitParcels === 0 ? '当前0在途包裹' : safest.inTransitParcels + '包在途'} · 近30天${safest.recent30dParcels}包)`;
+      }
+
+      gridEl.innerHTML = recCards.map(r => {
+        const isHome = r.recipient === 'HOME';
+        const quotaPct = Math.min(100, Math.round((r.year2026Rmb / 26000) * 100));
+        let statusTag = '';
+        let borderCls = 'border-slate-200 bg-white';
+        if (isHome) {
+          statusTag = `<span class="text-[10px] bg-blue-100 text-blue-900 px-2 py-0.5 rounded-full font-bold">🏠 奥克兰本地自用 (免清关)</span>`;
+          borderCls = 'border-blue-200 bg-blue-50/30';
+        } else if (r.inTransitParcels >= 2) {
+          statusTag = `<span class="text-[10px] bg-rose-100 text-rose-800 border border-rose-300 px-2 py-0.5 rounded-full font-extrabold">🔴 ${r.inTransitParcels}包同批在途·建议错峰</span>`;
+          borderCls = 'border-rose-300 bg-rose-50/40';
+        } else if (r.inTransitParcels === 1 || r.recent30dParcels >= 3) {
+          statusTag = `<span class="text-[10px] bg-amber-100 text-amber-900 px-2 py-0.5 rounded-full font-bold">🟡 ${r.inTransitParcels}包在途 / 近30天${r.recent30dParcels}包</span>`;
+          borderCls = 'border-amber-200 bg-amber-50/30';
+        } else {
+          statusTag = `<span class="text-[10px] bg-emerald-100 text-emerald-800 px-2 py-0.5 rounded-full font-bold">🟢 0在途·安全首选</span>`;
+          borderCls = 'border-emerald-200 bg-white';
+        }
+
+        return `
+          <div class="rounded-xl border ${borderCls} p-2.5 flex flex-col justify-between gap-1.5 shadow-2xs">
+            <div>
+              <div class="flex items-center justify-between gap-1">
+                <span class="text-xs font-extrabold text-slate-800">👤 ${r.recipient}</span>
+                ${statusTag}
+              </div>
+              <div class="text-[11px] text-slate-500 mt-1 flex items-center justify-between">
+                <span>近两年累计: <strong>${r.year2026Parcels}</strong>包 (≈¥${r.year2026Rmb.toLocaleString()})</span>
+                <span>上次: ${r.lastOrderDate || '无'}</span>
+              </div>
+            </div>
+            <div class="space-y-1 pt-1 border-t border-slate-100">
+              <div class="flex items-center justify-between text-[10px] text-slate-500">
+                <span>${isHome ? '本地自用/CW采购额' : '年度跨境清关参考额度占比'}</span>
+                <span class="font-mono font-semibold">${quotaPct}%</span>
+              </div>
+              <div class="w-full h-1.5 bg-slate-200 rounded-full overflow-hidden">
+                <div class="h-full ${quotaPct > 80 ? 'bg-rose-500' : (isHome ? 'bg-blue-500' : 'bg-emerald-600')} rounded-full" style="width:${Math.max(4, quotaPct)}%"></div>
+              </div>
+              <div class="flex items-center justify-between pt-0.5">
+                <button type="button" data-filter-rec-from-radar="${r.recipient}" class="text-[10px] text-slate-500 hover:text-slate-800 underline">查看TA的订单</button>
+                <button type="button" data-new-order-rec="${r.recipient}" class="text-[10px] bg-emerald-50 hover:bg-emerald-700 hover:text-white text-emerald-800 border border-emerald-200 font-bold px-2 py-0.5 rounded transition">
+                  ${isHome ? '💊 记CW/自用单' : '⚡ 用TA录新单'}
+                </button>
+              </div>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    // Feature 5: Dual-Mode Family Supplement Cabinet (Pill/Gram Progress + Expiry Alert) & Friend Restock Forecast
+    window.currentCabinetViewMode = 'ALL';
+
+    function renderRestockForecast(validOrders) {
+      const container = document.getElementById('restockForecastGrid');
+      if (!container) return;
+
+      const mode = window.currentCabinetViewMode || 'ALL';
+      const pairMap = {};
+
+      (validOrders || []).forEach(o => {
+        if (!o.orderDate || o.cancelled || o.year < 2023) return;
+        const isSelf = isSelfOrCWOrder(o);
+        (o.items || []).forEach(it => {
+          const recLabel = isSelf ? 'HOME(自用药箱)' : (o.recipient || 'HOME');
+          const key = `${recLabel}|||${it.product}`;
+          if (!pairMap[key]) {
+            pairMap[key] = {
+              recipient: recLabel,
+              rawRecipient: o.recipient || 'HOME',
+              isSelfCabinet: isSelf,
+              product: it.product,
+              merchant: o.merchant,
+              totalQty: 0,
+              orderCount: 0,
+              lastDate: o.orderDate,
+              lastQty: Number(it.qty) || 1,
+              lastOrderId: o.id
+            };
+          }
+          const rec = pairMap[key];
+          rec.totalQty += (Number(it.qty) || 0);
+          rec.orderCount += 1;
+          if (o.orderDate >= rec.lastDate) {
+            rec.lastDate = o.orderDate;
+            rec.lastQty = Number(it.qty) || 1;
+            rec.merchant = o.merchant;
+            rec.lastOrderId = o.id;
+          }
+        });
+      });
+
+      const allItems = Object.values(pairMap).map(x => {
+        const pInfo = getProductInfo(x.product);
+        const capInfo = parseProductUnitCapacity(x.product);
+        const dailyDose = (pInfo && Number(pInfo.dailyDose) > 0) ? Number(pInfo.dailyDose) : capInfo.defaultDaily;
+        const totalUnitsCapacity = x.lastQty * capInfo.capacity;
+        const estCycleDays = Math.min(240, Math.max(25, Math.round(totalUnitsCapacity / Math.max(0.5, dailyDose))));
+        const daysSince = Math.max(0, daysBetween(x.lastDate, TODAY_STR) || 0);
+        const consumedCap = Math.min(totalUnitsCapacity, Math.round(daysSince * dailyDose));
+        const remainCap = Math.max(0, totalUnitsCapacity - consumedCap);
+        const remainPct = totalUnitsCapacity > 0 ? Math.round((remainCap / totalUnitsCapacity) * 100) : 0;
+        const usedRatio = Math.min(100, Math.round((daysSince / estCycleDays) * 100));
+        const remainDays = Math.max(0, estCycleDays - daysSince);
+
+        const expiryDate = (pInfo && pInfo.expiryDate) ? pInfo.expiryDate : '';
+        const daysToExpiry = expiryDate ? daysBetween(TODAY_STR, expiryDate) : null;
+
+        return {
+          ...x,
+          capUnit: capInfo.unit,
+          unitCapacity: capInfo.capacity,
+          totalUnitsCapacity,
+          dailyDose,
+          estCycleDays,
+          daysSince,
+          remainCap,
+          remainPct,
+          usedRatio,
+          remainDays,
+          expiryDate,
+          daysToExpiry
+        };
+      });
+
+      let filtered = allItems;
+      if (mode === 'SELF_CABINET') {
+        filtered = allItems.filter(x => x.isSelfCabinet);
+      } else if (mode === 'FRIEND_RESTOCK') {
+        filtered = allItems.filter(x => !x.isSelfCabinet && (x.orderCount >= 2 || x.totalQty >= 3));
+      } else {
+        // ALL mode: show top self-cabinet items + top friend restock items (up to 8 cards)
+        const selfList = allItems.filter(x => x.isSelfCabinet).sort((a, b) => b.usedRatio - a.usedRatio).slice(0, 4);
+        const friendList = allItems.filter(x => !x.isSelfCabinet && (x.orderCount >= 2 || x.totalQty >= 3)).sort((a, b) => b.usedRatio - a.usedRatio).slice(0, 4);
+        filtered = [...selfList, ...friendList];
+      }
+
+      if (filtered.length === 0) {
+        container.innerHTML = `<div class="col-span-4 text-xs text-slate-400 py-5 text-center">暂无符合当前视角的药箱或常购记录，点击右上角「💊 记一笔CW/门店自用」即可开启家庭药箱余量与保质期追踪！</div>`;
+        return;
+      }
+
+      container.innerHTML = filtered.slice(0, 8).map(c => {
+        const isLow = c.remainPct <= 20 || c.usedRatio >= 80;
+        const isExpiringSoon = c.daysToExpiry !== null && c.daysToExpiry <= 90;
+        const borderCls = isExpiringSoon
+          ? 'border-rose-300 bg-rose-50/40'
+          : (c.isSelfCabinet ? 'border-blue-200 bg-blue-50/25' : (isLow ? 'border-amber-300 bg-amber-50/30' : 'border-slate-200 bg-slate-50/50'));
+
+        const expiryBadgeHtml = c.expiryDate
+          ? `<span class="text-[10px] px-1.5 py-0.2 rounded font-bold ${isExpiringSoon ? 'bg-rose-600 text-white animate-pulse' : 'bg-emerald-50 text-emerald-800 border border-emerald-200'}">📅 保质期至 ${c.expiryDate} (${c.daysToExpiry >= 0 ? '剩' + c.daysToExpiry + '天' : '已过期'})</span>`
+          : `<button type="button" data-set-prod-expiry="${c.product.replace(/"/g, '&quot;')}" class="text-[10px] text-slate-400 hover:text-indigo-700 underline">＋设保质期</button>`;
+
+        return `
+          <div class="border ${borderCls} rounded-xl p-3 flex flex-col justify-between gap-2 shadow-2xs">
+            <div>
+              <div class="flex items-center justify-between gap-1 flex-wrap">
+                <span class="text-xs font-bold px-2 py-0.5 rounded ${c.isSelfCabinet ? 'bg-blue-600 text-white' : 'bg-emerald-100 text-emerald-900'}">
+                  ${c.isSelfCabinet ? '🏠 自用家庭药箱' : '🤝 ' + c.recipient}
+                </span>
+                <span class="text-[11px] font-semibold ${isLow ? 'text-amber-800 bg-amber-100 px-1.5 py-0.5 rounded' : 'text-emerald-700'}">
+                  ${isLow ? '🔔 余量偏低·建议补货' : `💊 余量约 ${c.remainPct}%`}
+                </span>
+              </div>
+              <div class="text-xs font-bold text-slate-800 mt-1.5 line-clamp-2" title="${c.product}">${c.product}</div>
+              <div class="text-[11px] text-slate-500 mt-1 flex flex-wrap items-center justify-between gap-1">
+                <span>上次购入: ${c.lastDate} (×${c.lastQty} · 共${c.totalUnitsCapacity}${c.capUnit})</span>
+                ${expiryBadgeHtml}
+              </div>
+            </div>
+
+            <div class="space-y-1.5 pt-1.5 border-t border-slate-200/60">
+              <div class="flex items-center justify-between text-[11px]">
+                <span class="text-slate-600">预估还剩 <strong class="text-slate-900">${c.remainCap}${c.capUnit}</strong> (可吃 ~${c.remainDays}天)</span>
+                <button type="button" data-adj-daily-dose="${c.product.replace(/"/g, '&quot;')}" class="text-[10px] bg-white hover:bg-slate-100 text-indigo-700 border border-indigo-200 px-1.5 py-0.2 rounded font-semibold" title="点击修改每日服用量">
+                  每日 ${c.dailyDose}${c.capUnit} ✎
+                </button>
+              </div>
+              <div class="w-full h-2 bg-slate-200 rounded-full overflow-hidden" title="瓶内预估剩余 ${c.remainPct}%">
+                <div class="h-full ${isLow ? 'bg-amber-500' : (c.isSelfCabinet ? 'bg-blue-600' : 'bg-emerald-600')} rounded-full transition-all" style="width:${Math.max(6, c.remainPct)}%"></div>
+              </div>
+              <div class="flex items-center justify-between pt-0.5 gap-1">
+                <button type="button" data-add-cart-opt="${c.product.replace(/"/g, '&quot;')}" class="text-[11px] text-teal-700 hover:text-teal-900 font-semibold">🛒 跨店比价</button>
+                <button type="button" data-restock-order="${c.lastOrderId}" class="text-[11px] text-emerald-700 hover:text-emerald-900 font-bold">⚡ 再来一单 →</button>
+              </div>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    // Configure #modalOrder for 1-Click CW Self-Use or Local Stockpile entry
+    function applyQuickPresetToOrderModal(presetType) {
+      const modal = document.getElementById('modalOrder');
+      if (modal && modal.classList.contains('hidden')) {
+        openOrderModal(null, false);
+      }
+      const cwTip = document.getElementById('cwSelfUseHelperTip');
+      if (presetType === 'CW_SELF') {
+        document.getElementById('formMerchant').value = 'CW';
+        document.getElementById('formRecipient').value = 'HOME';
+        document.getElementById('formCurrency').value = 'NZD';
+        if (document.getElementById('formPaymentMethod')) document.getElementById('formPaymentMethod').value = '信用卡 (Visa/MasterCard)';
+        if (typeof setOrderPurchaseMode === 'function') setOrderPurchaseMode(true, 'SELF_CARRY');
+        const ordNoInp = document.getElementById('formOrderNo');
+        const ordDate = document.getElementById('formOrderDate').value || TODAY_STR;
+        if (ordNoInp) ordNoInp.value = `CW自用(${ordDate})`;
+        if (cwTip) cwTip.classList.remove('hidden');
+        updateFormOrderTotalPreview();
+        showToast('💊 已切换为「CW官网/门店自用快录」：免填国际快递单号，保存后自动进入家庭药箱！');
+      } else if (presetType === 'STOCKPILE') {
+        if (!document.getElementById('formMerchant').value) document.getElementById('formMerchant').value = 'CW';
+        if (!document.getElementById('formRecipient').value) document.getElementById('formRecipient').value = 'HOME';
+        document.getElementById('formCurrency').value = 'NZD';
+        if (typeof setOrderPurchaseMode === 'function') setOrderPurchaseMode(true, 'STOCKPILE_WAIT');
+        const ordNoInp = document.getElementById('formOrderNo');
+        const ordDate = document.getElementById('formOrderDate').value || TODAY_STR;
+        if (ordNoInp && (!ordNoInp.value || ordNoInp.value.startsWith('门店订单'))) {
+          ordNoInp.value = `囤货待寄(${ordDate})`;
+        }
+        if (cwTip) cwTip.classList.remove('hidden');
+        updateFormOrderTotalPreview();
+        showToast('📦 已切换为「买回家囤货待寄」模式：先记入库存，后续拼箱寄出时可一键补填运单号！');
+      }
+    }
+
+    function initV77AllFeaturesEvents() {
+      // 1. Customs Radar Drawer Toggle & Click Delegation
+      const btnRadar = document.getElementById('btnToggleCustomsRadarDrawer');
+      if (btnRadar) {
+        btnRadar.addEventListener('click', () => {
+          const panel = document.getElementById('customsRecipientRadarPanel');
+          const arrow = document.getElementById('customsRadarArrow');
+          if (panel) {
+            const isHidden = panel.classList.toggle('hidden');
+            if (arrow) arrow.textContent = isHidden ? '▾' : '▴';
+          }
+        });
+      }
+
+      // 2. Family Supplement Cabinet Mode Switcher
+      document.querySelectorAll('.cabinet-mode-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          window.currentCabinetViewMode = btn.getAttribute('data-cabinet-mode') || 'ALL';
+          document.querySelectorAll('.cabinet-mode-btn').forEach(b => {
+            b.className = 'cabinet-mode-btn px-2.5 py-1 rounded-md font-medium text-slate-700 hover:bg-white transition';
+          });
+          btn.className = 'cabinet-mode-btn px-2.5 py-1 rounded-md font-bold bg-emerald-700 text-white transition';
+          renderRestockForecast(getActiveOrders().filter(o => !o.cancelled));
+        });
+      });
+
+      const btnQuickCWFromCab = document.getElementById('btnQuickRecordCWFromCabinet');
+      if (btnQuickCWFromCab) {
+        btnQuickCWFromCab.addEventListener('click', () => applyQuickPresetToOrderModal('CW_SELF'));
+      }
+
+      // 3. Orders Tab Scope Filter Bar (ALL / DAIGOU / SELF_CW / STOCKPILE)
+      document.querySelectorAll('.order-scope-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          state.orderScopeFilter = btn.getAttribute('data-order-scope') || 'ALL';
+          document.querySelectorAll('.order-scope-btn').forEach(b => {
+            b.className = 'order-scope-btn px-3 py-1 rounded-full font-medium bg-slate-100 hover:bg-emerald-50 text-slate-700 border border-slate-200 transition';
+          });
+          btn.className = 'order-scope-btn px-3 py-1 rounded-full font-bold bg-emerald-800 text-white shadow-2xs transition';
+          renderOrdersTab();
+        });
+      });
+
+      const btnQuickCWTab = document.getElementById('btnQuickNewCWOrderFromTab');
+      if (btnQuickCWTab) {
+        btnQuickCWTab.addEventListener('click', () => applyQuickPresetToOrderModal('CW_SELF'));
+      }
+
+      // 4. Order Modal CW & Stockpile Quick Presets + CW Demo Receipt
+      const btnPresetCW = document.getElementById('btnQuickPresetCW');
+      if (btnPresetCW) {
+        btnPresetCW.addEventListener('click', () => applyQuickPresetToOrderModal('CW_SELF'));
+      }
+      const btnPresetStock = document.getElementById('btnQuickPresetStockpile');
+      if (btnPresetStock) {
+        btnPresetStock.addEventListener('click', () => applyQuickPresetToOrderModal('STOCKPILE'));
+      }
+      const btnFillCWDemo = document.getElementById('btnFillCWDemoText');
+      if (btnFillCWDemo) {
+        btnFillCWDemo.addEventListener('click', () => {
+          const demoText = [
+            'Chemist Warehouse New Zealand - Tax Invoice / Order Confirmation',
+            'Order #CW-8892410',
+            'Order Date: ' + TODAY_STR,
+            'Delivery Address: HOME Auckland NZ (Click & Collect / Local Delivery)',
+            '1. goodhealth 好健康 深海鱼油胶囊 1000mg 400粒  Qty: 2  $26.99 each',
+            '2. Swisse 斯维诗 钙+维生素D片 150片  Qty: 2  $21.99 each',
+            '3. Clinicians 科立纯 鼻炎益生菌 30粒  Qty: 2  $28.50 each',
+            'Shipping: $0.00 (Free Shipping over $50)',
+            'Total Paid: $154.96 NZD (Paid by Visa Card)'
+          ].join('\n');
+          const box = document.getElementById('newOrderScrapeInput');
+          if (box) box.value = demoText;
+          document.getElementById('formMerchant').value = 'CW';
+          document.getElementById('formRecipient').value = 'HOME';
+          document.getElementById('formOrderNo').value = 'CW-8892410';
+          document.getElementById('formCurrency').value = 'NZD';
+          const cont = document.getElementById('formItemsContainer');
+          if (cont) {
+            cont.innerHTML = '';
+            addFormItemRow('goodhealth 好健康 深海鱼油胶囊 1000mg 400粒', 2, 26.99);
+            addFormItemRow('Swisse 斯维诗 钙+维生素D片 150片', 2, 21.99);
+            addFormItemRow('Clinicians 科立纯 鼻炎益生菌 30粒', 2, 28.50);
+          }
+          updateFormOrderTotalPreview();
+          showToast('🧪 已填入 CW (Chemist Warehouse) 官网自用采购单示例！');
+        });
+      }
+
+      // 5. Products Tab: Smart Cart Optimizer & Auto Target Prices
+      const btnToggleCartOpt = document.getElementById('btnToggleSmartCartOptimizer');
+      if (btnToggleCartOpt) {
+        btnToggleCartOpt.addEventListener('click', () => {
+          const el = document.getElementById('smartCartOptimizerStudio');
+          if (el) {
+            el.classList.toggle('hidden');
+            if (!el.classList.contains('hidden')) {
+              renderSmartCartOptimizerStudio();
+              el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+          }
+        });
+      }
+
+      const btnAutoTargets = document.getElementById('btnAutoSetTargetPrices');
+      if (btnAutoTargets) {
+        btnAutoTargets.addEventListener('click', () => {
+          recordBeforeAction('一键智能设定全库心愿目标好价');
+          let count = 0;
+          state.products.forEach(p => {
+            const series = collectProductVerifiedPriceSeries(p.name, 'ALL_VERIFIED');
+            const nzdArr = series.map(x => Number(x.nzdPrice || 0)).filter(v => v > 0);
+            const minNzd = nzdArr.length > 0 ? Math.min(...nzdArr) : (Number(p.nzdPrice) || 0);
+            if (minNzd > 0) {
+              p.targetNzdPrice = Number((minNzd * 1.03).toFixed(2));
+              count += 1;
+            }
+          });
+          saveState(`为 ${count} 款商品设定心愿目标好价(史低+3%)`);
+          renderProductsTab();
+          showToast(`🎯 已按「历史最低核实价 + 3%」为 ${count} 款商品设定目标好价雷达！达标商品已高亮提醒`);
+        });
+      }
+
+      const basisSel = document.getElementById('cartOptPriceBasis');
+      if (basisSel) basisSel.addEventListener('change', renderSmartCartOptimizerStudio);
+
+      const btnAddCartOpt = document.getElementById('btnAddProdToCartOpt');
+      if (btnAddCartOpt) {
+        btnAddCartOpt.addEventListener('click', () => {
+          const prodSel = document.getElementById('cartOptAddProdSelect');
+          const qtyInp = document.getElementById('cartOptAddQtyInput');
+          if (!prodSel || !prodSel.value) return;
+          const pname = prodSel.value;
+          const qty = Math.max(1, Number(qtyInp ? qtyInp.value : 2) || 2);
+          ensureDefaultV77CartItems();
+          const existing = state.v77CartItems.find(x => x.product === pname);
+          if (existing) {
+            existing.qty += qty;
+          } else {
+            state.v77CartItems.push({ product: pname, qty });
+          }
+          renderSmartCartOptimizerStudio();
+          showToast(`🛒 已将「${pname} ×${qty}」加入跨店比价与拆箱计算器`);
+        });
+      }
+
+      const btnPresetHot = document.getElementById('btnCartPresetHotCombo');
+      if (btnPresetHot) {
+        btnPresetHot.addEventListener('click', () => {
+          state.v77CartItems = [
+            { product: 'Manuka Health 蜜纽康 麦卢卡活性蜂蜜 MGO263+ UMF10+ 500g', qty: 3 },
+            { product: 'goodhealth 好健康 深海鱼油胶囊 1000mg 400粒', qty: 4 },
+            { product: 'Anchor 安佳 成人全脂奶粉 1kg*6袋', qty: 1 },
+            { product: 'Red Seal 红印 天然蜂胶牙膏 100g', qty: 6 }
+          ].filter(item => state.products.some(p => p.name === item.product));
+          renderSmartCartOptimizerStudio();
+          showToast('🔥 已载入亲友代购常买爆款组合，自动完成4店比价与分箱计算！');
+        });
+      }
+
+      const btnPresetCwCombo = document.getElementById('btnCartPresetSelfCW');
+      if (btnPresetCwCombo) {
+        btnPresetCwCombo.addEventListener('click', () => {
+          state.v77CartItems = [
+            { product: 'goodhealth 好健康 深海鱼油胶囊 1000mg 400粒', qty: 2 },
+            { product: 'Clinicians 科立纯 鼻炎益生菌 30粒', qty: 3 },
+            { product: 'Swisse 斯维诗 钙+维生素D片 150片', qty: 2 },
+            { product: 'goodhealth 好健康 牡蛎精胶囊 60粒', qty: 2 }
+          ].filter(item => state.products.some(p => p.name === item.product));
+          renderSmartCartOptimizerStudio();
+          showToast('💊 已载入家庭自用常备保健品组合，对比 CW 与各华人店历史低价！');
+        });
+      }
+
+      const btnClearCart = document.getElementById('btnClearCartOptimizer');
+      if (btnClearCart) {
+        btnClearCart.addEventListener('click', () => {
+          state.v77CartItems = [];
+          renderSmartCartOptimizerStudio();
+        });
+      }
+
+      const cartTbody = document.getElementById('cartOptimizerTableBody');
+      if (cartTbody) {
+        cartTbody.addEventListener('input', (e) => {
+          const idxStr = e.target.getAttribute('data-cart-opt-qty');
+          if (idxStr !== null) {
+            const idx = parseInt(idxStr, 10);
+            if (state.v77CartItems && state.v77CartItems[idx]) {
+              state.v77CartItems[idx].qty = Math.max(1, Number(e.target.value) || 1);
+              renderSmartCartOptimizerStudio();
+            }
+          }
+        });
+      }
+
+      // 6. Analytics Tab: Freight & Discount Apportionment Buttons
+      const btnShipQty = document.getElementById('btnApportionShipByQty');
+      if (btnShipQty) {
+        btnShipQty.addEventListener('click', () => {
+          const totalShip = Math.max(0, Number(document.getElementById('billBatchShipInput').value) || 0);
+          const totalQty = (state.billItems || []).reduce((acc, r) => acc + (Number(r.qty) || 0), 0);
+          if (totalQty <= 0) return;
+          state.billItems.forEach(r => {
+            r.shipping = Number(((totalShip * (Number(r.qty) || 0)) / totalQty).toFixed(2));
+          });
+          renderBillTable();
+          showToast(`📦 已将总运费 ${totalShip} 按件数比例平摊到各商品行！`);
+        });
+      }
+
+      const btnShipVal = document.getElementById('btnApportionShipByVal');
+      if (btnShipVal) {
+        btnShipVal.addEventListener('click', () => {
+          const totalShip = Math.max(0, Number(document.getElementById('billBatchShipInput').value) || 0);
+          const totalVal = (state.billItems || []).reduce((acc, r) => acc + (Number(r.unitPrice) || 0) * (Number(r.qty) || 0), 0);
+          if (totalVal <= 0) return;
+          state.billItems.forEach(r => {
+            const rowVal = (Number(r.unitPrice) || 0) * (Number(r.qty) || 0);
+            r.shipping = Number(((totalShip * rowVal) / totalVal).toFixed(2));
+          });
+          renderBillTable();
+          showToast(`⚖️ 已将总运费 ${totalShip} 按各商品货值金额占比分摊！`);
+        });
+      }
+
+      const btnClearShip = document.getElementById('btnClearAllBillShip');
+      if (btnClearShip) {
+        btnClearShip.addEventListener('click', () => {
+          (state.billItems || []).forEach(r => { r.shipping = 0; });
+          renderBillTable();
+          showToast('🧹 已将对账单所有行运费清零（包邮结算）');
+        });
+      }
+
+      const btnActualCost = document.getElementById('btnBillUseActualCost');
+      if (btnActualCost) {
+        btnActualCost.addEventListener('click', () => {
+          const sym = document.getElementById('billCurrencySelect').value || '¥';
+          const isRmb = sym === '¥';
+          const liveRate = (window.cfConfigState && window.cfConfigState.liveRates && Number(window.cfConfigState.liveRates.NZD)) || 4.35;
+          (state.billItems || []).forEach(r => {
+            const series = collectProductVerifiedPriceSeries(r.product, 'ALL_VERIFIED');
+            if (series.length > 0) {
+              const latest = series[series.length - 1];
+              if (isRmb) {
+                r.unitPrice = latest.rmbPrice ? Number(latest.rmbPrice) : Number((latest.nzdPrice * (latest.exchangeRate || liveRate)).toFixed(2));
+              } else {
+                r.unitPrice = latest.nzdPrice ? Number(latest.nzdPrice) : Number((latest.rmbPrice / (latest.exchangeRate || liveRate)).toFixed(2));
+              }
+            }
+          });
+          renderBillTable();
+          showToast('🏷️ 已按最近一期真实订单已核实实付成本价填入！');
+        });
+      }
+
+      const btnMarkup5 = document.getElementById('btnBillMarkup5Pct');
+      if (btnMarkup5) {
+        btnMarkup5.addEventListener('click', () => {
+          (state.billItems || []).forEach(r => {
+            r.unitPrice = Number((Number(r.unitPrice || 0) * 1.05).toFixed(1));
+          });
+          renderBillTable();
+          showToast('📈 已在当前单价基础上 +5%（覆盖信用卡手续费与汇率磨损）');
+        });
+      }
+
+      const btnDisc95 = document.getElementById('btnBillDiscount95Pct');
+      if (btnDisc95) {
+        btnDisc95.addEventListener('click', () => {
+          (state.billItems || []).forEach(r => {
+            r.unitPrice = Number((Number(r.unitPrice || 0) * 0.95).toFixed(1));
+          });
+          renderBillTable();
+          showToast('🎁 已为当前账单所有商品应用亲友 95 折优惠！');
+        });
+      }
+
+      const btnRoundInt = document.getElementById('btnBillRoundInt');
+      if (btnRoundInt) {
+        btnRoundInt.addEventListener('click', () => {
+          (state.billItems || []).forEach(r => {
+            r.unitPrice = Math.round(Number(r.unitPrice) || 0);
+            r.shipping = Math.round(Number(r.shipping) || 0);
+          });
+          renderBillTable();
+          showToast('✅ 已将所有单价与运费四舍五入取整，方便亲友微信转账！');
+        });
+      }
+
+      // 7. Global delegated click handlers for V7.7 interactive buttons
+      document.addEventListener('click', (e) => {
+        const delCartBtn = e.target.closest('[data-del-cart-opt]');
+        if (delCartBtn) {
+          const idx = parseInt(delCartBtn.getAttribute('data-del-cart-opt'), 10);
+          if (state.v77CartItems && !isNaN(idx)) {
+            state.v77CartItems.splice(idx, 1);
+            renderSmartCartOptimizerStudio();
+          }
+          return;
+        }
+
+        const addCartCardBtn = e.target.closest('[data-add-cart-opt]');
+        if (addCartCardBtn) {
+          const pname = addCartCardBtn.getAttribute('data-add-cart-opt');
+          ensureDefaultV77CartItems();
+          const existing = state.v77CartItems.find(x => x.product === pname);
+          if (existing) existing.qty += 1;
+          else state.v77CartItems.push({ product: pname, qty: 2 });
+          const prodTabBtn = document.querySelector('.tab-btn[data-tab="products"]');
+          if (prodTabBtn && document.getElementById('tab-products').classList.contains('hidden')) {
+            prodTabBtn.click();
+          }
+          const studio = document.getElementById('smartCartOptimizerStudio');
+          if (studio) {
+            studio.classList.remove('hidden');
+            renderSmartCartOptimizerStudio();
+            studio.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          }
+          showToast(`🛒 已将「${pname}」加入跨店凑单比价计算器！`);
+          return;
+        }
+
+        const createFromCartBtn = e.target.closest('[data-create-order-from-cart]');
+        if (createFromCartBtn) {
+          const targetMerch = createFromCartBtn.getAttribute('data-create-order-from-cart');
+          const basis = (document.getElementById('cartOptPriceBasis') && document.getElementById('cartOptPriceBasis').value) || 'LOWEST';
+          openOrderModal(null, false);
+          const isCw = targetMerch === 'CW';
+          document.getElementById('formMerchant').value = targetMerch === 'ALL' ? '纽澳康源' : targetMerch;
+          document.getElementById('formRecipient').value = isCw ? 'HOME' : '朱峰';
+          document.getElementById('formCurrency').value = 'NZD';
+          if (isCw && typeof setOrderPurchaseMode === 'function') {
+            setOrderPurchaseMode(true, 'SELF_CARRY');
+          }
+          const cont = document.getElementById('formItemsContainer');
+          if (cont) cont.innerHTML = '';
+          (state.v77CartItems || []).forEach(it => {
+            const pInfo = getMerchantPricesForProduct(it.product, basis);
+            const merchants = ['华洋', '纽澳康源', '易康', 'CW'];
+            const valid = merchants.map(m => ({ m, d: pInfo.byMerchant[m] })).filter(x => x.d && x.d.nzd > 0).sort((a, b) => a.d.nzd - b.d.nzd);
+            const bestM = valid.length > 0 ? valid[0].m : '纽澳康源';
+            const bestP = valid.length > 0 ? valid[0].d.nzd : (pInfo.baseNzd || 0);
+            if (targetMerch === 'ALL' || bestM === targetMerch) {
+              addFormItemRow(it.product, it.qty, bestP);
+            }
+          });
+          updateFormOrderTotalPreview();
+          showToast(`⚡ 已按比价方案生成【${targetMerch === 'ALL' ? '合并总单' : targetMerch}】采购单草稿！`);
+          return;
+        }
+
+        const newOrderRecBtn = e.target.closest('[data-new-order-rec]');
+        if (newOrderRecBtn) {
+          const rec = newOrderRecBtn.getAttribute('data-new-order-rec');
+          openOrderModal(null, false);
+          document.getElementById('formRecipient').value = rec;
+          if (rec === 'HOME') applyQuickPresetToOrderModal('CW_SELF');
+          else showToast(`⚡ 已为您新建收件人为「${rec}」的采购单！`);
+          return;
+        }
+
+        const filterRecRadarBtn = e.target.closest('[data-filter-rec-from-radar]');
+        if (filterRecRadarBtn) {
+          const rec = filterRecRadarBtn.getAttribute('data-filter-rec-from-radar');
+          const fRec = document.getElementById('filterRecipient');
+          if (fRec) fRec.value = rec;
+          const ordTab = document.querySelector('.tab-btn[data-tab="orders"]');
+          if (ordTab) ordTab.click();
+          renderOrdersTab();
+          return;
+        }
+
+        const adjDoseBtn = e.target.closest('[data-adj-daily-dose]');
+        if (adjDoseBtn) {
+          const pname = adjDoseBtn.getAttribute('data-adj-daily-dose');
+          const p = getProductInfo(pname);
+          if (p) {
+            const cap = parseProductUnitCapacity(pname);
+            const cur = Number(p.dailyDose) || cap.defaultDaily;
+            const nextDose = cur >= 6 ? 1 : cur + 1;
+            p.dailyDose = nextDose;
+            saveState(`调整「${pname}」每日服用量为 ${nextDose}${cap.unit}`);
+            renderRestockForecast(getActiveOrders().filter(o => !o.cancelled));
+            showToast(`💊 已将「${pname}」每日用量设为 ${nextDose}${cap.unit}/天，余量周期已实时重算`);
+          }
+          return;
+        }
+
+        const setExpiryBtn = e.target.closest('[data-set-prod-expiry]');
+        if (setExpiryBtn) {
+          const pname = setExpiryBtn.getAttribute('data-set-prod-expiry');
+          const p = getProductInfo(pname);
+          if (p) {
+            document.getElementById('modalProductTitle').textContent = '📅 设定自用保健品保质期与每日用量';
+            document.getElementById('editProdOriginalName').value = p.name;
+            document.getElementById('editProdName').value = p.name;
+            document.getElementById('editProdCategory').value = p.category || '维生素/钙铁锌/保健';
+            document.getElementById('editProdNzdPrice').value = p.nzdPrice || '';
+            document.getElementById('editProdRmbPrice').value = p.rmbPrice || '';
+            document.getElementById('editProdRmbShip').value = p.rmbShipPerUnit || '';
+            if (document.getElementById('editProdTargetNzd')) document.getElementById('editProdTargetNzd').value = p.targetNzdPrice || '';
+            if (document.getElementById('editProdWeightG')) document.getElementById('editProdWeightG').value = p.unitWeightG || estimateProductUnitWeightG(p.name) || '';
+            if (document.getElementById('editProdDailyDose')) document.getElementById('editProdDailyDose').value = p.dailyDose || parseProductUnitCapacity(p.name).defaultDaily || '';
+            if (document.getElementById('editProdExpiryDate')) {
+              document.getElementById('editProdExpiryDate').value = p.expiryDate || '2027-06-30';
+              setTimeout(() => document.getElementById('editProdExpiryDate').focus(), 80);
+            }
+            document.getElementById('modalProduct').classList.remove('hidden');
+          }
+          return;
+        }
+
+        const shipStockBtn = e.target.closest('[data-ship-stockpile]');
+        if (shipStockBtn) {
+          const ordId = shipStockBtn.getAttribute('data-ship-stockpile');
+          const ord = state.orders.find(o => o.id === ordId);
+          if (ord) {
+            ord.storeDeliveryMode = 'COURIER';
+            ord.parcels = [];
+            openOrderModal(ord, false);
+            showToast('✈️ 请在下方「快递包裹与运单号」中填入拼箱寄出的国际快递单号并保存');
+          }
+          return;
+        }
+
+        const convStockSelfBtn = e.target.closest('[data-convert-stockpile-self]');
+        if (convStockSelfBtn) {
+          const ordId = convStockSelfBtn.getAttribute('data-convert-stockpile-self');
+          const ord = state.orders.find(o => o.id === ordId);
+          if (ord) {
+            recordBeforeAction(`将囤货订单 #${ord.orderNo} 转为本地自用入药箱`);
+            ord.storeDeliveryMode = 'SELF_CARRY';
+            ord.recipient = 'HOME';
+            ord.parcels = [{ courier: 'CW本地自用', trackingNo: 'CW到家/自提(已入药箱)', trackingUrl: '', deliveredDate: ord.orderDate || TODAY_STR }];
+            saveState(`囤货订单 #${ord.orderNo} 转为本地自用`);
+            renderAll();
+            showToast('🏠 已转为本地自用并同步至首页「自用家庭药箱」看板！');
+          }
+          return;
+        }
+      });
+    }
+
+
     if (document.readyState === 'loading') {
       document.addEventListener('DOMContentLoaded', initBackfillStudioEvents);
     } else {
@@ -16443,10 +17834,20 @@ export async function onRequestPost(context) {
         let parcelsRowsHtml = '';
         if (o.cancelled) {
           parcelsRowsHtml = `<span class="inline-block text-xs bg-rose-100 text-rose-800 font-semibold px-2 py-0.5 rounded">🚫 订单已取消</span>`;
-        } else if (o.storeDeliveryMode === 'SELF_CARRY' || (o.parcels && o.parcels.length === 1 && (o.parcels[0].courier === '门店自提' || o.parcels[0].courier === '自提/免单号'))) {
+        } else if (o.storeDeliveryMode === 'STOCKPILE_WAIT' || (o.parcels && o.parcels.length === 1 && o.parcels[0].courier === '本地囤货待寄')) {
           parcelsRowsHtml = `
             <div class="flex flex-wrap items-center justify-between gap-1.5">
-              <span class="text-xs bg-emerald-50 text-emerald-800 border border-emerald-200 font-bold px-2 py-0.5 rounded">🛍️ 自提/免单号 · ✅ ${o.orderDate} 已交付</span>
+              <span class="text-xs bg-amber-100 text-amber-950 border border-amber-300 font-bold px-2 py-0.5 rounded">📦 家中囤货暂存 · 待拼箱寄回</span>
+              <div class="flex items-center gap-1.5">
+                <button type="button" data-ship-stockpile="${o.id}" class="text-[11px] bg-emerald-700 text-white px-2 py-0.5 rounded font-bold">✈️ 填单号寄出</button>
+                <button type="button" data-convert-stockpile-self="${o.id}" class="text-[11px] text-blue-700 underline">转自用</button>
+              </div>
+            </div>`;
+        } else if (o.storeDeliveryMode === 'SELF_CARRY' || (o.parcels && o.parcels.length === 1 && (o.parcels[0].courier === '门店自提' || o.parcels[0].courier === '自提/免单号' || o.parcels[0].courier === 'CW本地自用'))) {
+          const isCwSelf = String(o.merchant || '').toUpperCase().includes('CW') || o.recipient === 'HOME';
+          parcelsRowsHtml = `
+            <div class="flex flex-wrap items-center justify-between gap-1.5">
+              <span class="text-xs ${isCwSelf ? 'bg-blue-50 text-blue-900 border-blue-200' : 'bg-emerald-50 text-emerald-800 border-emerald-200'} border font-bold px-2 py-0.5 rounded">${isCwSelf ? '🏠 本地自用/已入家庭药箱' : '🛍️ 自提/免单号'} · ✅ ${o.orderDate}</span>
               <button type="button" data-revert-selfpickup="${o.id}" class="text-[11px] text-slate-500 underline">改填快递单号</button>
             </div>`;
         } else if (!o.parcels || o.parcels.length === 0) {
@@ -17614,8 +19015,10 @@ export async function onRequestPost(context) {
         btnShareRo.addEventListener('click', () => generateRecipientReadonlyShareUrl());
       }
 
+
       checkAndApplyReadonlyRecipientMode();
       initV73CustomerNotifyAndMiniProgramEvents();
+      initV77AllFeaturesEvents();
 
       // Auto-pull on startup when running on Cloudflare Pages or when passcode is configured
       if (window.cfConfigState.autoPullOnLoad && (isRunningOnCloudflareDomain() || window.cfConfigState.passcode)) {
