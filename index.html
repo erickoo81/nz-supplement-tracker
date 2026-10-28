@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>纽澳跨境采购与快递追踪管家 V7.4</title>
+  <title>纽澳跨境采购与快递追踪管家 V7.5</title>
   <script src="https://cdn.tailwindcss.com/3.4.17"></script>
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
@@ -344,7 +344,7 @@
             </h1>
             <button type="button" id="btnHeaderVersionBadge" class="inline-flex items-center gap-1 text-xs bg-gradient-to-r from-amber-400 to-amber-300 hover:from-amber-300 hover:to-amber-200 text-slate-950 font-extrabold px-2.5 py-0.5 rounded-full shadow-xs transition cursor-pointer" title="当前版本 V7.1（Cloudflare KV 全域同步修复与智能诊断 · 历史时间机器 · 实时汇率 · 亲友只读对账单）· 点击打开个性化与版本中心">
               <span id="uiIcon-appVersion">✨</span>
-              <span id="uiText-appVersion">V7.4</span>
+              <span id="uiText-appVersion">V7.5</span>
             </button>
             <button type="button" id="btnHeaderCfStatusPill" class="inline-flex items-center gap-1 text-[11px] bg-emerald-900/90 hover:bg-emerald-800 text-emerald-100 border border-emerald-600/70 font-semibold px-2.5 py-0.5 rounded-full transition cursor-pointer" title="点击打开 Cloudflare KV 边缘云同步设置 (方案B)">
               <span id="headerCfStatusDot" class="w-2 h-2 rounded-full bg-amber-400 inline-block"></span>
@@ -3000,9 +3000,10 @@
       cardRadius: '1rem'
     };
 
+    const CURRENT_APP_VERSION = 'V7.5';
     const DEFAULT_UI_CUSTOM_LABELS = {
       appTitle: { icon: '', text: '纽澳跨境采购与快递追踪管家', note: '支持一单多包拆单追踪 · 采购单价与运费核算 · 电脑与手机多端同步', labelTitle: '系统主标题 & 副标题说明', group: 'header', emojiPresets: ['🇳🇿', '🦘', '🌿', '📦', '🛡️'] },
-      appVersion: { icon: '🚀', text: 'V7.4', note: '当前版本 V7.4（手机截图OCR智能识别 · 发客户通知修复 · 手机端免横滑竖排卡片视图）· 点击打开个性化与版本中心', labelTitle: '顶部版本号标识 (点击可打开设置)', group: 'header', emojiPresets: ['🚀', '✨', '🏷️', '💎', '🔥'] },
+            appVersion: { icon: '🚀', text: 'V7.5', note: '当前版本 V7.5（高精手机截图OCR商品库匹配 · 云端拉取版本号防回退锁 · 发客户通知与手机竖排卡片）· 点击打开个性化与版本中心', labelTitle: '顶部版本号标识 (点击可打开设置)', group: 'header', emojiPresets: ['🚀', '✨', '🏷️', '💎', '🔥'] },
       btnNewOrder: { icon: '＋', text: '新增订单', note: '新建采购订单（内含网页粘贴自动填单 / 门店直购录入 / 复制上一单）', labelTitle: '顶部按钮 1：新增订单', group: 'topbar', emojiPresets: ['＋', '🛒', '✍️', '⚡', '🛍️'] },
       btnBatchImport: { icon: '📥', text: '智能导单', note: '专用于导入新采购订单：Excel表格差异导入 / 网页订单粘贴解析 / 浏览器抓单小书签', labelTitle: '顶部按钮 2：智能导单', group: 'topbar', emojiPresets: ['📥', '📂', '📊', '⚡', '📑'] },
       btnSyncBackup: { icon: '☁️', text: '云端与备份', note: '专用于多端云同步与备份：Cloudflare KV 实时云同步 / 历史时间机器回滚 / 本地 JSON 备份包', labelTitle: '顶部按钮 3：云端与备份', group: 'topbar', emojiPresets: ['☁️', '🔄', '📲', '💾', '🛡️'] },
@@ -3054,10 +3055,14 @@
           if (saved[k].note !== undefined) base[k].note = String(saved[k].note);
         }
       });
-      if (base.appVersion && ['V6.0', 'v6.0', 'V6.1', 'v6.1', 'V6.2', 'v6.2', 'V7.0', 'v7.0', 'V7.1', 'v7.1', 'V7.2', 'v7.2'].includes(base.appVersion.text)) {
-        base.appVersion.text = 'V7.3';
-        base.appVersion.icon = '🚀';
-        base.appVersion.note = DEFAULT_UI_CUSTOM_LABELS.appVersion.note;
+      // Always lock standard version tags (V6.x / V7.x from localStorage or Cloudflare KV pull) to CURRENT_APP_VERSION so cloud auto-pull never reverts the version badge!
+      if (base.appVersion) {
+        const savedVer = String(base.appVersion.text || '').trim();
+        if (!savedVer || /^[vV]?\d+\.\d+/.test(savedVer)) {
+          base.appVersion.text = CURRENT_APP_VERSION;
+          base.appVersion.icon = '🚀';
+          base.appVersion.note = DEFAULT_UI_CUSTOM_LABELS.appVersion.note;
+        }
       }
       if (base.btnBatchImport && base.btnBatchImport.text === '批量导入') {
         base.btnBatchImport.text = '智能导单';
@@ -7603,6 +7608,8 @@
         const editOrdBtn = e.target.closest('[data-edit-order]');
         if (editOrdBtn) {
           const ordId = editOrdBtn.getAttribute('data-edit-order');
+          const qvModal = document.getElementById('modalOrderQuickView');
+          if (qvModal) qvModal.classList.add('hidden');
           const ord = getActiveOrders().find(o => o.id === ordId);
           if (ord) openOrderModal(ord, false);
           return;
@@ -8284,7 +8291,7 @@
     function buildFullSystemExportObject(options = {}) {
         const obj = {
           exportedAt: new Date().toISOString(),
-          appVersion: 'V7.4',
+          appVersion: CURRENT_APP_VERSION,
           orders: state.orders,
           sheet1Orders: state.sheet1Orders,
           products: state.products,
@@ -11536,7 +11543,7 @@
                 origVal: origUp,
                 origDisplay: `${curSymbol(origCur)}${origUp.toFixed(2)} /件`,
                 webVal: webUp,
-                webDisplay: `${activeSym}${webUp.toFixed(2)} /件 (网页核验一致 · ${srcHint})`,
+                webDisplay: `${activeSym}${webUp.toFixed(2)} /件 (网页核验一致 · ${dualPriceDetail})`,
                 editableType: 'price',
                 currencySymbol: activeSym,
                 choice: 'web',
@@ -13524,7 +13531,7 @@
       const labels = mergeUiCustomLabels(state.uiCustomLabels);
 
       const groupMeta = [
-        { id: 'header', title: '一、系统顶部标题与版本号标识 (V7.3)', desc: '修改左上角系统主名称、版本号徽章与副标题说明' },
+        { id: 'header', title: '一、系统顶部标题与版本号标识 (V7.5)', desc: '修改左上角系统主名称、版本号徽章与副标题说明' },
         { id: 'topbar', title: '二、顶部操作栏高频按钮 (6组)', desc: '自由调整顶部操作按钮的 Emoji 图标、简短名称与鼠标悬停提示语' },
         { id: 'nav', title: '三、主导航栏四大核心模块', desc: '定制四大主模块的图标、Tab 标题与功能注释' },
         { id: 'kpi', title: '四、首页 5 大数据看板卡片', desc: '定制快递追踪工作台顶部 5 个数据统计卡的图标、标题与底部注释说明' }
@@ -14469,15 +14476,14 @@ export async function onRequestPost(context) {
       const banner = document.getElementById('readonlyCustomerBanner');
       const badge = document.getElementById('readonlyCustomerNameBadge');
       const adminIdsToHide = [
-        'btnOpenNewOrderModal',
+        'btnOpenNewOrder',
         'btnOpenSmartImportModal',
         'btnOpenSyncModal',
-        'btnOpenAppSettingsModal',
-        'btnTopUndo',
-        'btnTopRedo',
-        'btnTopCommitSave',
-        'btnTopDiscardChanges',
-        'unsavedChangesBanner',
+        'btnOpenScrapeRulesModalHeader',
+        'btnHeaderUndo',
+        'btnHeaderDiscard',
+        'btnHeaderSave',
+        'unsavedGlobalBanner',
         'unreadGlobalBanner',
         'filterRecipient'
       ];
@@ -15025,149 +15031,348 @@ export async function onRequestPost(context) {
       }
     }
 
-    // Clean OCR artifacts (spaces between Chinese characters, full-width symbols, broken decimals)
+    // Clean OCR artifacts (spaces between Chinese characters, full-width symbols, broken decimals, common OCR homoglyphs)
     function cleanOcrRawText(rawText) {
       let s = String(rawText || '');
       // Remove spaces between CJK characters repeatedly
-      for (let pass = 0; pass < 3; pass++) {
+      for (let pass = 0; pass < 4; pass++) {
         s = s.replace(/([\u4e00-\u9fa5])\s+([\u4e00-\u9fa5])/g, '$1$2');
       }
-      // Fix common OCR symbol & number confusions
-      s = s.replace(/[￥¥]\s*(\d+)\s*[.。·]\s*(\d{1,2})/g, '¥$1.$2');
+      // Fix common Chinese OCR character misreads in NZ supplement screenshots
+      const ocrTypos = [
+        [/好健[庚康广庆]/g, '好健康'],
+        [/[澳懊奥]佳[宝室宗]/g, '澳佳宝'],
+        [/[蜜密]纽[康庚]/g, '蜜纽康'],
+        [/麦[卢户芦]卡/g, '麦卢卡'],
+        [/深海[鱼渔][油抽由]/g, '深海鱼油'],
+        [/[鱼渔][油抽由]/g, '鱼油'],
+        [/奶[蓟蓟][草早]/g, '奶蓟草'],
+        [/护[肝杆][片斤宝]/g, '护肝片'],
+        [/蔓越[莓莓梅]/g, '蔓越莓'],
+        [/卵[磷麟]脂/g, '卵磷脂'],
+        [/辅[酶梅]\s*[Q0O]1[0O]/gi, '辅酶Q10'],
+        [/MG[0O]/gi, 'MGO'],
+        [/UMF\s*1[0O]/gi, 'UMF10'],
+        [/1[0O][0O][0O]\s*mg/gi, '1000mg'],
+        [/15[0O][0O]\s*mg/gi, '1500mg'],
+        [/5[0O][0O]\s*g/gi, '500g'],
+        [/25[0O]\s*g/gi, '250g'],
+        [/4[0O][0O]\s*粒/g, '400粒'],
+        [/2[0O][0O]\s*粒/g, '200粒'],
+        [/12[0O]\s*粒/g, '120粒']
+      ];
+      ocrTypos.forEach(([reg, rep]) => { s = s.replace(reg, rep); });
+
+      // Fix currency symbol & number confusions (e.g. ¥ 185 . 00 or Y185.00 or 半185.00)
+      s = s.replace(/(?:[￥¥]|(?<![A-Za-z])[YУy羊半](?=\s*\d{2,4}[.。·]\d{1,2}))\s*(\d+)\s*[.。·]\s*(\d{1,2})/g, '¥$1.$2');
+      s = s.replace(/[￥¥]\s*(\d{2,4})(?!\d)/g, '¥$1');
       s = s.replace(/\$\s*(\d+)\s*[.。·]\s*(\d{1,2})/g, '$$$1.$2');
-      s = s.replace(/(\d)\s*[xX×＊*]\s*(\d{1,3})(?!\d)/g, '$1 × $2');
-      s = s.replace(/MG0/gi, 'MGO');
-      s = s.replace(/UMF\s*1O/gi, 'UMF10');
+      s = s.replace(/(\d)\s*[xX×＊*]\s*(\d{1,2})(?!\d)/g, '$1 × $2');
       return s;
     }
 
-    // Fuzzy match products from state.products when OCR text has partial or noisy product titles
-    function extractFuzzyCatalogItemsFromOcrText(cleanedText, preferredCurrency) {
-      const lines = String(cleanedText || '').split(/\r?\n/).map(l => l.trim()).filter(Boolean);
-      const cur = preferredCurrency || 'CNY';
+    // Mask out product spec numbers (e.g. 500g, 400粒, 1500mg, MGO263+, UMF10+, 4段, dates, phones) so they are NEVER misread as prices or quantities
+    function maskSpecsForPriceQtyExtraction(text) {
+      return String(text || '')
+        .replace(/202\d[-/.年]\d{1,2}[-/.月]\d{1,2}日?/g, ' [DATE] ')
+        .replace(/\b1[3-9]\d{9}\b/g, ' [PHONE] ')
+        .replace(/\b\d{6,20}\b/g, ' [LONGID] ')
+        .replace(/(?:MGO|UMF|SPF|Q|D|B)\s*\d{1,4}\+?/gi, ' [SPEC] ')
+        .replace(/\d{1,4}\s*(?:\+\s*)?(?:mg|g|kg|ml|l|粒|片|袋|包|滴|亿|段|月|岁|只)(?:\s*[*×xX]\s*\d{1,2}\s*(?:袋|罐|瓶|盒|支)?)?/gi, ' [SPEC] ')
+        .replace(/\b(?:1000|1500|2000|2500|500|263|400|250|180|150|120|90|60|30)\+?(?=\s|$)/g, (m) => ' ' + m + ' ');
+    }
+
+    // Normalize any raw or partial product name to the closest canonical catalog product in state.products
+    function normalizeScrapedProductName(rawTitle, preferredPrice = 0, preferredCurrency = 'CNY') {
+      const cleanTitle = cleanOcrRawText(rawTitle || '').replace(/^[\d.\-*•、\s]+/, '').trim();
+      if (!cleanTitle) return '保健品';
+      const matched = findBestCatalogProductMatch(cleanTitle, preferredPrice, preferredCurrency);
+      return matched ? matched.product.name : cleanTitle;
+    }
+
+    // Score a text line or snippet against all products in state.products using Brand + Alias + Spec + Bigram + Price proximity
+    function findBestCatalogProductMatch(lineText, candidatePrice = 0, preferredCurrency = 'CNY') {
+      const s = String(lineText || '').toLowerCase();
+      if (!s || s.length < 2) return null;
+
       const keywordRules = [
-        { keys: ['263', '1kg'], targetSub: 'MGO263+ UMF10+ 1kg' },
-        { keys: ['263', '1000g'], targetSub: 'MGO263+ UMF10+ 1kg' },
-        { keys: ['263'], targetSub: 'MGO263+ UMF10+ 500g' },
-        { keys: ['蜜纽康', '400'], targetSub: 'Mgo400+' },
-        { keys: ['mgo', '400'], targetSub: 'Mgo400+' },
-        { keys: ['蜜纽康', '250'], targetSub: 'Mgo250+' },
-        { keys: ['蜜纽康', '100'], targetSub: 'Mgo100+' },
-        { keys: ['蜜纽康'], targetSub: 'MGO263+ UMF10+ 500g' },
-        { keys: ['好健康', '1500'], targetSub: '好健康 深海鱼油胶囊 1500mg' },
-        { keys: ['goodhealth', '1500'], targetSub: '好健康 深海鱼油胶囊 1500mg' },
-        { keys: ['好健康', '鱼油'], targetSub: '好健康 深海鱼油胶囊 1000mg' },
-        { keys: ['好健康', '液体钙'], targetSub: '好健康 液体钙' },
-        { keys: ['澳佳宝', '三倍'], targetSub: '澳佳宝 三倍鱼油' },
-        { keys: ['澳佳宝', '鱼油'], targetSub: '澳佳宝 深海鱼油胶囊1000mg' },
-        { keys: ['blackmores', '鱼油'], targetSub: '澳佳宝 深海鱼油胶囊1000mg' },
-        { keys: ['钙镁'], targetSub: '活性钙镁片+D3' },
-        { keys: ['澳佳宝', '维', 'c'], targetSub: '活性维生素C 1000mg' },
-        { keys: ['绵羊油'], targetSub: '绵羊油保湿霜' },
-        { keys: ['安佳', '脱脂'], targetSub: '贵族高钙成人脱脂奶粉' },
-        { keys: ['安佳', '贵族', '全脂'], targetSub: '贵族高钙成人全脂奶粉' },
-        { keys: ['安佳', '儿童'], targetSub: '安佳 儿童 益生菌' },
-        { keys: ['安佳'], targetSub: '安佳 成人全脂奶粉 1kg*6袋' },
-        { keys: ['a2', '4段'], targetSub: 'A2 白金版婴幼儿配方奶粉 4段' },
-        { keys: ['爱他美', '白金', '4段'], targetSub: '爱他美 白金版铂金装 婴幼儿配方奶粉 4段' },
-        { keys: ['爱他美', '铂金', '4段'], targetSub: '爱他美 白金版铂金装 婴幼儿配方奶粉 4段' },
-        { keys: ['爱他美', '1段'], targetSub: '爱他美 金装婴儿配方奶粉(0-6月) 1段' },
-        { keys: ['爱他美', '2段'], targetSub: '爱他美 金装澳洲版 婴幼儿配方奶粉 2段' },
-        { keys: ['爱他美', '3段'], targetSub: '爱他美 金装澳洲版 婴幼儿配方奶粉 3段' },
-        { keys: ['爱他美', '4段'], targetSub: '爱他美 金装澳洲版 婴幼儿配方奶粉 4段' },
-        { keys: ['乳钙'], targetSub: '天然乳钙液体钙' },
-        { keys: ['bioisland'], targetSub: '天然乳钙液体钙' },
-        { keys: ['卵磷脂'], targetSub: '大豆卵磷脂软胶囊' },
-        { keys: ['奶蓟草', '120'], targetSub: '奶蓟草护肝片 护肝宝 120粒' },
-        { keys: ['护肝', '120'], targetSub: '奶蓟草护肝片 护肝宝 120粒' },
-        { keys: ['奶蓟草'], targetSub: '奶蓟草护肝片 护肝宝 200粒' },
-        { keys: ['护肝'], targetSub: '奶蓟草护肝片 护肝宝 200粒' },
-        { keys: ['蔓越莓'], targetSub: '蔓越莓胶囊' },
-        { keys: ['汤普森', '免疫'], targetSub: '儿童营养免疫片' },
-        { keys: ['贺寿利', '咀嚼'], targetSub: '儿童综合维生素及矿物质咀嚼片' },
-        { keys: ['贺寿利', '牛奶片'], targetSub: '牛奶片 香草味' },
-        { keys: ['益生菌', '500亿'], targetSub: '益生菌胶囊 500亿' },
-        { keys: ['益生菌'], targetSub: '日常呵护益生菌胶囊' },
-        { keys: ['辅酶'], targetSub: '辅酶Q10' },
-        { keys: ['q10'], targetSub: '辅酶Q10' },
-        { keys: ['芦荟'], targetSub: '97%芦荟凝胶' },
-        { keys: ['木瓜膏'], targetSub: '神奇番木瓜膏' },
-        { keys: ['泡腾片'], targetSub: '高含量维生素C泡腾片' },
-        { keys: ['润喉糖'], targetSub: '蜂胶润喉糖' },
-        { keys: ['蜂胶牙膏'], targetSub: '天然蜂胶牙膏' },
-        { keys: ['红印'], targetSub: '天然蜂胶牙膏' },
-        { keys: ['4倍', '鱼油'], targetSub: '4倍浓缩野生深海无腥味鱼油' },
-        { keys: ['扑热息痛'], targetSub: 'Maxigesic 扑热息痛' },
-        { keys: ['maxigesic'], targetSub: 'Maxigesic 扑热息痛' },
-        { keys: ['补钙', '150'], targetSub: '钙+维生素D 成人孕妇老人补钙' }
+        { keys: ['263', '1kg'], targetSub: 'MGO263+ UMF10+ 1kg', weight: 100 },
+        { keys: ['263', '1000'], targetSub: 'MGO263+ UMF10+ 1kg', weight: 100 },
+        { keys: ['263'], targetSub: 'MGO263+ UMF10+ 500g', weight: 90 },
+        { keys: ['umf10', '1kg'], targetSub: 'MGO263+ UMF10+ 1kg', weight: 95 },
+        { keys: ['umf10'], targetSub: 'MGO263+ UMF10+ 500g', weight: 85 },
+        { keys: ['400', '蜂蜜'], targetSub: 'Mgo400+', weight: 95 },
+        { keys: ['蜜纽康', '400'], targetSub: 'Mgo400+', weight: 95 },
+        { keys: ['mgo', '400'], targetSub: 'Mgo400+', weight: 95 },
+        { keys: ['蜜纽康', '250'], targetSub: 'Mgo250+', weight: 95 },
+        { keys: ['mgo', '250'], targetSub: 'Mgo250+', weight: 92 },
+        { keys: ['蜜纽康', '100'], targetSub: 'Mgo100+', weight: 95 },
+        { keys: ['mgo', '100'], targetSub: 'Mgo100+', weight: 92 },
+        { keys: ['蜜纽康'], targetSub: 'MGO263+ UMF10+ 500g', weight: 78 },
+        { keys: ['麦卢卡'], targetSub: 'MGO263+ UMF10+ 500g', weight: 75 },
+        { keys: ['好健康', '1500'], targetSub: '好健康 深海鱼油胶囊 1500mg', weight: 98 },
+        { keys: ['good', '1500'], targetSub: '好健康 深海鱼油胶囊 1500mg', weight: 96 },
+        { keys: ['鱼油', '1500'], targetSub: '好健康 深海鱼油胶囊 1500mg', weight: 92 },
+        { keys: ['好健康', '鱼油'], targetSub: '好健康 深海鱼油胶囊 1000mg', weight: 88 },
+        { keys: ['good', '鱼油'], targetSub: '好健康 深海鱼油胶囊 1000mg', weight: 86 },
+        { keys: ['好健康', '液体钙'], targetSub: '好健康 液体钙', weight: 95 },
+        { keys: ['澳佳宝', '三倍'], targetSub: '澳佳宝 三倍鱼油', weight: 98 },
+        { keys: ['三倍', '鱼油'], targetSub: '澳佳宝 三倍鱼油', weight: 95 },
+        { keys: ['4倍', '鱼油'], targetSub: '4倍浓缩野生深海无腥味鱼油', weight: 98 },
+        { keys: ['四倍', '鱼油'], targetSub: '4倍浓缩野生深海无腥味鱼油', weight: 98 },
+        { keys: ['澳佳宝', '鱼油'], targetSub: '澳佳宝 深海鱼油胶囊1000mg', weight: 90 },
+        { keys: ['blackmores', '鱼油'], targetSub: '澳佳宝 深海鱼油胶囊1000mg', weight: 90 },
+        { keys: ['钙镁'], targetSub: '活性钙镁片+D3', weight: 95 },
+        { keys: ['澳佳宝', '维'], targetSub: '活性维生素C 1000mg', weight: 88 },
+        { keys: ['绵羊油'], targetSub: '绵羊油保湿霜', weight: 95 },
+        { keys: ['lanolin'], targetSub: '绵羊油保湿霜', weight: 90 },
+        { keys: ['安佳', '脱脂'], targetSub: '贵族高钙成人脱脂奶粉', weight: 96 },
+        { keys: ['贵族', '脱脂'], targetSub: '贵族高钙成人脱脂奶粉', weight: 96 },
+        { keys: ['安佳', '贵族'], targetSub: '贵族高钙成人全脂奶粉', weight: 92 },
+        { keys: ['安佳', '儿童'], targetSub: '安佳 儿童 益生菌', weight: 95 },
+        { keys: ['安佳', '6袋'], targetSub: '安佳 成人全脂奶粉 1kg*6袋', weight: 96 },
+        { keys: ['安佳'], targetSub: '安佳 成人全脂奶粉 1kg*6袋', weight: 78 },
+        { keys: ['a2', '4段'], targetSub: 'A2 白金版婴幼儿配方奶粉 4段', weight: 96 },
+        { keys: ['爱他美', '白金'], targetSub: '爱他美 白金版铂金装 婴幼儿配方奶粉 4段', weight: 96 },
+        { keys: ['爱他美', '铂金'], targetSub: '爱他美 白金版铂金装 婴幼儿配方奶粉 4段', weight: 96 },
+        { keys: ['爱他美', '1段'], targetSub: '爱他美 金装婴儿配方奶粉(0-6月) 1段', weight: 95 },
+        { keys: ['爱他美', '0-6'], targetSub: '爱他美 金装婴儿配方奶粉(0-6月) 1段', weight: 95 },
+        { keys: ['爱他美', '2段'], targetSub: '爱他美 金装澳洲版 婴幼儿配方奶粉 2段', weight: 95 },
+        { keys: ['爱他美', '3段'], targetSub: '爱他美 金装澳洲版 婴幼儿配方奶粉 3段', weight: 95 },
+        { keys: ['爱他美', '4段'], targetSub: '爱他美 金装澳洲版 婴幼儿配方奶粉 4段', weight: 92 },
+        { keys: ['乳钙'], targetSub: '天然乳钙液体钙', weight: 94 },
+        { keys: ['bio', '钙'], targetSub: '天然乳钙液体钙', weight: 92 },
+        { keys: ['卵磷脂'], targetSub: '大豆卵磷脂软胶囊', weight: 95 },
+        { keys: ['奶蓟草', '120'], targetSub: '奶蓟草护肝片 护肝宝 120粒', weight: 96 },
+        { keys: ['护肝', '120'], targetSub: '奶蓟草护肝片 护肝宝 120粒', weight: 96 },
+        { keys: ['奶蓟草'], targetSub: '奶蓟草护肝片 护肝宝 200粒', weight: 90 },
+        { keys: ['护肝'], targetSub: '奶蓟草护肝片 护肝宝 200粒', weight: 88 },
+        { keys: ['蔓越莓'], targetSub: '蔓越莓胶囊', weight: 95 },
+        { keys: ['汤普森', '免疫'], targetSub: '儿童营养免疫片', weight: 95 },
+        { keys: ['免疫片'], targetSub: '儿童营养免疫片', weight: 90 },
+        { keys: ['贺寿利', '咀嚼'], targetSub: '儿童综合维生素及矿物质咀嚼片', weight: 95 },
+        { keys: ['牛奶片'], targetSub: '牛奶片 香草味', weight: 95 },
+        { keys: ['500亿'], targetSub: '益生菌胶囊 500亿', weight: 95 },
+        { keys: ['益生菌'], targetSub: '日常呵护益生菌胶囊', weight: 86 },
+        { keys: ['辅酶'], targetSub: '辅酶Q10', weight: 95 },
+        { keys: ['q10'], targetSub: '辅酶Q10', weight: 95 },
+        { keys: ['芦荟'], targetSub: '97%芦荟凝胶', weight: 95 },
+        { keys: ['木瓜膏'], targetSub: '神奇番木瓜膏', weight: 95 },
+        { keys: ['泡腾片'], targetSub: '高含量维生素C泡腾片', weight: 95 },
+        { keys: ['润喉糖'], targetSub: '蜂胶润喉糖', weight: 95 },
+        { keys: ['蜂胶牙膏'], targetSub: '天然蜂胶牙膏', weight: 95 },
+        { keys: ['红印', '牙膏'], targetSub: '天然蜂胶牙膏', weight: 95 },
+        { keys: ['扑热息痛'], targetSub: 'Maxigesic 扑热息痛', weight: 96 },
+        { keys: ['maxigesic'], targetSub: 'Maxigesic 扑热息痛', weight: 96 },
+        { keys: ['孕妇', '钙'], targetSub: '钙+维生素D 成人孕妇老人补钙', weight: 92 },
+        { keys: ['老人', '钙'], targetSub: '钙+维生素D 成人孕妇老人补钙', weight: 92 }
       ];
 
-      const results = [];
-      const usedLines = new Set();
+      for (const rule of keywordRules) {
+        if (rule.keys.every(k => s.includes(k))) {
+          const catalogProds = (state.products && state.products.length > 0) ? state.products : (INITIAL_DATA.products || []);
+          const found = catalogProds.find(p => p.name.includes(rule.targetSub));
+          if (found) return { product: found, score: rule.weight };
+        }
+      }
 
-      for (let i = 0; i < lines.length; i++) {
-        if (usedLines.has(i)) continue;
-        const lineLower = lines[i].toLowerCase();
-        // Skip pure summary lines
-        if (/^(收货人|收件人|订单编号|订单号|下单时间|创建时间|支付方式|快递公司|物流单号|实付款|商品总额|运费)/.test(lines[i])) {
-          continue;
+      // Character bigram + token fuzzy scoring across state.products
+      const cleanCjk = s.replace(/[^\u4e00-\u9fa5a-z0-9]/g, '');
+      if (cleanCjk.length < 3) return null;
+
+      let bestProd = null;
+      let bestScore = 0;
+
+      const catalogProdsAll = (state.products && state.products.length > 0) ? state.products : (INITIAL_DATA.products || []);
+      for (const p of catalogProdsAll) {
+        const pLower = p.name.toLowerCase();
+        const pCjk = pLower.replace(/[^\u4e00-\u9fa5a-z0-9]/g, '');
+        let score = 0;
+
+        // 1. Core token match
+        const tokens = pLower.split(/\s+/).filter(t => t.length >= 2);
+        for (const tk of tokens) {
+          if (s.includes(tk)) {
+            score += /^(\d+g|\d+mg|\d+粒|\d+片|\d+段)$/i.test(tk) ? 14 : 26;
+          }
         }
 
-        let matchedProd = null;
-        for (const rule of keywordRules) {
-          if (rule.keys.every(k => lineLower.includes(k))) {
-            matchedProd = state.products.find(p => p.name.includes(rule.targetSub)) || { name: rule.targetSub };
+        // 2. Chinese character 2-gram overlap (handles partial OCR corruption)
+        const cjkOnly = p.name.replace(/[^\u4e00-\u9fa5]/g, '');
+        if (cjkOnly.length >= 2) {
+          let bigramHits = 0;
+          for (let j = 0; j < cjkOnly.length - 1; j++) {
+            const bg = cjkOnly.slice(j, j + 2);
+            if (cleanCjk.includes(bg)) bigramHits++;
+          }
+          score += bigramHits * 11;
+        }
+
+        // 3. Price proximity bonus if candidatePrice is known
+        if (score >= 22 && candidatePrice > 0) {
+          const refP = preferredCurrency === 'CNY' ? (Number(p.rmbPrice) || 0) : (Number(p.nzdPrice) || 0);
+          if (refP > 0 && Math.abs(refP - candidatePrice) / refP <= 0.18) {
+            score += 18;
+          }
+        }
+
+        if (score > bestScore) {
+          bestScore = score;
+          bestProd = p;
+        }
+      }
+
+      if (bestProd && bestScore >= 28) {
+        return { product: bestProd, score: bestScore };
+      }
+      return null;
+    }
+
+    // Extract unitPrice and qty safely from a 1-3 line window around a matched product without confusing product specs (500g, 400粒)
+    function extractSafePriceAndQtyFromWindow(windowLines, matchedProd, preferredCurrency = 'CNY') {
+      const cur = preferredCurrency || 'CNY';
+      const joinedRaw = windowLines.join('  ');
+      const masked = maskSpecsForPriceQtyExtraction(joinedRaw);
+
+      let unitPrice = 0;
+      let qty = 1;
+
+      const pInfo = matchedProd ? getProductInfo(matchedProd.name) : null;
+      const catalogRefPrice = matchedProd
+        ? (getHistoricalPriceByDate(matchedProd.name, TODAY_STR, cur) ||
+           (cur === 'CNY' ? (pInfo && pInfo.rmbPrice ? Number(pInfo.rmbPrice) : 0) : (pInfo && pInfo.nzdPrice ? Number(pInfo.nzdPrice) : 0)) || 0)
+        : 0;
+
+      // Normalize potential missing decimal from OCR (e.g. 18500 -> 185.00)
+      const sanitizeOcrPrice = (val) => {
+        let num = parseFloat(val) || 0;
+        if (num <= 0) return 0;
+        if (num >= 1200 && num < 200000) {
+          const div100 = num / 100;
+          if (catalogRefPrice > 0 && Math.abs(div100 - catalogRefPrice) / catalogRefPrice < 0.45) {
+            return Number(div100.toFixed(2));
+          }
+          if (num >= 1800 && div100 >= 15 && div100 <= 1200) {
+            return Number(div100.toFixed(2));
+          }
+        }
+        return num;
+      };
+
+      // Pattern 1: Explicit price × qty (e.g. ¥185.00 × 2 or 185.00 x 2)
+      const pqMatch = masked.match(/(?:¥|￥|NZ\$|\$)?\s*(\d{2,6}(?:\.\d{1,2})?)\s*[xX×＊*]\s*(\d{1,2})(?!\d)/i);
+      if (pqMatch) {
+        unitPrice = sanitizeOcrPrice(pqMatch[1]);
+        qty = Math.min(50, Math.max(1, parseInt(pqMatch[2], 10) || 1));
+      } else {
+        // Pattern 2: Separate quantity marker (e.g. × 2, x2, 数量: 2, 2罐/2瓶/2件)
+        const qtyMatches = [...masked.matchAll(/(?:[xX×＊*]\s*(\d{1,2})|(?:数量|件数)\s*[:：]?\s*(\d{1,2})|\b(\d{1,2})\s*(?:件|罐|瓶|盒))(?!\d)/gi)];
+        if (qtyMatches.length > 0) {
+          const qm = qtyMatches[0];
+          const qVal = parseInt(qm[1] || qm[2] || qm[3], 10) || 1;
+          if (qVal >= 1 && qVal <= 36) qty = qVal;
+        }
+
+        // Pattern 3: Currency-prefixed or decimal price (excluding 0.00 shipping)
+        const priceMatches = [...masked.matchAll(/(?:(?:¥|￥|NZ\$|\$)\s*(\d{1,6}(?:\.\d{1,2})?)|\b(\d{2,4}\.\d{2})\b)/gi)];
+        for (const pm of priceMatches) {
+          const rawCandidate = sanitizeOcrPrice(pm[1] || pm[2]);
+          if (rawCandidate > 5 && rawCandidate < 2500) {
+            unitPrice = rawCandidate;
             break;
           }
         }
+      }
 
-        if (!matchedProd) {
-          // Direct substring check against state.products
-          for (const p of state.products) {
-            const coreTokens = p.name.split(/\s+/).filter(t => t.length >= 2 && !/^(\d+g|\d+粒|\d+片)$/i.test(t));
-            const hitCount = coreTokens.filter(t => lineLower.includes(t.toLowerCase())).length;
-            if (hitCount >= 2) {
-              matchedProd = p;
-              break;
-            }
-          }
-        }
-
-        if (matchedProd) {
-          // Look for price & qty on this line or the next 1-2 lines
-          const windowText = [lines[i], lines[i + 1] || '', lines[i + 2] || ''].join(' ');
-          let qty = 1;
-          let unitPrice = 0;
-
-          const pqMatch = windowText.match(/(?:¥|￥|NZ\$|\$)?\s*(\d{1,4}(?:\.\d{1,2})?)\s*[x×*]\s*(\d{1,3})(?!\d)/i);
-          if (pqMatch) {
-            unitPrice = parseFloat(pqMatch[1]) || 0;
-            qty = parseInt(pqMatch[2], 10) || 1;
-          } else {
-            const qtyMatch = windowText.match(/(?:[x×*]\s*(\d{1,3})|数量\s*[:：]?\s*(\d{1,3})|(\d{1,2})\s*(?:件|罐|瓶|盒|支|袋))(?!\d)/i);
-            if (qtyMatch) {
-              qty = parseInt(qtyMatch[1] || qtyMatch[2] || qtyMatch[3], 10) || 1;
-            }
-            const priceMatch = windowText.match(/(?:¥|￥|NZ\$|\$)\s*(\d{1,4}(?:\.\d{1,2})?)/i);
-            if (priceMatch) {
-              unitPrice = parseFloat(priceMatch[1]) || 0;
-            }
-          }
-
-          if (!unitPrice || unitPrice <= 0) {
-            const pInfo = getProductInfo(matchedProd.name);
-            unitPrice = getHistoricalPriceByDate(matchedProd.name, TODAY_STR, cur) ||
-              (cur === 'CNY' ? (pInfo && pInfo.rmbPrice ? pInfo.rmbPrice : 0) : (pInfo && pInfo.nzdPrice ? pInfo.nzdPrice : 0)) || 0;
-          }
-
-          results.push({
-            product: matchedProd.name,
-            qty,
-            unitPrice: Number(unitPrice) || 0
-          });
-          usedLines.add(i);
+      // Guardrail: If OCR unitPrice equals a known spec number (like 263, 400, 500, 1000, 1500) and deviates wildly from catalogRefPrice, prefer catalogRefPrice
+      if (unitPrice > 0 && catalogRefPrice > 0) {
+        const isSuspiciousSpecNum = [100, 120, 150, 180, 200, 250, 263, 400, 500, 900, 1000, 1500].includes(Math.round(unitPrice));
+        if (isSuspiciousSpecNum && Math.abs(unitPrice - catalogRefPrice) / catalogRefPrice > 0.35) {
+          unitPrice = catalogRefPrice;
         }
       }
+
+      if (!unitPrice || unitPrice <= 0) {
+        unitPrice = catalogRefPrice;
+      }
+
+      return { unitPrice: Number(unitPrice) || 0, qty: Number(qty) || 1 };
+    }
+
+    // High-Precision Catalog Matcher for Screenshot OCR & Mini-Program Text
+    function extractFuzzyCatalogItemsFromOcrText(cleanedText, preferredCurrency) {
+      const rawLines = String(cleanedText || '').split(/\r?\n/).map(l => l.trim()).filter(Boolean);
+      const cur = preferredCurrency || 'CNY';
+
+      // Filter out obvious non-product header/footer lines
+      const skipLineReg = /^(收货人|收件人|收货地址|订单编号|订单号|下单时间|创建时间|付款时间|支付方式|快递公司|物流单号|运单号|实付款|应付金额|商品总额|商品总价|运费|优惠券|促销优惠|订单状态|买家留言|订单备注|复制|联系客服|申请售后|再来一单|确认收货|查看物流)/;
+
+      const results = [];
+      const seenProducts = new Set();
+
+      for (let i = 0; i < rawLines.length; i++) {
+        const line = rawLines[i];
+        if (skipLineReg.test(line)) continue;
+        // Skip pure price/qty lines (they belong to the preceding product line)
+        if (/^(?:[¥￥$]|NZ\$)?\s*\d+(?:\.\d{1,2})?(?:\s*[xX×*]\s*\d+)?$/i.test(line)) continue;
+
+        let matchObj = findBestCatalogProductMatch(line, 0, cur);
+        let consumedNextLine = false;
+
+        // Also check 2-line combined title if a long product title wrapped across 2 lines in the mobile screenshot
+        if ((!matchObj || matchObj.score < 85) && i + 1 < rawLines.length && !skipLineReg.test(rawLines[i + 1])) {
+          const twoLine = line + ' ' + rawLines[i + 1];
+          const twoMatch = findBestCatalogProductMatch(twoLine, 0, cur);
+          if (twoMatch && (!matchObj || twoMatch.score > matchObj.score + 10)) {
+            matchObj = twoMatch;
+            consumedNextLine = true;
+          }
+        }
+
+        if (matchObj && matchObj.product) {
+          const prod = matchObj.product;
+          const windowLines = [
+            line,
+            rawLines[i + 1] || '',
+            rawLines[i + 2] || '',
+            consumedNextLine ? (rawLines[i + 3] || '') : ''
+          ].filter(Boolean);
+
+          const pq = extractSafePriceAndQtyFromWindow(windowLines, prod, cur);
+
+          // Avoid duplicate trigger on wrapped title lines of the exact same product in adjacent lines
+          const dedupKey = `${prod.name}`;
+          if (!seenProducts.has(dedupKey)) {
+            seenProducts.add(dedupKey);
+            results.push({
+              product: prod.name,
+              qty: pq.qty,
+              unitPrice: pq.unitPrice,
+              matchScore: matchObj.score
+            });
+          }
+          if (consumedNextLine) i++;
+        }
+      }
+
+      // Cross-check against Paid Total (实付款 / 商品总额) if only 1 item was recognized and OCR missed its unit price
+      if (results.length === 1) {
+        const totalMatch = String(cleanedText || '').match(/(?:商品总额|商品总价|实付款|应付金额|合计)\s*[:：]?\s*(?:¥|￥|NZ\$|\$)?\s*(\d{2,5}(?:\.\d{1,2})?)/i);
+        if (totalMatch) {
+          let totalVal = parseFloat(totalMatch[1]) || 0;
+          if (totalVal >= 1500 && totalVal % 100 === 0) totalVal = totalVal / 100;
+          const shipMatch = String(cleanedText || '').match(/运费\s*[:：]?\s*(?:¥|￥|NZ\$|\$)?\s*(\d{1,3}(?:\.\d{1,2})?)/i);
+          const shipVal = shipMatch ? (parseFloat(shipMatch[1]) || 0) : 0;
+          const netItemTotal = Math.max(0, totalVal - shipVal);
+          if (netItemTotal > 10 && results[0].qty >= 1) {
+            const impliedUnit = Number((netItemTotal / results[0].qty).toFixed(2));
+            if (!results[0].unitPrice || Math.abs(results[0].unitPrice - impliedUnit) / Math.max(1, impliedUnit) < 0.25) {
+              results[0].unitPrice = impliedUnit;
+            }
+          }
+        }
+      }
+
       return results;
     }
 
@@ -15184,14 +15389,17 @@ export async function onRequestPost(context) {
       else if (/华洋|hyhealth/i.test(cleaned)) mpBuilderState.merchant = '华洋';
       else if (/纽澳康源|healthelement/i.test(cleaned)) mpBuilderState.merchant = '纽澳康源';
 
-      // Recipient matching (direct name or address keyword)
-      const recCands = inferSmartRecipientCandidates(parsed.recipient, parsed.recipientAddress || cleaned);
-      if (recCands && recCands.length > 0) {
-        mpBuilderState.recipient = recCands[0].tag;
+      // Recipient matching (prioritize explicit named person in text, then non-default address candidates, otherwise preserve current selection)
+      const namedRecs = ['朱峰', '朱莉', '王超', '顾婷', '朱欢'];
+      const explicitNamed = namedRecs.find(r => (parsed.recipient && parsed.recipient.includes(r)) || cleaned.includes(r));
+      if (explicitNamed) {
+        mpBuilderState.recipient = explicitNamed;
       } else {
-        const knownRecs = ['朱峰', '朱莉', '王超', '顾婷', '朱欢', '泗泾', 'HOME'];
-        const foundRec = knownRecs.find(r => cleaned.includes(r));
-        if (foundRec) mpBuilderState.recipient = foundRec;
+        const recCands = (inferSmartRecipientCandidates(parsed.recipient, parsed.recipientAddress || cleaned) || [])
+          .filter(c => c && c.reason !== '常用分类');
+        if (recCands.length > 0) {
+          mpBuilderState.recipient = recCands[0].tag;
+        }
       }
 
       if (parsed.orderDate) {
@@ -15217,7 +15425,7 @@ export async function onRequestPost(context) {
         }
       }
 
-      let detectedCurrency = parsed.currency || ((/¥|￥|人民币|微信支付/.test(cleaned) && !/NZ\$/i.test(cleaned)) ? 'CNY' : 'CNY');
+      let detectedCurrency = (/NZ\$/i.test(cleaned) && !/¥|￥|人民币|微信支付/.test(cleaned)) ? 'NZD' : (parsed.currency || 'CNY');
       const cEl = document.getElementById('mpQuickCurrency');
       if (cEl) cEl.value = detectedCurrency === 'NZD' ? 'NZD' : 'CNY';
 
@@ -15240,16 +15448,37 @@ export async function onRequestPost(context) {
         }
       }
 
+      // CRITICAL V7.5 FIX: Always run High-Precision Catalog Fuzzy Matcher and prioritize it for OCR screenshots
+      // so noisy OCR lines from parseWebOrderForBackfill never overwrite real catalog items!
+      const fuzzyCatalogItems = extractFuzzyCatalogItemsFromOcrText(cleaned, detectedCurrency);
+
       let extractedItems = [];
-      if (parsed.items && parsed.items.length > 0) {
-        extractedItems = parsed.items.map(it => ({
-          product: it.product,
-          qty: Number(it.qty) || 1,
-          unitPrice: Number(it.unitPrice) || 0
-        }));
+      if (options.fromOcr && fuzzyCatalogItems.length > 0) {
+        extractedItems = fuzzyCatalogItems;
+      } else if (parsed.items && parsed.items.length > 0) {
+        // Normalize & validate parsed items against catalog
+        const validatedParsed = parsed.items.map(it => {
+          const catMatch = findBestCatalogProductMatch(it.product, Number(it.unitPrice) || 0, detectedCurrency);
+          return {
+            product: catMatch ? catMatch.product.name : it.product,
+            qty: Number(it.qty) || 1,
+            unitPrice: Number(it.unitPrice) || 0,
+            isCatalogVerified: !!catMatch
+          };
+        });
+        const verifiedCount = validatedParsed.filter(x => x.isCatalogVerified).length;
+        if (fuzzyCatalogItems.length > verifiedCount) {
+          extractedItems = fuzzyCatalogItems;
+        } else {
+          extractedItems = validatedParsed;
+        }
       }
 
       // Multi-line WeChat Mini Program card fallback
+      if (extractedItems.length === 0 && fuzzyCatalogItems.length > 0) {
+        extractedItems = fuzzyCatalogItems;
+      }
+
       if (extractedItems.length === 0) {
         const lines = cleaned.split(/\r?\n/).map(l => l.trim()).filter(Boolean);
         for (let i = 0; i < lines.length; i++) {
@@ -15257,7 +15486,7 @@ export async function onRequestPost(context) {
           const inlineMatch = line.match(/^(?:¥|￥|NZ\$|\$)?\s*([\d.]+)\s*[x×*]\s*(\d+)$/i);
           if (inlineMatch && i > 0) {
             const prevTitle = lines[i - 1].replace(/^规格[:：].*$/, '').trim() || (i >= 2 ? lines[i - 2] : '保健品');
-            const normName = normalizeScrapedProductName(prevTitle);
+            const normName = normalizeScrapedProductName(prevTitle, parseFloat(inlineMatch[1]), detectedCurrency);
             extractedItems.push({
               product: normName,
               unitPrice: parseFloat(inlineMatch[1]),
@@ -15265,11 +15494,6 @@ export async function onRequestPost(context) {
             });
           }
         }
-      }
-
-      // Fuzzy catalog matching fallback (especially powerful for OCR text from screenshots)
-      if (extractedItems.length === 0) {
-        extractedItems = extractFuzzyCatalogItemsFromOcrText(cleaned, detectedCurrency);
       }
 
       if (extractedItems.length > 0) {
@@ -15967,31 +16191,54 @@ export async function onRequestPost(context) {
           image.onload = () => {
             try {
               const canvas = document.createElement('canvas');
-              const maxDim = 1600;
-              let w = image.naturalWidth || image.width || 800;
-              let h = image.naturalHeight || image.height || 1200;
-              if (w < 900) {
-                const scale = 1200 / Math.max(w, 1);
-                w = Math.round(w * scale);
-                h = Math.round(h * scale);
-              } else if (Math.max(w, h) > maxDim) {
-                const scale = maxDim / Math.max(w, h);
-                w = Math.round(w * scale);
-                h = Math.round(h * scale);
-              }
+              let srcW = image.naturalWidth || image.width || 800;
+              let srcH = image.naturalHeight || image.height || 1200;
+
+              // Crop top 4.5% phone status bar (time, 5G, battery icons) on tall mobile screenshots to eliminate top-bar digit noise
+              const cropTopY = (srcH > srcW * 1.35) ? Math.round(srcH * 0.045) : 0;
+              const cropH = srcH - cropTopY;
+
+              // Scale by WIDTH (keep width between 1350px and 1680px so Chinese strokes stay crisp even on very tall screenshots!)
+              let targetW = srcW;
+              if (srcW < 1200) targetW = 1440;
+              else if (srcW > 1680) targetW = 1680;
+              const scale = targetW / Math.max(srcW, 1);
+              const w = Math.round(srcW * scale);
+              const h = Math.round(cropH * scale);
+
               canvas.width = w;
               canvas.height = h;
               const ctx = canvas.getContext('2d');
               ctx.fillStyle = '#FFFFFF';
               ctx.fillRect(0, 0, w, h);
-              ctx.drawImage(image, 0, 0, w, h);
+              ctx.imageSmoothingEnabled = true;
+              ctx.imageSmoothingQuality = 'high';
+              ctx.drawImage(image, 0, cropTopY, srcW, cropH, 0, 0, w, h);
 
-              // Gentle contrast enhancement for WeChat Mini-Program gray text
+              // Red/Orange Price-Preserving Adaptive Contrast Curve for WeChat Mini-Program Screenshots
               const imgData = ctx.getImageData(0, 0, w, h);
               const d = imgData.data;
               for (let i = 0; i < d.length; i += 4) {
-                const lum = 0.299 * d[i] + 0.587 * d[i + 1] + 0.114 * d[i + 2];
-                const v = lum < 165 ? Math.max(0, (lum - 30) * 0.75) : Math.min(255, lum * 1.08);
+                const r = d[i], g = d[i + 1], b = d[i + 2];
+                const maxC = Math.max(r, g, b);
+                const minC = Math.min(r, g, b);
+                const sat = maxC - minC;
+                const lum = 0.299 * r + 0.587 * g + 0.114 * b;
+
+                // Preserve red/orange price tags (e.g. ¥185.00 in red/orange) as crisp dark ink
+                const isRedOrOrangeText = (r > 135 && (r - g) > 38 && (r - b) > 38 && lum < 210);
+                let v;
+                if (isRedOrOrangeText) {
+                  v = 20;
+                } else if (lum > 212 && sat < 30) {
+                  // Clean light-gray card backgrounds to pure white
+                  v = 255;
+                } else if (lum < 145) {
+                  // Crisp dark text strokes
+                  v = Math.max(0, (lum - 25) * 0.65);
+                } else {
+                  v = Math.min(255, lum * 1.1);
+                }
                 d[i] = v;
                 d[i + 1] = v;
                 d[i + 2] = v;
@@ -16008,42 +16255,96 @@ export async function onRequestPost(context) {
       }
 
       async function extractTextFromImageDataUrl(dataUrl, onProgress) {
-        // 1. Try Browser Native TextDetector first if available and non-empty
+        // 1. Try Browser Native TextDetector first ONLY if it actually supports CJK (captures Chinese characters)
         if ('TextDetector' in window) {
           try {
-            if (onProgress) onProgress('正在调用设备原生视觉引擎识别文字...', 35);
+            if (onProgress) onProgress('正在检测设备原生中文视觉引擎...', 30);
             const img = new Image();
             await new Promise((res, rej) => { img.onload = res; img.onerror = rej; img.src = dataUrl; });
             const detector = new window.TextDetector();
             const blocks = await detector.detect(img);
             if (blocks && blocks.length > 0) {
               const nativeTxt = blocks.map(b => b.rawValue).filter(Boolean).join('\n');
-              // If native detector captured Chinese characters or enough lines, use it
-              if (/[\u4e00-\u9fa5]/.test(nativeTxt) || nativeTxt.length > 35) {
-                if (onProgress) onProgress('设备原生 OCR 识别完成！', 100);
+              const cjkCount = (nativeTxt.match(/[\u4e00-\u9fa5]/g) || []).length;
+              if (cjkCount >= 4) {
+                if (onProgress) onProgress('设备原生中文 OCR 识别完成！', 100);
                 return nativeTxt;
               }
             }
           } catch (e) {}
         }
 
-        // 2. Preprocess image on canvas & run Tesseract.js (chi_sim + eng)
-        if (onProgress) onProgress('正在增强手机截图文字对比度...', 25);
+        // 2. Preprocess image on canvas & run Tesseract.js (chi_sim + eng) with PSM 6 (vertical mobile order blocks)
+        if (onProgress) onProgress('正在增强手机截图红字价格与中文清晰度...', 25);
         const enhancedUrl = await preprocessScreenshotForOcr(dataUrl);
         const TesseractLib = await ensureTesseractLoaded(onProgress);
-        if (onProgress) onProgress('正在识别截图中的中文商品、金额与单号...', 40);
+        if (onProgress) onProgress('正在高精识别截图中的商品、规格与实付金额...', 40);
 
         const result = await TesseractLib.recognize(enhancedUrl, 'chi_sim+eng', {
           logger: (m) => {
             if (m && typeof m.progress === 'number' && onProgress) {
               const pct = Math.min(98, Math.max(40, Math.round(40 + m.progress * 58)));
-              onProgress(`正在智能识别截图文字 (${pct}%)...`, pct);
+              onProgress(`正在智能识别截图文字与匹配商品库 (${pct}%)...`, pct);
             }
           }
         });
         const text = (result && result.data && result.data.text) ? result.data.text.trim() : '';
-        if (onProgress) onProgress('OCR 识别完成！', 100);
+        if (onProgress) onProgress('OCR 识别与商品库匹配完成！', 100);
         return text;
+      }
+
+      function renderOcrInteractiveCalibrationSummary() {
+        const summaryBox = document.getElementById('mpOcrResultSummary');
+        const summaryTxt = document.getElementById('mpOcrResultSummaryText');
+        const badgeEl = document.getElementById('mpOcrBadgePill');
+        if (!summaryBox || !summaryTxt) return;
+
+        const count = mpBuilderState.items.length;
+        const cur = document.getElementById('mpQuickCurrency') ? document.getElementById('mpQuickCurrency').value : 'CNY';
+        const sym = cur === 'CNY' ? '¥' : 'NZ$';
+        const itemSum = mpBuilderState.items.reduce((acc, it) => acc + (Number(it.unitPrice) || 0) * (Number(it.qty) || 1), 0);
+
+        if (badgeEl) {
+          badgeEl.textContent = count > 0 ? `✅ 已识别 ${count} 款商品` : '⚠️ 请点选补全';
+          badgeEl.className = count > 0
+            ? 'text-[10px] bg-emerald-100 text-emerald-800 px-2 py-0.5 rounded-full font-bold'
+            : 'text-[10px] bg-amber-100 text-amber-800 px-2 py-0.5 rounded-full font-bold';
+        }
+
+        summaryBox.classList.remove('hidden');
+        if (count > 0) {
+          const prodOptionsHtml = (selectedName) => (state.products || []).map(p =>
+            `<option value="${p.name.replace(/"/g, '&quot;')}" ${p.name === selectedName ? 'selected' : ''}>${p.name}</option>`
+          ).join('');
+
+          const rowsHtml = mpBuilderState.items.map((it, idx) => `
+            <div class="flex flex-wrap items-center justify-between gap-1.5 bg-slate-50 border border-emerald-200 rounded-lg p-1.5 text-[11px]">
+              <select data-ocr-cal-prod="${idx}" class="flex-1 min-w-[160px] bg-white border border-slate-300 rounded px-1.5 py-1 font-bold text-slate-800 text-[11px]">
+                ${prodOptionsHtml(it.product)}
+              </select>
+              <div class="flex items-center gap-1">
+                <span class="text-slate-500">单价${sym}</span>
+                <input type="number" step="0.01" data-ocr-cal-price="${idx}" value="${Number(it.unitPrice) || 0}" class="w-16 bg-white border border-slate-300 rounded px-1.5 py-0.5 font-mono font-bold text-emerald-800 text-right" />
+                <span class="text-slate-500 ml-1">×</span>
+                <input type="number" min="1" step="1" data-ocr-cal-qty="${idx}" value="${Number(it.qty) || 1}" class="w-11 bg-white border border-slate-300 rounded px-1 py-0.5 font-mono font-bold text-slate-900 text-center" />
+                <button type="button" data-ocr-cal-del="${idx}" class="text-rose-600 hover:bg-rose-50 px-1.5 py-0.5 rounded font-bold" title="移除此项">✕</button>
+              </div>
+            </div>
+          `).join('');
+
+          summaryTxt.innerHTML = `
+            <div class="space-y-2">
+              <div class="flex flex-wrap items-center justify-between gap-1">
+                <span>🎉 <strong>截图智能匹配成功！</strong> 收件人：<strong>${mpBuilderState.recipient}</strong> · 渠道：<strong>${mpBuilderState.merchant}</strong></span>
+                <span class="font-mono font-extrabold text-emerald-800">合计：${sym}${itemSum.toFixed(2)}</span>
+              </div>
+              <div class="text-[10px] text-slate-500">👇 如截图有模糊字，可直接在下方下拉框一键切换商品、微调单价或数量（与下方快录板实时联动）：</div>
+              <div class="space-y-1.5">${rowsHtml}</div>
+            </div>
+          `;
+        } else {
+          summaryTxt.innerHTML = `💡 <strong>已提取截图文字到下方文本框</strong>（未完全匹配到标准商品名）。<br/>您可以直接在下方<strong>「方式 B：5秒点选快录板」</strong>对着截图点一下对应商品按钮，或使用微信长按图片「提取文字」后点击上方「📋 粘剪贴板」秒速入库！`;
+        }
       }
 
       async function processOrderScreenshotDataUrl(dataUrl, targetMode = 'miniprogram', fileName = '') {
@@ -16076,34 +16377,31 @@ export async function onRequestPost(context) {
           if (barEl) barEl.style.width = pct + '%';
         };
 
-        updateProgress('🔄 已读取手机截图，正在启动智能 OCR 文字与商品识别...', 12);
-        showToast('📸 正在为您智能识别手机订单截图，请稍候...');
+        updateProgress('🔄 已读取手机截图，正在启动 V7.5 高精 OCR 与商品库匹配...', 12);
+        showToast('📸 正在为您智能识别手机订单截图并匹配商品库，请稍候...');
 
         try {
           const ocrText = await extractTextFromImageDataUrl(dataUrl, updateProgress);
           const cleaned = cleanOcrRawText(ocrText).trim();
 
           if (targetMode === 'newOrder') {
+            const fuzzyItems = extractFuzzyCatalogItemsFromOcrText(cleaned, 'CNY');
             const scrapeInp = document.getElementById('newOrderScrapeInput');
             if (scrapeInp && cleaned) {
               scrapeInp.value = cleaned;
               const parseBtn = document.getElementById('btnParseNewOrderScrape');
               if (parseBtn) parseBtn.click();
             }
-            // Also fallback to fuzzy catalog items if standard parser found 0 items
-            const existingRows = document.querySelectorAll('#formItemsContainer .form-item-row');
-            if (existingRows.length <= 1) {
-              const fuzzyItems = extractFuzzyCatalogItemsFromOcrText(cleaned, 'CNY');
-              if (fuzzyItems.length > 0) {
-                const container = document.getElementById('formItemsContainer');
-                if (container) {
-                  container.innerHTML = '';
-                  fuzzyItems.forEach(it => addFormItemRow(it.product, it.qty, it.unitPrice));
-                  recalcOrderFormNetTotal();
-                }
+            // Prioritize catalog-verified fuzzy items for OCR screenshots so noisy OCR lines don't pollute the form
+            if (fuzzyItems.length > 0) {
+              const container = document.getElementById('formItemsContainer');
+              if (container) {
+                container.innerHTML = '';
+                fuzzyItems.forEach(it => addFormItemRow(it.product, it.qty, it.unitPrice));
+                if (typeof updateFormOrderTotalPreview === 'function') updateFormOrderTotalPreview();
               }
             }
-            showToast('✅ 手机订单截图识别完成！已自动填入订单表单');
+            showToast(`✅ 手机订单截图识别完成！已自动匹配 ${fuzzyItems.length} 款商品填入表单`);
             return;
           }
 
@@ -16112,29 +16410,14 @@ export async function onRequestPost(context) {
             pasteInp.value = cleaned;
           }
 
-          const res = parseMiniProgramTextToBuilder(cleaned || fileName, { silentToast: true });
+          const res = parseMiniProgramTextToBuilder(cleaned || fileName, { silentToast: true, fromOcr: true });
           const count = (res && res.itemsCount) || mpBuilderState.items.length;
-          const cur = document.getElementById('mpQuickCurrency') ? document.getElementById('mpQuickCurrency').value : 'CNY';
-          const sym = cur === 'CNY' ? '¥' : 'NZ$';
-          const itemSum = mpBuilderState.items.reduce((acc, it) => acc + (Number(it.unitPrice) || 0) * (Number(it.qty) || 1), 0);
 
-          if (badgeEl) {
-            badgeEl.textContent = count > 0 ? `✅ 已识别 ${count} 款商品` : '⚠️ 请核对补全';
-            badgeEl.className = count > 0
-              ? 'text-[10px] bg-emerald-100 text-emerald-800 px-2 py-0.5 rounded-full font-bold'
-              : 'text-[10px] bg-amber-100 text-amber-800 px-2 py-0.5 rounded-full font-bold';
-          }
-
-          if (summaryBox && summaryTxt) {
-            summaryBox.classList.remove('hidden');
-            if (count > 0) {
-              const itemsPreview = mpBuilderState.items.map(i => `${i.product} ×${i.qty}`).join('、');
-              summaryTxt.innerHTML = `🎉 <strong>截图自动识别成功！</strong><br/>👤 收件客户：<strong>${mpBuilderState.recipient}</strong> · 渠道：<strong>${mpBuilderState.merchant}</strong><br/>🛒 识别商品 (${count}款)：<span class="text-emerald-800">${itemsPreview}</span><br/>💰 识别总额：<strong class="font-mono">${sym}${itemSum.toFixed(2)}</strong>（已自动填入下方快录板，可直接点下方按钮一键入库！）`;
-              showToast(`🎉 截图识别成功！已自动提取 ${count} 款商品到快录板`);
-            } else {
-              summaryTxt.innerHTML = `💡 <strong>已提取截图文字到下方文本框</strong>（未完全匹配到标准商品名）。<br/>您可以直接在下方<strong>「方式 B：5秒点选快录板」</strong>对着截图点一下对应商品按钮，或使用微信长按图片「提取文字」后点击上方「📋 粘剪贴板」秒速入库！`;
-              showToast('💡 已提取截图文字，请在快录板点选确认商品');
-            }
+          renderOcrInteractiveCalibrationSummary();
+          if (count > 0) {
+            showToast(`🎉 截图识别成功！已自动匹配 ${count} 款商品到快录板（支持一键微调）`);
+          } else {
+            showToast('💡 已提取截图文字，请在快录板点选确认商品');
           }
         } catch (err) {
           console.warn('Screenshot OCR fallback:', err);
@@ -16179,6 +16462,57 @@ export async function onRequestPost(context) {
           };
           reader.readAsDataURL(file);
           e.target.value = '';
+        });
+      }
+
+      const ocrSumBox = document.getElementById('mpOcrResultSummary');
+      if (ocrSumBox) {
+        ocrSumBox.addEventListener('change', (e) => {
+          const prodSel = e.target.closest('[data-ocr-cal-prod]');
+          if (prodSel) {
+            const idx = parseInt(prodSel.getAttribute('data-ocr-cal-prod'), 10);
+            if (mpBuilderState.items[idx]) {
+              const newName = prodSel.value;
+              mpBuilderState.items[idx].product = newName;
+              const cur = document.getElementById('mpQuickCurrency') ? document.getElementById('mpQuickCurrency').value : 'CNY';
+              const pInfo = getProductInfo(newName);
+              const refP = getHistoricalPriceByDate(newName, TODAY_STR, cur) ||
+                (cur === 'CNY' ? (pInfo && pInfo.rmbPrice ? Number(pInfo.rmbPrice) : 0) : (pInfo && pInfo.nzdPrice ? Number(pInfo.nzdPrice) : 0)) || 0;
+              if (refP > 0) mpBuilderState.items[idx].unitPrice = refP;
+              renderMiniProgramQuickBuilder();
+              renderOcrInteractiveCalibrationSummary();
+            }
+            return;
+          }
+          const priceInp = e.target.closest('[data-ocr-cal-price]');
+          if (priceInp) {
+            const idx = parseInt(priceInp.getAttribute('data-ocr-cal-price'), 10);
+            if (mpBuilderState.items[idx]) {
+              mpBuilderState.items[idx].unitPrice = parseFloat(priceInp.value) || 0;
+              renderMiniProgramQuickBuilder();
+              renderOcrInteractiveCalibrationSummary();
+            }
+            return;
+          }
+          const qtyInp = e.target.closest('[data-ocr-cal-qty]');
+          if (qtyInp) {
+            const idx = parseInt(qtyInp.getAttribute('data-ocr-cal-qty'), 10);
+            if (mpBuilderState.items[idx]) {
+              mpBuilderState.items[idx].qty = Math.max(1, parseInt(qtyInp.value, 10) || 1);
+              renderMiniProgramQuickBuilder();
+              renderOcrInteractiveCalibrationSummary();
+            }
+            return;
+          }
+        });
+        ocrSumBox.addEventListener('click', (e) => {
+          const delBtn = e.target.closest('[data-ocr-cal-del]');
+          if (delBtn) {
+            const idx = parseInt(delBtn.getAttribute('data-ocr-cal-del'), 10);
+            mpBuilderState.items.splice(idx, 1);
+            renderMiniProgramQuickBuilder();
+            renderOcrInteractiveCalibrationSummary();
+          }
         });
       }
 
