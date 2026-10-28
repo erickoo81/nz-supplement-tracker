@@ -344,7 +344,7 @@
             </h1>
             <button type="button" id="btnHeaderVersionBadge" class="inline-flex items-center gap-1 text-xs bg-gradient-to-r from-amber-400 to-amber-300 hover:from-amber-300 hover:to-amber-200 text-slate-950 font-extrabold px-2.5 py-0.5 rounded-full shadow-xs transition cursor-pointer" title="当前版本 V7.1（Cloudflare KV 全域同步修复与智能诊断 · 历史时间机器 · 实时汇率 · 亲友只读对账单）· 点击打开个性化与版本中心">
               <span id="uiIcon-appVersion">✨</span>
-              <span id="uiText-appVersion">V7.5</span>
+              <span id="uiText-appVersion">V7.6</span>
             </button>
             <button type="button" id="btnHeaderCfStatusPill" class="inline-flex items-center gap-1 text-[11px] bg-emerald-900/90 hover:bg-emerald-800 text-emerald-100 border border-emerald-600/70 font-semibold px-2.5 py-0.5 rounded-full transition cursor-pointer" title="点击打开 Cloudflare KV 边缘云同步设置 (方案B)">
               <span id="headerCfStatusDot" class="w-2 h-2 rounded-full bg-amber-400 inline-block"></span>
@@ -1019,9 +1019,112 @@
           <button id="btnRebuildPriceHistoryFromOrders" type="button" class="bg-amber-50 hover:bg-amber-100 text-amber-900 border border-amber-300 text-xs sm:text-sm px-3 py-1.5 rounded-lg font-medium transition" title="扫描所有订单中的采购单价与下单日期，自动归档到对应商品的历史日期单价库">
             🔄 汇总订单日期单价
           </button>
+          <button id="btnTogglePriceTrendStudio" type="button" class="bg-indigo-600 hover:bg-indigo-500 text-white text-xs sm:text-sm px-3 py-1.5 rounded-lg font-medium transition shadow-sm">
+            📈 价格趋势与比价大屏
+          </button>
           <button id="btnAddNewProductModal" class="bg-emerald-700 hover:bg-emerald-600 text-white text-xs sm:text-sm px-3 py-1.5 rounded-lg font-medium transition">
             ＋ 新增商品/单价
           </button>
+        </div>
+      </div>
+
+      <!-- V7.6: INTERACTIVE VERIFIED PRICE TREND & MULTI-MERCHANT COMPARISON STUDIO -->
+      <div id="productPriceTrendStudio" class="bg-white rounded-xl p-4 sm:p-5 shadow-sm border border-indigo-200 space-y-4">
+        <div class="flex flex-wrap items-center justify-between gap-3 border-b border-slate-100 pb-3">
+          <div>
+            <div class="flex items-center gap-2">
+              <span class="bg-indigo-600 text-white text-[11px] font-bold px-2 py-0.5 rounded">V7.6 价格雷达</span>
+              <h3 class="text-sm sm:text-base font-bold text-slate-800">📈 已核实历史单价趋势图 & 四大渠道比价工作台</h3>
+            </div>
+            <p class="text-xs text-slate-500 mt-0.5">自动汇总「网页抓单实付核验价」与「历史台账已核实单价」，支持纽币/人民币双轨剥离分析（区分商家涨跌 vs 汇率波动）及跨店史低比价。</p>
+          </div>
+          <div class="flex flex-wrap items-center gap-2">
+            <select id="trendStudioProdSelect" class="text-xs sm:text-sm border border-indigo-300 rounded-lg px-2.5 py-1.5 bg-indigo-50/40 font-semibold text-slate-800 max-w-xs sm:max-w-md"></select>
+            <select id="trendStudioFilterMode" class="text-xs border border-slate-300 rounded-lg px-2 py-1.5 bg-white text-slate-700">
+              <option value="ALL_VERIFIED">✅ 全部已核实单价 (抓单实付+历史核实)</option>
+              <option value="WEB_ONLY">🎯 仅看网页抓单/订单实付核验价</option>
+            </select>
+            <select id="trendStudioCurrencyMode" class="text-xs border border-slate-300 rounded-lg px-2 py-1.5 bg-white text-slate-700">
+              <option value="DUAL">💱 双轨走势 (NZ$ 原价 + ¥ 实付拆解)</option>
+              <option value="NZD">🇳🇿 仅看纽币单价 (NZ$)</option>
+              <option value="CNY">🇨🇳 仅看人民币实付 (¥ RMB)</option>
+            </select>
+            <button id="btnOpenQuickPricePointForm" type="button" class="text-xs bg-emerald-50 hover:bg-emerald-100 text-emerald-800 border border-emerald-300 px-2.5 py-1.5 rounded-lg font-medium transition">
+              ＋ 记录今日好价
+            </button>
+          </div>
+        </div>
+
+        <!-- Quick Product Switcher Pills -->
+        <div class="flex items-center gap-1.5 overflow-x-auto pb-1" id="trendStudioQuickPills">
+          <!-- Populated by JS -->
+        </div>
+
+        <!-- Quick Add Verified Price Point Inline Drawer (Hidden by default) -->
+        <div id="quickPricePointDrawer" class="hidden bg-emerald-50/70 border border-emerald-200 rounded-xl p-3 space-y-2">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-bold text-emerald-900">✍️ 手动录入已核实单价点（无需下单即可记录商城打折/闪购好价到趋势图）</span>
+            <button type="button" id="btnCloseQuickPricePointForm" class="text-xs text-slate-400 hover:text-slate-600">✕ 关闭</button>
+          </div>
+          <div class="grid grid-cols-2 sm:grid-cols-6 gap-2 items-end">
+            <div>
+              <label class="block text-[11px] text-slate-600 mb-0.5">核实日期</label>
+              <input type="date" id="qpDateInput" class="w-full text-xs border border-slate-300 rounded px-2 py-1 bg-white" />
+            </div>
+            <div>
+              <label class="block text-[11px] text-slate-600 mb-0.5">采购渠道/商家</label>
+              <select id="qpMerchantInput" class="w-full text-xs border border-slate-300 rounded px-2 py-1 bg-white">
+                <option value="华洋">华洋</option>
+                <option value="纽澳康源">纽澳康源</option>
+                <option value="易康">易康</option>
+                <option value="CW大药房">CW大药房</option>
+                <option value="其他渠道">其他渠道</option>
+              </select>
+            </div>
+            <div>
+              <label class="block text-[11px] text-slate-600 mb-0.5">NZD 纽币单价 ($)</label>
+              <input type="number" step="0.01" id="qpNzdInput" placeholder="如 18.5" class="w-full text-xs border border-slate-300 rounded px-2 py-1 bg-white" />
+            </div>
+            <div>
+              <label class="block text-[11px] text-slate-600 mb-0.5">RMB 实付单价 (¥)</label>
+              <input type="number" step="0.01" id="qpRmbInput" placeholder="如 82.0" class="w-full text-xs border border-slate-300 rounded px-2 py-1 bg-white" />
+            </div>
+            <div>
+              <label class="block text-[11px] text-slate-600 mb-0.5">当时汇率 (选填)</label>
+              <input type="number" step="0.0001" id="qpRateInput" placeholder="如 4.43" class="w-full text-xs border border-slate-300 rounded px-2 py-1 bg-white" />
+            </div>
+            <div>
+              <button type="button" id="btnSaveQuickPricePoint" class="w-full bg-emerald-700 hover:bg-emerald-600 text-white text-xs font-bold py-1.5 px-3 rounded transition">
+                💾 存入趋势库
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- 3 KPI Diagnostic Cards + Chart Canvas -->
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-4 items-stretch">
+          <div class="lg:col-span-4 flex flex-col justify-between gap-2.5" id="trendStudioDiagnosticCards">
+            <!-- Populated by JS -->
+          </div>
+          <div class="lg:col-span-8 bg-slate-50/70 rounded-xl p-3 border border-slate-200/80 flex flex-col justify-between">
+            <div class="flex flex-wrap items-center justify-between gap-2 mb-2">
+              <span class="text-xs font-bold text-slate-700" id="trendStudioChartTitle">价格走势曲线</span>
+              <span class="text-[11px] text-slate-500" id="trendStudioChartSubtitle">点击图上数据点或下方明细可定位关联订单</span>
+            </div>
+            <div class="relative w-full h-56 sm:h-64">
+              <canvas id="productPriceTrendCanvas"></canvas>
+            </div>
+          </div>
+        </div>
+
+        <!-- Merchant Comparison Bar + Verified Price Timeline Table -->
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-4 pt-1">
+          <div class="lg:col-span-5 bg-slate-50 rounded-xl p-3 border border-slate-200" id="trendStudioMerchantCompare">
+            <!-- Populated by JS -->
+          </div>
+          <div class="lg:col-span-7 bg-slate-50 rounded-xl p-3 border border-slate-200 overflow-x-auto" id="trendStudioTimelineTable">
+            <!-- Populated by JS -->
+          </div>
         </div>
       </div>
 
@@ -3000,7 +3103,7 @@
       cardRadius: '1rem'
     };
 
-    const CURRENT_APP_VERSION = 'V7.5';
+    const CURRENT_APP_VERSION = 'V7.6';
     const DEFAULT_UI_CUSTOM_LABELS = {
       appTitle: { icon: '', text: '纽澳跨境采购与快递追踪管家', note: '支持一单多包拆单追踪 · 采购单价与运费核算 · 电脑与手机多端同步', labelTitle: '系统主标题 & 副标题说明', group: 'header', emojiPresets: ['🇳🇿', '🦘', '🌿', '📦', '🛡️'] },
             appVersion: { icon: '🚀', text: 'V7.5', note: '当前版本 V7.5（高精手机截图OCR商品库匹配 · 云端拉取版本号防回退锁 · 发客户通知与手机竖排卡片）· 点击打开个性化与版本中心', labelTitle: '顶部版本号标识 (点击可打开设置)', group: 'header', emojiPresets: ['🚀', '✨', '🏷️', '💎', '🔥'] },
@@ -6145,6 +6248,548 @@
       }
     }
 
+    let productPriceTrendChartInstance = null;
+    let currentTrendProductName = '';
+
+    // Collect & deduplicate verified price timeline for a product across p.priceHistory AND active orders
+    function collectProductVerifiedPriceSeries(prodName, filterMode = 'ALL_VERIFIED') {
+      const p = getProductInfo(prodName);
+      const rawPoints = [];
+
+      if (p && Array.isArray(p.priceHistory)) {
+        p.priceHistory.forEach(h => {
+          const isPureCny = (h.currency === 'CNY' || h.rawCurrency === 'CNY') && !h.nzdPrice;
+          const nzdVal = Number(h.nzdPrice || (!isPureCny ? h.price : 0)) || null;
+          const rmbVal = Number(h.rmbPrice || (isPureCny ? (h.rawPrice || h.price) : 0)) || null;
+          if (!nzdVal && !rmbVal) return;
+          const isWebVerified = Boolean(h.scrapedAt || h.orderNo || h.exchangeRate || h.rmbPrice || (h.note && (h.note.includes('实付') || h.note.includes('抓单') || h.note.includes('手动核实'))));
+          rawPoints.push({
+            date: String(h.date || p.nzdDate || '2025-01-01').slice(0, 10),
+            merchant: h.merchant || '纽澳康源',
+            nzdPrice: nzdVal ? Number(nzdVal.toFixed(2)) : null,
+            rmbPrice: rmbVal ? Number(rmbVal.toFixed(2)) : null,
+            exchangeRate: Number(h.exchangeRate) || null,
+            orderNo: h.orderNo || '',
+            orderId: h.orderId || '',
+            scrapedAt: h.scrapedAt || '',
+            note: h.note || '',
+            isWebVerified: isWebVerified,
+            sourceType: isWebVerified ? '抓单/实付核验' : '台账核实单价'
+          });
+        });
+      }
+
+      // Also scan active orders so newly scraped or backfilled orders immediately show up on the chart
+      getActiveOrders().forEach(o => {
+        if (o.cancelled) return;
+        const oDate = String(o.orderDate || '2025-01-01').slice(0, 10);
+        const cur = o.currency || 'NZD';
+        const oRate = Number(o.exchangeRate) || null;
+        (o.items || []).forEach(it => {
+          if (it.product !== prodName) return;
+          const up = Number(it.unitPrice) || 0;
+          if (up <= 0) return;
+          let nzdVal = null;
+          let rmbVal = null;
+          const itemRate = Number(it.exchangeRate) || oRate || null;
+          if (cur === 'CNY') {
+            rmbVal = Number(up.toFixed(2));
+            if (it.nzdUnitPrice && Number(it.nzdUnitPrice) > 0) nzdVal = Number(Number(it.nzdUnitPrice).toFixed(2));
+            else if (itemRate && itemRate > 0 && o.origCurrency === 'NZD') nzdVal = Number((up / itemRate).toFixed(2));
+          } else {
+            nzdVal = Number(up.toFixed(2));
+            if (it.rmbUnitPrice && Number(it.rmbUnitPrice) > 0) rmbVal = Number(Number(it.rmbUnitPrice).toFixed(2));
+            else if (itemRate && itemRate > 0) rmbVal = Number((up * itemRate).toFixed(2));
+          }
+          const isWeb = Boolean(o.webBackfilled || o.isStoreOrder || itemRate || o.orderNo);
+          rawPoints.push({
+            date: String(it.priceDate || oDate).slice(0, 10),
+            merchant: o.merchant || '华洋',
+            nzdPrice: nzdVal,
+            rmbPrice: rmbVal,
+            exchangeRate: itemRate,
+            orderNo: o.orderNo || '',
+            orderId: o.id || '',
+            scrapedAt: o.webBackfilledAt || '',
+            note: o.webBackfilled ? '网页抓单核验' : '订单实付单价',
+            isWebVerified: isWeb,
+            sourceType: o.webBackfilled ? '网页抓单核验' : '订单实付核实'
+          });
+        });
+      });
+
+      // Fallback to product baseline price if no history array yet
+      if (rawPoints.length === 0 && p && (p.nzdPrice || p.rmbPrice)) {
+        rawPoints.push({
+          date: String(p.nzdDate || '2025-01-01').slice(0, 10),
+          merchant: '纽澳康源',
+          nzdPrice: p.nzdPrice ? Number(Number(p.nzdPrice).toFixed(2)) : null,
+          rmbPrice: p.rmbPrice ? Number(Number(p.rmbPrice).toFixed(2)) : null,
+          exchangeRate: Number(p.lastExchangeRate) || null,
+          orderNo: '',
+          orderId: '',
+          scrapedAt: p.lastScrapedAt || '',
+          note: p.priceSource || '默认核实单价',
+          isWebVerified: Boolean(p.lastScrapedAt),
+          sourceType: '默认核实单价'
+        });
+      }
+
+      // Deduplicate by date + merchant + price
+      const deduped = [];
+      rawPoints.forEach(pt => {
+        if (filterMode === 'WEB_ONLY' && !pt.isWebVerified) return;
+        const dupIdx = deduped.findIndex(d =>
+          d.date === pt.date &&
+          d.merchant === pt.merchant &&
+          ((pt.nzdPrice && d.nzdPrice && Math.abs(d.nzdPrice - pt.nzdPrice) < 0.02) ||
+           (pt.rmbPrice && d.rmbPrice && Math.abs(d.rmbPrice - pt.rmbPrice) < 0.05))
+        );
+        if (dupIdx === -1) {
+          deduped.push(pt);
+        } else {
+          // Merge richer info (orderId, orderNo, rmbPrice, exchangeRate)
+          deduped[dupIdx] = {
+            ...deduped[dupIdx],
+            nzdPrice: deduped[dupIdx].nzdPrice || pt.nzdPrice,
+            rmbPrice: deduped[dupIdx].rmbPrice || pt.rmbPrice,
+            exchangeRate: deduped[dupIdx].exchangeRate || pt.exchangeRate,
+            orderNo: deduped[dupIdx].orderNo || pt.orderNo,
+            orderId: deduped[dupIdx].orderId || pt.orderId,
+            isWebVerified: deduped[dupIdx].isWebVerified || pt.isWebVerified,
+            sourceType: (deduped[dupIdx].isWebVerified || pt.isWebVerified) ? '抓单/实付核验' : deduped[dupIdx].sourceType
+          };
+        }
+      });
+
+      return deduped.sort((a, b) => String(a.date).localeCompare(String(b.date)));
+    }
+
+    // Build an inline SVG sparkline for a product card
+    function buildProductCardSparklineSvg(series) {
+      if (!series || series.length === 0) return '';
+      // Prefer NZD series if available, otherwise RMB series
+      const useNzd = series.some(s => s.nzdPrice && s.nzdPrice > 0);
+      const pts = series.filter(s => useNzd ? (s.nzdPrice > 0) : (s.rmbPrice > 0));
+      if (pts.length === 0) return '';
+      const vals = pts.map(s => useNzd ? s.nzdPrice : s.rmbPrice);
+      const curPrefix = useNzd ? 'NZ$' : '¥';
+      const minVal = Math.min(...vals);
+      const maxVal = Math.max(...vals);
+      const avgVal = vals.reduce((a, b) => a + b, 0) / vals.length;
+      const latestVal = vals[vals.length - 1];
+      const firstVal = vals[0];
+      const diffPct = firstVal > 0 ? (((latestVal - firstVal) / firstVal) * 100) : 0;
+
+      // Find cheapest merchant
+      let minPt = pts[0];
+      pts.forEach(pt => {
+        const v = useNzd ? pt.nzdPrice : pt.rmbPrice;
+        const mv = useNzd ? minPt.nzdPrice : minPt.rmbPrice;
+        if (v <= mv) minPt = pt;
+      });
+
+      const w = 180, h = 36, padX = 8, padY = 6;
+      let svgCoords = [];
+      if (pts.length === 1) {
+        svgCoords = [{ x: w / 2, y: h / 2, val: vals[0], pt: pts[0] }];
+      } else {
+        const span = (maxVal - minVal) > 0.001 ? (maxVal - minVal) : 1;
+        svgCoords = pts.map((pt, idx) => {
+          const val = useNzd ? pt.nzdPrice : pt.rmbPrice;
+          const x = Number((padX + (idx / (pts.length - 1)) * (w - padX * 2)).toFixed(1));
+          const y = Number(((maxVal - minVal) > 0.001
+            ? (padY + (1 - (val - minVal) / span) * (h - padY * 2))
+            : (h / 2)).toFixed(1));
+          return { x, y, val, pt };
+        });
+      }
+
+      const polyPoints = svgCoords.map(c => `${c.x},${c.y}`).join(' ');
+      const areaPoints = svgCoords.length > 1
+        ? `${svgCoords[0].x},${h - 2} ${polyPoints} ${svgCoords[svgCoords.length - 1].x},${h - 2}`
+        : '';
+
+      const strokeColor = latestVal <= minVal + 0.01 ? '#059669' : (latestVal >= maxVal - 0.01 && minVal < maxVal ? '#e11d48' : '#4f46e5');
+      const fillId = 'sparkGrad_' + Math.random().toString(36).slice(2, 8);
+
+      const dotsSvg = svgCoords.map((c, i) => {
+        const isMin = c.val === minVal;
+        const isMax = c.val === maxVal && maxVal > minVal;
+        const isLast = i === svgCoords.length - 1;
+        const dotColor = isMin ? '#059669' : (isMax ? '#e11d48' : (isLast ? '#4f46e5' : '#94a3b8'));
+        const r = (isMin || isMax || isLast) ? 3.2 : 2.2;
+        return `<circle cx="${c.x}" cy="${c.y}" r="${r}" fill="${dotColor}" stroke="#fff" stroke-width="1"><title>${c.pt.date} · ${c.pt.merchant}: ${curPrefix}${c.val}</title></circle>`;
+      }).join('');
+
+      const statusBadge = (pts.length > 1 && minVal < maxVal)
+        ? (latestVal <= minVal + 0.01
+            ? `<span class="text-[10px] bg-emerald-100 text-emerald-800 px-1.5 py-0.5 rounded font-bold">🔥 当前正处史低价</span>`
+            : `<span class="text-[10px] ${diffPct <= 0 ? 'bg-emerald-50 text-emerald-700' : 'bg-amber-50 text-amber-800'} px-1.5 py-0.5 rounded font-semibold">${diffPct <= 0 ? '📉 较早期降 ' + Math.abs(diffPct).toFixed(1) + '%' : '📈 较早期涨 ' + diffPct.toFixed(1) + '%'}</span>`)
+        : `<span class="text-[10px] bg-slate-100 text-slate-600 px-1.5 py-0.5 rounded">已核实 ${pts.length} 次价格</span>`;
+
+      return `
+        <div class="bg-slate-50/90 border border-slate-200/80 rounded-lg p-2 space-y-1.5">
+          <div class="flex items-center justify-between gap-1 flex-wrap">
+            <div class="flex items-center gap-1.5">
+              <span class="text-[10px] font-bold text-slate-600">📈 已核实价格走势 (${pts.length}期)</span>
+              ${statusBadge}
+            </div>
+            <button type="button" data-trend-prod="${pts[0] ? series[0] && '' : ''}" class="hidden"></button>
+          </div>
+          <div class="flex items-center justify-between gap-2">
+            <svg viewBox="0 0 ${w} ${h}" class="w-36 sm:w-44 h-9 shrink-0 overflow-visible">
+              <defs>
+                <linearGradient id="${fillId}" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0%" stop-color="${strokeColor}" stop-opacity="0.22"/>
+                  <stop offset="100%" stop-color="${strokeColor}" stop-opacity="0.0"/>
+                </linearGradient>
+              </defs>
+              ${areaPoints ? `<polygon points="${areaPoints}" fill="url(#${fillId})" />` : ''}
+              ${svgCoords.length > 1 ? `<polyline fill="none" stroke="${strokeColor}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" points="${polyPoints}" />` : `<line x1="12" y1="${h/2}" x2="${w-12}" y2="${h/2}" stroke="${strokeColor}" stroke-width="1.5" stroke-dasharray="3,3" />`}
+              ${dotsSvg}
+            </svg>
+            <div class="text-[10px] leading-tight text-right space-y-0.5">
+              <div class="text-emerald-700 font-bold">🟢 史低: ${curPrefix}${minVal.toFixed(2)} <span class="font-normal text-slate-500">(${minPt.merchant})</span></div>
+              <div class="text-slate-600">📊 均价: <strong>${curPrefix}${avgVal.toFixed(2)}</strong> · 最高: ${curPrefix}${maxVal.toFixed(2)}</div>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    function renderProductPriceTrendStudio(selectedName) {
+      const studioEl = document.getElementById('productPriceTrendStudio');
+      const selectEl = document.getElementById('trendStudioProdSelect');
+      const quickPillsEl = document.getElementById('trendStudioQuickPills');
+      const filterModeEl = document.getElementById('trendStudioFilterMode');
+      const currencyModeEl = document.getElementById('trendStudioCurrencyMode');
+      if (!studioEl || !selectEl) return;
+
+      const filterMode = filterModeEl ? filterModeEl.value : 'ALL_VERIFIED';
+      const currencyMode = currencyModeEl ? currencyModeEl.value : 'DUAL';
+
+      // Build list of products sorted by number of verified price points descending
+      const prodWithSeries = state.products.map(p => {
+        const seriesAll = collectProductVerifiedPriceSeries(p.name, 'ALL_VERIFIED');
+        return { product: p, seriesCount: seriesAll.length, seriesAll };
+      }).sort((a, b) => b.seriesCount - a.seriesCount);
+
+      if (prodWithSeries.length === 0) return;
+
+      if (selectedName && state.products.some(p => p.name === selectedName)) {
+        currentTrendProductName = selectedName;
+      } else if (!currentTrendProductName || !state.products.some(p => p.name === currentTrendProductName)) {
+        // Default to the product with the most price variations
+        const multiPriceProd = prodWithSeries.find(x => {
+          const nzdSet = new Set(x.seriesAll.map(s => s.nzdPrice || s.rmbPrice));
+          return nzdSet.size > 1;
+        }) || prodWithSeries[0];
+        currentTrendProductName = multiPriceProd.product.name;
+      }
+
+      // Populate dropdown
+      selectEl.innerHTML = prodWithSeries.map(item => {
+        const p = item.product;
+        return `<option value="${p.name.replace(/"/g, '&quot;')}" ${p.name === currentTrendProductName ? 'selected' : ''}>${p.name} (${item.seriesCount}期核实价)</option>`;
+      }).join('');
+
+      // Populate top 8 quick switcher pills (prioritizing products with >=2 price points)
+      if (quickPillsEl) {
+        const topPills = prodWithSeries.slice(0, 8);
+        quickPillsEl.innerHTML = `<span class="text-[11px] text-slate-400 shrink-0">🔥 多期核实常购品：</span>` + topPills.map(item => {
+          const isSel = item.product.name === currentTrendProductName;
+          const shortName = item.product.name.length > 18 ? item.product.name.slice(0, 18) + '…' : item.product.name;
+          return `<button type="button" data-studio-pill="${item.product.name.replace(/"/g, '&quot;')}" class="text-[11px] px-2.5 py-1 rounded-full border shrink-0 transition ${isSel ? 'bg-indigo-600 text-white border-indigo-600 font-bold shadow-sm' : 'bg-slate-50 hover:bg-indigo-50 text-slate-700 border-slate-200'}">${shortName} <span class="opacity-80">(${item.seriesCount})</span></button>`;
+        }).join('');
+      }
+
+      let series = collectProductVerifiedPriceSeries(currentTrendProductName, filterMode);
+      // If WEB_ONLY returned 0 points for this item, fall back gracefully to ALL_VERIFIED with a notice
+      let fallbackNotice = '';
+      if (series.length === 0 && filterMode === 'WEB_ONLY') {
+        series = collectProductVerifiedPriceSeries(currentTrendProductName, 'ALL_VERIFIED');
+        fallbackNotice = '（该商品暂无网页抓单记录，已自动展示历史台账已核实单价）';
+      }
+
+      // Compute KPIs
+      const nzdPoints = series.filter(s => s.nzdPrice && s.nzdPrice > 0);
+      const rmbPoints = series.filter(s => s.rmbPrice && s.rmbPrice > 0);
+      const ratePoints = series.filter(s => s.exchangeRate && s.exchangeRate > 0);
+
+      const minNzdPt = nzdPoints.length ? nzdPoints.reduce((a, b) => (b.nzdPrice <= a.nzdPrice ? b : a), nzdPoints[0]) : null;
+      const maxNzdPt = nzdPoints.length ? nzdPoints.reduce((a, b) => (b.nzdPrice >= a.nzdPrice ? b : a), nzdPoints[0]) : null;
+      const avgNzd = nzdPoints.length ? (nzdPoints.reduce((s, x) => s + x.nzdPrice, 0) / nzdPoints.length) : 0;
+      const latestNzdPt = nzdPoints.length ? nzdPoints[nzdPoints.length - 1] : null;
+
+      const minRmbPt = rmbPoints.length ? rmbPoints.reduce((a, b) => (b.rmbPrice <= a.rmbPrice ? b : a), rmbPoints[0]) : null;
+      const latestRmbPt = rmbPoints.length ? rmbPoints[rmbPoints.length - 1] : null;
+
+      // Buying advice & exchange rate attribution
+      let adviceHtml = '';
+      if (latestNzdPt && minNzdPt && maxNzdPt) {
+        const vsMinPct = minNzdPt.nzdPrice > 0 ? (((latestNzdPt.nzdPrice - minNzdPt.nzdPrice) / minNzdPt.nzdPrice) * 100) : 0;
+        const vsAvgPct = avgNzd > 0 ? (((latestNzdPt.nzdPrice - avgNzd) / avgNzd) * 100) : 0;
+        if (vsMinPct <= 1.5) {
+          adviceHtml = `<div class="text-xs font-bold text-emerald-800">🟢 入手评级：强烈推荐（当前处于历史最低价位！）</div><p class="text-[11px] text-slate-600 mt-0.5">最新核实价 <strong>NZ$${latestNzdPt.nzdPrice}</strong> 持平历史最低价（低于历史均价 NZ$${avgNzd.toFixed(2)} 约 ${Math.abs(vsAvgPct).toFixed(1)}%），遇到可放心囤货。</p>`;
+        } else if (vsAvgPct <= 0) {
+          adviceHtml = `<div class="text-xs font-bold text-teal-800">👍 入手评级：好价区间（低于历史均价 ${Math.abs(vsAvgPct).toFixed(1)}%）</div><p class="text-[11px] text-slate-600 mt-0.5">最新核实价 <strong>NZ$${latestNzdPt.nzdPrice}</strong> 低于历史均价 NZ$${avgNzd.toFixed(2)}，距史低价 NZ$${minNzdPt.nzdPrice} (${minNzdPt.merchant}) 仅差 NZ$${(latestNzdPt.nzdPrice - minNzdPt.nzdPrice).toFixed(2)}。</p>`;
+        } else {
+          adviceHtml = `<div class="text-xs font-bold text-amber-800">⏳ 入手评级：偏高观望（高于史低 +${vsMinPct.toFixed(1)}%）</div><p class="text-[11px] text-slate-600 mt-0.5">最新核实价 <strong>NZ$${latestNzdPt.nzdPrice}</strong> 高于历史均价 NZ$${avgNzd.toFixed(2)}，历史最低曾在 <strong>${minNzdPt.merchant}</strong> 做到 <strong>NZ$${minNzdPt.nzdPrice}</strong> (${minNzdPt.date})。</p>`;
+        }
+      } else if (latestRmbPt && minRmbPt) {
+        adviceHtml = `<div class="text-xs font-bold text-emerald-800">🇨🇳 人民币直付核实品</div><p class="text-[11px] text-slate-600 mt-0.5">历史最低实付 <strong>¥${minRmbPt.rmbPrice}</strong> (${minRmbPt.date} · ${minRmbPt.merchant})，最新实付 <strong>¥${latestRmbPt.rmbPrice}</strong>。</p>`;
+      }
+
+      // Rate attribution note if >=2 rate points or dual currency exists
+      let rateAttributionHtml = '';
+      if (ratePoints.length >= 1) {
+        const latestRate = ratePoints[ratePoints.length - 1];
+        rateAttributionHtml = `<div class="mt-1.5 pt-1.5 border-t border-indigo-200/60 text-[11px] text-indigo-900">💱 <strong>汇率透视</strong>：最近核验汇率 <strong>${latestRate.exchangeRate}</strong> (${latestRate.date})。双轨图可直观区分「商家改价」与「汇率涨跌」。</div>`;
+      }
+
+      const diagEl = document.getElementById('trendStudioDiagnosticCards');
+      if (diagEl) {
+        diagEl.innerHTML = `
+          <div class="bg-emerald-50/80 border border-emerald-200 rounded-xl p-3">
+            <div class="text-[11px] font-semibold text-emerald-800">🟢 历史已核实最低入手价 (史低锚点)</div>
+            <div class="mt-1 flex items-baseline gap-2 flex-wrap">
+              <span class="text-lg font-extrabold text-emerald-700">${minNzdPt ? 'NZ$' + minNzdPt.nzdPrice.toFixed(2) : (minRmbPt ? '¥' + minRmbPt.rmbPrice.toFixed(2) : '暂无')}</span>
+              ${minRmbPt ? `<span class="text-xs font-bold text-rose-700">(实付最低 ¥${minRmbPt.rmbPrice.toFixed(2)})</span>` : ''}
+            </div>
+            <div class="text-[11px] text-slate-600 mt-1">
+              ${minNzdPt ? `📅 出现于 <strong>${minNzdPt.date}</strong> · 渠道：<strong class="text-emerald-900">${minNzdPt.merchant}</strong>${minNzdPt.orderNo ? ' (#' + minNzdPt.orderNo + ')' : ''}` : (minRmbPt ? `📅 出现于 <strong>${minRmbPt.date}</strong> · 渠道：<strong>${minRmbPt.merchant}</strong>` : '')}
+            </div>
+          </div>
+
+          <div class="bg-slate-50 border border-slate-200 rounded-xl p-3">
+            <div class="text-[11px] font-semibold text-slate-600">📊 历史核实价格区间 & 最新价对比</div>
+            <div class="mt-1 grid grid-cols-3 gap-2 text-center">
+              <div class="bg-white rounded p-1.5 border border-slate-200/80">
+                <div class="text-[10px] text-slate-400">最新核实</div>
+                <div class="text-xs font-bold text-slate-800">${latestNzdPt ? 'NZ$' + latestNzdPt.nzdPrice.toFixed(2) : (latestRmbPt ? '¥' + latestRmbPt.rmbPrice.toFixed(2) : '-')}</div>
+              </div>
+              <div class="bg-white rounded p-1.5 border border-slate-200/80">
+                <div class="text-[10px] text-slate-400">历史均价</div>
+                <div class="text-xs font-bold text-indigo-700">${avgNzd > 0 ? 'NZ$' + avgNzd.toFixed(2) : '-'}</div>
+              </div>
+              <div class="bg-white rounded p-1.5 border border-slate-200/80">
+                <div class="text-[10px] text-slate-400">历史最高</div>
+                <div class="text-xs font-bold text-rose-700">${maxNzdPt ? 'NZ$' + maxNzdPt.nzdPrice.toFixed(2) : '-'}</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="bg-indigo-50/70 border border-indigo-200 rounded-xl p-3">
+            ${adviceHtml || '<div class="text-xs text-slate-500">暂无足够价格点生成比价诊断</div>'}
+            ${rateAttributionHtml}
+          </div>
+        `;
+      }
+
+      // Update Chart Title
+      const titleEl = document.getElementById('trendStudioChartTitle');
+      const subEl = document.getElementById('trendStudioChartSubtitle');
+      if (titleEl) titleEl.textContent = `📈 ${currentTrendProductName} · 已核实单价走势 (${series.length} 期记录)${fallbackNotice}`;
+      if (subEl) subEl.textContent = `绿色圆点 = 史低好价 · 红色圆点 = 历史高点 · 支持悬停查看当时汇率与关联订单号`;
+
+      // Render Merchant Comparison Radar
+      const merchMap = {};
+      series.forEach(pt => {
+        const m = pt.merchant || '其他';
+        if (!merchMap[m]) merchMap[m] = { count: 0, nzdList: [], rmbList: [], lastDate: pt.date };
+        merchMap[m].count += 1;
+        if (pt.nzdPrice > 0) merchMap[m].nzdList.push(pt.nzdPrice);
+        if (pt.rmbPrice > 0) merchMap[m].rmbList.push(pt.rmbPrice);
+        if (pt.date >= merchMap[m].lastDate) merchMap[m].lastDate = pt.date;
+      });
+
+      const merchEntries = Object.entries(merchMap).map(([mName, info]) => {
+        const minN = info.nzdList.length ? Math.min(...info.nzdList) : null;
+        const avgN = info.nzdList.length ? (info.nzdList.reduce((a, b) => a + b, 0) / info.nzdList.length) : null;
+        const minR = info.rmbList.length ? Math.min(...info.rmbList) : null;
+        return { mName, count: info.count, minN, avgN, minR, lastDate: info.lastDate };
+      }).sort((a, b) => (a.minN || 99999) - (b.minN || 99999));
+
+      const merchEl = document.getElementById('trendStudioMerchantCompare');
+      if (merchEl) {
+        merchEl.innerHTML = `
+          <div class="flex items-center justify-between mb-2">
+            <span class="text-xs font-bold text-slate-800">🧭 跨商家渠道已核实比价雷达</span>
+            <span class="text-[10px] text-slate-500">按史低价从低到高排序</span>
+          </div>
+          <div class="space-y-2">
+            ${merchEntries.map((m, idx) => {
+              const isBest = idx === 0 && merchEntries.length > 1;
+              return `
+                <div class="bg-white rounded-lg p-2.5 border ${isBest ? 'border-emerald-400 ring-1 ring-emerald-200' : 'border-slate-200'} flex items-center justify-between gap-2">
+                  <div>
+                    <div class="flex items-center gap-1.5">
+                      <span class="text-xs font-bold text-slate-800">${m.mName}</span>
+                      ${isBest ? '<span class="text-[10px] bg-emerald-100 text-emerald-800 font-bold px-1.5 py-0.2 rounded">🏆 史低最优渠道</span>' : ''}
+                      <span class="text-[10px] text-slate-400">核实 ${m.count} 次</span>
+                    </div>
+                    <div class="text-[10px] text-slate-500 mt-0.5">最近核实: ${m.lastDate}${m.avgN ? ` · 渠道均价 NZ$${m.avgN.toFixed(2)}` : ''}</div>
+                  </div>
+                  <div class="text-right">
+                    <div class="text-xs font-extrabold ${isBest ? 'text-emerald-700' : 'text-slate-800'}">${m.minN ? '史低 NZ$' + m.minN.toFixed(2) : (m.minR ? '史低 ¥' + m.minR.toFixed(2) : '-')}</div>
+                    ${m.minR && m.minN ? `<div class="text-[10px] text-rose-700 font-semibold">实付 ¥${m.minR.toFixed(2)}</div>` : ''}
+                  </div>
+                </div>
+              `;
+            }).join('')}
+          </div>
+        `;
+      }
+
+      // Render Verified Price Timeline Table
+      const tableEl = document.getElementById('trendStudioTimelineTable');
+      if (tableEl) {
+        tableEl.innerHTML = `
+          <div class="flex items-center justify-between mb-2">
+            <span class="text-xs font-bold text-slate-800">📋 历次已核实单价明细档案 (点击单号可定位订单)</span>
+            <span class="text-[10px] text-slate-500">共 ${series.length} 条已核实记录</span>
+          </div>
+          <table class="w-full text-left border-collapse text-[11px]">
+            <thead>
+              <tr class="border-b border-slate-200 text-slate-500">
+                <th class="py-1.5 px-2">核实日期</th>
+                <th class="py-1.5 px-2">渠道商家</th>
+                <th class="py-1.5 px-2">NZD原币单价</th>
+                <th class="py-1.5 px-2">RMB实付单价</th>
+                <th class="py-1.5 px-2">当时汇率</th>
+                <th class="py-1.5 px-2">核验来源 / 关联订单</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-slate-200/60 bg-white">
+              ${series.slice().reverse().map(pt => {
+                const isLowestNzd = minNzdPt && pt.nzdPrice && Math.abs(pt.nzdPrice - minNzdPt.nzdPrice) < 0.01;
+                return `
+                  <tr class="hover:bg-indigo-50/40">
+                    <td class="py-1.5 px-2 font-mono font-semibold text-slate-700">${pt.date}</td>
+                    <td class="py-1.5 px-2"><span class="px-1.5 py-0.5 rounded bg-slate-100 text-slate-800 font-medium">${pt.merchant}</span></td>
+                    <td class="py-1.5 px-2 font-bold ${isLowestNzd ? 'text-emerald-700' : 'text-slate-800'}">${pt.nzdPrice ? 'NZ$' + pt.nzdPrice.toFixed(2) + (isLowestNzd ? ' 🟢史低' : '') : '<span class="text-slate-400">-</span>'}</td>
+                    <td class="py-1.5 px-2 font-bold text-rose-700">${pt.rmbPrice ? '¥' + pt.rmbPrice.toFixed(2) : '<span class="text-slate-400">-</span>'}</td>
+                    <td class="py-1.5 px-2 font-mono text-teal-800">${pt.exchangeRate ? pt.exchangeRate : '<span class="text-slate-400">-</span>'}</td>
+                    <td class="py-1.5 px-2">
+                      ${pt.orderNo
+                        ? `<button type="button" data-jump-order-no="${pt.orderNo}" class="text-indigo-600 hover:underline font-semibold">🔍 订单 #${pt.orderNo}</button>`
+                        : `<span class="text-slate-500">${pt.sourceType || pt.note || '已核实单价'}</span>`}
+                    </td>
+                  </tr>
+                `;
+              }).join('')}
+            </tbody>
+          </table>
+        `;
+      }
+
+      // Render Chart.js Canvas
+      const canvas = document.getElementById('productPriceTrendCanvas');
+      if (!canvas || typeof Chart === 'undefined') return;
+      if (productPriceTrendChartInstance) {
+        productPriceTrendChartInstance.destroy();
+        productPriceTrendChartInstance = null;
+      }
+
+      const labels = series.map(pt => `${pt.date} (${pt.merchant})`);
+      const nzdData = series.map(pt => pt.nzdPrice || null);
+      const rmbData = series.map(pt => pt.rmbPrice || null);
+
+      const nzdPointColors = series.map(pt => {
+        if (!pt.nzdPrice) return '#4f46e5';
+        if (minNzdPt && Math.abs(pt.nzdPrice - minNzdPt.nzdPrice) < 0.01) return '#059669';
+        if (maxNzdPt && minNzdPt && maxNzdPt.nzdPrice > minNzdPt.nzdPrice && Math.abs(pt.nzdPrice - maxNzdPt.nzdPrice) < 0.01) return '#e11d48';
+        return '#4f46e5';
+      });
+
+      const datasets = [];
+      if (currencyMode === 'DUAL' || currencyMode === 'NZD') {
+        datasets.push({
+          label: 'NZD 纽币核实单价 ($)',
+          data: nzdData,
+          borderColor: '#4f46e5',
+          backgroundColor: 'rgba(79, 70, 229, 0.12)',
+          pointBackgroundColor: nzdPointColors,
+          pointBorderColor: '#ffffff',
+          pointBorderWidth: 2,
+          pointRadius: 5,
+          pointHoverRadius: 7,
+          borderWidth: 2.5,
+          tension: 0.25,
+          fill: currencyMode === 'NZD',
+          spanGaps: true,
+          yAxisID: 'yNzd'
+        });
+      }
+      if ((currencyMode === 'DUAL' || currencyMode === 'CNY') && rmbData.some(v => v !== null)) {
+        datasets.push({
+          label: 'RMB 人民币实付单价 (¥)',
+          data: rmbData,
+          borderColor: '#e11d48',
+          backgroundColor: 'rgba(225, 29, 72, 0.10)',
+          pointBackgroundColor: '#e11d48',
+          pointBorderColor: '#ffffff',
+          pointBorderWidth: 2,
+          pointRadius: 5,
+          pointHoverRadius: 7,
+          borderWidth: 2,
+          borderDash: currencyMode === 'DUAL' ? [5, 4] : [],
+          tension: 0.25,
+          fill: currencyMode === 'CNY',
+          spanGaps: true,
+          yAxisID: currencyMode === 'DUAL' ? 'yRmb' : 'yNzd'
+        });
+      }
+
+      productPriceTrendChartInstance = new Chart(canvas.getContext('2d'), {
+        type: 'line',
+        data: { labels, datasets },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          interaction: { mode: 'index', intersect: false },
+          plugins: {
+            legend: { position: 'top', labels: { boxWidth: 12, font: { size: 11 } } },
+            tooltip: {
+              callbacks: {
+                afterBody: function(context) {
+                  const idx = context[0] ? context[0].dataIndex : -1;
+                  const pt = series[idx];
+                  if (!pt) return [];
+                  const extra = [];
+                  if (pt.exchangeRate) extra.push(`💱 当时核验汇率: ${pt.exchangeRate}`);
+                  if (pt.orderNo) extra.push(`📦 关联订单号: #${pt.orderNo}`);
+                  if (pt.note) extra.push(`📝 备注: ${pt.note}`);
+                  return extra;
+                }
+              }
+            }
+          },
+          scales: {
+            x: { ticks: { font: { size: 10 }, maxRotation: 25 } },
+            yNzd: {
+              type: 'linear',
+              display: true,
+              position: 'left',
+              title: { display: true, text: currencyMode === 'CNY' ? 'RMB (¥)' : 'NZD ($)', font: { size: 10 } },
+              ticks: { font: { size: 10 } }
+            },
+            ...(currencyMode === 'DUAL' && rmbData.some(v => v !== null) ? {
+              yRmb: {
+                type: 'linear',
+                display: true,
+                position: 'right',
+                grid: { drawOnChartArea: false },
+                title: { display: true, text: 'RMB 实付 (¥)', font: { size: 10 } },
+                ticks: { font: { size: 10 } }
+              }
+            } : {})
+          }
+        }
+      });
+    }
+
     function renderProductsTab() {
       sanitizeCatalogFabricatedPrices();
       const q = (document.getElementById('prodSearchInput').value || '').trim().toLowerCase();
@@ -6174,14 +6819,16 @@
       const grid = document.getElementById('productsGrid');
       grid.innerHTML = list.map(p => {
         const st = statsMap[p.name] || { qty: 0, orders: 0, merchants: new Set() };
+        const verifiedSeries = collectProductVerifiedPriceSeries(p.name, 'ALL_VERIFIED');
+        const sparklineHtml = buildProductCardSparklineSvg(verifiedSeries);
         const histArr = (p.priceHistory || []).slice().sort((a, b) => String(a.date || '').localeCompare(String(b.date || '')));
-        const nzdPricesOnly = histArr
-          .map(h => Number(h.nzdPrice || ((h.currency !== 'CNY' && h.rawCurrency !== 'CNY') ? h.price : 0)))
+        const nzdPricesOnly = verifiedSeries
+          .map(h => Number(h.nzdPrice || 0))
           .filter(v => v > 0);
         const minPrice = nzdPricesOnly.length > 0 ? Math.min(...nzdPricesOnly) : (p.nzdPrice || 0);
         const maxPrice = nzdPricesOnly.length > 0 ? Math.max(...nzdPricesOnly) : (p.nzdPrice || 0);
         const priceTrendBadge = (nzdPricesOnly.length > 1 && minPrice < maxPrice)
-          ? `<span class="text-[10px] bg-blue-50 text-blue-800 border border-blue-200 px-1.5 py-0.2 rounded font-medium">📉 历史纽币波动 NZ$${minPrice} ~ NZ$${maxPrice}</span>`
+          ? `<span class="text-[10px] bg-blue-50 text-blue-800 border border-blue-200 px-1.5 py-0.2 rounded font-medium">📉 纽币波动 NZ$${minPrice} ~ NZ$${maxPrice}</span>`
           : '';
 
         const histHtml = histArr.map(h => {
@@ -6217,6 +6864,7 @@
               </div>
               <h3 class="text-sm font-bold text-slate-900 leading-snug">${p.name}</h3>
               ${p.note ? `<div class="text-[11px] text-rose-700 bg-rose-50 border border-rose-200 px-2 py-0.5 rounded inline-block">⚠️ ${p.note}</div>` : ''}
+              ${sparklineHtml}
               ${histHtml ? `<div class="space-y-1"><div class="text-[11px] text-slate-400">📊 历史日期单价与汇率档案 (${p.priceSource || '真实订单归档 · 绝不虚构汇率折算'})：</div><div class="flex flex-wrap gap-1">${histHtml}</div></div>` : ''}
             </div>
 
@@ -6232,15 +6880,22 @@
                     <strong class="text-amber-700 ml-0.5">${p.rmbPrice ? '¥' + p.rmbPrice : '未设'}</strong>
                   </div>
                 </div>
-                <button data-edit-prod="${p.name}" class="text-xs bg-slate-100 hover:bg-emerald-700 hover:text-white text-slate-700 font-medium px-2.5 py-1 rounded-lg transition shrink-0">
-                  ✎ 改价/编辑
-                </button>
+                <div class="flex items-center gap-1.5 shrink-0">
+                  <button type="button" data-trend-prod="${p.name.replace(/"/g, '&quot;')}" class="text-xs bg-indigo-50 hover:bg-indigo-600 hover:text-white text-indigo-700 border border-indigo-200 font-semibold px-2 py-1 rounded-lg transition">
+                    📈 趋势比价
+                  </button>
+                  <button data-edit-prod="${p.name.replace(/"/g, '&quot;')}" class="text-xs bg-slate-100 hover:bg-emerald-700 hover:text-white text-slate-700 font-medium px-2.5 py-1 rounded-lg transition">
+                    ✎ 编辑
+                  </button>
+                </div>
               </div>
               ${latestDate ? `<div class="text-[10px] text-slate-400 flex items-center justify-between"><span>⏱️ 最新单价获取日期：<strong class="text-slate-600 font-mono">${latestDate}</strong>${p.lastScrapedAt ? ` (抓单核验: ${p.lastScrapedAt})` : ''}</span><span>${p.lastExchangeRate ? `按当时汇率 ${p.lastExchangeRate} 折算` : '真实币种原值保存'}</span></div>` : ''}
             </div>
           </div>
         `;
       }).join('');
+
+      renderProductPriceTrendStudio(currentTrendProductName);
     }
 
     function load20251101Preset() {
@@ -7092,6 +7747,99 @@
         showToast(added > 0 ? `✅ 已从历史订单中新增归档 ${added} 条日期单价记录！请点击顶部「保存修改」持久化` : '所有订单的日期单价均已在商品库中归档！');
       });
 
+      // V7.6 Price Trend Studio Event Listeners
+      const btnToggleStudio = document.getElementById('btnTogglePriceTrendStudio');
+      if (btnToggleStudio) {
+        btnToggleStudio.addEventListener('click', () => {
+          const st = document.getElementById('productPriceTrendStudio');
+          if (!st) return;
+          st.classList.toggle('hidden');
+          if (!st.classList.contains('hidden')) {
+            renderProductPriceTrendStudio(currentTrendProductName);
+            st.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          }
+        });
+      }
+      const trendProdSelect = document.getElementById('trendStudioProdSelect');
+      if (trendProdSelect) {
+        trendProdSelect.addEventListener('change', (e) => {
+          renderProductPriceTrendStudio(e.target.value);
+        });
+      }
+      const trendFilterMode = document.getElementById('trendStudioFilterMode');
+      if (trendFilterMode) {
+        trendFilterMode.addEventListener('change', () => {
+          renderProductPriceTrendStudio(currentTrendProductName);
+        });
+      }
+      const trendCurrencyMode = document.getElementById('trendStudioCurrencyMode');
+      if (trendCurrencyMode) {
+        trendCurrencyMode.addEventListener('change', () => {
+          renderProductPriceTrendStudio(currentTrendProductName);
+        });
+      }
+      const btnOpenQp = document.getElementById('btnOpenQuickPricePointForm');
+      const btnCloseQp = document.getElementById('btnCloseQuickPricePointForm');
+      const qpDrawer = document.getElementById('quickPricePointDrawer');
+      if (btnOpenQp && qpDrawer) {
+        btnOpenQp.addEventListener('click', () => {
+          qpDrawer.classList.toggle('hidden');
+          const dInput = document.getElementById('qpDateInput');
+          if (dInput && !dInput.value) dInput.value = TODAY_STR;
+        });
+      }
+      if (btnCloseQp && qpDrawer) {
+        btnCloseQp.addEventListener('click', () => qpDrawer.classList.add('hidden'));
+      }
+      const btnSaveQp = document.getElementById('btnSaveQuickPricePoint');
+      if (btnSaveQp) {
+        btnSaveQp.addEventListener('click', () => {
+          const p = getProductInfo(currentTrendProductName);
+          if (!p) return;
+          const dateVal = (document.getElementById('qpDateInput').value || TODAY_STR).trim();
+          const merchVal = document.getElementById('qpMerchantInput').value || '华洋';
+          const nzdVal = parseFloat(document.getElementById('qpNzdInput').value) || null;
+          const rmbVal = parseFloat(document.getElementById('qpRmbInput').value) || null;
+          let rateVal = parseFloat(document.getElementById('qpRateInput').value) || null;
+          if (!nzdVal && !rmbVal) {
+            showToast('⚠️ 请至少输入 NZD 纽币单价或 RMB 人民币实付单价中的一项！');
+            return;
+          }
+          if (!rateVal && nzdVal && rmbVal) {
+            rateVal = Number((rmbVal / nzdVal).toFixed(4));
+          }
+          recordBeforeAction(`录入 ${p.name} 已核实单价点`);
+          p.priceHistory = p.priceHistory || [];
+          p.priceHistory.push({
+            date: dateVal,
+            scrapedAt: TODAY_STR,
+            merchant: merchVal,
+            price: nzdVal || rmbVal,
+            nzdPrice: nzdVal,
+            rmbPrice: rmbVal,
+            exchangeRate: rateVal,
+            rawPrice: nzdVal || rmbVal,
+            rawCurrency: nzdVal ? 'NZD' : 'CNY',
+            currency: nzdVal ? 'NZD' : 'CNY',
+            note: '手动核实好价记录'
+          });
+          p.priceHistory.sort((a, b) => String(a.date || '').localeCompare(String(b.date || '')));
+          if (!p.nzdDate || dateVal >= p.nzdDate) {
+            p.nzdDate = dateVal;
+            if (nzdVal) p.nzdPrice = nzdVal;
+            if (rmbVal) p.rmbPrice = rmbVal;
+            if (rateVal) p.lastExchangeRate = rateVal;
+          }
+          saveState(`手动录入 ${p.name} 核实价格`);
+          document.getElementById('qpNzdInput').value = '';
+          document.getElementById('qpRmbInput').value = '';
+          document.getElementById('qpRateInput').value = '';
+          if (qpDrawer) qpDrawer.classList.add('hidden');
+          renderProductsTab();
+          showToast(`✅ 已将 ${dateVal} (${merchVal}) 的已核实单价加入「${p.name}」趋势图！`);
+        });
+      }
+
       document.getElementById('btnGenerateSeqParcels').addEventListener('click', () => {
         const rawTrack = document.getElementById('seqStartTrack').value.trim();
         const count = parseInt(document.getElementById('seqCount').value, 10) || 2;
@@ -7632,6 +8380,41 @@
           saveState(`删除订单 #${targetOrd ? targetOrd.orderNo : ordId}`);
           renderAll();
           showToast('订单已移除（如误删可点击顶部「↩️ 撤销」或「🗑️ 取消修改」立即恢复！）');
+          return;
+        }
+
+        const trendProdBtn = e.target.closest('[data-trend-prod]');
+        if (trendProdBtn) {
+          const pname = trendProdBtn.getAttribute('data-trend-prod');
+          if (pname) {
+            const studioEl = document.getElementById('productPriceTrendStudio');
+            if (studioEl) studioEl.classList.remove('hidden');
+            renderProductPriceTrendStudio(pname);
+            if (studioEl) studioEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          }
+          return;
+        }
+
+        const studioPillBtn = e.target.closest('[data-studio-pill]');
+        if (studioPillBtn) {
+          const pname = studioPillBtn.getAttribute('data-studio-pill');
+          if (pname) renderProductPriceTrendStudio(pname);
+          return;
+        }
+
+        const jumpOrdBtn = e.target.closest('[data-jump-order-no]');
+        if (jumpOrdBtn) {
+          const ordNo = jumpOrdBtn.getAttribute('data-jump-order-no');
+          if (ordNo) {
+            const tabOrdersBtn = document.querySelector('.tab-btn[data-tab="tab-orders"]');
+            if (tabOrdersBtn) tabOrdersBtn.click();
+            const searchInput = document.getElementById('globalSearchInput');
+            if (searchInput) {
+              searchInput.value = ordNo;
+              searchInput.dispatchEvent(new Event('input'));
+            }
+            showToast(`🔍 已为您定位到关联订单 #${ordNo}`);
+          }
           return;
         }
 
