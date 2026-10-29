@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>纽澳跨境采购与快递追踪管家 V7.8</title>
+  <title>纽澳跨境采购与快递追踪管家 v7.9.0 (Build 20261029.1948)</title>
   <script src="https://cdn.tailwindcss.com/3.4.17"></script>
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
@@ -342,9 +342,9 @@
               <span id="uiIcon-appTitle" class="hidden"></span>
               <span id="uiText-appTitle">纽澳跨境采购与快递追踪管家</span>
             </h1>
-            <button type="button" id="btnHeaderVersionBadge" class="inline-flex items-center gap-1 text-xs bg-gradient-to-r from-amber-400 to-amber-300 hover:from-amber-300 hover:to-amber-200 text-slate-950 font-extrabold px-2.5 py-0.5 rounded-full shadow-xs transition cursor-pointer" title="当前版本 V7.8（自用与寄回国双轨架构 · HOME国内家庭件关税雷达 · 拆包一致性校验 · 最佳入手季节洞察 · 账单附带物流单号）· 点击打开个性化与版本中心">
-              <span id="uiIcon-appVersion">✨</span>
-              <span id="uiText-appVersion">V7.8</span>
+            <button type="button" id="btnHeaderVersionBadge" class="inline-flex items-center gap-1 text-xs bg-gradient-to-r from-amber-400 to-amber-300 hover:from-amber-300 hover:to-amber-200 text-slate-950 font-extrabold px-2.5 py-0.5 rounded-full shadow-xs transition cursor-pointer" title="当前正式稳定版本：v7.9.0 (Build 20261029.1948)（遵循 vMAJOR.MINOR.PATCH + Build Tag 规范 · 点击查看版本规范与更新日志）">
+              <span id="uiIcon-appVersion">🚀</span>
+              <span id="uiText-appVersion">v7.9.0 (Build 20261029.1948)</span>
             </button>
             <button type="button" id="btnHeaderCfStatusPill" class="inline-flex items-center gap-1 text-[11px] bg-emerald-900/90 hover:bg-emerald-800 text-emerald-100 border border-emerald-600/70 font-semibold px-2.5 py-0.5 rounded-full transition cursor-pointer" title="点击打开 Cloudflare KV 边缘云同步设置 (方案B)">
               <span id="headerCfStatusDot" class="w-2 h-2 rounded-full bg-amber-400 inline-block"></span>
@@ -966,6 +966,31 @@
             <label class="block text-xs font-medium text-slate-500 mb-1">搜索单号/商品/备注</label>
             <input type="text" id="filterSearch" placeholder="输入订单号/运单号/商品名..." class="w-full text-xs sm:text-sm border border-slate-300 rounded-lg px-2.5 py-2" />
           </div>
+
+          <div class="sm:col-span-2 lg:col-span-6 pt-1 border-t border-slate-100 flex flex-wrap items-center justify-between gap-2">
+            <div class="flex flex-wrap items-center gap-2">
+              <label for="filterOrderSort" class="text-xs font-bold text-slate-700 flex items-center gap-1">
+                <span>🔃 自主选择排序：</span>
+              </label>
+              <select id="filterOrderSort" class="text-xs border border-emerald-300 rounded-lg px-2.5 py-1.5 bg-emerald-50/50 font-semibold text-slate-800">
+                <option value="DATE_DESC">📅 按下单日期：最新在前 (默认 ↓)</option>
+                <option value="DATE_ASC">📅 按下单日期：最早在前 (↑)</option>
+                <option value="AMOUNT_DESC">💰 按订单总额(折NZD)：从高到低 (↓)</option>
+                <option value="AMOUNT_ASC">💰 按订单总额(折NZD)：从低到高 (↑)</option>
+                <option value="QTY_DESC">📦 按商品总件数：从多到少 (↓)</option>
+                <option value="QTY_ASC">📦 按商品总件数：从少到多 (↑)</option>
+                <option value="PARCELS_DESC">🚚 按包裹拆包数：多包拆单优先 (↓)</option>
+                <option value="RECIPIENT_ASC">👤 按收件人姓名：同收件人聚合 (A→Z)</option>
+                <option value="MERCHANT_ASC">🏪 按采购商家：同平台聚合排序</option>
+                <option value="UNVERIFIED_FIRST">⚡ 按核验状态：待抓单核验优先</option>
+              </select>
+              <label class="inline-flex items-center gap-1 text-xs text-slate-600 bg-slate-100 px-2.5 py-1 rounded-lg border border-slate-200 cursor-pointer select-none" title="勾选后未读新导入订单始终排在最顶部；取消勾选则完全按所选排序规则排列">
+                <input type="checkbox" id="chkSortPinUnread" class="rounded text-emerald-700" checked />
+                <span>📌 未读新单置顶</span>
+              </label>
+            </div>
+            <span class="text-[11px] text-slate-400">💡 提示：直接点击下方表头「下单日期 ↕」「收件人 ↕」「商家 ↕」「商品件数 ↕」「总计 ↕」也可一键切换排序</span>
+          </div>
         </div>
 
         <!-- Dynamic Filter Summary Bar -->
@@ -1040,14 +1065,14 @@
         <div id="ordersTableScrollWrap" class="overflow-x-auto custom-scroll max-w-full">
           <table id="ordersMainTable" class="w-full text-left border-collapse">
             <thead>
-              <tr class="bg-slate-50 border-b border-slate-200 text-xs font-semibold text-slate-600">
-                <th class="py-2.5 px-2.5 whitespace-nowrap w-[96px]">下单日期</th>
-                <th class="py-2.5 px-2 whitespace-nowrap w-[68px]">收件人</th>
-                <th class="py-2.5 px-2.5 w-[142px]">商家 / 订单号</th>
-                <th class="py-2.5 px-2.5">购买商品明细 (数量 × 单价)</th>
-                <th class="py-2.5 px-2.5 w-[160px]">运费 / 总计</th>
-                <th class="py-2.5 px-2.5 w-[235px]">快递包裹与签收追踪 (支持一单多包)</th>
-                <th class="py-2.5 px-2.5 whitespace-nowrap text-right w-[144px]">操作</th>
+              <tr class="bg-slate-50 border-b border-slate-200 text-xs font-semibold text-slate-600 select-none">
+                <th data-order-sort-col="DATE" class="py-2.5 px-2.5 whitespace-nowrap w-[96px] cursor-pointer hover:bg-emerald-50/70 hover:text-emerald-900 transition" title="点击切换下单日期正序/倒序">下单日期 <span id="sortInd-DATE" class="text-emerald-700 font-bold">↓</span></th>
+                <th data-order-sort-col="RECIPIENT" class="py-2.5 px-2 whitespace-nowrap w-[68px] cursor-pointer hover:bg-emerald-50/70 hover:text-emerald-900 transition" title="点击按收件人聚合排序">收件人 <span id="sortInd-RECIPIENT" class="text-slate-400">↕</span></th>
+                <th data-order-sort-col="MERCHANT" class="py-2.5 px-2.5 w-[142px] cursor-pointer hover:bg-emerald-50/70 hover:text-emerald-900 transition" title="点击按采购商家聚合排序">商家 / 订单号 <span id="sortInd-MERCHANT" class="text-slate-400">↕</span></th>
+                <th data-order-sort-col="QTY" class="py-2.5 px-2.5 cursor-pointer hover:bg-emerald-50/70 hover:text-emerald-900 transition" title="点击按购买商品总件数排序">购买商品明细 (数量 × 单价) <span id="sortInd-QTY" class="text-slate-400">↕</span></th>
+                <th data-order-sort-col="AMOUNT" class="py-2.5 px-2.5 w-[160px] cursor-pointer hover:bg-emerald-50/70 hover:text-emerald-900 transition" title="点击按订单实付总金额排序">运费 / 总计 <span id="sortInd-AMOUNT" class="text-slate-400">↕</span></th>
+                <th data-order-sort-col="PARCELS" class="py-2.5 px-2.5 w-[235px] cursor-pointer hover:bg-emerald-50/70 hover:text-emerald-900 transition" title="点击按包裹数量排序">快递包裹与签收追踪 <span id="sortInd-PARCELS" class="text-slate-400">↕</span></th>
+                <th class="py-2.5 px-2.5 whitespace-nowrap text-right w-[150px]">操作</th>
               </tr>
             </thead>
             <tbody id="ordersTableBody" class="divide-y divide-slate-200 text-xs sm:text-sm">
@@ -1060,37 +1085,176 @@
 
     <!-- TAB 3: PRODUCT CATALOG & RETAIL PRICE COMPARISON -->
     <section id="tab-products" class="hidden space-y-4">
-      <div class="bg-white rounded-xl p-4 sm:p-5 shadow-sm border border-slate-200 flex flex-wrap items-center justify-between gap-3">
-        <div>
-          <h2 class="text-base font-bold text-slate-800">🏷️ 商品字典与《零售店单价》历史价格库</h2>
-          <p class="text-xs text-slate-500 mt-0.5">已完整导入原表格 2022–2026 所有 35 种采购商品及《零售店单价》表中的纽澳康源历史单价。在此修改默认单价后，录单时会自动带出。</p>
+      <div class="bg-white rounded-xl p-4 sm:p-5 shadow-sm border border-slate-200 space-y-3.5">
+        <div class="flex flex-wrap items-start justify-between gap-3">
+          <div>
+            <div class="flex items-center gap-2 flex-wrap">
+              <h2 class="text-base font-bold text-slate-800">🏷️ 商品单价库 · 已核实订单价格中枢 & 智能同品归一引擎</h2>
+              <span id="verifiedExtractionStatusBadge" class="text-[11px] bg-emerald-100 text-emerald-900 border border-emerald-300 font-extrabold px-2.5 py-0.5 rounded-full">✅ 已从全量核实订单自动提取单价</span>
+            </div>
+            <p class="text-xs text-slate-500 mt-0.5">已自动扫描并提取所有<strong>「已核验订单」与「历史台账订单」</strong>中的真实单价、币种、汇率与商家档位；支持多关键字检索、分类联动、下拉列表科学排序及<strong>同品同名异词审核合并（自动识别 150粒 ≠ 200粒 独立规格）</strong>。</p>
+          </div>
+          <div class="flex flex-wrap items-center gap-1.5">
+            <button id="btnToggleDedupMergeStudio" type="button" class="bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-400 hover:to-orange-400 text-slate-950 text-xs px-3 py-1.5 rounded-lg font-extrabold shadow-xs transition flex items-center gap-1" title="比对全库商品名称，按品牌+核心词+规格匹配疑似重复商品，由您审核合并为确定商品名，并开启后续抓单实时归一">
+              <span>🧬 同品比对与合并审核</span>
+              <span id="dedupCandidateCountBadge" class="bg-slate-950 text-amber-300 px-1.5 py-0.2 rounded-full text-[10px]">0组待审</span>
+            </button>
+            <button id="btnRebuildPriceHistoryFromOrders" type="button" class="bg-emerald-50 hover:bg-emerald-100 text-emerald-900 border border-emerald-300 text-xs px-2.5 py-1.5 rounded-lg font-bold transition" title="重新扫描所有已核实订单与历史订单中的采购单价与下单日期，全量同步至商品单价库">
+              🔄 提取/同步全部已核实订单单价
+            </button>
+            <button id="btnTogglePriceTrendStudio" type="button" class="bg-indigo-600 hover:bg-indigo-500 text-white text-xs px-2.5 py-1.5 rounded-lg font-medium transition shadow-xs">
+              📈 价格趋势大屏
+            </button>
+            <button id="btnToggleSmartCartOptimizer" type="button" class="bg-teal-700 hover:bg-teal-600 text-white text-xs px-2.5 py-1.5 rounded-lg font-bold transition shadow-xs">
+              🛒 跨店比价计算器
+            </button>
+            <button id="btnAutoSetTargetPrices" type="button" class="bg-rose-50 hover:bg-rose-100 text-rose-800 border border-rose-300 text-xs px-2.5 py-1.5 rounded-lg font-bold transition" title="按每款商品的历史最低核实价+3%自动设定心愿单目标好价提醒阈值">
+              🎯 智能设好价(<span id="goodPriceHitCountBadge">0</span>达标)
+            </button>
+            <button id="btnAddNewProductModal" class="bg-emerald-700 hover:bg-emerald-600 text-white text-xs px-3 py-1.5 rounded-lg font-bold transition">
+              ＋ 新增商品
+            </button>
+          </div>
         </div>
-        <div class="flex flex-wrap items-center gap-2">
-          <input type="text" id="prodSearchInput" placeholder="搜索商品名称或分类..." class="text-xs sm:text-sm border border-slate-300 rounded-lg px-3 py-1.5" />
-          <select id="prodCategoryFilter" class="text-xs sm:text-sm border border-slate-300 rounded-lg px-2.5 py-1.5 bg-white">
-            <option value="ALL">全部分类</option>
-            <option value="麦卢卡蜂蜜/蜂产品">麦卢卡蜂蜜/蜂产品</option>
-            <option value="成人/婴幼奶粉">成人/婴幼奶粉</option>
-            <option value="鱼油/心脑血管">鱼油/心脑血管</option>
-            <option value="维生素/钙铁锌/保健">维生素/钙铁锌/保健</option>
-            <option value="个护/日用涂抹">个护/日用涂抹</option>
-            <option value="食品/医药其他">食品/医药其他</option>
-          </select>
-          <button id="btnRebuildPriceHistoryFromOrders" type="button" class="bg-amber-50 hover:bg-amber-100 text-amber-900 border border-amber-300 text-xs sm:text-sm px-3 py-1.5 rounded-lg font-medium transition" title="扫描所有订单中的采购单价与下单日期，自动归档到对应商品的历史日期单价库">
-            🔄 汇总订单日期单价
-          </button>
-          <button id="btnTogglePriceTrendStudio" type="button" class="bg-indigo-600 hover:bg-indigo-500 text-white text-xs sm:text-sm px-3 py-1.5 rounded-lg font-medium transition shadow-sm">
-            📈 价格趋势与比价大屏
-          </button>
-          <button id="btnToggleSmartCartOptimizer" type="button" class="bg-teal-700 hover:bg-teal-600 text-white text-xs sm:text-sm px-3 py-1.5 rounded-lg font-bold transition shadow-sm">
-            🛒 跨店比价与凑单拆箱计算器
-          </button>
-          <button id="btnAutoSetTargetPrices" type="button" class="bg-rose-50 hover:bg-rose-100 text-rose-800 border border-rose-300 text-xs sm:text-sm px-2.5 py-1.5 rounded-lg font-bold transition" title="按每款商品的历史最低核实价+3%自动设定心愿单目标好价提醒阈值">
-            🎯 智能设目标好价(<span id="goodPriceHitCountBadge">0</span>达标)
-          </button>
-          <button id="btnAddNewProductModal" class="bg-emerald-700 hover:bg-emerald-600 text-white text-xs sm:text-sm px-3 py-1.5 rounded-lg font-medium transition">
-            ＋ 新增商品/单价
-          </button>
+
+        <!-- Unified Search, Category Filter & Dropdown/Catalog Sort Rule Toolbar -->
+        <div class="bg-slate-50/90 border border-slate-200 rounded-xl p-3 space-y-2.5">
+          <div class="grid grid-cols-1 sm:grid-cols-12 gap-2.5 items-center">
+            <div class="sm:col-span-5 relative flex items-center">
+              <span class="absolute left-3 text-slate-400 text-xs pointer-events-none">🔍</span>
+              <input type="text" id="prodSearchInput" placeholder="输入商品名/品牌/规格搜索（支持多词如：好健康 鱼油 / Swisse 200粒）..." class="w-full text-xs sm:text-sm border border-slate-300 focus:border-emerald-600 rounded-lg pl-8 pr-16 py-2 bg-white font-medium text-slate-800" />
+              <button type="button" id="btnClearProdSearch" class="hidden absolute right-2 text-[11px] bg-slate-200 hover:bg-slate-300 text-slate-700 px-2 py-0.5 rounded font-bold">✕ 清空</button>
+            </div>
+            <div class="sm:col-span-3">
+              <select id="prodCategoryFilter" class="w-full text-xs sm:text-sm border border-slate-300 rounded-lg px-2.5 py-2 bg-white font-semibold text-slate-800">
+                <option value="ALL">🗂️ 全部分类</option>
+                <option value="麦卢卡蜂蜜/蜂产品">🍯 麦卢卡蜂蜜/蜂产品</option>
+                <option value="成人/婴幼奶粉">🍼 成人/婴幼奶粉</option>
+                <option value="鱼油/心脑血管">🐟 鱼油/心脑血管</option>
+                <option value="维生素/钙铁锌/保健">💊 维生素/钙铁锌/保健</option>
+                <option value="个护/日用涂抹">🧴 个护/日用涂抹</option>
+                <option value="食品/医药其他">🍫 食品/医药其他</option>
+              </select>
+            </div>
+            <div class="sm:col-span-4 flex items-center gap-1.5">
+              <label for="prodSortModeSelect" class="text-xs font-bold text-slate-600 shrink-0" title="同时控制下方「价格趋势下拉框」「跨店比价下拉框」与「商品卡片列表」的排序规则">📊 排序规则:</label>
+              <select id="prodSortModeSelect" class="flex-1 text-xs border border-indigo-300 rounded-lg px-2.5 py-2 bg-indigo-50/40 font-semibold text-slate-800">
+                <option value="CATEGORY_BRAND">🗂️ 按分类分组 + 品牌A→Z + 规格 (推荐)</option>
+                <option value="FREQ_DESC">🔥 按累计购买总件数 (常买爆款优先)</option>
+                <option value="VERIFIED_DESC">✅ 按已核实价格期数 (多期比价优先)</option>
+                <option value="RECENT_DESC">⏱️ 按最新核实/购买日期 (近期优先)</option>
+                <option value="PRICE_ASC">💲 按纽币单价从低到高 (↑)</option>
+                <option value="PRICE_DESC">💲 按纽币单价从高到低 (↓)</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Interactive Category Quick Pills + Live Search/Filter Status Feedback -->
+          <div class="flex flex-wrap items-center justify-between gap-2 pt-1 border-t border-slate-200/70">
+            <div id="prodCategoryQuickPills" class="flex flex-wrap items-center gap-1.5">
+              <!-- Populated by JS -->
+            </div>
+            <div id="prodFilterStatusSummary" class="text-xs text-slate-600 font-medium flex items-center gap-2">
+              <!-- Populated by JS -->
+            </div>
+          </div>
+
+          <!-- Instant Matched Products Preview Strip (Shows immediately when searching or filtering by category so user doesn't have to scroll past charts) -->
+          <div id="prodInstantSearchMatchesStrip" class="hidden pt-2 border-t border-emerald-200/80 bg-emerald-50/70 rounded-lg px-3 py-2 space-y-1.5">
+            <!-- Populated by JS when search or category filter is active -->
+          </div>
+        </div>
+      </div>
+
+      <!-- V7.9 NEW MODULE: SPEC-AWARE PRODUCT DEDUPLICATION, AUDIT MERGE & REAL-TIME ALIAS UNIFICATION STUDIO -->
+      <div id="productDedupMergeStudio" class="bg-white rounded-xl p-4 sm:p-5 shadow-sm border-2 border-amber-300 space-y-4">
+        <div class="flex flex-wrap items-center justify-between gap-3 border-b border-amber-200/80 pb-3">
+          <div>
+            <div class="flex items-center gap-2 flex-wrap">
+              <span class="bg-amber-500 text-slate-950 text-[11px] font-extrabold px-2 py-0.5 rounded">v7.9.0 核心引擎</span>
+              <h3 class="text-sm sm:text-base font-bold text-slate-900">🧬 商品同名异词智能比对审核合并 & 抓单实时归一中心（含规格隔离保护）</h3>
+            </div>
+            <p class="text-xs text-slate-600 mt-0.5">
+              自动提取<strong>品牌 + 核心功能关键字 + 精确规格（粒数/片数/克重/浓度/段数）</strong>：同款同规格商品由您审核合并为一个<strong>确定标准商品名</strong>；若为同款商品但规格不同（如 <strong>150粒 vs 200粒、120粒 vs 200粒、500g vs 1kg、1000mg vs 1500mg</strong>），系统强制作为<strong>两款独立产品</strong>严格隔离保护！审核通过后，后续抓单导入新订单时将自动按关键字+规格实时归一入库。
+            </p>
+          </div>
+          <div class="flex items-center gap-2">
+            <button type="button" id="btnBatchMergeAllCandidates" class="bg-emerald-700 hover:bg-emerald-600 text-white text-xs font-extrabold px-3 py-1.5 rounded-lg shadow-xs transition">
+              ✨ 一键合并全部已确认同规组
+            </button>
+            <button type="button" id="btnCloseDedupMergeStudio" class="text-xs text-slate-500 hover:text-slate-800 px-2 py-1 rounded border border-slate-200">收起面板 ▲</button>
+          </div>
+        </div>
+
+        <!-- 3 Sub-Sections inside Dedup Studio -->
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-4 items-start">
+          <!-- Left 7 cols: Auto-Detected Same-Spec Duplicate Candidates + Spec-Isolated Protection Examples -->
+          <div class="lg:col-span-7 space-y-3">
+            <div id="dedupCandidateGroupsContainer" class="space-y-2.5">
+              <!-- Populated by JS -->
+            </div>
+            <div id="dedupSpecProtectedContainer" class="bg-slate-50 rounded-xl p-3 border border-slate-200 space-y-2">
+              <!-- Populated by JS -->
+            </div>
+          </div>
+
+          <!-- Right 5 cols: Manual 2-Product Compare/Merge + Active Alias Rules + Real-Time Capture Simulator -->
+          <div class="lg:col-span-5 space-y-3">
+            <!-- Manual Merge Box -->
+            <div class="bg-amber-50/60 border border-amber-200 rounded-xl p-3 space-y-2.5 text-xs">
+              <div class="font-extrabold text-amber-950 flex items-center justify-between">
+                <span>🔗 手动指定两款商品比对合并</span>
+                <span class="text-[10px] text-amber-800 font-normal">自动检测粒数/克重规格冲突</span>
+              </div>
+              <div class="space-y-2">
+                <div>
+                  <label class="block text-[11px] text-slate-600 mb-0.5">① 选择被合并的异名/冗余商品（合并后将归入下方确定商品名）：</label>
+                  <select id="manualMergeSourceSelect" class="w-full text-xs border border-slate-300 rounded-lg px-2 py-1.5 bg-white"></select>
+                </div>
+                <div>
+                  <label class="block text-[11px] text-slate-600 mb-0.5">② 选择保留的目标商品（或在此基础上修改确定商品名）：</label>
+                  <select id="manualMergeTargetSelect" class="w-full text-xs border border-slate-300 rounded-lg px-2 py-1.5 bg-white"></select>
+                </div>
+                <div>
+                  <label class="block text-[11px] text-slate-600 mb-0.5">③ 合并后的最终「确定标准商品名」：</label>
+                  <input type="text" id="manualMergeCanonicalInput" placeholder="默认采用目标商品名称，可自由微调..." class="w-full text-xs border border-emerald-400 rounded-lg px-2.5 py-1.5 bg-white font-bold text-slate-900" />
+                </div>
+                <div id="manualMergeSpecCheckAlert" class="text-[11px] rounded-lg px-2.5 py-1.5"></div>
+                <button type="button" id="btnExecuteManualMerge" class="w-full bg-emerald-700 hover:bg-emerald-600 text-white font-extrabold py-1.5 px-3 rounded-lg shadow-2xs transition">
+                  ✅ 确认合并这两款商品（同步历史订单 & 写入实时归一规则）
+                </button>
+              </div>
+            </div>
+
+            <!-- Real-time Order Capture Keyword+Spec Unification Simulator -->
+            <div class="bg-indigo-50/60 border border-indigo-200 rounded-xl p-3 space-y-2 text-xs">
+              <div class="font-extrabold text-indigo-950 flex items-center justify-between">
+                <span>🧪 抓单入库「实时关键字+规格归一」测试器</span>
+                <div class="flex items-center gap-1">
+                  <button type="button" data-sim-sample="【易康直邮】Swisse 斯维诗 奶蓟草护肝宝 200粒" class="text-[10px] bg-white hover:bg-indigo-100 text-indigo-800 border border-indigo-200 px-1.5 py-0.5 rounded">测同规200粒</button>
+                  <button type="button" data-sim-sample="【华洋特惠】goodhealth 好健康 液体钙胶囊 200粒" class="text-[10px] bg-white hover:bg-indigo-100 text-indigo-800 border border-indigo-200 px-1.5 py-0.5 rounded">测异规200粒≠150粒</button>
+                </div>
+              </div>
+              <div class="flex items-center gap-1.5">
+                <input type="text" id="simRawCaptureNameInput" placeholder="输入网页抓取的商品标题测试实时归一结果..." class="flex-1 text-xs border border-indigo-300 rounded-lg px-2.5 py-1.5 bg-white" />
+                <button type="button" id="btnRunCaptureNameSim" class="bg-indigo-600 hover:bg-indigo-500 text-white font-bold px-2.5 py-1.5 rounded-lg shrink-0">测试匹配</button>
+              </div>
+              <div id="simCaptureNameResultBox" class="text-[11px] bg-white rounded-lg p-2 border border-indigo-100 text-slate-600">
+                点击上方示例或输入任意商品名，查看系统如何区分「同款同规自动归一」与「同款异规(150粒 vs 200粒)独立入库」。
+              </div>
+            </div>
+
+            <!-- Active Alias Rules List -->
+            <div class="bg-slate-50 border border-slate-200 rounded-xl p-3 space-y-2 text-xs">
+              <div class="font-bold text-slate-800 flex items-center justify-between">
+                <span>📚 已生效的确定商品名归一规则 (<span id="activeAliasRulesCount">0</span>条)</span>
+                <span class="text-[10px] text-slate-400">新订单抓取时自动生效</span>
+              </div>
+              <div id="activeAliasRulesList" class="space-y-1.5 max-h-40 overflow-y-auto custom-scroll">
+                <!-- Populated by JS -->
+              </div>
+            </div>
+          </div>
         </div>
       </div>
 
@@ -1265,6 +1429,26 @@
         </div>
       </div>
 
+      <!-- Products Grid Header & Synced Quick Filter Bar -->
+      <div id="productsGridSectionHeader" class="bg-white rounded-xl px-4 py-3 shadow-sm border border-slate-200 flex flex-wrap items-center justify-between gap-2">
+        <div class="flex items-center gap-2 flex-wrap">
+          <span class="text-sm font-extrabold text-slate-800">📦 商品单价档案卡片列表</span>
+          <span id="productsGridCountBadge" class="text-xs bg-emerald-100 text-emerald-900 font-bold px-2.5 py-0.5 rounded-full">共 0 款</span>
+        </div>
+        <div class="flex flex-wrap items-center gap-2 text-xs">
+          <input type="text" id="prodGridSecondarySearch" placeholder="在此快速过滤商品卡片..." class="text-xs border border-slate-300 rounded-lg px-2.5 py-1 bg-slate-50 focus:bg-white w-48 sm:w-60" />
+          <select id="prodGridSecondaryCat" class="text-xs border border-slate-300 rounded-lg px-2 py-1 bg-slate-50 font-semibold text-slate-700">
+            <option value="ALL">全部分类</option>
+            <option value="麦卢卡蜂蜜/蜂产品">🍯 麦卢卡蜂蜜/蜂产品</option>
+            <option value="成人/婴幼奶粉">🍼 成人/婴幼奶粉</option>
+            <option value="鱼油/心脑血管">🐟 鱼油/心脑血管</option>
+            <option value="维生素/钙铁锌/保健">💊 维生素/钙铁锌/保健</option>
+            <option value="个护/日用涂抹">🧴 个护/日用涂抹</option>
+            <option value="食品/医药其他">🍫 食品/医药其他</option>
+          </select>
+        </div>
+      </div>
+
       <div id="productsGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
         <!-- Rendered by JS -->
       </div>
@@ -1373,6 +1557,10 @@
               <!-- Admin-Only Dual-Ledger Profit / Family Subsidy Bar -->
               <div id="dualLedgerSummaryBar" class="bg-slate-900 text-white rounded-lg px-3 py-2 flex flex-wrap items-center justify-between gap-2 text-xs">
                 <!-- Populated by renderBillTable() -->
+              </div>
+              <!-- Matched Source Orders Quick-Detail Strip -->
+              <div id="billMatchedOrdersDetailStrip" class="bg-white/90 rounded-lg px-3 py-2 border border-indigo-100 text-xs flex flex-wrap items-center gap-1.5">
+                <!-- Populated by updateDualLedgerSummaryBar() -->
               </div>
             </div>
 
@@ -2684,7 +2872,7 @@
         <div>
           <h3 class="text-base font-bold flex items-center gap-2 flex-wrap">
             <span>⚙️ 个性化与规则中心</span>
-            <span class="text-[11px] bg-amber-400 text-slate-950 font-extrabold px-2.5 py-0.5 rounded-full">V7.8 自用与寄回国双轨 · HOME国内件关税雷达 · 拆包防漏校验 · 最佳入手月洞察</span>
+            <span class="text-[11px] bg-amber-400 text-slate-950 font-extrabold px-2.5 py-0.5 rounded-full">v7.9.0 (Build 20261029.1948) · SemVer标准版本管理</span>
           </h3>
           <p class="text-xs text-emerald-200 mt-0.5">一站式归纳管理：8套主题皮肤与自定义调色盘 · 全系统选项名称/图标/注释自由修改 · 抓单自学习规则 · 454条超链接模板</p>
         </div>
@@ -2712,21 +2900,37 @@
 
       <!-- TAB PANEL 0A: THEME & APPEARANCE STUDIO (🎨 主题与外观) -->
       <div id="rulesPanel-theme" class="p-5 overflow-y-auto custom-scroll space-y-5 text-xs flex-1">
-        <!-- Version V6.0 Banner -->
-        <div class="bg-gradient-to-r from-emerald-50 via-teal-50 to-amber-50 border border-emerald-200 rounded-xl p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-          <div class="space-y-1">
-            <div class="flex items-center gap-2">
-              <span class="px-2.5 py-0.5 rounded-full bg-emerald-800 text-amber-300 font-extrabold text-xs">当前版本：V7.8 (自用与寄回国双轨 · HOME国内件关税雷达 · 拆包防漏校验 · 最佳入手月洞察 · 账单附带快递单号)</span>
-              <span class="font-bold text-slate-800 text-sm">版本升级规则说明</span>
+        <!-- Strict Semantic Versioning + Build Tag Specification Banner -->
+        <div class="bg-gradient-to-r from-emerald-50 via-teal-50 to-amber-50 border-2 border-emerald-300 rounded-xl p-4 space-y-3">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-emerald-200/80 pb-2.5">
+            <div class="flex items-center gap-2 flex-wrap">
+              <span class="px-2.5 py-1 rounded-full bg-emerald-900 text-amber-300 font-extrabold text-xs font-mono">v7.9.0 (Build 20261029.1948)</span>
+              <span class="font-extrabold text-slate-900 text-sm">严格执行的版本号规则（Semantic Versioning + Build Tag）</span>
             </div>
-            <p class="text-slate-600 leading-relaxed">
-              自 <strong>V6.0</strong> 起，系统顶部标题旁常驻显示版本号：日常细节优化与功能微调将递增小数点后版本号（如 <code class="bg-white px-1.5 py-0.5 rounded border">V6.1</code>、<code class="bg-white px-1.5 py-0.5 rounded border">V6.2</code>），架构或交互重大升级将跃升大版本号（如 <code class="bg-white px-1.5 py-0.5 rounded border">V7.0</code>）。
-            </p>
-          </div>
-          <div class="shrink-0 flex items-center gap-2">
-            <button type="button" id="btnJumpToLabelsTab" class="bg-white hover:bg-slate-50 text-emerald-900 border border-emerald-300 font-bold px-3 py-2 rounded-lg shadow-2xs transition">
+            <button type="button" id="btnJumpToLabelsTab" class="bg-white hover:bg-slate-50 text-emerald-900 border border-emerald-300 font-bold px-3 py-1.5 rounded-lg shadow-2xs transition text-xs shrink-0">
               ✏️ 去修改界面名称/图标 ➔
             </button>
+          </div>
+          <div class="text-xs text-slate-700 leading-relaxed space-y-2">
+            <p>系统遵循标准的 <code class="bg-white px-1.5 py-0.5 rounded border font-mono font-bold text-emerald-900">vMAJOR.MINOR.PATCH (Build YYYYMMDD.HHMM)</code> 规则，版本号已固化在<strong>网页左上角标识、页面标题（第6行 &lt;title&gt;）与浏览器控制台输出</strong>中，确保每次热更新上线后一眼就能核对生效状态：</p>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-3 pt-1">
+              <div class="bg-white/90 rounded-lg p-3 border border-emerald-200 space-y-1">
+                <div class="font-extrabold text-emerald-950">📌 当前正式稳定版本：<span class="font-mono text-emerald-700">v7.9.0 (Build 20261029.1948)</span></div>
+                <ul class="list-disc pl-4 space-y-1 text-[11px] text-slate-600">
+                  <li><strong>主版本号（7）</strong>：独立 <code class="font-mono">.html</code> 全功能前端，原生内置亲友免登录只读查件/对账门户、Cloudflare Pages Functions + KV 云同步与「自用 / 寄回国」双轨架构；</li>
+                  <li><strong>次版本号（9）</strong>：上线「商品库智能同品比对与合并审核中心（含 150粒≠200粒 规格隔离保护与抓单实时关键字归一）」、全模块通用「📋 详单」一屏全览凭证、订单总表多维自主排序与商品库分类/搜索联动；</li>
+                  <li><strong>修订号（0）</strong>：修复商品库分类筛选因历史缓存缺失分类字段失效问题、将订单总表刺眼的红色优惠券底框重构为柔和青碧色券标、固化全局 SemVer + Build Tag 防回退锁。</li>
+                </ul>
+              </div>
+              <div class="bg-white/90 rounded-lg p-3 border border-amber-200 space-y-1">
+                <div class="font-extrabold text-amber-950">🔄 未来热更新版本递增规则：</div>
+                <ul class="list-disc pl-4 space-y-1 text-[11px] text-slate-600">
+                  <li><strong>小修复（Patch）</strong>：微调按钮排版、改动文案、调整某个计算公式或提示语时递增修订号，如更新为 <code class="font-mono font-bold text-slate-800">v7.9.1 (Build 20261030.xxxx)</code>；</li>
+                  <li><strong>新功能（Minor）</strong>：新增电商抓单渠道、新分析看板、新对账或比价模块时递增次版本号，如更新为 <code class="font-mono font-bold text-slate-800">v7.10.0 (Build YYYYMMDD.HHMM)</code>；</li>
+                  <li><strong>架构级升级（Major）</strong>：切换底层存储引擎或全局大改版时递增主版本号，如更新为 <code class="font-mono font-bold text-slate-800">v8.0.0 (Build YYYYMMDD.HHMM)</code>。</li>
+                </ul>
+              </div>
+            </div>
           </div>
         </div>
 
@@ -3312,10 +3516,13 @@
       cardRadius: '1rem'
     };
 
-    const CURRENT_APP_VERSION = 'V7.8';
+    const CURRENT_SEMVER = 'v7.9.0';
+    const CURRENT_BUILD_TAG = 'Build 20261029.1948';
+    const CURRENT_APP_VERSION = 'v7.9.0 (Build 20261029.1948)';
+    console.info('%c[纽澳跨境采购与快递追踪管家] 当前正式稳定版本: ' + CURRENT_APP_VERSION + ' | Semantic Versioning + Build Tag 已生效', 'background:#064e3b;color:#fde68a;padding:4px 10px;border-radius:6px;font-weight:bold;');
     const DEFAULT_UI_CUSTOM_LABELS = {
       appTitle: { icon: '', text: '纽澳跨境采购与快递追踪管家', note: '支持一单多包拆单追踪 · 采购单价与运费核算 · 电脑与手机多端同步', labelTitle: '系统主标题 & 副标题说明', group: 'header', emojiPresets: ['🇳🇿', '🦘', '🌿', '📦', '🛡️'] },
-            appVersion: { icon: '🚀', text: 'V7.8', note: '当前版本 V7.8（自用与寄回国双轨 · HOME国内家庭件关税雷达 · 拆包防漏校验 · 最佳入手季节洞察）· 点击打开个性化与版本中心', labelTitle: '顶部版本号标识 (点击可打开设置)', group: 'header', emojiPresets: ['🚀', '✨', '🏷️', '💎', '🔥'] },
+      appVersion: { icon: '🚀', text: CURRENT_APP_VERSION, note: '当前正式稳定版本：v7.9.0 (Build 20261029.1948)（同品智能比对合并 · 规格隔离入库 · 全模块详单按钮 · 订单多维排序）· 点击查看版本规则', labelTitle: '顶部版本号标识 (SemVer + Build Tag)', group: 'header', emojiPresets: ['🚀', '✨', '🏷️', '💎', '🔥'] },
       btnNewOrder: { icon: '＋', text: '新增订单', note: '新建采购订单（内含网页粘贴自动填单 / 门店直购录入 / 复制上一单）', labelTitle: '顶部按钮 1：新增订单', group: 'topbar', emojiPresets: ['＋', '🛒', '✍️', '⚡', '🛍️'] },
       btnBatchImport: { icon: '📥', text: '智能导单', note: '专用于导入新采购订单：Excel表格差异导入 / 网页订单粘贴解析 / 浏览器抓单小书签', labelTitle: '顶部按钮 2：智能导单', group: 'topbar', emojiPresets: ['📥', '📂', '📊', '⚡', '📑'] },
       btnSyncBackup: { icon: '☁️', text: '云端与备份', note: '专用于多端云同步与备份：Cloudflare KV 实时云同步 / 历史时间机器回滚 / 本地 JSON 备份包', labelTitle: '顶部按钮 3：云端与备份', group: 'topbar', emojiPresets: ['☁️', '🔄', '📲', '💾', '🛡️'] },
@@ -5087,7 +5294,8 @@
                 <td class="px-3 py-2.5 text-xs"><span class="px-2 py-0.5 rounded bg-amber-100 text-amber-900 font-bold">待填快递单号</span></td>
                 <td class="px-3 py-2.5 text-xs text-slate-600">${elapsed !== null ? `下单已 ${elapsed} 天` : '-'}</td>
                 <td class="px-3 py-2.5 text-xs text-slate-800 max-w-xs truncate" title="${itemsStr}">${itemsStr}</td>
-                <td class="px-3 py-2.5 text-xs text-right whitespace-nowrap">
+                <td class="px-3 py-2.5 text-xs text-right whitespace-nowrap space-x-1">
+                  <button type="button" data-quickview-order="${o.id}" class="px-2 py-1 rounded bg-teal-600 hover:bg-teal-500 text-white font-extrabold shadow-2xs transition">📋 详单</button>
                   <button data-edit-order="${o.id}" class="bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold px-2.5 py-1 rounded-md text-xs">＋ 补填单号</button>
                 </td>
               </tr>`;
@@ -5111,6 +5319,7 @@
               </td>
               <td class="px-3 py-2.5 text-xs text-slate-800 max-w-xs truncate" title="${itemsStr}">${itemsStr}</td>
               <td class="px-3 py-2.5 text-xs text-right whitespace-nowrap space-x-1">
+                <button type="button" data-quickview-order="${o.id}" class="px-2 py-1 rounded bg-teal-600 hover:bg-teal-500 text-white font-extrabold shadow-2xs transition" title="查看本单完整详单与全部商品明细">📋 详单</button>
                 <a href="${tUrl}" target="_blank" rel="noopener noreferrer" data-copy-track="${p.trackingNo}" class="px-2 py-1 rounded bg-emerald-50 text-emerald-800 border border-emerald-200 font-semibold">🔍 查物流</a>
                 <button data-sign-order="${o.id}" data-sign-idx="${it.pIdx}" class="px-2.5 py-1 rounded bg-emerald-700 hover:bg-emerald-600 text-white font-bold">✍️ 签收</button>
               </td>
@@ -5195,6 +5404,7 @@
                 <span class="bg-emerald-50 text-emerald-800 border border-emerald-200 px-2 py-0.5 rounded font-mono">${it.suggestedDate || '按下单+18天'}</span>
               </td>
               <td class="px-3 py-2 text-xs text-right whitespace-nowrap space-x-1">
+                <button type="button" data-quickview-order="${o.id}" class="bg-teal-600 hover:bg-teal-500 text-white font-extrabold px-2 py-1 rounded-md shadow-2xs transition" title="查看该笔历史订单的完整详单与同单包裹情况">📋 详单</button>
                 ${p ? `<button type="button" data-quick-fill-hist="${o.id}" data-quick-fill-idx="${it.pIdx}" data-quick-fill-date="${it.suggestedDate}" class="bg-rose-600 hover:bg-rose-500 text-white font-bold px-2.5 py-1 rounded-md">✨ 采纳建议日(${it.suggestedDate})</button>
                        <button type="button" data-sign-order="${o.id}" data-sign-idx="${it.pIdx}" class="bg-white hover:bg-slate-100 text-slate-700 border border-slate-300 font-semibold px-2 py-1 rounded-md">手动指定</button>`
                     : `<button type="button" data-edit-order="${o.id}" class="bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold px-2.5 py-1 rounded-md">编辑补全</button>`}
@@ -5301,7 +5511,7 @@
                 <strong class="ml-1.5 text-slate-800">${o.orderDate}</strong> · <span>${o.recipient}</span> · <span>${o.merchant}</span> · <span class="font-mono text-slate-600">#${o.orderNo}</span>
                 <span class="text-slate-500 ml-2">${itemsStr}</span>
               </div>
-              <button type="button" data-edit-order="${o.id}" class="text-slate-600 hover:text-slate-900 underline font-semibold">查看/恢复</button>
+              <div class="flex items-center gap-1.5"><button type="button" data-quickview-order="${o.id}" class="px-2 py-0.5 rounded bg-teal-600 hover:bg-teal-500 text-white font-bold">📋 详单</button><button type="button" data-edit-order="${o.id}" class="text-slate-600 hover:text-slate-900 underline font-semibold">编辑/恢复</button></div>
             </div>`;
         }).join('');
 
@@ -5690,7 +5900,10 @@
               <div class="text-xs text-slate-700 font-medium line-clamp-2">${itemsSummary}</div>
               <div class="flex items-center justify-between pt-2 border-t border-amber-200/60">
                 <span class="text-xs text-amber-800">暂未出运单号</span>
-                <div class="flex items-center gap-1.5">
+                <div class="flex flex-wrap items-center gap-1.5">
+                  <button type="button" data-quickview-order="${o.id}" class="bg-teal-600 hover:bg-teal-500 text-white text-xs font-extrabold px-2.5 py-1 rounded-lg shadow-2xs transition" title="查看本单完整详单">
+                    📋 详单
+                  </button>
                   <button data-notify-order="${o.id}" class="bg-indigo-50 hover:bg-indigo-100 text-indigo-800 border border-indigo-200 text-xs font-bold px-2.5 py-1 rounded-lg transition" title="给客户发送下单确认或采购账单">
                     📲 发客户
                   </button>
@@ -5780,16 +5993,19 @@
 
             <div class="flex flex-wrap items-center justify-between gap-2 pt-1.5 border-t border-slate-100 text-xs">
               <span class="text-slate-400">${p.courier}历史参考: ${avgText}</span>
-              <div class="flex items-center gap-1.5">
-                <a href="${trackUrl}" target="_blank" rel="noopener noreferrer" data-copy-track="${p.trackingNo}" class="px-2.5 py-1 rounded bg-emerald-50 hover:bg-emerald-100 text-emerald-800 border border-emerald-200 font-medium transition" title="直达原表导入的专属物流追踪链接：${trackUrl}">
-                  🔍 直达查物流 ↗
+              <div class="flex flex-wrap items-center gap-1.5">
+                <button type="button" data-quickview-order="${o.id}" class="px-2.5 py-1 rounded bg-teal-600 hover:bg-teal-500 text-white font-extrabold shadow-2xs transition" title="一屏查看该包裹所属订单的完整详单（含全部商品、单价、运费及同单拆分包裹）">
+                  📋 详单
+                </button>
+                <a href="${trackUrl}" target="_blank" rel="noopener noreferrer" data-copy-track="${p.trackingNo}" class="px-2 py-1 rounded bg-emerald-50 hover:bg-emerald-100 text-emerald-800 border border-emerald-200 font-semibold transition" title="直达物流追踪链接：${trackUrl}">
+                  🔍 查物流 ↗
                 </a>
                 <button data-notify-order="${o.id}" class="px-2 py-1 rounded bg-indigo-50 hover:bg-indigo-100 text-indigo-800 border border-indigo-200 font-bold transition" title="生成发给 ${o.recipient} 的快递发货单/账单通知">
                   📲 发客户
                 </button>
-                ${orderUrl ? `<a href="${orderUrl}" target="_blank" rel="noopener noreferrer" class="px-2 py-1 rounded border border-slate-200 hover:bg-slate-100 text-slate-600 transition" title="查看 ${o.merchant} 订单详情">🛍️ 查订单 ↗</a>` : ''}
+                ${orderUrl ? `<a href="${orderUrl}" target="_blank" rel="noopener noreferrer" class="px-2 py-1 rounded border border-slate-200 hover:bg-slate-100 text-slate-600 transition" title="打开 ${o.merchant} 原网站订单页">原网页↗</a>` : ''}
                 <button data-sign-order="${o.id}" data-sign-idx="${item.pIdx}" class="px-2.5 py-1 rounded font-semibold ${p.deliveredDate ? 'bg-slate-100 text-slate-700 hover:bg-slate-200' : 'bg-emerald-700 text-white hover:bg-emerald-600'} transition">
-                  ${p.deliveredDate ? '修改日期' : '✍️ 一键签收'}
+                  ${p.deliveredDate ? '改期' : '✍️ 签收'}
                 </button>
               </div>
             </div>
@@ -6374,7 +6590,7 @@
               <div class="text-[11px] text-slate-500 leading-tight mt-0.5">商品:${m.symbol}${m.itemTotal.toFixed(2)} | 运费:${m.symbol}${m.shippingFee.toFixed(2)}${m.paymentFee > 0 ? ` | 手续费:${m.symbol}${m.paymentFee.toFixed(2)}` : ''}</div>
               ${o.exchangeRate && o.origPaidTotal && o.origCurrency !== m.currency ? `<div class="mt-0.5"><span class="inline-block text-[10px] bg-teal-50 text-teal-900 border border-teal-200 px-1.5 py-0.2 rounded font-semibold break-words leading-tight">💱 原标价 ${o.origCurrency === 'NZD' ? 'NZ$' : '¥'}${Number(o.origPaidTotal).toFixed(2)} · 汇率 ${o.exchangeRate}</span></div>` : ''}
               ${o.exchangeRate && o.settledAmount && o.settledCurrency && o.settledCurrency !== m.currency ? `<div class="mt-0.5"><span class="inline-block text-[10px] bg-teal-50 text-teal-900 border border-teal-200 px-1.5 py-0.2 rounded font-semibold break-words leading-tight">💱 实付结算 ¥${Number(o.settledAmount).toFixed(2)} · 汇率 ${o.exchangeRate}</span></div>` : ''}
-              ${m.discount > 0 ? `<div class="mt-0.5"><span class="inline-block text-[10px] bg-rose-50 text-rose-700 border border-rose-200 px-1.5 py-0.2 rounded font-semibold break-words leading-tight">🎟️ 优惠 -${m.symbol}${m.discount.toFixed(2)}${m.discountNote ? ' (' + m.discountNote + ')' : ''}</span></div>` : ''}
+              ${m.discount > 0 ? `<div class="mt-0.5"><span class="inline-flex items-center gap-0.5 text-[10px] bg-teal-50/90 text-teal-800 border border-teal-200/90 px-1.5 py-0.2 rounded font-medium break-words leading-tight" title="已享受订单优惠券/满减折扣，非异常提醒">🎫 券省 ${m.symbol}${m.discount.toFixed(2)}${m.discountNote ? ' (' + m.discountNote + ')' : ''}</span></div>` : ''}
               ${o.paymentMethod ? `<div class="mt-0.5"><span class="inline-block text-[10px] bg-blue-50 text-blue-800 border border-blue-200 px-1.5 py-0.2 rounded font-medium break-words leading-tight">💳 ${o.paymentMethod}</span></div>` : ''}
               <div class="mt-1">
                 ${o.webBackfilled
@@ -6400,8 +6616,8 @@
                   </button>
                 </div>
                 <div class="flex items-center gap-1 justify-end">
-                  <button type="button" data-quickview-order="${o.id}" class="px-1.5 py-0.5 rounded bg-emerald-50 hover:bg-emerald-100 text-emerald-800 border border-emerald-200 text-[11px] font-bold whitespace-nowrap transition" title="打开单条订单竖向一屏全览卡片">
-                    🔍详情
+                  <button type="button" data-quickview-order="${o.id}" class="px-2 py-0.5 rounded bg-teal-600 hover:bg-teal-500 text-white text-[11px] font-extrabold whitespace-nowrap shadow-2xs transition" title="查看本单完整详单（含全部商品、汇率明细、优惠与快递包裹状态）">
+                    📋详单
                   </button>
                   <button type="button" data-notify-order="${o.id}" class="px-1.5 py-0.5 rounded bg-indigo-50 hover:bg-indigo-100 text-indigo-800 border border-indigo-200 text-[11px] font-bold whitespace-nowrap transition" title="生成发给客户（${o.recipient}）的微信通知：可选下单回执、快递单号、采购账单或二合一卡片">
                     📲发客户
@@ -6888,7 +7104,10 @@
                     <td class="py-1.5 px-2 font-mono text-teal-800">${pt.exchangeRate ? pt.exchangeRate : '<span class="text-slate-400">-</span>'}</td>
                     <td class="py-1.5 px-2">
                       ${pt.orderNo
-                        ? `<button type="button" data-jump-order-no="${pt.orderNo}" class="text-indigo-600 hover:underline font-semibold">🔍 订单 #${pt.orderNo}</button>`
+                        ? `<div class="inline-flex items-center gap-1 flex-wrap">
+                             ${pt.orderId ? `<button type="button" data-quickview-order="${pt.orderId}" class="px-1.5 py-0.5 rounded bg-teal-600 hover:bg-teal-500 text-white text-[10px] font-bold shadow-2xs transition" title="直接弹出该笔订单的完整详单">📋 详单</button>` : `<button type="button" data-quickview-orderno="${pt.orderNo}" class="px-1.5 py-0.5 rounded bg-teal-600 hover:bg-teal-500 text-white text-[10px] font-bold shadow-2xs transition" title="直接弹出该笔订单的完整详单">📋 详单</button>`}
+                             <button type="button" data-jump-order-no="${pt.orderNo}" class="text-indigo-600 hover:underline font-mono font-semibold" title="在订单总表中筛选定位此单">#${pt.orderNo}</button>
+                           </div>`
                         : `<span class="text-slate-500">${pt.sourceType || pt.note || '已核实单价'}</span>`}
                     </td>
                   </tr>
@@ -15120,10 +15339,13 @@
       if (laggingSplitOrders.length > 0) {
         const tags = laggingSplitOrders.slice(0, 4).map(item => {
           const pNos = item.pendingParcels.map(p => `${p.courier}:${p.trackingNo}`).join('、');
-          return `<button type="button" data-jump-order-id="${item.order.id}" class="inline-flex items-center gap-1 bg-white hover:bg-amber-100 text-amber-950 border border-amber-300 px-2 py-0.5 rounded-md font-bold transition shadow-2xs">
-            <span>#${item.order.orderNo} (${item.order.recipient})</span>
-            <span class="text-emerald-700">${item.delivCount}已达</span>/<span class="text-rose-600">${item.pendingCount}在途(${pNos})</span>
-          </button>`;
+          return `<span class="inline-flex items-center gap-1 bg-white text-amber-950 border border-amber-300 px-2 py-0.5 rounded-md font-bold shadow-2xs">
+            <button type="button" data-quickview-order="${item.order.id}" class="px-1.5 py-0.2 rounded bg-teal-600 hover:bg-teal-500 text-white text-[10px] font-extrabold transition" title="查看该拆包订单完整详单">📋详单</button>
+            <button type="button" data-jump-order-id="${item.order.id}" class="hover:underline">
+              <span>#${item.order.orderNo} (${item.order.recipient})</span>
+              <span class="text-emerald-700">${item.delivCount}已达</span>/<span class="text-rose-600">${item.pendingCount}在途(${pNos})</span>
+            </button>
+          </span>`;
         }).join('');
         stripEl.innerHTML = `
           <div class="flex flex-wrap items-center justify-between gap-2">
@@ -15785,7 +16007,8 @@
               ordersCount: 0,
               lastDate: o.orderDate,
               lastQty: Number(it.qty) || 1,
-              lastMerchant: o.merchant
+              lastMerchant: o.merchant,
+              lastOrderId: o.id
             };
           }
           map[key].totalQty += Number(it.qty) || 0;
@@ -15794,6 +16017,7 @@
             map[key].lastDate = o.orderDate;
             map[key].lastQty = Number(it.qty) || 1;
             map[key].lastMerchant = o.merchant;
+            map[key].lastOrderId = o.id;
             map[key].isPureSelfUse = isSelfUseOrder(o);
             map[key].recipient = isSelfOrHomeFamily ? (isSelfUseOrder(o) ? '自用' : 'HOME(国内家中)') : o.recipient;
           }
@@ -15904,12 +16128,15 @@
               </div>
             </div>
 
-            <div class="flex items-center justify-between pt-1 border-t border-slate-200/70">
-              <button type="button" data-add-prod-to-optimizer="${c.product}" class="text-[11px] text-teal-700 hover:text-teal-900 font-bold">
-                🛒 加入比价台
-              </button>
+            <div class="flex items-center justify-between gap-1 pt-1 border-t border-slate-200/70">
+              <div class="flex items-center gap-1.5">
+                ${c.lastOrderId ? `<button type="button" data-quickview-order="${c.lastOrderId}" class="text-[11px] bg-teal-600 hover:bg-teal-500 text-white px-2 py-0.5 rounded font-bold transition shadow-2xs" title="查看最近一次购买该商品的完整详单">📋 详单</button>` : ''}
+                <button type="button" data-add-prod-to-optimizer="${c.product}" class="text-[11px] text-teal-700 hover:text-teal-900 font-bold">
+                  🛒 比价
+                </button>
+              </div>
               <button type="button" data-quick-restock-rec="${c.isPureSelfUse ? '自用' : (c.isSelf ? 'HOME' : c.recipient)}" data-quick-restock-prod="${c.product}" data-quick-restock-qty="${c.lastQty}" data-quick-restock-merch="${c.lastMerchant}" class="text-[11px] bg-emerald-700 hover:bg-emerald-600 text-white px-2.5 py-1 rounded-md font-bold transition shadow-2xs">
-                ${c.isPureSelfUse ? '💊 补录自用' : '⚡ 一键补货开单'}
+                ${c.isPureSelfUse ? '💊 补录自用' : '⚡ 补货开单'}
               </button>
             </div>
           </div>
@@ -18236,8 +18463,8 @@ export async function onRequestPost(context) {
                 <button type="button" data-notify-order="${o.id}" class="px-2.5 py-1.5 rounded-lg bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-extrabold shadow-2xs transition flex items-center gap-1">
                   <span>📲 发客户通知</span>
                 </button>
-                <button type="button" data-quickview-order="${o.id}" class="px-2.5 py-1.5 rounded-lg bg-emerald-50 hover:bg-emerald-100 text-emerald-900 border border-emerald-200 text-xs font-bold transition">
-                  🔍 单条全览
+                <button type="button" data-quickview-order="${o.id}" class="px-2.5 py-1.5 rounded-lg bg-teal-600 hover:bg-teal-500 text-white text-xs font-extrabold shadow-2xs transition">
+                  📋 详单
                 </button>
                 ${(!o.webBackfilled && !isStoreOrd) ? `
                 <button type="button" data-backfill-order="${o.id}" class="px-2.5 py-1.5 rounded-lg bg-teal-700 hover:bg-teal-600 text-white text-xs font-bold transition">
@@ -19309,6 +19536,7 @@ export async function onRequestPost(context) {
       checkAndApplyReadonlyRecipientMode();
       initV73CustomerNotifyAndMiniProgramEvents();
       initV77AllFeaturesEvents();
+      initV790SuiteEngine();
 
       // Auto-pull on startup when running on Cloudflare Pages or when passcode is configured
       if (window.cfConfigState.autoPullOnLoad && (isRunningOnCloudflareDomain() || window.cfConfigState.passcode)) {
@@ -19323,6 +19551,2005 @@ export async function onRequestPost(context) {
       document.addEventListener('visibilitychange', () => {
         if (document.visibilityState === 'visible' && window.cfConfigState.autoPullOnLoad && (isRunningOnCloudflareDomain() || window.cfConfigState.passcode) && uncommittedChanges.length === 0) {
           executeCfCloudPull({ silentIfEmpty: true, isAutoBackgroundPull: true });
+        }
+      });
+    }
+
+
+    // ============================================================================
+    // v7.9.0 (Build 20261029.1948) COMPREHENSIVE UPGRADE ENGINE:
+    // 1. Automatic Verified Order Price Extraction & 100% Category Backfill
+    // 2. Multi-Keyword Search, Category Filter Linkage & Logical <optgroup> Dropdown Sorting
+    // 3. Spec-Aware Product Deduplication, Audit Merge & Real-Time Capture Unification (150粒 ≠ 200粒)
+    // 4. Orders Table Multi-Dimension Custom Sorting & Soft Teal Coupon Badge
+    // 5. Universal "📋 详单" Button Across All Modules & Beautified Order Receipt Modal
+    // ============================================================================
+
+    const VALID_PRODUCT_CATEGORIES = [
+      '麦卢卡蜂蜜/蜂产品',
+      '成人/婴幼奶粉',
+      '鱼油/心脑血管',
+      '维生素/钙铁锌/保健',
+      '个护/日用涂抹',
+      '食品/医药其他'
+    ];
+
+    const CATEGORY_ICONS_MAP = {
+      '麦卢卡蜂蜜/蜂产品': '🍯',
+      '成人/婴幼奶粉': '🍼',
+      '鱼油/心脑血管': '🐟',
+      '维生素/钙铁锌/保健': '💊',
+      '个护/日用涂抹': '🧴',
+      '食品/医药其他': '🍫'
+    };
+
+    const BRAND_SYNONYM_GROUPS = [
+      { canonical: 'Swisse', patterns: [/swisse/i, /斯维诗/] },
+      { canonical: 'Nutralife', patterns: [/nutralife/i, /nutra[\s-]*life/i, /纽乐/] },
+      { canonical: 'Good Health', patterns: [/good\s*health/i, /好健康/] },
+      { canonical: 'Blackmores', patterns: [/blackmores/i, /澳佳宝/] },
+      { canonical: 'Manuka Health', patterns: [/manuka\s*health/i, /蜜纽康/] },
+      { canonical: 'Comvita', patterns: [/comvita/i, /康维他/] },
+      { canonical: 'Anchor', patterns: [/anchor/i, /安佳/] },
+      { canonical: 'Aptamil', patterns: [/aptamil/i, /爱他美/] },
+      { canonical: 'A2', patterns: [/\ba2\b/i] },
+      { canonical: 'Healtheries', patterns: [/healtheries/i, /贺寿利/] },
+      { canonical: 'BioIsland', patterns: [/bio\s*island/i, /佰澳朗德/] },
+      { canonical: 'Thompsons', patterns: [/thompson'?s/i, /汤普森/] },
+      { canonical: 'Clinicians', patterns: [/clinicians/i, /科立纯/] },
+      { canonical: 'Red Seal', patterns: [/red\s*seal/i, /红印/] },
+      { canonical: 'Lucas Papaw', patterns: [/lucas\s*papaw/i, /番木瓜/, /木瓜膏/] },
+      { canonical: 'Merino', patterns: [/merino/i, /美丽诺/] },
+      { canonical: 'G&M', patterns: [/g\s*&\s*m/i, /绵羊油/] },
+      { canonical: 'Maxigesic', patterns: [/maxigesic/i] }
+    ];
+
+    // 1. Extract hard specification signature (count, weightG, volumeMl, packCount, strengthMg, stage, mgo, variant)
+    function extractProductSpecSignature(rawName) {
+      const s = String(rawName || '').trim();
+      const lower = s.toLowerCase();
+
+      // Strip date/warehouse bracket prefixes like 【保质期27.10】 before parsing numbers
+      const cleaned = s.replace(/[【\[（(][^】\]）)]*(?:保质期|效期|批次|直邮|包邮|特惠|清仓)[^】\]）)]*[】\]）)]/gi, ' ');
+
+      // Pill / Tablet / Capsule / Sachet count (e.g., 150粒, 200粒, 200片, 60 capsules, 400粒)
+      let count = null;
+      let countUnit = '';
+      const countMatch = cleaned.match(/(\d{1,4})\s*(粒|片|颗|丸|支|cap(?:sule)?s?\b|tab(?:let)?s?\b|softgels?\b)/i);
+      if (countMatch) {
+        count = parseInt(countMatch[1], 10);
+        countUnit = countMatch[2];
+      }
+
+      // Pack multiplier (e.g., 900g*6罐, 1kg*6袋, 900g-3罐*2 => 6罐, 900g*3罐 => 3罐)
+      let packCount = 1;
+      const compoundPackMatch = cleaned.match(/[-*×xX]\s*(\d+)\s*(?:罐|袋|盒|瓶)\s*[*×xX]\s*(\d+)/i);
+      if (compoundPackMatch) {
+        packCount = parseInt(compoundPackMatch[1], 10) * parseInt(compoundPackMatch[2], 10);
+      } else {
+        const simplePackMatch = cleaned.match(/[*×xX]\s*(\d+)\s*(罐|袋|盒|瓶|支)/i);
+        if (simplePackMatch) {
+          packCount = parseInt(simplePackMatch[1], 10);
+        }
+      }
+
+      // Weight in grams (e.g., 500g, 500克, 1kg -> 1000g, 900g, 250克, 100g, 25g)
+      let weightG = null;
+      const kgMatch = cleaned.match(/(\d+(?:\.\d+)?)\s*(?:kg|千克|公斤)(?!\w)/i);
+      if (kgMatch) {
+        weightG = Math.round(parseFloat(kgMatch[1]) * 1000);
+      } else {
+        const gMatch = cleaned.match(/(\d+(?:\.\d+)?)\s*(?:g|克)(?![a-zA-Z])/i);
+        if (gMatch) {
+          weightG = Math.round(parseFloat(gMatch[1]));
+        }
+      }
+
+      // Volume in ml (e.g., 250ml, 20ml)
+      let volumeMl = null;
+      const mlMatch = cleaned.match(/(\d+(?:\.\d+)?)\s*(?:ml\b|毫升)/i);
+      if (mlMatch) {
+        volumeMl = Math.round(parseFloat(mlMatch[1]));
+      }
+
+      // Strength / Dosage in mg or billion CFU (e.g., 1000mg, 1500mg, 300mg, 1200mg, 50,000mg, 500亿)
+      let strengthMg = null;
+      const mgMatch = cleaned.match(/(\d[\d,]*)\s*mg\b/i);
+      if (mgMatch) {
+        strengthMg = parseInt(mgMatch[1].replace(/,/g, ''), 10);
+      }
+      let billionCfu = null;
+      const cfuMatch = cleaned.match(/(\d+)\s*亿/);
+      if (cfuMatch) {
+        billionCfu = parseInt(cfuMatch[1], 10);
+      }
+
+      // Milk powder stage (1段, 2段, 3段, 4段)
+      let stage = null;
+      const stageMatch = cleaned.match(/([1234])\s*段/);
+      if (stageMatch) {
+        stage = parseInt(stageMatch[1], 10);
+      }
+
+      // Manuka Honey MGO / UMF rating
+      let mgo = null;
+      let umf = null;
+      const mgoMatch = cleaned.match(/mgo\s*(\d+)\+?/i);
+      if (mgoMatch) mgo = parseInt(mgoMatch[1], 10);
+      const umfMatch = cleaned.match(/umf\s*(\d+)\+?/i);
+      if (umfMatch) umf = parseInt(umfMatch[1], 10);
+
+      // Formula / Series variant (全脂 vs 脱脂, 白金版 vs 金装, 儿童 vs 成人)
+      const variants = [];
+      if (/脱脂/.test(cleaned)) variants.push('脱脂');
+      else if (/全脂/.test(cleaned)) variants.push('全脂');
+      if (/白金|铂金/.test(cleaned)) variants.push('白金版');
+      else if (/金装/.test(cleaned)) variants.push('金装');
+      if (/儿童/.test(cleaned)) variants.push('儿童');
+
+      // Build human-readable spec badge text
+      const parts = [];
+      if (stage !== null) parts.push(`${stage}段`);
+      if (mgo !== null) parts.push(`MGO${mgo}+`);
+      if (umf !== null) parts.push(`UMF${umf}+`);
+      if (strengthMg !== null) parts.push(`${strengthMg}mg`);
+      if (billionCfu !== null) parts.push(`${billionCfu}亿`);
+      if (weightG !== null) parts.push(weightG >= 1000 && weightG % 1000 === 0 ? `${weightG / 1000}kg` : `${weightG}g`);
+      if (volumeMl !== null) parts.push(`${volumeMl}ml`);
+      if (count !== null) parts.push(`${count}${countUnit || '粒'}`);
+      if (packCount > 1) parts.push(`×${packCount}罐/袋`);
+      if (variants.length > 0) parts.push(variants.join('/'));
+
+      return {
+        count,
+        countUnit,
+        weightG,
+        volumeMl,
+        packCount,
+        strengthMg,
+        billionCfu,
+        stage,
+        mgo,
+        umf,
+        variants,
+        badgeText: parts.length > 0 ? parts.join(' · ') : '标准规格',
+        numericSortVal: count || weightG || volumeMl || 0
+      };
+    }
+
+    // 2. Check whether two product specifications are strictly compatible for merging
+    // Critical Rule: 150粒 vs 200粒, 120粒 vs 200粒, 500g vs 1kg, 1000mg vs 1500mg are DIFFERENT products!
+    function checkSpecCompatibility(specA, specB, options = {}) {
+      const strictRequireBothCount = !!options.strictRequireBothCount;
+
+      // 1) Pill/Tablet Count Conflict (e.g. 150粒 vs 200粒, 120粒 vs 200粒)
+      if (specA.count !== null && specB.count !== null && specA.count !== specB.count) {
+        return {
+          compatible: false,
+          conflictField: 'count',
+          reason: `粒/片数规格不同 (${specA.count}粒/片 ≠ ${specB.count}粒/片)`
+        };
+      }
+      if (strictRequireBothCount && (specA.count !== null) !== (specB.count !== null)) {
+        return {
+          compatible: false,
+          conflictField: 'count_missing',
+          reason: `一方包含粒数规格 (${specA.count || specB.count}粒)，另一方未标注粒数`
+        };
+      }
+
+      // 2) Weight Conflict (e.g. 500g vs 1kg/1000g)
+      if (specA.weightG !== null && specB.weightG !== null && specA.weightG !== specB.weightG) {
+        return {
+          compatible: false,
+          conflictField: 'weightG',
+          reason: `克重规格不同 (${specA.weightG}g ≠ ${specB.weightG}g)`
+        };
+      }
+
+      // 3) Volume Conflict (e.g. 20ml vs 250ml)
+      if (specA.volumeMl !== null && specB.volumeMl !== null && specA.volumeMl !== specB.volumeMl) {
+        return {
+          compatible: false,
+          conflictField: 'volumeMl',
+          reason: `容量规格不同 (${specA.volumeMl}ml ≠ ${specB.volumeMl}ml)`
+        };
+      }
+
+      // 4) Pack Multiplier Conflict (e.g. *3罐 vs *6罐)
+      if (specA.packCount !== specB.packCount) {
+        return {
+          compatible: false,
+          conflictField: 'packCount',
+          reason: `整箱包装数量不同 (×${specA.packCount} ≠ ×${specB.packCount})`
+        };
+      }
+
+      // 5) Strength / Concentration Conflict (e.g. 1000mg vs 1500mg)
+      if (specA.strengthMg !== null && specB.strengthMg !== null && specA.strengthMg !== specB.strengthMg) {
+        return {
+          compatible: false,
+          conflictField: 'strengthMg',
+          reason: `含量浓度不同 (${specA.strengthMg}mg ≠ ${specB.strengthMg}mg)`
+        };
+      }
+
+      // 6) Stage Conflict (1段 vs 2段 vs 3段 vs 4段)
+      if (specA.stage !== null && specB.stage !== null && specA.stage !== specB.stage) {
+        return {
+          compatible: false,
+          conflictField: 'stage',
+          reason: `奶粉段数不同 (${specA.stage}段 ≠ ${specB.stage}段)`
+        };
+      }
+
+      // 7) Honey MGO / UMF Conflict
+      if (specA.mgo !== null && specB.mgo !== null && specA.mgo !== specB.mgo) {
+        return {
+          compatible: false,
+          conflictField: 'mgo',
+          reason: `蜂蜜MGO等级不同 (MGO${specA.mgo}+ ≠ MGO${specB.mgo}+)`
+        };
+      }
+      if (specA.umf !== null && specB.umf !== null && specA.umf !== specB.umf) {
+        return {
+          compatible: false,
+          conflictField: 'umf',
+          reason: `蜂蜜UMF等级不同 (UMF${specA.umf}+ ≠ UMF${specB.umf}+)`
+        };
+      }
+
+      // 8) Formula Variant Conflict (全脂 vs 脱脂, 白金版 vs 金装)
+      const hasSkimA = specA.variants.includes('脱脂');
+      const hasFullA = specA.variants.includes('全脂');
+      const hasSkimB = specB.variants.includes('脱脂');
+      const hasFullB = specB.variants.includes('全脂');
+      if ((hasSkimA && hasFullB) || (hasFullA && hasSkimB)) {
+        return {
+          compatible: false,
+          conflictField: 'variant',
+          reason: `全脂/脱脂配方不同 (${specA.variants.join('/')} ≠ ${specB.variants.join('/')})`
+        };
+      }
+      const hasPlatA = specA.variants.includes('白金版');
+      const hasGoldA = specA.variants.includes('金装');
+      const hasPlatB = specB.variants.includes('白金版');
+      const hasGoldB = specB.variants.includes('金装');
+      if ((hasPlatA && hasGoldB) || (hasGoldA && hasPlatB)) {
+        return {
+          compatible: false,
+          conflictField: 'variant',
+          reason: `奶粉系列不同 (白金版 ≠ 金装)`
+        };
+      }
+
+      return {
+        compatible: true,
+        conflictField: null,
+        reason: `规格一致 (${specA.badgeText})`
+      };
+    }
+
+    // 3. Extract Brand & Core Functional Keywords for semantic comparison
+    function extractProductBrandAndCoreKeywords(rawName) {
+      const s = String(rawName || '').trim();
+      let brand = '其他品牌';
+      for (const b of BRAND_SYNONYM_GROUPS) {
+        if (b.patterns.some(rx => rx.test(s))) {
+          brand = b.canonical;
+          break;
+        }
+      }
+
+      // Normalize string to extract core functional tokens
+      let core = s.toLowerCase();
+      // Remove bracketed notes
+      core = core.replace(/[【\[（(][^】\]）)]*[】\]）)]/g, ' ');
+      // Remove brand tokens
+      BRAND_SYNONYM_GROUPS.forEach(b => {
+        b.patterns.forEach(rx => { core = core.replace(rx, ' '); });
+      });
+      // Remove spec tokens (numbers + units)
+      core = core
+        .replace(/\d+(?:\.\d+)?\s*(?:mg|g|kg|ml|粒|片|颗|丸|袋|罐|盒|瓶|支|段|亿|倍)/gi, ' ')
+        .replace(/mgo\s*\d+\+?/gi, ' ')
+        .replace(/umf\s*\d+\+?/gi, ' ')
+        .replace(/[*×xX\-+/&.,:：()（）]/g, ' ');
+
+      // Strip generic filler words that vary across webpages
+      const stopWords = [
+        '高含量', '浓缩', '无味', '无腥味', '日服型', '日常呵护', '野生', '天然', '活性',
+        '神奇', '万用膏', '成人', '孕妇', '老人', '澳洲版', '新西兰', '澳洲', '直邮', '包邮',
+        '软胶囊', '胶囊', '咀嚼片', '泡腾片', '片', '膏', '凝胶', '霜', '护肝宝', '配方', '婴幼儿', '婴儿',
+        'ultiboost', 'capsules', 'tablets', 'softgels'
+      ];
+
+      // Extract canonical functional concepts
+      const concepts = [];
+      if (/维生素c|维c|vc\b/i.test(s)) concepts.push('维生素C');
+      if (/泡腾/i.test(s)) concepts.push('泡腾片');
+      if (/奶蓟草|护肝|liver/i.test(s)) concepts.push('奶蓟草护肝片');
+      if (/深海鱼油|鱼油|fish\s*oil|omega/i.test(s)) concepts.push('鱼油');
+      if (/三倍|3倍/i.test(s)) concepts.push('三倍鱼油');
+      if (/四倍|4倍/i.test(s)) concepts.push('4倍浓缩鱼油');
+      if (/卵磷脂|lecithin/i.test(s)) concepts.push('大豆卵磷脂');
+      if (/液体钙/i.test(s) && !/乳钙/i.test(s)) concepts.push('液体钙');
+      if (/乳钙/i.test(s)) concepts.push('乳钙');
+      if (/钙镁|钙\+维生素d|钙\+vd|补钙/i.test(s) && !/液体钙|乳钙/i.test(s)) concepts.push('钙维生素D');
+      if (/辅酶|q10/i.test(s)) concepts.push('辅酶Q10');
+      if (/益生菌|probiotic/i.test(s) && !/奶粉/i.test(s)) concepts.push('益生菌');
+      if (/蔓越莓|cranberry/i.test(s)) concepts.push('蔓越莓');
+      if (/麦卢卡|manuka/i.test(s) && /蜂蜜|honey/i.test(s) && !/糖/i.test(s)) concepts.push('麦卢卡蜂蜜');
+      if (/润喉糖|蜂胶糖/i.test(s)) concepts.push('麦卢卡润喉糖');
+      if (/蜂胶牙膏|牙膏/i.test(s)) concepts.push('蜂胶牙膏');
+      if (/绵羊油/i.test(s)) concepts.push('绵羊油保湿霜');
+      if (/芦荟/i.test(s)) concepts.push('芦荟凝胶');
+      if (/木瓜膏|papaw/i.test(s)) concepts.push('番木瓜膏');
+      if (/牛奶片/i.test(s)) concepts.push('牛奶片');
+      if (/成人.*全脂奶粉|全脂奶粉/i.test(s)) concepts.push('成人全脂奶粉');
+      if (/成人.*脱脂奶粉|脱脂奶粉/i.test(s)) concepts.push('成人脱脂奶粉');
+      if (/儿童.*成长型奶粉/i.test(s)) concepts.push('儿童成长奶粉');
+      if (/婴幼儿配方奶粉|婴儿配方奶粉/i.test(s)) concepts.push('婴幼儿配方奶粉');
+      if (/免疫片/i.test(s)) concepts.push('儿童免疫片');
+      if (/综合维生素/i.test(s)) concepts.push('儿童综合维生素');
+      if (/退烧|扑热息痛|maxigesic/i.test(s)) concepts.push('退烧止痛片');
+      if (/牡蛎/i.test(s)) concepts.push('牡蛎精');
+      if (/镁胶囊|镁片/i.test(s) && !/钙镁/i.test(s)) concepts.push('镁胶囊');
+      if (/鼻炎喷雾/i.test(s)) concepts.push('鼻炎喷雾');
+
+      stopWords.forEach(w => {
+        core = core.split(w).join(' ');
+      });
+      const residualTokens = core.split(/\s+/).map(t => t.trim()).filter(t => t.length >= 2);
+
+      return {
+        brand,
+        concepts,
+        residualTokens,
+        conceptKey: `${brand}::${concepts.length > 0 ? concepts.sort().join('+') : residualTokens.join('+')}`
+      };
+    }
+
+    // 4. Scan state.products (and orders) for:
+    //    (a) Candidate duplicate groups (same brand + same core concepts + compatible spec)
+    //    (b) Spec-isolated protected pairs (same brand + same core concepts, but DIFFERENT spec like 120粒 vs 200粒, 500g vs 1kg, 1000mg vs 1500mg)
+    function scanProductDuplicateAndProtectedGroups() {
+      const prods = state.products || [];
+      const ignoredPairs = new Set((state.ignoredDedupGroupKeys || []));
+
+      // Compute order stats per product name
+      const orderStats = {};
+      getActiveOrders().forEach(o => {
+        if (o.cancelled) return;
+        (o.items || []).forEach(it => {
+          if (!orderStats[it.product]) orderStats[it.product] = { orders: 0, qty: 0 };
+          orderStats[it.product].orders += 1;
+          orderStats[it.product].qty += (Number(it.qty) || 0);
+        });
+      });
+
+      const analyzed = prods.map(p => {
+        const spec = extractProductSpecSignature(p.name);
+        const kw = extractProductBrandAndCoreKeywords(p.name);
+        const st = orderStats[p.name] || { orders: 0, qty: 0 };
+        return { product: p, name: p.name, spec, kw, stats: st };
+      });
+
+      // Group by conceptKey (same brand + same core product concept)
+      const byConcept = {};
+      analyzed.forEach(item => {
+        if (!item.kw.concepts.length && item.kw.residualTokens.length === 0) return;
+        const k = item.kw.conceptKey;
+        if (!byConcept[k]) byConcept[k] = [];
+        byConcept[k].push(item);
+      });
+
+      const candidateGroups = [];
+      const protectedSpecGroups = [];
+
+      Object.entries(byConcept).forEach(([conceptKey, items]) => {
+        if (items.length < 2) return;
+
+        // Partition items into compatible-spec clusters
+        const visited = new Set();
+        for (let i = 0; i < items.length; i++) {
+          if (visited.has(i)) continue;
+          const cluster = [items[i]];
+          visited.add(i);
+          for (let j = i + 1; j < items.length; j++) {
+            if (visited.has(j)) continue;
+            const compat = checkSpecCompatibility(items[i].spec, items[j].spec);
+            if (compat.compatible) {
+              cluster.push(items[j]);
+              visited.add(j);
+            } else {
+              // Record as a protected different-spec pair!
+              protectedSpecGroups.push({
+                brand: items[i].kw.brand,
+                concept: items[i].kw.concepts.join(' / '),
+                itemA: items[i],
+                itemB: items[j],
+                conflictReason: compat.reason
+              });
+            }
+          }
+          if (cluster.length >= 2) {
+            const groupKey = cluster.map(x => x.name).sort().join('|||');
+            if (!ignoredPairs.has(groupKey)) {
+              // Pick the best default canonical name (prefer one with more orders, or more complete spec in name)
+              const sortedCluster = cluster.slice().sort((a, b) => {
+                if (b.stats.orders !== a.stats.orders) return b.stats.orders - a.stats.orders;
+                return b.name.length - a.name.length;
+              });
+              candidateGroups.push({
+                groupKey,
+                brand: sortedCluster[0].kw.brand,
+                concept: sortedCluster[0].kw.concepts.join(' / '),
+                specBadge: sortedCluster[0].spec.badgeText,
+                recommendedCanonical: sortedCluster[0].name,
+                items: sortedCluster
+              });
+            }
+          }
+        }
+      });
+
+      return { candidateGroups, protectedSpecGroups };
+    }
+
+    // 5. Execute Product Merge (merges priceHistory, updates historical orders, saves real-time alias rule)
+    function executeProductGroupMerge(canonicalName, variantNamesList) {
+      const cleanCanonical = String(canonicalName || '').trim();
+      if (!cleanCanonical || !Array.isArray(variantNamesList) || variantNamesList.length === 0) return false;
+
+      const allNamesInvolved = Array.from(new Set([cleanCanonical, ...variantNamesList.map(x => String(x || '').trim()).filter(Boolean)]));
+      if (allNamesInvolved.length < 2) return false;
+
+      recordBeforeAction(`合并同款商品为确定商品名: ${cleanCanonical}`);
+
+      // Find or create target product entry in state.products
+      let targetProd = state.products.find(p => p.name === cleanCanonical)
+        || state.products.find(p => allNamesInvolved.includes(p.name));
+
+      if (!targetProd) return false;
+
+      const combinedHistory = [];
+      let bestNzdPrice = targetProd.nzdPrice || null;
+      let bestNzdDate = targetProd.nzdDate || '';
+      let bestRmbPrice = targetProd.rmbPrice || null;
+      let bestRmbShip = targetProd.rmbShipPerUnit || 0;
+      let bestRate = targetProd.lastExchangeRate || null;
+      let bestScrapedAt = targetProd.lastScrapedAt || '';
+
+      allNamesInvolved.forEach(nm => {
+        const p = state.products.find(x => x.name === nm);
+        if (!p) return;
+        if (p.nzdPrice && (!bestNzdDate || (p.nzdDate && p.nzdDate >= bestNzdDate) || !bestNzdPrice)) {
+          bestNzdPrice = p.nzdPrice;
+          if (p.nzdDate) bestNzdDate = p.nzdDate;
+        }
+        if (p.rmbPrice && (!bestRmbPrice || (p.nzdDate && p.nzdDate >= bestNzdDate))) {
+          bestRmbPrice = p.rmbPrice;
+        }
+        if (p.rmbShipPerUnit && !bestRmbShip) bestRmbShip = p.rmbShipPerUnit;
+        if (p.lastExchangeRate) bestRate = p.lastExchangeRate;
+        if (p.lastScrapedAt && p.lastScrapedAt >= bestScrapedAt) bestScrapedAt = p.lastScrapedAt;
+
+        (p.priceHistory || []).forEach(h => {
+          const isDup = combinedHistory.some(ch =>
+            ch.date === h.date &&
+            ch.merchant === h.merchant &&
+            Math.abs((Number(ch.price) || 0) - (Number(h.price) || 0)) < 0.02
+          );
+          if (!isDup) {
+            combinedHistory.push({ ...h });
+          }
+        });
+      });
+
+      combinedHistory.sort((a, b) => String(a.date || '').localeCompare(String(b.date || '')));
+
+      targetProd.name = cleanCanonical;
+      targetProd.category = targetProd.category || inferProductCategoryByName(cleanCanonical);
+      targetProd.nzdPrice = bestNzdPrice;
+      targetProd.nzdDate = bestNzdDate;
+      targetProd.rmbPrice = bestRmbPrice;
+      targetProd.rmbShipPerUnit = bestRmbShip;
+      if (bestRate) targetProd.lastExchangeRate = bestRate;
+      if (bestScrapedAt) targetProd.lastScrapedAt = bestScrapedAt;
+      targetProd.priceHistory = combinedHistory;
+      targetProd.inOrderSheets = true;
+
+      // Remove merged duplicate product entries from state.products
+      const otherNames = new Set(allNamesInvolved.filter(n => n !== cleanCanonical));
+      let keptTarget = false;
+      state.products = state.products.filter(p => {
+        if (p === targetProd) {
+          keptTarget = true;
+          return true;
+        }
+        if (p.name === cleanCanonical && !keptTarget) {
+          keptTarget = true;
+          return true;
+        }
+        return !otherNames.has(p.name) && p.name !== cleanCanonical;
+      });
+
+      // Update historical orders & sheet1Orders & billItems & cartOptimizer
+      let updatedOrderItemsCount = 0;
+      const updateOrdersArray = (arr) => {
+        (arr || []).forEach(o => {
+          (o.items || []).forEach(it => {
+            if (otherNames.has(it.product)) {
+              it.product = cleanCanonical;
+              updatedOrderItemsCount++;
+            }
+          });
+        });
+      };
+      updateOrdersArray(state.orders);
+      updateOrdersArray(state.sheet1Orders);
+
+      (state.billItems || []).forEach(b => {
+        if (otherNames.has(b.product)) b.product = cleanCanonical;
+      });
+      (window.smartCartOptimizerItems || []).forEach(c => {
+        if (otherNames.has(c.product)) c.product = cleanCanonical;
+      });
+
+      // Save persistent alias & spec-aware keyword rule
+      state.productAliasRules = Array.isArray(state.productAliasRules) ? state.productAliasRules : [];
+      const specSig = extractProductSpecSignature(cleanCanonical);
+      const kwSig = extractProductBrandAndCoreKeywords(cleanCanonical);
+      let existingRule = state.productAliasRules.find(r => r.canonicalName === cleanCanonical || (r.aliases || []).some(a => allNamesInvolved.includes(a)));
+      if (existingRule) {
+        existingRule.canonicalName = cleanCanonical;
+        existingRule.aliases = Array.from(new Set([...(existingRule.aliases || []), ...allNamesInvolved.filter(n => n !== cleanCanonical)]));
+        existingRule.specBadge = specSig.badgeText;
+        existingRule.brand = kwSig.brand;
+        existingRule.concepts = kwSig.concepts;
+      } else {
+        state.productAliasRules.push({
+          id: 'RULE-' + Date.now() + '-' + Math.random().toString(36).slice(2, 6),
+          canonicalName: cleanCanonical,
+          aliases: allNamesInvolved.filter(n => n !== cleanCanonical),
+          brand: kwSig.brand,
+          concepts: kwSig.concepts,
+          specBadge: specSig.badgeText,
+          createdAt: TODAY_STR
+        });
+      }
+
+      // Also sync into state.customScrapeRules.productAliases for backward compatibility
+      state.customScrapeRules = state.customScrapeRules || {};
+      state.customScrapeRules.productAliases = state.customScrapeRules.productAliases || {};
+      allNamesInvolved.forEach(alias => {
+        if (alias !== cleanCanonical) {
+          state.customScrapeRules.productAliases[alias] = cleanCanonical;
+        }
+      });
+
+      saveState(`合并同品为「${cleanCanonical}」(归并${otherNames.size}个异名，同步${updatedOrderItemsCount}条订单明细)`);
+      renderAll();
+      showToast(`✅ 已合并为确定商品名「${cleanCanonical}」！同步更新 ${updatedOrderItemsCount} 条订单记录并已记入实时抓单归一库`);
+      return true;
+    }
+
+    // 6. Real-Time Product Name Unification on New Order Capture / Scrape / Import
+    //    - Matches by exact alias OR by Brand + Core Keywords + STRICT Spec Compatibility (150粒 ≠ 200粒)
+    function resolveCanonicalProductName(rawInputName, options = {}) {
+      const raw = String(rawInputName || '').trim();
+      if (!raw) return { canonicalName: '', matchedType: 'EMPTY', isNewSpecVariant: false };
+
+      // Clean leading expiry/warehouse tags like 【保质期27.10】 while keeping core title & specs
+      const cleanedRaw = raw
+        .replace(/^[【\[（(][^】\]）)]*(?:保质期|效期|直邮|包邮|特惠|清仓|现货|闪购)[^】\]）)]*[】\]）)]\s*/gi, '')
+        .trim() || raw;
+
+      // 1) Exact match in current state.products
+      const exactProd = (state.products || []).find(p => p.name.toLowerCase() === cleanedRaw.toLowerCase() || p.name.toLowerCase() === raw.toLowerCase());
+      if (exactProd) {
+        return {
+          canonicalName: exactProd.name,
+          matchedType: 'EXACT_CATALOG',
+          isNewSpecVariant: false,
+          specBadge: extractProductSpecSignature(exactProd.name).badgeText,
+          reason: `精确匹配商品库现有标准名`
+        };
+      }
+
+      // 2) Exact alias match in state.productAliasRules or state.customScrapeRules.productAliases
+      const aliasMap = (state.customScrapeRules && state.customScrapeRules.productAliases) || {};
+      if (aliasMap[raw] || aliasMap[cleanedRaw]) {
+        const target = aliasMap[raw] || aliasMap[cleanedRaw];
+        return {
+          canonicalName: target,
+          matchedType: 'ALIAS_RULE',
+          isNewSpecVariant: false,
+          specBadge: extractProductSpecSignature(target).badgeText,
+          reason: `命中您已审核的同名异词映射规则`
+        };
+      }
+      const rules = Array.isArray(state.productAliasRules) ? state.productAliasRules : [];
+      for (const r of rules) {
+        if ((r.aliases || []).some(a => a.toLowerCase() === raw.toLowerCase() || a.toLowerCase() === cleanedRaw.toLowerCase())) {
+          return {
+            canonicalName: r.canonicalName,
+            matchedType: 'ALIAS_RULE',
+            isNewSpecVariant: false,
+            specBadge: r.specBadge || extractProductSpecSignature(r.canonicalName).badgeText,
+            reason: `命中已审核别名规则 → ${r.canonicalName}`
+          };
+        }
+      }
+
+      // 3) Spec-Aware Keyword Matching against state.products
+      const incomingSpec = extractProductSpecSignature(cleanedRaw);
+      const incomingKw = extractProductBrandAndCoreKeywords(cleanedRaw);
+
+      if (incomingKw.brand !== '其他品牌' && incomingKw.concepts.length > 0) {
+        const sameConceptProds = [];
+        const conflictingSpecProds = [];
+
+        (state.products || []).forEach(p => {
+          const pKw = extractProductBrandAndCoreKeywords(p.name);
+          if (pKw.brand !== incomingKw.brand) return;
+          // Check concept overlap
+          const sharedConcepts = incomingKw.concepts.filter(c => pKw.concepts.includes(c));
+          if (sharedConcepts.length === 0 || sharedConcepts.length < Math.min(incomingKw.concepts.length, pKw.concepts.length)) return;
+
+          const pSpec = extractProductSpecSignature(p.name);
+          const compat = checkSpecCompatibility(incomingSpec, pSpec, { strictRequireBothCount: false });
+          if (compat.compatible) {
+            sameConceptProds.push({ product: p, pSpec, pKw });
+          } else {
+            conflictingSpecProds.push({ product: p, pSpec, pKw, conflictReason: compat.reason });
+          }
+        });
+
+        if (sameConceptProds.length > 0) {
+          // Prefer candidate whose count/weight matches explicitly
+          sameConceptProds.sort((a, b) => {
+            const aExactSpec = (incomingSpec.count && a.pSpec.count === incomingSpec.count) || (incomingSpec.weightG && a.pSpec.weightG === incomingSpec.weightG) ? 1 : 0;
+            const bExactSpec = (incomingSpec.count && b.pSpec.count === incomingSpec.count) || (incomingSpec.weightG && b.pSpec.weightG === incomingSpec.weightG) ? 1 : 0;
+            return bExactSpec - aExactSpec;
+          });
+          const best = sameConceptProds[0];
+          return {
+            canonicalName: best.product.name,
+            matchedType: 'KEYWORD_SPEC_MATCH',
+            isNewSpecVariant: false,
+            specBadge: incomingSpec.badgeText,
+            reason: `关键字 [${incomingKw.brand} + ${incomingKw.concepts.join('+')}] 且规格一致 [${incomingSpec.badgeText}] → 自动统一入口为确定商品名`
+          };
+        }
+
+        if (conflictingSpecProds.length > 0) {
+          // Same product concept, but DIFFERENT spec (e.g. 200粒 vs existing 150粒)!
+          // Must NOT merge; keep as a distinct new-spec product!
+          const conflictEx = conflictingSpecProds[0];
+          return {
+            canonicalName: cleanedRaw,
+            matchedType: 'NEW_SPEC_ISOLATED',
+            isNewSpecVariant: true,
+            specBadge: incomingSpec.badgeText,
+            conflictedWith: conflictEx.product.name,
+            reason: `🛡️ 识别到同品牌同品「${conflictEx.product.name}」，但 ${conflictEx.conflictReason} → 严格作为独立新规格产品入库，绝不混并！`
+          };
+        }
+      }
+
+      return {
+        canonicalName: cleanedRaw,
+        matchedType: 'NEW_PRODUCT',
+        isNewSpecVariant: false,
+        specBadge: incomingSpec.badgeText,
+        reason: `新商品规格 (${incomingSpec.badgeText})，将按原名独立建档`
+      };
+    }
+
+    // 7. Guaranteed Category Backfill & Automatic Verified Order Price Extraction
+    function ensureAllProductsHaveCategoriesAndVerifiedPrices() {
+      if (!state || !Array.isArray(state.products)) return { extractedOrders: 0, totalVerifiedPoints: 0 };
+
+      const seedMap = {};
+      (INITIAL_DATA.products || []).forEach(sp => { seedMap[sp.name] = sp; });
+
+      // Ensure every product has a valid category
+      state.products.forEach(p => {
+        const sp = seedMap[p.name];
+        if (!p.category || !VALID_PRODUCT_CATEGORIES.includes(p.category)) {
+          p.category = (sp && sp.category && VALID_PRODUCT_CATEGORIES.includes(sp.category))
+            ? sp.category
+            : inferProductCategoryByName(p.name);
+        }
+      });
+
+      // Scan all active valid orders and extract verified unit prices into state.products
+      let extractedOrdersCount = 0;
+      getActiveOrders().forEach(o => {
+        if (!o || o.cancelled) return;
+        const hasValidPrice = (o.items || []).some(it => Number(it.unitPrice) > 0);
+        if (hasValidPrice) {
+          extractedOrdersCount++;
+          syncOrderPricesToCatalog(o);
+          // Also ensure orderId is attached to matching priceHistory entries so 📋 详单 works directly
+          (o.items || []).forEach(it => {
+            const p = getProductInfo(it.product);
+            if (p && Array.isArray(p.priceHistory)) {
+              p.priceHistory.forEach(h => {
+                if ((h.orderNo && h.orderNo === o.orderNo) || (h.date === o.orderDate && h.merchant === o.merchant)) {
+                  if (!h.orderId) h.orderId = o.id;
+                  if (!h.orderNo && o.orderNo) h.orderNo = o.orderNo;
+                }
+              });
+            }
+          });
+        }
+      });
+
+      let totalVerifiedPoints = 0;
+      state.products.forEach(p => {
+        const pts = collectProductVerifiedPriceSeries(p.name, 'ALL_VERIFIED');
+        totalVerifiedPoints += pts.length;
+      });
+
+      const badgeEl = document.getElementById('verifiedExtractionStatusBadge');
+      if (badgeEl) {
+        badgeEl.textContent = `✅ 已从 ${extractedOrdersCount} 笔已核实订单自动提取 ${totalVerifiedPoints} 条历史价格档位`;
+      }
+      return { extractedOrders: extractedOrdersCount, totalVerifiedPoints };
+    }
+
+    // 8. Logical Product Sorting & <optgroup> Dropdown Builder
+    function computeProductCatalogStatsMap() {
+      const statsMap = {};
+      (state.products || []).forEach(p => {
+        const series = collectProductVerifiedPriceSeries(p.name, 'ALL_VERIFIED');
+        const kw = extractProductBrandAndCoreKeywords(p.name);
+        const spec = extractProductSpecSignature(p.name);
+        const latestDate = series.length > 0 ? series[series.length - 1].date : (p.nzdDate || '2022-01-01');
+        statsMap[p.name] = {
+          qty: 0,
+          orders: 0,
+          merchants: new Set(),
+          seriesCount: series.length,
+          series,
+          brand: kw.brand,
+          spec,
+          latestDate
+        };
+      });
+
+      getActiveOrders().forEach(o => {
+        if (o.cancelled) return;
+        (o.items || []).forEach(it => {
+          if (!statsMap[it.product]) {
+            const kw = extractProductBrandAndCoreKeywords(it.product);
+            const spec = extractProductSpecSignature(it.product);
+            statsMap[it.product] = { qty: 0, orders: 0, merchants: new Set(), seriesCount: 1, series: [], brand: kw.brand, spec, latestDate: o.orderDate || '' };
+          }
+          statsMap[it.product].qty += (Number(it.qty) || 0);
+          statsMap[it.product].orders += 1;
+          if (o.merchant) statsMap[it.product].merchants.add(o.merchant);
+          if (o.orderDate && o.orderDate > statsMap[it.product].latestDate) {
+            statsMap[it.product].latestDate = o.orderDate;
+          }
+        });
+      });
+      return statsMap;
+    }
+
+    function sortProductsByMode(productsList, sortMode, statsMap) {
+      const mode = sortMode || state.prodSortMode || 'CATEGORY_BRAND';
+      const stMap = statsMap || computeProductCatalogStatsMap();
+      const catOrder = VALID_PRODUCT_CATEGORIES;
+
+      return (productsList || []).slice().sort((a, b) => {
+        const sa = stMap[a.name] || { qty: 0, orders: 0, seriesCount: 0, brand: '', spec: { numericSortVal: 0 }, latestDate: '' };
+        const sb = stMap[b.name] || { qty: 0, orders: 0, seriesCount: 0, brand: '', spec: { numericSortVal: 0 }, latestDate: '' };
+
+        if (mode === 'FREQ_DESC') {
+          if (sb.qty !== sa.qty) return sb.qty - sa.qty;
+          if (sb.orders !== sa.orders) return sb.orders - a.orders;
+          return a.name.localeCompare(b.name, 'zh-CN');
+        }
+        if (mode === 'VERIFIED_DESC') {
+          if (sb.seriesCount !== sa.seriesCount) return sb.seriesCount - sa.seriesCount;
+          if (sb.qty !== sa.qty) return sb.qty - sa.qty;
+          return a.name.localeCompare(b.name, 'zh-CN');
+        }
+        if (mode === 'RECENT_DESC') {
+          if (sb.latestDate !== sa.latestDate) return String(sb.latestDate).localeCompare(String(sa.latestDate));
+          return sb.qty - sa.qty;
+        }
+        if (mode === 'PRICE_ASC') {
+          const pa = Number(a.nzdPrice) || (Number(a.rmbPrice) ? Number(a.rmbPrice) / 4.35 : 9999);
+          const pb = Number(b.nzdPrice) || (Number(b.rmbPrice) ? Number(b.rmbPrice) / 4.35 : 9999);
+          return pa - pb;
+        }
+        if (mode === 'PRICE_DESC') {
+          const pa = Number(a.nzdPrice) || (Number(a.rmbPrice) ? Number(a.rmbPrice) / 4.35 : 0);
+          const pb = Number(b.nzdPrice) || (Number(b.rmbPrice) ? Number(b.rmbPrice) / 4.35 : 0);
+          return pb - pa;
+        }
+
+        // Default: CATEGORY_BRAND (Group by Category -> Brand A-Z -> Name -> Spec numeric ascending e.g. 120粒 before 200粒)
+        const ca = catOrder.indexOf(a.category || '');
+        const cb = catOrder.indexOf(b.category || '');
+        if (ca !== cb) return (ca === -1 ? 99 : ca) - (cb === -1 ? 99 : cb);
+        if (sa.brand !== sb.brand) return String(sa.brand).localeCompare(String(sb.brand), 'en');
+        const baseA = a.name.replace(/\d+\s*(?:粒|片|g|克|kg|ml)/gi, '');
+        const baseB = b.name.replace(/\d+\s*(?:粒|片|g|克|kg|ml)/gi, '');
+        if (baseA !== baseB) return baseA.localeCompare(baseB, 'zh-CN');
+        return (sa.spec.numericSortVal || 0) - (sb.spec.numericSortVal || 0);
+      });
+    }
+
+    function buildStructuredProductSelectHtml(productsList, selectedName, sortMode, statsMap) {
+      const mode = sortMode || state.prodSortMode || 'CATEGORY_BRAND';
+      const stMap = statsMap || computeProductCatalogStatsMap();
+      const sorted = sortProductsByMode(productsList, mode, stMap);
+
+      const formatOptLabel = (p) => {
+        const st = stMap[p.name] || { qty: 0, seriesCount: 1 };
+        const priceTag = p.nzdPrice ? `NZ$${p.nzdPrice}` : (p.rmbPrice ? `¥${p.rmbPrice}` : '');
+        if (mode === 'FREQ_DESC') {
+          return `[已购${st.qty}件·${st.seriesCount}期] ${p.name} ${priceTag ? '(' + priceTag + ')' : ''}`;
+        }
+        if (mode === 'VERIFIED_DESC') {
+          return `[${st.seriesCount}期核实价·已购${st.qty}件] ${p.name} ${priceTag ? '(' + priceTag + ')' : ''}`;
+        }
+        if (mode === 'RECENT_DESC') {
+          return `[${st.latestDate || '历史'}] ${p.name} (${priceTag || '-'} · ${st.seriesCount}期)`;
+        }
+        return `${p.name} [${priceTag || '待定'} · ${st.seriesCount}期核实${st.qty > 0 ? ' · 已购' + st.qty + '件' : ''}]`;
+      };
+
+      if (mode === 'CATEGORY_BRAND') {
+        const groups = {};
+        VALID_PRODUCT_CATEGORIES.forEach(c => { groups[c] = []; });
+        sorted.forEach(p => {
+          const c = (p.category && groups[p.category]) ? p.category : '维生素/钙铁锌/保健';
+          groups[c].push(p);
+        });
+        return Object.entries(groups)
+          .filter(([_, arr]) => arr.length > 0)
+          .map(([cat, arr]) => {
+            const icon = CATEGORY_ICONS_MAP[cat] || '📦';
+            const opts = arr.map(p => {
+              const safe = p.name.replace(/"/g, '&quot;');
+              const sel = p.name === selectedName ? 'selected' : '';
+              return `<option value="${safe}" ${sel}>${formatOptLabel(p)}</option>`;
+            }).join('');
+            return `<optgroup label="${icon} ${cat} (${arr.length}款)">${opts}</optgroup>`;
+          }).join('');
+      }
+
+      return sorted.map(p => {
+        const safe = p.name.replace(/"/g, '&quot;');
+        const sel = p.name === selectedName ? 'selected' : '';
+        return `<option value="${safe}" ${sel}>${formatOptLabel(p)}</option>`;
+      }).join('');
+    }
+
+    // Multi-keyword & brand-synonym matcher for Product Search
+    function matchesProductSearchAndCategory(prod, rawQuery, categoryFilter) {
+      if (!prod) return false;
+      const pCat = prod.category || inferProductCategoryByName(prod.name);
+      if (categoryFilter && categoryFilter !== 'ALL' && pCat !== categoryFilter) {
+        return false;
+      }
+      const q = String(rawQuery || '').trim().toLowerCase();
+      if (!q) return true;
+
+      const kw = extractProductBrandAndCoreKeywords(prod.name);
+      const spec = extractProductSpecSignature(prod.name);
+      const searchableHaystack = [
+        prod.name,
+        pCat,
+        kw.brand,
+        kw.concepts.join(' '),
+        spec.badgeText,
+        prod.priceSource || '',
+        prod.note || ''
+      ].join(' ').toLowerCase();
+
+      const tokens = q.split(/\s+/).filter(Boolean);
+      return tokens.every(tok => searchableHaystack.includes(tok));
+    }
+
+    // Override renderProductPriceTrendStudio so its dropdown uses logical sorting AND responds to search/category filter
+    const _origRenderProductPriceTrendStudio = renderProductPriceTrendStudio;
+    renderProductPriceTrendStudio = function(selectedName) {
+      const studioEl = document.getElementById('productPriceTrendStudio');
+      const selectEl = document.getElementById('trendStudioProdSelect');
+      const quickPillsEl = document.getElementById('trendStudioQuickPills');
+      if (!studioEl || !selectEl) return;
+
+      const q = (document.getElementById('prodSearchInput')?.value || '').trim();
+      const cat = document.getElementById('prodCategoryFilter')?.value || 'ALL';
+      const sortMode = document.getElementById('prodSortModeSelect')?.value || state.prodSortMode || 'CATEGORY_BRAND';
+      const stMap = computeProductCatalogStatsMap();
+
+      const filteredProds = (state.products || []).filter(p => matchesProductSearchAndCategory(p, q, cat));
+      const poolForSelect = filteredProds.length > 0 ? filteredProds : (state.products || []);
+
+      // Determine active selected product
+      let targetProdName = selectedName || currentTrendProductName;
+      if (!targetProdName || !poolForSelect.some(p => p.name === targetProdName)) {
+        const sortedPool = sortProductsByMode(poolForSelect, sortMode, stMap);
+        const withMulti = sortedPool.find(p => (stMap[p.name]?.seriesCount || 0) > 1);
+        targetProdName = (withMulti || sortedPool[0] || {}).name || '';
+      }
+      currentTrendProductName = targetProdName;
+
+      // First call original function so chart & diagnostic cards render
+      _origRenderProductPriceTrendStudio(currentTrendProductName);
+
+      // Then upgrade #trendStudioProdSelect with structured <optgroup> and current sort rule!
+      selectEl.innerHTML = buildStructuredProductSelectHtml(poolForSelect, currentTrendProductName, sortMode, stMap);
+
+      // Upgrade #trendStudioQuickPills to show top matching products under current filter/sort
+      if (quickPillsEl) {
+        const sortedForPills = sortProductsByMode(poolForSelect, sortMode === 'CATEGORY_BRAND' ? 'VERIFIED_DESC' : sortMode, stMap).slice(0, 10);
+        const filterHint = (q || cat !== 'ALL')
+          ? `<span class="text-[11px] bg-emerald-100 text-emerald-900 font-bold px-2 py-0.5 rounded-full shrink-0">🔍 已联动筛选 (${poolForSelect.length}款)：</span>`
+          : `<span class="text-[11px] text-slate-400 shrink-0">🔥 快捷切换商品：</span>`;
+        quickPillsEl.innerHTML = filterHint + sortedForPills.map(p => {
+          const isSel = p.name === currentTrendProductName;
+          const cnt = stMap[p.name]?.seriesCount || 1;
+          const shortName = p.name.length > 20 ? p.name.slice(0, 20) + '…' : p.name;
+          return `<button type="button" data-studio-pill="${p.name.replace(/"/g, '&quot;')}" class="text-[11px] px-2.5 py-1 rounded-full border shrink-0 transition ${isSel ? 'bg-indigo-600 text-white border-indigo-600 font-bold shadow-xs' : 'bg-slate-50 hover:bg-indigo-50 text-slate-700 border-slate-200'}">${shortName} <span class="opacity-80">(${cnt}期)</span></button>`;
+        }).join('');
+      }
+    };
+
+    // Render the Spec-Aware Product Deduplication & Merge Studio (#productDedupMergeStudio)
+    function renderProductDedupMergeStudio() {
+      const studioEl = document.getElementById('productDedupMergeStudio');
+      const candCont = document.getElementById('dedupCandidateGroupsContainer');
+      const protCont = document.getElementById('dedupSpecProtectedContainer');
+      const badgeEl = document.getElementById('dedupCandidateCountBadge');
+      const srcSel = document.getElementById('manualMergeSourceSelect');
+      const tgtSel = document.getElementById('manualMergeTargetSelect');
+      const rulesListEl = document.getElementById('activeAliasRulesList');
+      const rulesCntEl = document.getElementById('activeAliasRulesCount');
+      if (!studioEl || !candCont || !protCont) return;
+
+      const { candidateGroups, protectedSpecGroups } = scanProductDuplicateAndProtectedGroups();
+      if (badgeEl) {
+        badgeEl.textContent = candidateGroups.length > 0 ? `${candidateGroups.length}组待审` : `已全部归一`;
+        badgeEl.className = candidateGroups.length > 0
+          ? 'bg-rose-600 text-white px-1.5 py-0.2 rounded-full text-[10px] font-extrabold animate-pulse'
+          : 'bg-emerald-800 text-emerald-100 px-1.5 py-0.2 rounded-full text-[10px]';
+      }
+
+      if (candidateGroups.length === 0) {
+        candCont.innerHTML = `
+          <div class="bg-emerald-50/90 border border-emerald-200 rounded-xl p-3.5 flex items-center justify-between gap-2 text-xs text-emerald-950">
+            <div>
+              <span class="font-extrabold">🎉 当前商品库无重复同规商品！</span>
+              <span class="text-slate-600 ml-1">所有同品牌同规格商品均已统一为确定商品名；您仍可使用右侧工具手动指定合并或测试新单抓取归一。</span>
+            </div>
+            ${(state.ignoredDedupGroupKeys && state.ignoredDedupGroupKeys.length > 0)
+              ? `<button type="button" id="btnResetIgnoredDedupGroups" class="text-[11px] text-emerald-800 underline shrink-0">恢复已忽略项(${state.ignoredDedupGroupKeys.length})</button>`
+              : ''}
+          </div>
+        `;
+      } else {
+        candCont.innerHTML = `
+          <div class="text-xs font-extrabold text-amber-950 flex items-center justify-between">
+            <span>🔍 系统通过「品牌 + 核心关键字 + 同规格校验」发现以下 ${candidateGroups.length} 组疑似同款商品（请审核确认标准商品名）：</span>
+          </div>
+        ` + candidateGroups.map((grp, gIdx) => {
+          const safeGroupKey = grp.groupKey.replace(/"/g, '&quot;');
+          const variantsHtml = grp.items.map((it, iIdx) => {
+            const p = it.product;
+            const safeName = p.name.replace(/"/g, '&quot;');
+            const isRec = p.name === grp.recommendedCanonical;
+            return `
+              <label class="flex items-start justify-between gap-2 p-2 rounded-lg border ${isRec ? 'bg-emerald-50/70 border-emerald-300' : 'bg-white border-slate-200'} cursor-pointer hover:border-emerald-400 transition text-xs">
+                <div class="flex items-start gap-2">
+                  <input type="radio" name="dedup_canon_${gIdx}" value="${safeName}" ${isRec ? 'checked' : ''} data-dedup-radio-group="${gIdx}" class="mt-0.5 text-emerald-700" />
+                  <div>
+                    <div class="font-bold text-slate-900">${p.name} ${isRec ? '<span class="text-[10px] bg-emerald-700 text-white px-1.5 py-0.2 rounded font-bold ml-1">推荐标准名</span>' : ''}</div>
+                    <div class="text-[10px] text-slate-500 mt-0.5">
+                      规格识别: <strong class="text-teal-800">[${it.spec.badgeText}]</strong> · 
+                      单价: <strong>${p.nzdPrice ? 'NZ$' + p.nzdPrice : ''}${p.rmbPrice ? ' / ¥' + p.rmbPrice : ''}</strong> · 
+                      历史价格档位: <strong>${(p.priceHistory || []).length}期</strong> · 
+                      关联订单: <strong>${it.stats.orders}单 (${it.stats.qty}件)</strong>
+                    </div>
+                  </div>
+                </div>
+              </label>
+            `;
+          }).join('');
+
+          return `
+            <div class="bg-amber-50/40 border-2 border-amber-200/90 rounded-xl p-3 space-y-2.5" data-dedup-card="${gIdx}">
+              <div class="flex flex-wrap items-center justify-between gap-1.5">
+                <div class="flex items-center gap-1.5 flex-wrap">
+                  <span class="bg-amber-500 text-slate-950 text-[10px] font-extrabold px-2 py-0.5 rounded">候选同品组 #${gIdx + 1}</span>
+                  <span class="text-xs font-extrabold text-slate-800">${grp.brand} · ${grp.concept}</span>
+                  <span class="text-[11px] bg-teal-100 text-teal-900 border border-teal-300 font-bold px-2 py-0.5 rounded-full">✓ 规格一致: ${grp.specBadge}</span>
+                </div>
+                <button type="button" data-ignore-dedup-group="${safeGroupKey}" class="text-[11px] text-slate-400 hover:text-rose-600 underline">🚫 非同款 (不合并)</button>
+              </div>
+              <div class="space-y-1.5">${variantsHtml}</div>
+              <div class="flex flex-wrap items-center gap-2 pt-1 border-t border-amber-200/60">
+                <span class="text-[11px] font-bold text-slate-700 shrink-0">🎯 合并后确定商品名：</span>
+                <input type="text" id="dedupCanonicalInput_${gIdx}" value="${grp.recommendedCanonical.replace(/"/g, '&quot;')}" class="flex-1 min-w-[200px] text-xs border border-emerald-400 rounded-lg px-2.5 py-1 bg-white font-bold text-slate-900" />
+                <button type="button" data-confirm-dedup-idx="${gIdx}" data-confirm-dedup-key="${safeGroupKey}" class="bg-emerald-700 hover:bg-emerald-600 text-white text-xs font-extrabold px-3 py-1.5 rounded-lg shadow-2xs transition shrink-0">
+                  ✅ 审核通过并合并为确定商品名
+                </button>
+              </div>
+            </div>
+          `;
+        }).join('');
+      }
+
+      // Render Spec-Protected Examples (120粒 vs 200粒, 500g vs 1kg, 1000mg vs 1500mg)
+      if (protectedSpecGroups.length > 0) {
+        protCont.innerHTML = `
+          <div class="flex items-center justify-between gap-2">
+            <span class="text-xs font-extrabold text-slate-800">🛡️ 同品不同规格「自动隔离保护」列表（共识别 ${protectedSpecGroups.length} 对同品牌同品但规格不同的独立商品，系统已严格禁止混并）：</span>
+          </div>
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+            ${protectedSpecGroups.slice(0, 6).map(pg => `
+              <div class="bg-white rounded-lg p-2 border border-slate-200 text-[11px] space-y-1">
+                <div class="flex items-center justify-between">
+                  <span class="font-bold text-slate-800">${pg.brand} · ${pg.concept}</span>
+                  <span class="bg-blue-50 text-blue-800 border border-blue-200 px-1.5 py-0.2 rounded text-[10px] font-bold">独立规格保护</span>
+                </div>
+                <div class="text-slate-600 truncate" title="${pg.itemA.name}">🅰️ ${pg.itemA.name} <strong class="text-emerald-700">[${pg.itemA.spec.badgeText}]</strong></div>
+                <div class="text-slate-600 truncate" title="${pg.itemB.name}">🅱️ ${pg.itemB.name} <strong class="text-indigo-700">[${pg.itemB.spec.badgeText}]</strong></div>
+                <div class="text-[10px] text-amber-800 bg-amber-50 px-1.5 py-0.5 rounded font-medium">⚡ 隔离原因：${pg.conflictReason}</div>
+              </div>
+            `).join('')}
+          </div>
+        `;
+      }
+
+      // Populate Manual Merge Selects
+      const stMap = computeProductCatalogStatsMap();
+      if (srcSel && tgtSel) {
+        const prevSrc = srcSel.value;
+        const prevTgt = tgtSel.value;
+        const optsHtml = buildStructuredProductSelectHtml(state.products, '', 'CATEGORY_BRAND', stMap);
+        srcSel.innerHTML = optsHtml;
+        tgtSel.innerHTML = optsHtml;
+        if (prevSrc && state.products.some(p => p.name === prevSrc)) srcSel.value = prevSrc;
+        if (prevTgt && state.products.some(p => p.name === prevTgt)) tgtSel.value = prevTgt;
+        else if (state.products.length > 1) tgtSel.selectedIndex = 1;
+        updateManualMergeSpecPreview();
+      }
+
+      // Populate Active Alias Rules List
+      const rules = Array.isArray(state.productAliasRules) ? state.productAliasRules : [];
+      if (rulesCntEl) rulesCntEl.textContent = rules.length;
+      if (rulesListEl) {
+        if (rules.length === 0) {
+          rulesListEl.innerHTML = `<div class="text-slate-400 text-[11px] py-2">暂未手动合并过商品；审核合并左侧候选组后，生成的「标准名 ⇄ 网页异名」规则会在此常驻展示。</div>`;
+        } else {
+          rulesListEl.innerHTML = rules.map((r, rIdx) => `
+            <div class="bg-white rounded-lg p-2 border border-slate-200 flex items-start justify-between gap-2 text-[11px]">
+              <div class="space-y-0.5">
+                <div class="font-bold text-emerald-900">🎯 确定商品名：${r.canonicalName} <span class="text-[10px] bg-teal-50 text-teal-800 border border-teal-200 px-1.5 py-0.2 rounded">${r.specBadge || ''}</span></div>
+                <div class="text-slate-500">已归一网页异名：${(r.aliases || []).map(a => `<code class="bg-slate-100 px-1 rounded">${a}</code>`).join('、') || '按同规格关键字自动匹配'}</div>
+              </div>
+              <button type="button" data-del-alias-rule="${rIdx}" class="text-rose-500 hover:text-rose-700 font-bold px-1 shrink-0" title="删除此条归一规则">×</button>
+            </div>
+          `).join('');
+        }
+      }
+    }
+
+    function updateManualMergeSpecPreview() {
+      const srcSel = document.getElementById('manualMergeSourceSelect');
+      const tgtSel = document.getElementById('manualMergeTargetSelect');
+      const canonInp = document.getElementById('manualMergeCanonicalInput');
+      const alertBox = document.getElementById('manualMergeSpecCheckAlert');
+      if (!srcSel || !tgtSel || !alertBox) return;
+
+      const sName = srcSel.value;
+      const tName = tgtSel.value;
+      if (canonInp && (!canonInp.value.trim() || state.products.some(p => p.name === canonInp.value.trim()))) {
+        canonInp.value = tName;
+      }
+      if (!sName || !tName || sName === tName) {
+        alertBox.className = 'text-[11px] rounded-lg px-2.5 py-1.5 bg-slate-100 text-slate-600';
+        alertBox.innerHTML = '请选择两款不同的商品进行规格与关键字比对。';
+        return;
+      }
+      const specA = extractProductSpecSignature(sName);
+      const specB = extractProductSpecSignature(tName);
+      const compat = checkSpecCompatibility(specA, specB);
+      if (compat.compatible) {
+        alertBox.className = 'text-[11px] rounded-lg px-2.5 py-1.5 bg-emerald-50 border border-emerald-200 text-emerald-900 font-medium';
+        alertBox.innerHTML = `✅ <strong>规格比对通过</strong>：两款均为 <strong>[${specA.badgeText}]</strong>，无粒数/克重冲突，可安全合并！`;
+      } else {
+        alertBox.className = 'text-[11px] rounded-lg px-2.5 py-1.5 bg-rose-50 border border-rose-300 text-rose-900 font-bold';
+        alertBox.innerHTML = `⚠️ <strong>规格不同预警</strong>：${compat.reason}（前者 [${specA.badgeText}] vs 后者 [${specB.badgeText}]）。通常属于两款不同规格商品，请谨慎合并！`;
+      }
+    }
+
+    // Complete Replacement of renderProductsTab() with guaranteed category backfill, live search/category pills, and studio sync
+    renderProductsTab = function() {
+      sanitizeCatalogFabricatedPrices();
+      ensureAllProductsHaveCategoriesAndVerifiedPrices();
+
+      const searchEl = document.getElementById('prodSearchInput');
+      const catEl = document.getElementById('prodCategoryFilter');
+      const sortEl = document.getElementById('prodSortModeSelect');
+      const clearBtn = document.getElementById('btnClearProdSearch');
+      const secSearchEl = document.getElementById('prodGridSecondarySearch');
+      const secCatEl = document.getElementById('prodGridSecondaryCat');
+
+      const q = (searchEl ? searchEl.value : '').trim();
+      const cat = catEl ? catEl.value : 'ALL';
+      const sortMode = sortEl ? sortEl.value : (state.prodSortMode || 'CATEGORY_BRAND');
+      state.prodSortMode = sortMode;
+
+      if (clearBtn) clearBtn.classList.toggle('hidden', !q && cat === 'ALL');
+      if (secSearchEl && secSearchEl.value !== q) secSearchEl.value = q;
+      if (secCatEl && secCatEl.value !== cat) secCatEl.value = cat;
+
+      const stMap = computeProductCatalogStatsMap();
+
+      // Count products per category (matching current text query q)
+      const catCounts = { ALL: 0 };
+      VALID_PRODUCT_CATEGORIES.forEach(c => { catCounts[c] = 0; });
+      (state.products || []).forEach(p => {
+        if (matchesProductSearchAndCategory(p, q, 'ALL')) {
+          catCounts.ALL += 1;
+          const c = p.category || inferProductCategoryByName(p.name);
+          catCounts[c] = (catCounts[c] || 0) + 1;
+        }
+      });
+
+      // Update #prodCategoryFilter option labels with live counts
+      if (catEl) {
+        Array.from(catEl.options).forEach(opt => {
+          const val = opt.value;
+          const cnt = catCounts[val] !== undefined ? catCounts[val] : 0;
+          if (val === 'ALL') opt.textContent = `🗂️ 全部分类 (${cnt}款)`;
+          else opt.textContent = `${CATEGORY_ICONS_MAP[val] || '📦'} ${val} (${cnt}款)`;
+        });
+      }
+
+      // Render Interactive Category Quick Pills (#prodCategoryQuickPills)
+      const pillsBar = document.getElementById('prodCategoryQuickPills');
+      if (pillsBar) {
+        const allCats = ['ALL', ...VALID_PRODUCT_CATEGORIES];
+        pillsBar.innerHTML = allCats.map(c => {
+          const active = c === cat;
+          const cnt = catCounts[c] || 0;
+          const label = c === 'ALL' ? '全部商品' : `${CATEGORY_ICONS_MAP[c] || ''} ${c}`;
+          return `<button type="button" data-prod-cat-pill="${c}" class="text-xs px-2.5 py-1 rounded-full border transition ${active ? 'bg-emerald-800 text-white border-emerald-800 font-extrabold shadow-2xs' : 'bg-white hover:bg-emerald-50 text-slate-700 border-slate-200 font-medium'}">${label} <span class="${active ? 'text-amber-300' : 'text-slate-400'}">(${cnt})</span></button>`;
+        }).join('');
+      }
+
+      // Filter and sort products
+      const filtered = (state.products || []).filter(p => matchesProductSearchAndCategory(p, q, cat));
+      const list = sortProductsByMode(filtered, sortMode, stMap);
+
+      // Update Filter Status Summary & Instant Search Matches Strip
+      const statusSumEl = document.getElementById('prodFilterStatusSummary');
+      const instantStripEl = document.getElementById('prodInstantSearchMatchesStrip');
+      const gridBadgeEl = document.getElementById('productsGridCountBadge');
+      if (gridBadgeEl) {
+        gridBadgeEl.textContent = (q || cat !== 'ALL') ? `筛选出 ${list.length} / ${state.products.length} 款` : `共 ${list.length} 款`;
+      }
+
+      if (statusSumEl) {
+        if (q || cat !== 'ALL') {
+          statusSumEl.innerHTML = `
+            <span class="text-emerald-800 font-bold">🎯 已筛选出 <strong>${list.length}</strong> / ${state.products.length} 款商品</span>
+            <button type="button" id="btnScrollToProductsGrid" class="text-[11px] bg-emerald-700 hover:bg-emerald-600 text-white px-2 py-0.5 rounded font-bold">⬇ 直达下方卡片列表</button>
+            <button type="button" id="btnResetProdFilterInline" class="text-[11px] text-rose-600 hover:underline font-bold">✕ 重置筛选</button>
+          `;
+        } else {
+          statusSumEl.innerHTML = `<span>全库共 <strong>${state.products.length}</strong> 款标准商品 · 下拉列表与卡片均已按所选规则排序</span>`;
+        }
+      }
+
+      // Show instant matches strip right below the search input when user searches or selects a category!
+      if (instantStripEl) {
+        if (q || cat !== 'ALL') {
+          instantStripEl.classList.remove('hidden');
+          if (list.length === 0) {
+            instantStripEl.innerHTML = `
+              <div class="flex items-center justify-between text-xs text-amber-900">
+                <span>⚠️ 未找到匹配「<strong>${q || cat}</strong>」的商品，请尝试缩短关键词或切换为「全部分类」。</span>
+                <button type="button" id="btnClearFromEmptyStrip" class="bg-white border border-amber-300 px-2 py-0.5 rounded font-bold text-amber-900">显示全部商品</button>
+              </div>
+            `;
+          } else {
+            instantStripEl.innerHTML = `
+              <div class="flex items-center justify-between gap-2 text-[11px] text-emerald-950">
+                <span class="font-bold">⚡ 检索直达结果（共 ${list.length} 款，点击任意商品即可切换下方趋势图或编辑单价）：</span>
+                <button type="button" id="btnJumpCardsFromStrip" class="text-emerald-800 underline font-bold">滚动到卡片区 ⬇</button>
+              </div>
+              <div class="flex flex-wrap gap-1.5 pt-0.5">
+                ${list.slice(0, 12).map(p => {
+                  const st = stMap[p.name] || { qty: 0, seriesCount: 1 };
+                  const safeName = p.name.replace(/"/g, '&quot;');
+                  const spec = extractProductSpecSignature(p.name);
+                  return `
+                    <div class="inline-flex items-center gap-1 bg-white border border-emerald-300 rounded-lg px-2.5 py-1 text-xs shadow-2xs">
+                      <button type="button" data-trend-prod="${safeName}" class="font-bold text-slate-900 hover:text-indigo-700 text-left" title="点击在价格趋势大屏中查看此商品">
+                        ${p.name}
+                      </button>
+                      <span class="text-[10px] bg-teal-50 text-teal-800 border border-teal-200 px-1 rounded font-mono">${spec.badgeText}</span>
+                      <span class="text-[11px] font-extrabold text-emerald-700 font-mono">${p.nzdPrice ? 'NZ$' + p.nzdPrice : (p.rmbPrice ? '¥' + p.rmbPrice : '')}</span>
+                      <button type="button" data-edit-prod="${safeName}" class="text-[10px] bg-slate-100 hover:bg-emerald-700 hover:text-white text-slate-700 px-1.5 py-0.2 rounded font-bold transition">✎编辑</button>
+                    </div>
+                  `;
+                }).join('')}
+              </div>
+            `;
+          }
+        } else {
+          instantStripEl.classList.add('hidden');
+        }
+      }
+
+      // Render Product Cards Grid (#productsGrid)
+      const grid = document.getElementById('productsGrid');
+      if (grid) {
+        if (list.length === 0) {
+          grid.innerHTML = `
+            <div class="col-span-3 bg-white rounded-xl p-8 text-center border border-slate-200 space-y-2">
+              <div class="text-base font-bold text-slate-700">🔍 没有找到符合筛选条件「${q || cat}」的商品</div>
+              <p class="text-xs text-slate-500">请清空搜索词或切换回「全部分类」查看全部 ${state.products.length} 款商品。</p>
+              <button type="button" id="btnResetProdFilterEmptyGrid" class="bg-emerald-700 hover:bg-emerald-600 text-white text-xs font-bold px-4 py-2 rounded-lg transition">显示全部商品</button>
+            </div>
+          `;
+        } else {
+          grid.innerHTML = list.map(p => {
+            const st = stMap[p.name] || { qty: 0, orders: 0, merchants: new Set(), seriesCount: 1 };
+            const verifiedSeries = collectProductVerifiedPriceSeries(p.name, 'ALL_VERIFIED');
+            const sparklineHtml = buildProductCardSparklineSvg(verifiedSeries);
+            const specSig = extractProductSpecSignature(p.name);
+            const histArr = (p.priceHistory || []).slice().sort((a, b) => String(a.date || '').localeCompare(String(b.date || '')));
+            const nzdPricesOnly = verifiedSeries.map(h => Number(h.nzdPrice || 0)).filter(v => v > 0);
+            const minPrice = nzdPricesOnly.length > 0 ? Math.min(...nzdPricesOnly) : (p.nzdPrice || 0);
+            const maxPrice = nzdPricesOnly.length > 0 ? Math.max(...nzdPricesOnly) : (p.nzdPrice || 0);
+            const priceTrendBadge = (nzdPricesOnly.length > 1 && minPrice < maxPrice)
+              ? `<span class="text-[10px] bg-blue-50 text-blue-800 border border-blue-200 px-1.5 py-0.2 rounded font-medium">📉 波动 NZ$${minPrice}~${maxPrice}</span>`
+              : '';
+
+            const histHtml = histArr.map(h => {
+              const isDual = h.nzdPrice && h.rmbPrice && h.exchangeRate;
+              const isPureCny = !isDual && (h.currency === 'CNY' || h.rawCurrency === 'CNY' || (!h.nzdPrice && h.rmbPrice));
+              const ordQuickBtn = h.orderId
+                ? ` <button type="button" data-quickview-order="${h.orderId}" class="text-[10px] bg-teal-600 text-white px-1 rounded font-bold hover:bg-teal-500" title="查看关联订单详单">📋详单</button>`
+                : (h.orderNo ? ` <button type="button" data-quickview-orderno="${h.orderNo}" class="text-[10px] bg-teal-600 text-white px-1 rounded font-bold hover:bg-teal-500" title="查看关联订单 #${h.orderNo} 详单">📋详单</button>` : '');
+              if (isDual) {
+                return `<span class="inline-flex items-center gap-1 text-[11px] bg-teal-50 text-teal-950 border border-teal-300 px-2 py-0.5 rounded">📅 <strong>${h.date || '历史'}</strong> · ${h.merchant || '商家'}: <strong class="text-rose-700">实付 ¥${Number(h.rmbPrice).toFixed(2)}</strong> <span class="text-[10px] text-teal-800 font-semibold">(NZ$${Number(h.nzdPrice).toFixed(2)}·汇率${h.exchangeRate})</span>${ordQuickBtn}</span>`;
+              } else if (isPureCny) {
+                const rVal = Number(h.rmbPrice || h.rawPrice || h.price) || 0;
+                return `<span class="inline-flex items-center gap-1 text-[11px] bg-amber-50 text-amber-950 border border-amber-300 px-2 py-0.5 rounded">📅 <strong>${h.date || '历史'}</strong> · ${h.merchant || '商家'}: <strong class="text-amber-800">¥${rVal}</strong>${ordQuickBtn}</span>`;
+              } else {
+                const nVal = Number(h.nzdPrice || h.price) || 0;
+                const extraRmb = h.rmbPrice ? ` <span class="text-[10px] text-amber-700">(¥${h.rmbPrice})</span>` : '';
+                return `<span class="inline-flex items-center gap-1 text-[11px] bg-emerald-50/70 text-emerald-950 border border-emerald-200 px-2 py-0.5 rounded">📅 <strong>${h.date || '历史'}</strong> · ${h.merchant || '商家'}: <strong>NZ$${nVal}</strong>${extraRmb}${ordQuickBtn}</span>`;
+              }
+            }).join(' ');
+
+            const latestDate = p.nzdDate || (histArr.length > 0 ? histArr[histArr.length - 1].date : '');
+            const targetBadgeHtml = typeof buildProductTargetPriceBadge === 'function'
+              ? buildProductTargetPriceBadge(p, verifiedSeries, minPrice)
+              : '';
+
+            return `
+              <div class="bg-white rounded-xl p-4 shadow-sm border border-slate-200 flex flex-col justify-between gap-3 hover:border-emerald-400 transition">
+                <div class="space-y-2">
+                  <div class="flex items-start justify-between gap-2">
+                    <div class="flex flex-wrap items-center gap-1">
+                      <span class="text-[11px] font-semibold px-2 py-0.5 rounded bg-emerald-50 text-emerald-800 border border-emerald-200">${CATEGORY_ICONS_MAP[p.category] || '📦'} ${p.category || '维生素/钙铁锌/保健'}</span>
+                      <span class="text-[10px] font-bold px-1.5 py-0.2 rounded bg-teal-50 text-teal-800 border border-teal-200 font-mono" title="自动识别的独立规格标识">📏 ${specSig.badgeText}</span>
+                      ${priceTrendBadge}
+                    </div>
+                    <span class="text-xs font-bold text-slate-700 whitespace-nowrap">已买: <strong class="text-emerald-700 text-sm">${st.qty}</strong> 件 (${st.orders}单)</span>
+                  </div>
+                  <h3 class="text-sm font-bold text-slate-900 leading-snug">${p.name}</h3>
+                  ${targetBadgeHtml}
+                  ${p.note ? `<div class="text-[11px] text-rose-700 bg-rose-50 border border-rose-200 px-2 py-0.5 rounded inline-block">⚠️ ${p.note}</div>` : ''}
+                  ${sparklineHtml}
+                  ${histHtml ? `<div class="space-y-1"><div class="text-[11px] text-slate-500 font-medium">✅ 已从核实订单提取的历史单价 (${verifiedSeries.length}期)：</div><div class="flex flex-wrap gap-1">${histHtml}</div></div>` : ''}
+                </div>
+
+                <div class="pt-3 border-t border-slate-100 space-y-1.5">
+                  <div class="flex items-center justify-between gap-2">
+                    <div class="flex flex-wrap items-center gap-3 text-xs">
+                      <div>
+                        <span class="text-slate-400">NZD单价:</span>
+                        <strong class="text-slate-800 ml-0.5">${p.nzdPrice ? 'NZ$' + p.nzdPrice : '<span class="text-slate-400 font-normal">RMB直付</span>'}</strong>
+                      </div>
+                      <div>
+                        <span class="text-slate-400">RMB实付:</span>
+                        <strong class="text-amber-700 ml-0.5">${p.rmbPrice ? '¥' + p.rmbPrice : '未设'}</strong>
+                      </div>
+                    </div>
+                    <div class="flex flex-wrap items-center gap-1 shrink-0">
+                      <button type="button" data-add-cart-opt="${p.name.replace(/"/g, '&quot;')}" class="text-[11px] bg-teal-50 hover:bg-teal-600 hover:text-white text-teal-800 border border-teal-200 font-bold px-2 py-1 rounded-lg transition">
+                        🛒 比价
+                      </button>
+                      <button type="button" data-trend-prod="${p.name.replace(/"/g, '&quot;')}" class="text-[11px] bg-indigo-50 hover:bg-indigo-600 hover:text-white text-indigo-700 border border-indigo-200 font-semibold px-2 py-1 rounded-lg transition">
+                        📈 趋势
+                      </button>
+                      <button data-edit-prod="${p.name.replace(/"/g, '&quot;')}" class="text-[11px] bg-slate-100 hover:bg-emerald-700 hover:text-white text-slate-700 font-medium px-2 py-1 rounded-lg transition">
+                        ✎ 编辑
+                      </button>
+                    </div>
+                  </div>
+                  ${latestDate ? `<div class="text-[10px] text-slate-400 flex items-center justify-between"><span>⏱️ 最新核实日期：<strong class="text-slate-600 font-mono">${latestDate}</strong></span><span>${st.orders > 0 ? `源自 ${st.orders} 笔真实订单` : '《零售店单价》基准'}</span></div>` : ''}
+                </div>
+              </div>
+            `;
+          }).join('');
+        }
+      }
+
+      // Render Price Trend Studio (passing top matched product if filtered)
+      const studioTarget = (list.length > 0 && !list.some(x => x.name === currentTrendProductName))
+        ? list[0].name
+        : currentTrendProductName;
+      renderProductPriceTrendStudio(studioTarget);
+
+      // Update Cart Optimizer dropdown with logical <optgroup> sorting as well
+      const cartAddSel = document.getElementById('cartOptAddProdSelect');
+      if (cartAddSel) {
+        const prevCartVal = cartAddSel.value;
+        cartAddSel.innerHTML = buildStructuredProductSelectHtml(state.products, prevCartVal, sortMode, stMap);
+      }
+      if (typeof renderSmartCartOptimizer === 'function') renderSmartCartOptimizer();
+      if (typeof updateGoodPriceHitBadgeCount === 'function') updateGoodPriceHitBadgeCount();
+      renderProductDedupMergeStudio();
+    };
+
+    // Fix buildProductTargetPriceBadge to support both .nzdPrice and .nzdUnit
+    buildProductTargetPriceBadge = function(p, verifiedSeries, minNzdPrice) {
+      if (!p) return '';
+      const latestPt = verifiedSeries && verifiedSeries.length > 0 ? verifiedSeries[verifiedSeries.length - 1] : null;
+      const latestNzd = latestPt ? (Number(latestPt.nzdPrice || latestPt.nzdUnit) || Number(p.nzdPrice) || 0) : (Number(p.nzdPrice) || 0);
+      const targetNzd = Number(p.targetNzdPrice) > 0 ? Number(p.targetNzdPrice) : (minNzdPrice > 0 ? Number((minNzdPrice * 1.03).toFixed(2)) : 0);
+      const weightG = estimateProductUnitWeightG(p.name);
+
+      let statusHtml = '';
+      if (targetNzd > 0 && latestNzd > 0) {
+        if (latestNzd <= targetNzd + 0.05) {
+          statusHtml = `<span class="inline-flex items-center gap-0.5 bg-emerald-100 text-emerald-900 border border-emerald-300 px-1.5 py-0.5 rounded text-[10px] font-extrabold">🎯 已达好价 (≤$${targetNzd})</span>`;
+        } else {
+          const diff = (latestNzd - targetNzd).toFixed(1);
+          statusHtml = `<span class="inline-flex items-center gap-0.5 bg-slate-100 text-slate-600 border border-slate-200 px-1.5 py-0.5 rounded text-[10px]">🎯 目标 $${targetNzd} (差$${diff})</span>`;
+        }
+      }
+      return `
+        <div class="flex flex-wrap items-center justify-between gap-1.5 pt-0.5 text-[10px] text-slate-500">
+          <div class="flex flex-wrap items-center gap-1">
+            ${statusHtml}
+            <span class="bg-slate-100 text-slate-600 px-1.5 py-0.5 rounded font-mono">⚖️ 单重≈${weightG}g</span>
+          </div>
+          <button type="button" data-add-prod-to-optimizer="${p.name.replace(/"/g, '&quot;')}" class="text-teal-700 hover:text-teal-900 font-bold bg-teal-50 hover:bg-teal-100 border border-teal-200 px-1.5 py-0.5 rounded transition">
+            ＋加入比价台
+          </button>
+        </div>
+      `;
+    };
+
+    // 9. Upgrade getFilteredOrders() to support multi-dimension sorting (#filterOrderSort & clickable table headers)
+    getFilteredOrders = function() {
+      const fYear = document.getElementById('filterYear')?.value || 'ALL';
+      const fRec = document.getElementById('filterRecipient')?.value || 'ALL';
+      const fMerch = document.getElementById('filterMerchant')?.value || 'ALL';
+      const fCour = document.getElementById('filterCourier')?.value || 'ALL';
+      const fStatus = document.getElementById('filterStatus')?.value || 'ALL';
+      const fSearch = (document.getElementById('filterSearch')?.value || '').trim().toLowerCase();
+      const sortMode = document.getElementById('filterOrderSort')?.value || state.orderSortMode || 'DATE_DESC';
+      const pinUnread = document.getElementById('chkSortPinUnread') ? document.getElementById('chkSortPinUnread').checked : true;
+      state.orderSortMode = sortMode;
+
+      // Update table header sort indicators
+      const colMap = {
+        DATE: sortMode === 'DATE_ASC' ? '↑' : (sortMode === 'DATE_DESC' ? '↓' : '↕'),
+        RECIPIENT: sortMode === 'RECIPIENT_ASC' ? '↑' : (sortMode === 'RECIPIENT_DESC' ? '↓' : '↕'),
+        MERCHANT: sortMode === 'MERCHANT_ASC' ? '↑' : (sortMode === 'MERCHANT_DESC' ? '↓' : '↕'),
+        QTY: sortMode === 'QTY_ASC' ? '↑' : (sortMode === 'QTY_DESC' ? '↓' : '↕'),
+        AMOUNT: sortMode === 'AMOUNT_ASC' ? '↑' : (sortMode === 'AMOUNT_DESC' ? '↓' : '↕'),
+        PARCELS: sortMode === 'PARCELS_DESC' ? '↓' : (sortMode === 'PARCELS_ASC' ? '↑' : '↕')
+      };
+      Object.entries(colMap).forEach(([col, sym]) => {
+        const el = document.getElementById('sortInd-' + col);
+        if (el) {
+          el.textContent = sym;
+          el.className = sym === '↕' ? 'text-slate-400' : 'text-emerald-700 font-extrabold';
+        }
+      });
+
+      const scopeFilter = state.orderScopeFilter || 'ALL';
+      return getActiveOrders().filter(o => {
+        if (scopeFilter === 'SHIP_CHINA' && isSelfOrCWOrder(o)) return false;
+        if (scopeFilter === 'HOME_CHINA' && (isSelfOrCWOrder(o) || String(o.recipient || '').trim().toUpperCase() !== 'HOME')) return false;
+        if (scopeFilter === 'DAIGOU' && (isSelfOrCWOrder(o) || String(o.recipient || '').trim().toUpperCase() === 'HOME')) return false;
+        if (scopeFilter === 'SELF_CW' && !isSelfOrCWOrder(o)) return false;
+        if (fYear !== 'ALL' && String(o.year) !== fYear) return false;
+        if (fRec !== 'ALL' && o.recipient !== fRec) return false;
+        if (fMerch !== 'ALL' && o.merchant !== fMerch) return false;
+        if (fCour !== 'ALL') {
+          const hasC = (o.parcels || []).some(p => p.courier === fCour);
+          if (!hasC) return false;
+        }
+        const st = getOrderStatus(o);
+        if (fStatus === 'UNREAD') {
+          if (!o.isUnread) return false;
+        } else if (fStatus === 'STORE_ORDER') {
+          if (!isStoreOrNoNumberOrder(o)) return false;
+        } else if (fStatus === 'UNVERIFIED_WEB') {
+          if (o.webBackfilled || o.cancelled) return false;
+        } else if (fStatus === 'VERIFIED_WEB') {
+          if (!o.webBackfilled) return false;
+        } else if (fStatus !== 'ALL' && st !== fStatus) {
+          return false;
+        }
+        if (fSearch) {
+          const hay = [
+            o.orderDate, o.recipient, o.merchant, o.orderNo, o.note, o.paymentMethod || '', o.discountNote || '',
+            ...(o.items || []).map(i => i.product),
+            ...(o.parcels || []).map(p => `${p.courier} ${p.trackingNo}`)
+          ].join(' ').toLowerCase();
+          if (!hay.includes(fSearch)) return false;
+        }
+        return true;
+      }).sort((a, b) => {
+        if (pinUnread && (!!a.isUnread !== !!b.isUnread)) {
+          return a.isUnread ? -1 : 1;
+        }
+        if (sortMode === 'DATE_ASC') {
+          return String(a.orderDate || '').localeCompare(String(b.orderDate || ''));
+        }
+        if (sortMode === 'AMOUNT_DESC') {
+          return getOrderEquivalentNzd(b) - getOrderEquivalentNzd(a);
+        }
+        if (sortMode === 'AMOUNT_ASC') {
+          return getOrderEquivalentNzd(a) - getOrderEquivalentNzd(b);
+        }
+        if (sortMode === 'QTY_DESC' || sortMode === 'QTY_ASC') {
+          const qa = (a.items || []).reduce((s, i) => s + (Number(i.qty) || 0), 0);
+          const qb = (b.items || []).reduce((s, i) => s + (Number(i.qty) || 0), 0);
+          if (qa !== qb) return sortMode === 'QTY_DESC' ? (qb - qa) : (qa - qb);
+        }
+        if (sortMode === 'PARCELS_DESC' || sortMode === 'PARCELS_ASC') {
+          const pa = (a.parcels || []).length;
+          const pb = (b.parcels || []).length;
+          if (pa !== pb) return sortMode === 'PARCELS_DESC' ? (pb - pa) : (pa - pb);
+        }
+        if (sortMode === 'RECIPIENT_ASC' || sortMode === 'RECIPIENT_DESC') {
+          const cmp = String(a.recipient || '').localeCompare(String(b.recipient || ''), 'zh-CN');
+          if (cmp !== 0) return sortMode === 'RECIPIENT_ASC' ? cmp : -cmp;
+        }
+        if (sortMode === 'MERCHANT_ASC' || sortMode === 'MERCHANT_DESC') {
+          const cmp = String(a.merchant || '').localeCompare(String(b.merchant || ''), 'zh-CN');
+          if (cmp !== 0) return sortMode === 'MERCHANT_ASC' ? cmp : -cmp;
+        }
+        if (sortMode === 'UNVERIFIED_FIRST') {
+          const ua = (!a.webBackfilled && !a.isStoreOrder && !a.cancelled) ? 0 : 1;
+          const ub = (!b.webBackfilled && !b.isStoreOrder && !b.cancelled) ? 0 : 1;
+          if (ua !== ub) return ua - ub;
+        }
+        return String(b.orderDate || '').localeCompare(String(a.orderDate || ''));
+      });
+    };
+
+    // 10. Beautify openOrderQuickViewModal(orderId) ("📋 订单详单与物流全览凭证")
+    openOrderQuickViewModal = function(orderId) {
+      const ord = getActiveOrders().find(o => String(o.id) === String(orderId))
+        || (state.orders || []).find(o => String(o.id) === String(orderId))
+        || (state.sheet1Orders || []).find(o => String(o.id) === String(orderId))
+        || getActiveOrders().find(o => String(o.orderNo) === String(orderId));
+      if (!ord) {
+        showToast('未找到对应的订单记录');
+        return;
+      }
+      const modal = document.getElementById('modalOrderQuickView');
+      const body = document.getElementById('orderQuickViewBody');
+      const footer = document.getElementById('orderQuickViewFooter');
+      const title = document.getElementById('qvModalTitle');
+      if (!modal || !body || !footer) return;
+
+      const m = calcOrderMoney(ord);
+      const ordUrl = resolveOrderUrl(ord);
+      const st = getOrderStatus(ord);
+      const isSelf = isSelfUseOrder(ord);
+
+      let stBadgeHtml = '';
+      if (ord.cancelled) stBadgeHtml = `<span class="bg-rose-500 text-white text-[11px] font-extrabold px-2 py-0.5 rounded-full">🚫 订单已取消</span>`;
+      else if (isSelf) stBadgeHtml = `<span class="bg-blue-500 text-white text-[11px] font-extrabold px-2 py-0.5 rounded-full">💊 自用 (免物流单号)</span>`;
+      else if (st === 'DELIVERED') stBadgeHtml = `<span class="bg-emerald-500 text-slate-950 text-[11px] font-extrabold px-2 py-0.5 rounded-full">✅ 全部包裹已签收</span>`;
+      else if (st === 'PARTIAL') stBadgeHtml = `<span class="bg-amber-400 text-slate-950 text-[11px] font-extrabold px-2 py-0.5 rounded-full">📦 部分包裹已签收</span>`;
+      else stBadgeHtml = `<span class="bg-amber-400 text-slate-950 text-[11px] font-extrabold px-2 py-0.5 rounded-full">🚚 国际物流在途</span>`;
+
+      if (title) {
+        title.innerHTML = `<span class="flex items-center gap-2 flex-wrap"><span>📋 订单详单全览 · ${ord.recipient}</span> ${stBadgeHtml}</span>`;
+      }
+
+      const itemsListHtml = (ord.items || []).map((it, idx) => {
+        const up = getOrderItemPrice(it, m.currency, ord.orderDate);
+        const sub = (Number(it.qty) || 0) * up;
+        const specSig = extractProductSpecSignature(it.product);
+        const dualItemNote = (it.origUnitPrice && it.origCurrency && it.origCurrency !== m.currency)
+          ? `<div class="text-[10px] text-teal-700 font-normal">原价 ${it.origCurrency === 'NZD' ? 'NZ$' : '¥'}${Number(it.origUnitPrice).toFixed(2)}</div>`
+          : '';
+        return `
+          <div class="flex items-center justify-between gap-2 py-2 border-b last:border-b-0 border-slate-100">
+            <div class="flex-1 min-w-0">
+              <div class="font-bold text-slate-900 leading-snug">${idx + 1}. ${it.product}</div>
+              <div class="flex items-center gap-1.5 mt-0.5">
+                <span class="text-[10px] bg-slate-100 text-slate-600 px-1.5 py-0.2 rounded font-mono">规格: ${specSig.badgeText}</span>
+              </div>
+            </div>
+            <div class="font-mono text-right whitespace-nowrap shrink-0">
+              <div class="text-slate-600">${m.symbol}${up.toFixed(2)} × <strong>${it.qty}</strong></div>
+              <div class="font-extrabold text-emerald-800">${m.symbol}${sub.toFixed(2)}</div>
+              ${dualItemNote}
+            </div>
+          </div>
+        `;
+      }).join('');
+
+      const parcelsListHtml = isSelf
+        ? `<div class="text-blue-900 bg-blue-50 border border-blue-200 rounded-xl p-3 font-medium">💊 本单为「自用」采购记录，免填国际快递单号，已自动归入家庭常备药箱余量追踪。</div>`
+        : ((!ord.parcels || ord.parcels.length === 0)
+            ? `<div class="text-amber-800 bg-amber-50 border border-amber-200 rounded-xl p-3 flex items-center justify-between">
+                 <span>📦 暂未录入国际快递运单号</span>
+                 <button type="button" data-edit-order="${ord.id}" class="bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold px-2.5 py-1 rounded-lg text-xs">＋ 补填运单号</button>
+               </div>`
+            : ord.parcels.map((p, idx) => {
+                const tUrl = resolveTrackingUrl(p);
+                const dSpent = daysBetween(ord.orderDate, p.deliveredDate);
+                return `
+                  <div class="flex flex-wrap items-center justify-between gap-2 p-2.5 rounded-xl border ${p.deliveredDate ? 'border-emerald-200 bg-emerald-50/40' : 'border-amber-200 bg-amber-50/40'}">
+                    <div class="flex items-center gap-1.5 flex-wrap">
+                      <span class="font-bold px-2 py-0.5 rounded badge-courier-${p.courier}">${p.courier}</span>
+                      <a href="${tUrl}" target="_blank" rel="noopener noreferrer" data-copy-track="${p.trackingNo}" class="font-mono font-bold text-emerald-800 hover:underline break-all" title="点击复制运单号并直达官网查物流">${p.trackingNo} ↗</a>
+                      <button type="button" data-copy-track="${p.trackingNo}" class="text-[11px] text-slate-400 hover:text-slate-700 px-1" title="仅复制运单号">📋</button>
+                      ${ord.parcels.length > 1 ? `<span class="text-[10px] bg-white border border-slate-200 text-slate-500 px-1.5 py-0.2 rounded">分包 ${idx + 1}/${ord.parcels.length}</span>` : ''}
+                    </div>
+                    <div class="flex items-center gap-1.5">
+                      ${p.deliveredDate
+                        ? `<span class="text-emerald-800 bg-emerald-100/80 px-2 py-0.5 rounded font-bold">✅ ${p.deliveredDate} 送达${dSpent !== null ? ' (' + dSpent + '天)' : ''}</span>`
+                        : `<span class="text-amber-900 bg-amber-100 px-2 py-0.5 rounded font-bold">🚚 在途运输中</span>`}
+                      <button type="button" data-sign-order="${ord.id}" data-sign-idx="${idx}" class="px-2.5 py-1 rounded-lg bg-emerald-700 hover:bg-emerald-600 text-white font-bold transition">
+                        ${p.deliveredDate ? '改期' : '✍️ 签收'}
+                      </button>
+                    </div>
+                  </div>
+                `;
+              }).join(''));
+
+      body.innerHTML = `
+        <div class="bg-slate-50 border border-slate-200 rounded-xl p-3.5 grid grid-cols-2 sm:grid-cols-4 gap-2.5">
+          <div>
+            <div class="text-[10px] text-slate-400">收件人 / 归属</div>
+            <div class="font-extrabold text-slate-900 text-sm mt-0.5">${ord.recipient === 'HOME' ? '🏡 HOME (国内家中)' : ord.recipient}</div>
+          </div>
+          <div>
+            <div class="text-[10px] text-slate-400">下单日期</div>
+            <div class="font-mono font-bold text-slate-900 text-sm mt-0.5">${ord.orderDate || '-'}</div>
+          </div>
+          <div>
+            <div class="text-[10px] text-slate-400">采购商家渠道</div>
+            <div class="font-extrabold text-slate-900 text-sm mt-0.5">${ord.merchant || '-'}</div>
+          </div>
+          <div>
+            <div class="text-[10px] text-slate-400">订单编号 / 官网</div>
+            <div class="mt-0.5">
+              ${ordUrl
+                ? `<a href="${ordUrl}" target="_blank" rel="noopener noreferrer" class="font-mono font-bold text-emerald-700 hover:underline inline-flex items-center gap-0.5">#${ord.orderNo} ↗</a>`
+                : `<span class="font-mono font-bold text-slate-700">#${ord.orderNo}</span>`}
+            </div>
+          </div>
+        </div>
+
+        <div class="space-y-1.5">
+          <div class="flex items-center justify-between">
+            <span class="font-extrabold text-slate-800">🛒 购买商品明细（共 ${(ord.items || []).length} 款 · 合计 ${m.totalQty} 件）：</span>
+            ${ordUrl ? `<a href="${ordUrl}" target="_blank" rel="noopener noreferrer" class="text-[11px] bg-emerald-50 hover:bg-emerald-100 text-emerald-800 border border-emerald-200 px-2.5 py-0.5 rounded-lg font-bold transition">🔗 打开 ${ord.merchant} 原订单网页 ↗</a>` : ''}
+          </div>
+          <div class="bg-white border border-slate-200 rounded-xl px-3 py-1">${itemsListHtml}</div>
+        </div>
+
+        <div class="bg-gradient-to-r from-emerald-50/80 via-teal-50/60 to-slate-50 border border-emerald-200 rounded-xl p-3.5 space-y-1.5">
+          <div class="flex items-center justify-between flex-wrap gap-2">
+            <div class="flex items-center gap-1.5">
+              <span class="font-extrabold text-emerald-950">💰 订单结算总计：</span>
+              <span class="text-[10px] px-2 py-0.5 rounded-full font-bold ${ord.webBackfilled ? 'bg-emerald-100 text-emerald-800 border border-emerald-300' : 'bg-amber-100 text-amber-900 border border-amber-300'}">${ord.webBackfilled ? '✅ 网页实付已核验' : '📋 历史台账/参考单价'}</span>
+            </div>
+            <span class="text-lg font-extrabold text-emerald-800 font-mono">${m.symbol}${m.grandTotal.toFixed(2)} ${m.currency}</span>
+          </div>
+          <div class="flex flex-wrap items-center gap-2 text-[11px] text-slate-600">
+            <span>商品小计: <strong>${m.symbol}${m.itemTotal.toFixed(2)}</strong></span>
+            <span>·</span>
+            <span>运费: <strong>${m.symbol}${m.shippingFee.toFixed(2)}</strong></span>
+            ${m.paymentFee > 0 ? `<span>· 手续费: <strong>${m.symbol}${m.paymentFee.toFixed(2)}</strong></span>` : ''}
+            ${m.discount > 0 ? `<span class="inline-flex items-center gap-0.5 bg-teal-50 text-teal-800 border border-teal-200 px-2 py-0.2 rounded font-semibold">🎫 券省 ${m.symbol}${m.discount.toFixed(2)}${m.discountNote ? ' (' + m.discountNote + ')' : ''}</span>` : ''}
+          </div>
+          ${ord.exchangeRate && ord.origPaidTotal ? `<div class="text-[11px] text-teal-900 font-semibold">💱 双币种实付档案：网页原标价 NZ$${Number(ord.origPaidTotal).toFixed(2)} · 折算汇率 ${ord.exchangeRate} · 实付人民币 ¥${Number(ord.settledAmount || (m.grandTotal * ord.exchangeRate)).toFixed(2)}</div>` : ''}
+          ${ord.paymentMethod ? `<div class="text-[11px] text-blue-800 font-medium">💳 支付方式：${ord.paymentMethod}</div>` : ''}
+        </div>
+
+        <div class="space-y-1.5">
+          <div class="font-extrabold text-slate-800">🚚 国际快递包裹与签收状态（共 ${(ord.parcels || []).length} 包）：</div>
+          <div class="space-y-1.5">${parcelsListHtml}</div>
+        </div>
+        ${ord.note ? `<div class="bg-amber-50 border border-amber-200 rounded-xl p-2.5 text-amber-900">📝 订单备注：${ord.note}</div>` : ''}
+      `;
+
+      footer.innerHTML = `
+        <div class="flex flex-wrap items-center gap-1.5">
+          <button type="button" data-notify-order="${ord.id}" class="bg-indigo-600 hover:bg-indigo-500 text-white font-extrabold text-xs px-3.5 py-2 rounded-xl shadow-xs transition">
+            📲 发客户微信通知
+          </button>
+          ${(!ord.webBackfilled && !ord.isStoreOrder) ? `
+          <button type="button" data-backfill-order="${ord.id}" class="bg-teal-700 hover:bg-teal-600 text-white font-bold text-xs px-3 py-2 rounded-xl transition">
+            ⚡ 抓单核验
+          </button>` : ''}
+          <button type="button" data-clone-order="${ord.id}" class="bg-amber-100 hover:bg-amber-200 text-amber-950 font-bold text-xs px-3 py-2 rounded-xl transition">
+            🔁 再来一单
+          </button>
+          <button type="button" data-edit-order="${ord.id}" class="bg-slate-800 hover:bg-slate-700 text-white font-bold text-xs px-3 py-2 rounded-xl transition">
+            ✏️ 编辑订单
+          </button>
+        </div>
+        <button type="button" id="btnCloseOrderQuickViewBottom" class="bg-slate-200 hover:bg-slate-300 text-slate-700 font-bold text-xs px-3.5 py-2 rounded-xl">
+          关闭
+        </button>
+      `;
+
+      modal.classList.remove('hidden');
+      const btnBot = document.getElementById('btnCloseOrderQuickViewBottom');
+      if (btnBot) btnBot.addEventListener('click', () => modal.classList.add('hidden'));
+    };
+    window.openOrderQuickViewModal = openOrderQuickViewModal;
+
+    // 11. Enhance updateDualLedgerSummaryBar() to also populate #billMatchedOrdersDetailStrip with 📋 详单 buttons
+    const _origUpdateDualLedgerSummaryBar = typeof updateDualLedgerSummaryBar === 'function' ? updateDualLedgerSummaryBar : null;
+    if (_origUpdateDualLedgerSummaryBar) {
+      updateDualLedgerSummaryBar = function() {
+        _origUpdateDualLedgerSummaryBar();
+        const stripEl = document.getElementById('billMatchedOrdersDetailStrip');
+        if (!stripEl) return;
+        const matched = window.currentBillMatchedOrders || [];
+        if (matched.length === 0) {
+          stripEl.innerHTML = `<span class="text-slate-400">📂 点击上方「提取订单汇总」后，此处会列出本次对账关联的全部原始订单，点「📋 详单」即可逐笔核对原单。</span>`;
+        } else {
+          stripEl.innerHTML = `
+            <span class="font-bold text-indigo-950 shrink-0">📂 本期对账关联原单 (${matched.length}笔)：</span>
+            ${matched.slice(0, 12).map(o => `
+              <span class="inline-flex items-center gap-1 bg-indigo-50/80 border border-indigo-200 rounded-md px-2 py-0.5 text-[11px]">
+                <span class="font-medium text-slate-700">${o.orderDate} #${o.orderNo}</span>
+                <button type="button" data-quickview-order="${o.id}" class="bg-teal-600 hover:bg-teal-500 text-white px-1.5 py-0.2 rounded text-[10px] font-bold">📋详单</button>
+              </span>
+            `).join('')}
+          `;
+        }
+      };
+    }
+
+    // 12. Hook Real-Time Product Name Unification into parseWebOrderText, parseMiniProgramOrderText, and syncOrderPricesToCatalog
+    if (typeof parseWebOrderText === 'function') {
+      const _origParseWebOrderText = parseWebOrderText;
+      parseWebOrderText = function(rawText) {
+        const res = _origParseWebOrderText(rawText);
+        if (res && Array.isArray(res.items)) {
+          res.items.forEach(it => {
+            if (it && it.product) {
+              const resolved = resolveCanonicalProductName(it.product);
+              if (resolved.canonicalName) {
+                it.rawScrapedProduct = it.product;
+                it.product = resolved.canonicalName;
+                it.canonicalMatchReason = resolved.reason;
+                it.specBadge = resolved.specBadge;
+              }
+            }
+          });
+        }
+        return res;
+      };
+    }
+
+    if (typeof syncOrderPricesToCatalog === 'function') {
+      const _origSyncOrderPricesToCatalog = syncOrderPricesToCatalog;
+      syncOrderPricesToCatalog = function(orderObj) {
+        if (orderObj && Array.isArray(orderObj.items)) {
+          orderObj.items.forEach(it => {
+            if (it && it.product) {
+              const resolved = resolveCanonicalProductName(it.product);
+              if (resolved.canonicalName && (resolved.matchedType === 'EXACT_CATALOG' || resolved.matchedType === 'ALIAS_RULE' || resolved.matchedType === 'KEYWORD_SPEC_MATCH')) {
+                it.product = resolved.canonicalName;
+              }
+            }
+          });
+        }
+        return _origSyncOrderPricesToCatalog(orderObj);
+      };
+    }
+
+    // 13. Initialize all v7.9.0 Event Listeners & Startup Sync
+    function initV790SuiteEngine() {
+      ensureAllProductsHaveCategoriesAndVerifiedPrices();
+      renderOrdersTab();
+      renderProductsTab();
+
+      // Orders Table Sort Dropdown & Pin Unread Checkbox
+      const orderSortSel = document.getElementById('filterOrderSort');
+      if (orderSortSel) {
+        orderSortSel.addEventListener('change', () => renderOrdersTab());
+      }
+      const chkPinUnread = document.getElementById('chkSortPinUnread');
+      if (chkPinUnread) {
+        chkPinUnread.addEventListener('change', () => renderOrdersTab());
+      }
+
+      // Clickable Orders Table Column Headers for Sorting
+      document.querySelectorAll('[data-order-sort-col]').forEach(th => {
+        th.addEventListener('click', () => {
+          const col = th.getAttribute('data-order-sort-col');
+          const sel = document.getElementById('filterOrderSort');
+          if (!sel) return;
+          const cur = sel.value;
+          const toggleMap = {
+            DATE: cur === 'DATE_DESC' ? 'DATE_ASC' : 'DATE_DESC',
+            AMOUNT: cur === 'AMOUNT_DESC' ? 'AMOUNT_ASC' : 'AMOUNT_DESC',
+            QTY: cur === 'QTY_DESC' ? 'QTY_ASC' : 'QTY_DESC',
+            PARCELS: 'PARCELS_DESC',
+            RECIPIENT: 'RECIPIENT_ASC',
+            MERCHANT: 'MERCHANT_ASC'
+          };
+          sel.value = toggleMap[col] || 'DATE_DESC';
+          renderOrdersTab();
+        });
+      });
+
+      // Product Catalog Sort Mode Selector & Secondary Filter Bar
+      const prodSortSel = document.getElementById('prodSortModeSelect');
+      if (prodSortSel) {
+        prodSortSel.addEventListener('change', () => renderProductsTab());
+      }
+      const btnClearProdSearch = document.getElementById('btnClearProdSearch');
+      if (btnClearProdSearch) {
+        btnClearProdSearch.addEventListener('click', () => {
+          document.getElementById('prodSearchInput').value = '';
+          document.getElementById('prodCategoryFilter').value = 'ALL';
+          renderProductsTab();
+        });
+      }
+      const secSearch = document.getElementById('prodGridSecondarySearch');
+      if (secSearch) {
+        secSearch.addEventListener('input', (e) => {
+          const mainInp = document.getElementById('prodSearchInput');
+          if (mainInp) mainInp.value = e.target.value;
+          renderProductsTab();
+        });
+      }
+      const secCat = document.getElementById('prodGridSecondaryCat');
+      if (secCat) {
+        secCat.addEventListener('change', (e) => {
+          const mainCat = document.getElementById('prodCategoryFilter');
+          if (mainCat) mainCat.value = e.target.value;
+          renderProductsTab();
+        });
+      }
+
+      // Toggle Dedup & Merge Studio
+      const btnToggleDedup = document.getElementById('btnToggleDedupMergeStudio');
+      const btnCloseDedup = document.getElementById('btnCloseDedupMergeStudio');
+      const dedupStudio = document.getElementById('productDedupMergeStudio');
+      if (btnToggleDedup && dedupStudio) {
+        btnToggleDedup.addEventListener('click', () => {
+          dedupStudio.classList.toggle('hidden');
+          if (!dedupStudio.classList.contains('hidden')) {
+            renderProductDedupMergeStudio();
+            dedupStudio.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          }
+        });
+      }
+      if (btnCloseDedup && dedupStudio) {
+        btnCloseDedup.addEventListener('click', () => dedupStudio.classList.add('hidden'));
+      }
+
+      // Batch merge all detected same-spec candidate groups
+      const btnBatchMergeAll = document.getElementById('btnBatchMergeAllCandidates');
+      if (btnBatchMergeAll) {
+        btnBatchMergeAll.addEventListener('click', () => {
+          const { candidateGroups } = scanProductDuplicateAndProtectedGroups();
+          if (candidateGroups.length === 0) {
+            showToast('🎉 当前已无待合并的同规格重复商品！');
+            return;
+          }
+          let mergedGroups = 0;
+          candidateGroups.forEach((grp, idx) => {
+            const inp = document.getElementById(`dedupCanonicalInput_${idx}`);
+            const canon = (inp && inp.value.trim()) ? inp.value.trim() : grp.recommendedCanonical;
+            const variants = grp.items.map(x => x.name);
+            if (executeProductGroupMerge(canon, variants)) {
+              mergedGroups++;
+            }
+          });
+          if (mergedGroups > 0) {
+            showToast(`✨ 已一键完成 ${mergedGroups} 组同款同规格商品的合并与历史订单归一！`);
+          }
+        });
+      }
+
+      // Manual Merge Selects & Button
+      const srcSel = document.getElementById('manualMergeSourceSelect');
+      const tgtSel = document.getElementById('manualMergeTargetSelect');
+      if (srcSel) srcSel.addEventListener('change', updateManualMergeSpecPreview);
+      if (tgtSel) {
+        tgtSel.addEventListener('change', () => {
+          const canonInp = document.getElementById('manualMergeCanonicalInput');
+          if (canonInp) canonInp.value = tgtSel.value;
+          updateManualMergeSpecPreview();
+        });
+      }
+      const btnExecManualMerge = document.getElementById('btnExecuteManualMerge');
+      if (btnExecManualMerge) {
+        btnExecManualMerge.addEventListener('click', () => {
+          const sName = document.getElementById('manualMergeSourceSelect')?.value;
+          const tName = document.getElementById('manualMergeTargetSelect')?.value;
+          const cName = (document.getElementById('manualMergeCanonicalInput')?.value || tName || '').trim();
+          if (!sName || !tName || sName === tName) {
+            showToast('⚠️ 请选择两款不同的商品进行合并');
+            return;
+          }
+          executeProductGroupMerge(cName || tName, [sName, tName]);
+        });
+      }
+
+      // Real-time Capture Name Unification Simulator
+      const runSim = (sampleStr) => {
+        const inp = document.getElementById('simRawCaptureNameInput');
+        const box = document.getElementById('simCaptureNameResultBox');
+        if (!inp || !box) return;
+        if (sampleStr) inp.value = sampleStr;
+        const val = inp.value.trim();
+        if (!val) {
+          box.innerHTML = '请输入要测试的抓取商品名称';
+          return;
+        }
+        const res = resolveCanonicalProductName(val);
+        if (res.isNewSpecVariant) {
+          box.className = 'text-[11px] bg-amber-50 rounded-lg p-2.5 border border-amber-300 text-amber-950 space-y-1';
+          box.innerHTML = `
+            <div class="font-extrabold text-amber-900">🛡️ 规格隔离保护触发（判定为新规格独立产品）：</div>
+            <div>输入规格：<strong>[${res.specBadge}]</strong></div>
+            <div>比对结果：${res.reason}</div>
+            <div>入库商品名：<strong class="text-slate-900">${res.canonicalName}</strong>（不会混入旧规格！）</div>
+          `;
+        } else if (res.matchedType === 'EXACT_CATALOG' || res.matchedType === 'ALIAS_RULE' || res.matchedType === 'KEYWORD_SPEC_MATCH') {
+          box.className = 'text-[11px] bg-emerald-50 rounded-lg p-2.5 border border-emerald-300 text-emerald-950 space-y-1';
+          box.innerHTML = `
+            <div class="font-extrabold text-emerald-900">✅ 自动统一入口为确定商品名：</div>
+            <div>匹配逻辑：${res.reason}</div>
+            <div>最终入库标准名：<strong class="text-emerald-800 text-xs">${res.canonicalName}</strong> <span class="bg-white border border-emerald-200 px-1.5 py-0.2 rounded font-mono">[${res.specBadge}]</span></div>
+          `;
+        } else {
+          box.className = 'text-[11px] bg-slate-100 rounded-lg p-2.5 border border-slate-300 text-slate-700 space-y-1';
+          box.innerHTML = `
+            <div class="font-bold">✨ 全新商品建档：</div>
+            <div>${res.reason} → <strong>${res.canonicalName}</strong></div>
+          `;
+        }
+      };
+      const btnRunSim = document.getElementById('btnRunCaptureNameSim');
+      if (btnRunSim) btnRunSim.addEventListener('click', () => runSim());
+
+      // Global delegated click handler for v7.9.0 interactive elements
+      document.body.addEventListener('click', (e) => {
+        // 1) Quickview by orderNo (from price history timeline table)
+        const qvNoBtn = e.target.closest('[data-quickview-orderno]');
+        if (qvNoBtn) {
+          const ono = qvNoBtn.getAttribute('data-quickview-orderno');
+          const found = getActiveOrders().find(o => String(o.orderNo) === String(ono))
+            || (state.orders || []).find(o => String(o.orderNo) === String(ono));
+          if (found) {
+            openOrderQuickViewModal(found.id);
+          } else {
+            showToast(`未找到单号 #${ono} 的订单详情`);
+          }
+          return;
+        }
+
+        // 2) Category quick pill click in tab-products
+        const catPill = e.target.closest('[data-prod-cat-pill]');
+        if (catPill) {
+          const c = catPill.getAttribute('data-prod-cat-pill');
+          const catEl = document.getElementById('prodCategoryFilter');
+          if (catEl) {
+            catEl.value = c;
+            renderProductsTab();
+          }
+          return;
+        }
+
+        // 3) Scroll to products grid or reset product filters
+        if (e.target.closest('#btnScrollToProductsGrid') || e.target.closest('#btnJumpCardsFromStrip')) {
+          const hdr = document.getElementById('productsGridSectionHeader') || document.getElementById('productsGrid');
+          if (hdr) hdr.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          return;
+        }
+        if (e.target.closest('#btnResetProdFilterInline') || e.target.closest('#btnClearFromEmptyStrip') || e.target.closest('#btnResetProdFilterEmptyGrid')) {
+          const sInp = document.getElementById('prodSearchInput');
+          const cSel = document.getElementById('prodCategoryFilter');
+          if (sInp) sInp.value = '';
+          if (cSel) cSel.value = 'ALL';
+          renderProductsTab();
+          return;
+        }
+
+        // 4) Dedup candidate radio selection updates canonical input
+        const dedupRadio = e.target.closest('[data-dedup-radio-group]');
+        if (dedupRadio) {
+          const gIdx = dedupRadio.getAttribute('data-dedup-radio-group');
+          const canonInp = document.getElementById(`dedupCanonicalInput_${gIdx}`);
+          if (canonInp) canonInp.value = dedupRadio.value;
+          return;
+        }
+
+        // 5) Confirm single dedup candidate group merge
+        const confirmDedupBtn = e.target.closest('[data-confirm-dedup-idx]');
+        if (confirmDedupBtn) {
+          const gIdx = parseInt(confirmDedupBtn.getAttribute('data-confirm-dedup-idx'), 10);
+          const { candidateGroups } = scanProductDuplicateAndProtectedGroups();
+          const grp = candidateGroups[gIdx];
+          if (grp) {
+            const canonInp = document.getElementById(`dedupCanonicalInput_${gIdx}`);
+            const canon = (canonInp && canonInp.value.trim()) ? canonInp.value.trim() : grp.recommendedCanonical;
+            executeProductGroupMerge(canon, grp.items.map(x => x.name));
+          }
+          return;
+        }
+
+        // 6) Ignore dedup candidate group
+        const ignoreDedupBtn = e.target.closest('[data-ignore-dedup-group]');
+        if (ignoreDedupBtn) {
+          const gKey = ignoreDedupBtn.getAttribute('data-ignore-dedup-group');
+          state.ignoredDedupGroupKeys = Array.from(new Set([...(state.ignoredDedupGroupKeys || []), gKey]));
+          saveState('标记候选同品组为不同商品');
+          renderProductDedupMergeStudio();
+          showToast('🚫 已将该组标记为不同商品，后续不再提示合并');
+          return;
+        }
+
+        // 7) Reset ignored dedup groups
+        if (e.target.closest('#btnResetIgnoredDedupGroups')) {
+          state.ignoredDedupGroupKeys = [];
+          renderProductDedupMergeStudio();
+          showToast('已恢复全部候选同品比对组');
+          return;
+        }
+
+        // 8) Delete alias rule
+        const delRuleBtn = e.target.closest('[data-del-alias-rule]');
+        if (delRuleBtn) {
+          const rIdx = parseInt(delRuleBtn.getAttribute('data-del-alias-rule'), 10);
+          if (Array.isArray(state.productAliasRules) && state.productAliasRules[rIdx]) {
+            const removed = state.productAliasRules.splice(rIdx, 1)[0];
+            saveState(`移除商品名归一规则: ${removed.canonicalName}`);
+            renderProductDedupMergeStudio();
+            showToast(`已移除「${removed.canonicalName}」的别名归一规则`);
+          }
+          return;
+        }
+
+        // 9) Simulator preset sample buttons
+        const simSampleBtn = e.target.closest('[data-sim-sample]');
+        if (simSampleBtn) {
+          runSim(simSampleBtn.getAttribute('data-sim-sample'));
+          return;
         }
       });
     }
