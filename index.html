@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>纽澳跨境采购与快递追踪管家 v7.10.0 (Build 20261030.1145)</title>
+  <title>纽澳跨境采购与快递追踪管家 v7.11.0 (Build 20261030.1215)</title>
   <script src="https://cdn.tailwindcss.com/3.4.17"></script>
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
@@ -342,9 +342,9 @@
               <span id="uiIcon-appTitle" class="hidden"></span>
               <span id="uiText-appTitle">纽澳跨境采购与快递追踪管家</span>
             </h1>
-            <button type="button" id="btnHeaderVersionBadge" class="inline-flex items-center gap-1 text-xs bg-gradient-to-r from-amber-400 to-amber-300 hover:from-amber-300 hover:to-amber-200 text-slate-950 font-extrabold px-2.5 py-0.5 rounded-full shadow-xs transition cursor-pointer" title="当前正式稳定版本：v7.10.0 (Build 20261030.1145)（遵循 vMAJOR.MINOR.PATCH + Build Tag 规范 · 点击查看版本规范与更新日志）">
+            <button type="button" id="btnHeaderVersionBadge" class="inline-flex items-center gap-1 text-xs bg-gradient-to-r from-amber-400 to-amber-300 hover:from-amber-300 hover:to-amber-200 text-slate-950 font-extrabold px-2.5 py-0.5 rounded-full shadow-xs transition cursor-pointer" title="当前正式稳定版本：v7.11.0 (Build 20261030.1215)（遵循 vMAJOR.MINOR.PATCH + Build Tag 规范 · 点击查看版本规范与更新日志）">
               <span id="uiIcon-appVersion">🚀</span>
-              <span id="uiText-appVersion">v7.10.0 (Build 20261030.1145)</span>
+              <span id="uiText-appVersion">v7.11.0 (Build 20261030.1215)</span>
             </button>
             <button type="button" id="btnHeaderCfStatusPill" class="inline-flex items-center gap-1 text-[11px] bg-emerald-900/90 hover:bg-emerald-800 text-emerald-100 border border-emerald-600/70 font-semibold px-2.5 py-0.5 rounded-full transition cursor-pointer" title="点击打开 Cloudflare KV 边缘云同步设置 (方案B)">
               <span id="headerCfStatusDot" class="w-2 h-2 rounded-full bg-amber-400 inline-block"></span>
@@ -2260,12 +2260,12 @@
 
   <!-- MODAL 3: PRODUCT EDIT / ADD -->
   <div id="modalProduct" class="fixed inset-0 bg-slate-900/60 backdrop-blur-xs z-50 hidden flex items-center justify-center p-3 sm:p-5">
-    <div class="bg-white rounded-2xl shadow-2xl border border-slate-200 max-w-md w-full overflow-hidden">
+    <div class="bg-white rounded-2xl shadow-2xl border border-slate-200 max-w-2xl w-full max-h-[92vh] flex flex-col overflow-hidden">
       <div class="px-5 py-4 bg-emerald-950 text-white flex items-center justify-between">
         <h3 id="modalProductTitle" class="text-base font-bold">编辑商品与参考单价</h3>
         <button id="btnCloseProductModal" class="text-emerald-200 hover:text-white text-xl leading-none px-2">×</button>
       </div>
-      <div class="p-5 space-y-3 text-xs sm:text-sm">
+      <div class="p-5 space-y-3 text-xs sm:text-sm overflow-y-auto custom-scroll flex-1">
         <input type="hidden" id="editProdOriginalName" value="" />
         <div>
           <label class="block text-xs font-medium text-slate-600 mb-1">商品名称 *</label>
@@ -2314,6 +2314,69 @@
           <div>
             <label class="block text-[11px] font-medium text-slate-600 mb-1">📅 自用保质期至</label>
             <input type="date" id="editProdExpiryDate" class="w-full border border-slate-300 rounded-lg px-2 py-1.5 text-xs" />
+          </div>
+        </div>
+
+        <!-- NEW v7.11.0: Product Image & Supplement Facts / Ingredients Archive -->
+        <div class="pt-2.5 border-t border-slate-200 space-y-2.5">
+          <div class="flex flex-wrap items-center justify-between gap-1">
+            <span class="text-xs font-extrabold text-emerald-950">🖼️ 商品外观图 & 🧪 详细配方表/营养成分档案</span>
+            <span class="text-[10px] bg-emerald-50 text-emerald-800 border border-emerald-200 px-2 py-0.5 rounded font-semibold">⚡ 内置 Canvas 智能微缩压缩 (单图仅 8~25KB · 不占体积 · 自动随云端同步)</span>
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 bg-slate-50 p-3 rounded-xl border border-slate-200/80">
+            <!-- Left: Product Main Thumbnail Image -->
+            <div class="space-y-1.5">
+              <label class="block text-[11px] font-bold text-slate-700">1. 商品主图 (支持上传本地图 / 粘贴截图 / 填图片网址)</label>
+              <div class="flex items-center gap-2.5">
+                <div id="editProdImgPreviewBox" class="w-16 h-16 rounded-xl border border-slate-300 bg-white flex items-center justify-center overflow-hidden shrink-0 shadow-2xs">
+                  <span class="text-[10px] text-slate-400 text-center px-1">默认矢量图</span>
+                </div>
+                <div class="flex-1 space-y-1.5">
+                  <div class="flex flex-wrap items-center gap-1.5">
+                    <label class="cursor-pointer bg-emerald-700 hover:bg-emerald-600 text-white text-[11px] font-bold px-2.5 py-1 rounded-lg transition inline-flex items-center gap-1">
+                      <span>📤 选图片自动压缩</span>
+                      <input type="file" id="editProdImgFileInput" accept="image/*" class="hidden" />
+                    </label>
+                    <button type="button" id="btnClearEditProdImg" class="text-[11px] bg-white hover:bg-rose-50 text-rose-600 border border-slate-300 px-2 py-1 rounded-lg transition">清除</button>
+                  </div>
+                  <input type="text" id="editProdImgUrlInput" placeholder="或直接粘贴官网图片 URL / Base64..." class="w-full text-[11px] border border-slate-300 rounded px-2 py-1 bg-white font-mono" />
+                  <div id="editProdImgSizeHint" class="text-[10px] text-slate-400">支持在此弹窗直接按 Ctrl+V 粘贴商品截图</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Right: Supplement Facts / Formula Sheet Image -->
+            <div class="space-y-1.5">
+              <label class="block text-[11px] font-bold text-indigo-900">2. 背面配方表/营养成分表实拍图 (选填)</label>
+              <div class="flex items-center gap-2.5">
+                <div id="editProdNutriImgPreviewBox" class="w-16 h-16 rounded-xl border border-indigo-200 bg-white flex items-center justify-center overflow-hidden shrink-0 shadow-2xs">
+                  <span class="text-[10px] text-slate-400 text-center px-1">暂无配方图</span>
+                </div>
+                <div class="flex-1 space-y-1.5">
+                  <div class="flex flex-wrap items-center gap-1.5">
+                    <label class="cursor-pointer bg-indigo-600 hover:bg-indigo-500 text-white text-[11px] font-bold px-2.5 py-1 rounded-lg transition inline-flex items-center gap-1">
+                      <span>🔬 上传配方表图</span>
+                      <input type="file" id="editProdNutriFileInput" accept="image/*" class="hidden" />
+                    </label>
+                    <button type="button" id="btnClearEditProdNutriImg" class="text-[11px] bg-white hover:bg-rose-50 text-rose-600 border border-slate-300 px-2 py-1 rounded-lg transition">清除</button>
+                  </div>
+                  <input type="text" id="editProdNutriUrlInput" placeholder="或粘贴配方表图片 URL..." class="w-full text-[11px] border border-indigo-200 rounded px-2 py-1 bg-white font-mono" />
+                  <div id="editProdNutriSizeHint" class="text-[10px] text-slate-400">高锐度文字保留压缩 (~35KB/张)</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+            <div>
+              <label class="block text-[11px] font-bold text-slate-700 mb-1">🧪 核心配方成分与每粒/每克含量明细</label>
+              <textarea id="editProdIngredientsText" rows="3" placeholder="如：每粒含深海鱼油 1000mg（提供 Omega-3 300mg：EPA 180mg + DHA 120mg），不含重金属残留..." class="w-full text-xs border border-slate-300 rounded-lg p-2 bg-white"></textarea>
+            </div>
+            <div>
+              <label class="block text-[11px] font-bold text-slate-700 mb-1">💡 建议服用方法、适用人群与注意事项</label>
+              <textarea id="editProdUsageText" rows="3" placeholder="如：成人每日 1~3 粒，随餐温水送服；护心脑血管/改善眼干。孕妇及手术前两周请遵医嘱..." class="w-full text-xs border border-slate-300 rounded-lg p-2 bg-white"></textarea>
+            </div>
           </div>
         </div>
       </div>
@@ -2939,7 +3002,7 @@
         <div>
           <h3 class="text-base font-bold flex items-center gap-2 flex-wrap">
             <span>⚙️ 个性化与规则中心</span>
-            <span class="text-[11px] bg-amber-400 text-slate-950 font-extrabold px-2.5 py-0.5 rounded-full">v7.10.0 (Build 20261030.1145) · SemVer标准版本管理</span>
+            <span class="text-[11px] bg-amber-400 text-slate-950 font-extrabold px-2.5 py-0.5 rounded-full">v7.11.0 (Build 20261030.1215) · SemVer标准版本管理</span>
           </h3>
           <p class="text-xs text-emerald-200 mt-0.5">一站式归纳管理：8套主题皮肤与自定义调色盘 · 全系统选项名称/图标/注释自由修改 · 抓单自学习规则 · 454条超链接模板</p>
         </div>
@@ -2971,7 +3034,7 @@
         <div class="bg-gradient-to-r from-emerald-50 via-teal-50 to-amber-50 border-2 border-emerald-300 rounded-xl p-4 space-y-3">
           <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-emerald-200/80 pb-2.5">
             <div class="flex items-center gap-2 flex-wrap">
-              <span class="px-2.5 py-1 rounded-full bg-emerald-900 text-amber-300 font-extrabold text-xs font-mono">v7.10.0 (Build 20261030.1145)</span>
+              <span class="px-2.5 py-1 rounded-full bg-emerald-900 text-amber-300 font-extrabold text-xs font-mono">v7.11.0 (Build 20261030.1215)</span>
               <span class="font-extrabold text-slate-900 text-sm">严格执行的版本号规则（Semantic Versioning + Build Tag）</span>
             </div>
             <button type="button" id="btnJumpToLabelsTab" class="bg-white hover:bg-slate-50 text-emerald-900 border border-emerald-300 font-bold px-3 py-1.5 rounded-lg shadow-2xs transition text-xs shrink-0">
@@ -2982,7 +3045,7 @@
             <p>系统遵循标准的 <code class="bg-white px-1.5 py-0.5 rounded border font-mono font-bold text-emerald-900">vMAJOR.MINOR.PATCH (Build YYYYMMDD.HHMM)</code> 规则，版本号已固化在<strong>网页左上角标识、页面标题（第6行 &lt;title&gt;）与浏览器控制台输出</strong>中，确保每次热更新上线后一眼就能核对生效状态：</p>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-3 pt-1">
               <div class="bg-white/90 rounded-lg p-3 border border-emerald-200 space-y-1">
-                <div class="font-extrabold text-emerald-950">📌 当前正式稳定版本：<span class="font-mono text-emerald-700">v7.10.0 (Build 20261030.1145)</span></div>
+                <div class="font-extrabold text-emerald-950">📌 当前正式稳定版本：<span class="font-mono text-emerald-700">v7.11.0 (Build 20261030.1215)</span></div>
                 <ul class="list-disc pl-4 space-y-1 text-[11px] text-slate-600">
                   <li><strong>主版本号（7）</strong>：独立 <code class="font-mono">.html</code> 全功能前端，原生内置亲友免登录只读查件/对账门户、Cloudflare Pages Functions + KV 云同步与「自用 / 寄回国」双轨架构；</li>
                   <li><strong>次版本号（9）</strong>：上线「商品库智能同品比对与合并审核中心（含 150粒≠200粒 规格隔离保护与抓单实时关键字归一）」、全模块通用「📋 详单」一屏全览凭证、订单总表多维自主排序与商品库分类/搜索联动；</li>
@@ -3585,11 +3648,11 @@
 
     const CURRENT_SEMVER = 'v7.9.1';
     const CURRENT_BUILD_TAG = 'Build 20261029.2054';
-    const CURRENT_APP_VERSION = 'v7.10.0 (Build 20261030.1145)';
+    const CURRENT_APP_VERSION = 'v7.11.0 (Build 20261030.1215)';
     console.info('%c[纽澳跨境采购与快递追踪管家] 当前正式稳定版本: ' + CURRENT_APP_VERSION + ' | Semantic Versioning + Build Tag 已生效', 'background:#064e3b;color:#fde68a;padding:4px 10px;border-radius:6px;font-weight:bold;');
     const DEFAULT_UI_CUSTOM_LABELS = {
       appTitle: { icon: '', text: '纽澳跨境采购与快递追踪管家', note: '支持一单多包拆单追踪 · 采购单价与运费核算 · 电脑与手机多端同步', labelTitle: '系统主标题 & 副标题说明', group: 'header', emojiPresets: ['🇳🇿', '🦘', '🌿', '📦', '🛡️'] },
-      appVersion: { icon: '🚀', text: CURRENT_APP_VERSION, note: '当前正式稳定版本：v7.10.0 (Build 20261030.1145)（同品智能比对合并 · 规格隔离入库 · 全模块详单按钮 · 订单多维排序）· 点击查看版本规则', labelTitle: '顶部版本号标识 (SemVer + Build Tag)', group: 'header', emojiPresets: ['🚀', '✨', '🏷️', '💎', '🔥'] },
+      appVersion: { icon: '🚀', text: CURRENT_APP_VERSION, note: '当前正式稳定版本：v7.11.0 (Build 20261030.1215)（同品智能比对合并 · 规格隔离入库 · 全模块详单按钮 · 订单多维排序）· 点击查看版本规则', labelTitle: '顶部版本号标识 (SemVer + Build Tag)', group: 'header', emojiPresets: ['🚀', '✨', '🏷️', '💎', '🔥'] },
       btnNewOrder: { icon: '＋', text: '新增订单', note: '新建采购订单（内含网页粘贴自动填单 / 门店直购录入 / 复制上一单）', labelTitle: '顶部按钮 1：新增订单', group: 'topbar', emojiPresets: ['＋', '🛒', '✍️', '⚡', '🛍️'] },
       btnBatchImport: { icon: '📥', text: '智能导单', note: '专用于导入新采购订单：Excel表格差异导入 / 网页订单粘贴解析 / 浏览器抓单小书签', labelTitle: '顶部按钮 2：智能导单', group: 'topbar', emojiPresets: ['📥', '📂', '📊', '⚡', '📑'] },
       btnSyncBackup: { icon: '☁️', text: '云端与备份', note: '专用于多端云同步与备份：Cloudflare KV 实时云同步 / 历史时间机器回滚 / 本地 JSON 备份包', labelTitle: '顶部按钮 3：云端与备份', group: 'topbar', emojiPresets: ['☁️', '🔄', '📲', '💾', '🛡️'] },
@@ -19630,7 +19693,7 @@ export async function onRequestPost(context) {
 
 
     // ============================================================================
-    // v7.10.0 (Build 20261030.1145) COMPREHENSIVE UPGRADE ENGINE:
+    // v7.11.0 (Build 20261030.1215) COMPREHENSIVE UPGRADE ENGINE:
     // 1. Automatic Verified Order Price Extraction & 100% Category Backfill
     // 2. Multi-Keyword Search, Category Filter Linkage & Logical <optgroup> Dropdown Sorting
     // 3. Spec-Aware Product Deduplication, Audit Merge & Real-Time Capture Unification (150粒 ≠ 200粒)
@@ -21629,7 +21692,7 @@ export async function onRequestPost(context) {
 
 
     // ============================================================================
-    // v7.10.0 (Build 20261030.1145) HOTFIX & ENHANCEMENT SUITE:
+    // v7.11.0 (Build 20261030.1215) HOTFIX & ENHANCEMENT SUITE:
     // Fix 1: Backfill Studio "保存并继续下一单" & "确认更新本单" never grey out; skip 门店订单 in auto-next queue; support inline direct price verification without pasting text.
     // Fix 2: Product Dropdowns (<optgroup> category classification) always stay grouped across page refreshes, cloud pulls, and all sort modes.
     // Fix 3: Purge unverified reference prices (NZ$87.00 with blank RMB) & ghost duplicate order rows from priceHistory; strictly show genuine verified prices.
@@ -22500,7 +22563,7 @@ export async function onRequestPost(context) {
 
 
     // ============================================================================
-    // v7.10.0 (Build 20261030.1145) COMPREHENSIVE UPGRADE & BUG-FIX SUITE:
+    // v7.11.0 (Build 20261030.1215) COMPREHENSIVE UPGRADE & BUG-FIX SUITE:
     // 1. Strict Chronological Order Sorting: #chkSortPinUnread defaults to false;
     //    auto-clears stale 2022-2025 unread flags; switching sort/scope never traps read orders at bottom.
     // 2. WeChat Mini-Program Order Mode & Dual-Currency (NZD Listed Price <-> RMB Actual Paid with Fee)
@@ -22609,10 +22672,7 @@ export async function onRequestPost(context) {
           o.isMiniProgram = true;
           o.orderUrl = '';
         }
-        const yr = Number(o.year) || parseInt(String(o.orderDate || '').slice(0, 4), 10) || 2025;
-        if (yr < 2026 && o.isUnread && !o.manualUnreadPin) {
-          o.isUnread = false;
-        }
+        // Keep all existing o.isUnread flags intact (including 2024/2025 unscraped orders) so user never loses unread reminders!
       });
 
       // 4B. Ensure the two 2026-10-28 WeChat Mini-Program orders (#20261028092009885255 and #20261028091621952931)
@@ -23691,6 +23751,1140 @@ export async function onRequestPost(context) {
     }
 
 
+
+    // ============================================================================
+    // v7.11.0 (Build 20261030.1215) COMPREHENSIVE UPGRADE SUITE:
+    // 1. Keep All 95 Unread Reminders Intact + Pure Chronological Mixed Sorting in All Orders
+    //    & Dedicated Unread Filter Sorting when "📬 未读新订单" is active.
+    // 2. Uniform Compact Product Cards in #productsGrid: Deduplicate p.priceHistory to match
+    //    verifiedSeries; show 1 latest record by default + collapsible fixed-height scroll drawer
+    //    for multi-period price histories; collapsible/scrollable #trendStudioTimelineTable.
+    // 3. Product Images, Supplement Facts / Ingredients Archive & Customizable Payment Method Icons
+    //    (Inline SVG Badges + Custom Upload/Emoji in Theme & Label Studio + Canvas WebP/JPEG Micro-Compression + Storage Meter).
+    // 4. Instant Smart Product Autocomplete Combobox in #modalOrder (fuzzy multi-keyword matching
+    //    on focus & typing, category badge, verified prices, and purchase count).
+    // ============================================================================
+
+    // --- PART A: Built-in Vector Payment Method Icons & Custom Payment Icon Manager ---
+    const DEFAULT_PAYMENT_METHOD_ICONS = {
+      '微信支付': {
+        label: '微信支付',
+        colorClass: 'bg-emerald-50 text-emerald-900 border-emerald-300',
+        svg: `<svg class="w-3.5 h-3.5 inline-block shrink-0" viewBox="0 0 24 24" fill="none"><circle cx="9.5" cy="10" r="6.5" fill="#07C160"/><circle cx="15.5" cy="13.5" r="5.5" fill="#059669" stroke="#fff" stroke-width="1.2"/><circle cx="7.5" cy="9" r="0.9" fill="#fff"/><circle cx="11.5" cy="9" r="0.9" fill="#fff"/><circle cx="14" cy="12.8" r="0.75" fill="#fff"/><circle cx="17" cy="12.8" r="0.75" fill="#fff"/></svg>`,
+        customIcon: ''
+      },
+      '支付宝': {
+        label: '支付宝',
+        colorClass: 'bg-sky-50 text-sky-900 border-sky-300',
+        svg: `<svg class="w-3.5 h-3.5 inline-block shrink-0" viewBox="0 0 24 24" fill="none"><rect x="2" y="2" width="20" height="20" rx="5" fill="#1677FF"/><path d="M7 8.5h10M12 6v5m-4.5 0h9c-.6 3.2-2.8 5.8-7.5 7.2m1.5-5.2c1.8 1.8 4.2 3.4 7.5 4.2" stroke="#fff" stroke-width="1.8" stroke-linecap="round"/></svg>`,
+        customIcon: ''
+      },
+      '银联支付': {
+        label: '银联支付',
+        colorClass: 'bg-rose-50 text-rose-900 border-rose-300',
+        svg: `<svg class="w-3.5 h-3.5 inline-block shrink-0" viewBox="0 0 24 24" fill="none"><rect x="2" y="5" width="7" height="14" rx="1.5" fill="#E21836"/><rect x="8.5" y="5" width="7" height="14" rx="1.5" fill="#00447C"/><rect x="15" y="5" width="7" height="14" rx="1.5" fill="#007B84"/></svg>`,
+        customIcon: ''
+      },
+      'POLi 纽澳网银': {
+        label: 'POLi 纽澳网银',
+        colorClass: 'bg-teal-50 text-teal-900 border-teal-300',
+        svg: `<svg class="w-3.5 h-3.5 inline-block shrink-0" viewBox="0 0 24 24" fill="none"><path d="M12 3L4 7v5c0 5 3.4 9.3 8 10.5 4.6-1.2 8-5.5 8-10.5V7l-8-4z" fill="#0D9488"/><path d="M9 12l2 2 4-4" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>`,
+        customIcon: ''
+      },
+      '信用卡 (Visa/MasterCard)': {
+        label: '信用卡 (Visa/MasterCard)',
+        colorClass: 'bg-indigo-50 text-indigo-900 border-indigo-300',
+        svg: `<svg class="w-3.5 h-3.5 inline-block shrink-0" viewBox="0 0 24 24" fill="none"><rect x="2" y="5" width="20" height="14" rx="2.5" fill="#312E81"/><circle cx="10" cy="12" r="3.5" fill="#EF4444" fill-opacity="0.9"/><circle cx="14" cy="12" r="3.5" fill="#F59E0B" fill-opacity="0.85"/></svg>`,
+        customIcon: ''
+      },
+      '银行转账': {
+        label: '银行转账',
+        colorClass: 'bg-amber-50 text-amber-900 border-amber-300',
+        svg: `<svg class="w-3.5 h-3.5 inline-block shrink-0" viewBox="0 0 24 24" fill="none"><path d="M3 9l9-5 9 5v2H3V9zm2 4h3v6H5v-6zm5.5 0h3v6h-3v-6zM16 13h3v6h-3v-6zM3 20h18v2H3v-2z" fill="#D97706"/></svg>`,
+        customIcon: ''
+      },
+      '门店刷卡/现金': {
+        label: '门店刷卡/现金',
+        colorClass: 'bg-purple-50 text-purple-900 border-purple-300',
+        svg: `<svg class="w-3.5 h-3.5 inline-block shrink-0" viewBox="0 0 24 24" fill="none"><rect x="3" y="4" width="18" height="16" rx="3" fill="#7C3AED"/><path d="M3 9h18M7 15h4" stroke="#fff" stroke-width="2" stroke-linecap="round"/></svg>`,
+        customIcon: ''
+      }
+    };
+
+    function getPaymentMethodConfig(rawMethod) {
+      const norm = normalizePaymentMethodName(rawMethod);
+      if (!norm) return null;
+      const customMap = (state && state.paymentMethodCustomIcons) || {};
+      const base = DEFAULT_PAYMENT_METHOD_ICONS[norm] || {
+        label: norm,
+        colorClass: 'bg-blue-50 text-blue-800 border-blue-200',
+        svg: `<span class="text-[11px] leading-none">💳</span>`,
+        customIcon: ''
+      };
+      const ov = customMap[norm] || {};
+      return {
+        key: norm,
+        label: ov.label || base.label || norm,
+        colorClass: ov.colorClass || base.colorClass,
+        svg: base.svg,
+        customIcon: ov.customIcon || ''
+      };
+    }
+
+    function renderPaymentMethodBadgeHtml(rawMethod) {
+      const cfg = getPaymentMethodConfig(rawMethod);
+      if (!cfg) return '';
+      let iconHtml = cfg.svg;
+      if (cfg.customIcon) {
+        if (cfg.customIcon.startsWith('data:image/') || cfg.customIcon.startsWith('http')) {
+          iconHtml = `<img src="${cfg.customIcon}" alt="" class="w-3.5 h-3.5 rounded-xs object-contain inline-block shrink-0" />`;
+        } else {
+          iconHtml = `<span class="text-[11px] leading-none">${cfg.customIcon}</span>`;
+        }
+      }
+      return `<span class="inline-flex items-center gap-1 text-[10px] ${cfg.colorClass} border px-1.5 py-0.5 rounded-md font-bold whitespace-nowrap leading-tight shadow-2xs">${iconHtml}<span>${cfg.label}</span></span>`;
+    }
+    window.renderPaymentMethodBadgeHtml = renderPaymentMethodBadgeHtml;
+
+    // --- PART B: Built-in Default Product SVG Illustrations & Default Supplement Facts Reference ---
+    function getProductDefaultSvgDataUri(p) {
+      const name = String(p?.name || '');
+      const cat = String(p?.category || '');
+      let bg1 = '#ecfdf5', bg2 = '#d1fae5', accent = '#059669', tag = 'NZ HEALTH', icon = '🌿';
+      if (name.includes('蜂蜜') || cat.includes('蜂蜜')) {
+        bg1 = '#fffbeb'; bg2 = '#fde68a'; accent = '#d97706'; tag = 'MANUKA'; icon = '🍯';
+      } else if (name.includes('鱼油') || name.includes('磷虾油') || name.includes('卵磷脂') || cat.includes('鱼油')) {
+        bg1 = '#eff6ff'; bg2 = '#bfdbfe'; accent = '#2563eb'; tag = 'OMEGA-3'; icon = '🐟';
+      } else if (name.includes('奶粉') || name.includes('牛奶') || cat.includes('奶粉')) {
+        bg1 = '#f0f9ff'; bg2 = '#bae6fd'; accent = '#0284c7'; tag = 'DAIRY NZ'; icon = '🥛';
+      } else if (name.includes('护肝') || name.includes('奶蓟草')) {
+        bg1 = '#f0fdf4'; bg2 = '#bbf7d0'; accent = '#15803d'; tag = 'LIVER DETOX'; icon = '🌱';
+      } else if (name.includes('钙') || name.includes('维') || name.includes('铁') || name.includes('叶黄素') || name.includes('益生菌')) {
+        bg1 = '#f5f3ff'; bg2 = '#ddd6fe'; accent = '#7c3aed'; tag = 'VITAMIN'; icon = '💊';
+      } else if (name.includes('木瓜') || name.includes('绵羊油') || name.includes('牙膏') || name.includes('芦荟') || cat.includes('个护')) {
+        bg1 = '#fdf2f8'; bg2 = '#fbcfe8'; accent = '#db2777'; tag = 'CARE'; icon = '🧴';
+      }
+      const spec = extractProductSpecSignature(name).badgeText || '';
+      const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="96" height="96" viewBox="0 0 96 96">
+        <defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="${bg1}"/><stop offset="100%" stop-color="${bg2}"/></linearGradient></defs>
+        <rect width="96" height="96" rx="18" fill="url(#g)" stroke="${accent}" stroke-opacity="0.25" stroke-width="2"/>
+        <rect x="26" y="14" width="44" height="10" rx="4" fill="${accent}"/>
+        <rect x="22" y="22" width="52" height="58" rx="9" fill="#ffffff" stroke="${accent}" stroke-width="2"/>
+        <rect x="26" y="30" width="44" height="14" rx="3" fill="${bg2}"/>
+        <text x="48" y="40" font-family="sans-serif" font-size="7.5" font-weight="bold" fill="${accent}" text-anchor="middle">${tag}</text>
+        <text x="48" y="61" font-family="sans-serif" font-size="18" text-anchor="middle">${icon}</text>
+        <text x="48" y="75" font-family="monospace" font-size="8.5" font-weight="bold" fill="#334155" text-anchor="middle">${spec.slice(0, 10)}</text>
+      </svg>`;
+      return 'data:image/svg+xml;utf8,' + encodeURIComponent(svg);
+    }
+
+    function getDefaultSupplementFactsForProduct(p) {
+      const name = String(p?.name || '');
+      if (p?.ingredientsText || p?.usageText) {
+        return {
+          ingredients: p.ingredientsText || '暂未录入详细成分表（可点击右上角「编辑图片/配方」补充或上传瓶身背面营养表图）',
+          usage: p.usageText || '请按瓶身标签说明服用'
+        };
+      }
+      if (name.includes('深海鱼油') && name.includes('1000mg')) {
+        return {
+          ingredients: '每粒软胶囊含：天然深海鱼油 1000mg，提供 Omega-3 海洋甘油三酯 300mg（其中 EPA 二十碳五烯酸 180mg + DHA 二十二碳六烯酸 120mg）。经重金属（汞/铅）安全检测，无人工色素或防腐剂。',
+          usage: '成人日常保健：每日 1~3 粒，随餐温水送服；心脑血管/血脂及眼干养护可每日早晚各 2 粒。'
+        };
+      }
+      if (name.includes('深海鱼油') && name.includes('1500mg')) {
+        return {
+          ingredients: '每粒高含量软胶囊含：天然深海鱼油 1500mg，提供高浓度 Omega-3 450mg（EPA 270mg + DHA 180mg，相当于普通鱼油 1.5 倍含量）。',
+          usage: '成人每日 1~2 粒，随餐服用，高浓度配方减少每日吞服粒数。'
+        };
+      }
+      if (name.includes('三倍鱼油') || name.includes('4倍')) {
+        return {
+          ingredients: '每粒高浓缩鱼油含：浓缩 Omega-3 海洋甘油三酯 900mg（EPA 540mg + DHA 360mg），无腥味香草柠檬包衣。',
+          usage: '成人每日 1 粒，随餐服用即可满足高强度心脑眼养护需求。'
+        };
+      }
+      if (name.includes('护肝') || name.includes('奶蓟草')) {
+        return {
+          ingredients: '每粒含高浓度奶蓟草（Milk Thistle / 水飞蓟）提取物（等效干草 35,000mg / 水飞蓟宾高活性成分），协同蒲公英根、朝鲜蓟、牛磺酸等护肝排毒草本因子。',
+          usage: '成人每日 1~2 粒，随餐或睡前温水送服；适合熬夜加班、应酬饮酒及肝脏代谢养护人群。'
+        };
+      }
+      if (name.includes('MGO263') || name.includes('MGO 263')) {
+        return {
+          ingredients: '100% 新西兰原产天然麦卢卡活性蜂蜜，甲基乙二醛含量 MGO ≥ 263mg/kg（等效 UMF 10+ 抗菌活性等级）。',
+          usage: '每日早晚空腹直接含服 1~2 勺（约 10g），或用 40℃ 以下温水冲饮（切勿用沸水以免破坏活性酶）；1 岁以下婴儿禁食蜂蜜。'
+        };
+      }
+      if (name.includes('Mgo400') || name.includes('MGO 400')) {
+        return {
+          ingredients: '100% 新西兰高活性麦卢卡蜂蜜，甲基乙二醛含量 MGO ≥ 400mg/kg（等效 UMF 13+ 高阶肠胃养护等级）。',
+          usage: '每日晨起或餐前半小时直接含服 1 勺，缓慢咽下以覆盖胃黏膜，调理反酸与幽门胃肠不适。'
+        };
+      }
+      if (name.includes('液体钙') || name.includes('乳钙') || name.includes('钙镁')) {
+        return {
+          ingredients: '天然牛乳提取羟基磷酸钙 / 柠檬酸钙 + 维生素 D3（促进钙吸收）+ 维生素 K2 / 镁元素协同锁钙入骨。',
+          usage: '随餐或晚餐后温水送服（或剪开胶囊滴入辅食/温水中），补钙同时不易引起便秘。'
+        };
+      }
+      if (name.includes('奶粉')) {
+        return {
+          ingredients: '新西兰草饲黄金奶源，富含天然乳钙、优质乳清蛋白、免疫球蛋白及多种维生素矿物质。',
+          usage: '取适量奶粉加入 40~50℃ 温开水中搅拌均匀饮用（建议先放温水再放奶粉以避免结块）。'
+        };
+      }
+      return {
+        ingredients: '新西兰/澳洲原装正品营养补充剂（可点击右上角「✎ 编辑图片/配方」上传瓶身背面成分表照片或补充详细配方含量）。',
+        usage: '请参照产品瓶身中文/英文标签建议剂量随餐服用，置于阴凉干燥处避光保存。'
+      };
+    }
+
+    // --- PART C: Client-Side Canvas Image Micro-Compressor (Keeps Thumbnail ~12KB & Formula Sheet ~40KB) ---
+    function compressImageFileToDataUrl(fileOrBlob, maxDim = 300, quality = 0.78) {
+      return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onerror = reject;
+        reader.onload = (ev) => {
+          const img = new Image();
+          img.onerror = reject;
+          img.onload = () => {
+            try {
+              let w = img.naturalWidth || img.width || 300;
+              let h = img.naturalHeight || img.height || 300;
+              if (w > maxDim || h > maxDim) {
+                if (w >= h) {
+                  h = Math.round((h * maxDim) / w);
+                  w = maxDim;
+                } else {
+                  w = Math.round((w * maxDim) / h);
+                  h = maxDim;
+                }
+              }
+              const canvas = document.createElement('canvas');
+              canvas.width = w;
+              canvas.height = h;
+              const ctx = canvas.getContext('2d');
+              ctx.fillStyle = '#FFFFFF';
+              ctx.fillRect(0, 0, w, h);
+              ctx.imageSmoothingEnabled = true;
+              ctx.imageSmoothingQuality = 'high';
+              ctx.drawImage(img, 0, 0, w, h);
+              // Prefer WebP for ultra-compact size; fallback to JPEG
+              let out = canvas.toDataURL('image/webp', quality);
+              if (!out || out.length > 180000 || !out.startsWith('data:image/webp')) {
+                out = canvas.toDataURL('image/jpeg', quality);
+              }
+              resolve({ dataUrl: out, width: w, height: h, kb: Math.round((out.length * 0.75) / 1024 * 10) / 10 });
+            } catch (e) {
+              reject(e);
+            }
+          };
+          img.src = ev.target.result;
+        };
+        reader.readAsDataURL(fileOrBlob);
+      });
+    }
+
+    function computeSystemImageStorageStats() {
+      let imgCount = 0;
+      let totalBytes = 0;
+      (state.products || []).forEach(p => {
+        if (p.imageUrl && p.imageUrl.startsWith('data:')) {
+          imgCount++;
+          totalBytes += Math.round(p.imageUrl.length * 0.75);
+        }
+        if (p.nutritionImageUrl && p.nutritionImageUrl.startsWith('data:')) {
+          imgCount++;
+          totalBytes += Math.round(p.nutritionImageUrl.length * 0.75);
+        }
+      });
+      const customIcons = (state && state.paymentMethodCustomIcons) || {};
+      Object.values(customIcons).forEach(ic => {
+        if (ic && ic.customIcon && ic.customIcon.startsWith('data:')) {
+          imgCount++;
+          totalBytes += Math.round(ic.customIcon.length * 0.75);
+        }
+      });
+      return {
+        imgCount,
+        totalKb: Number((totalBytes / 1024).toFixed(1)),
+        pctOf5Mb: Number(Math.min(100, (totalBytes / (5 * 1024 * 1024)) * 100).toFixed(2))
+      };
+    }
+
+    // --- PART D: Fix Product Card Price History Duplication & Make Product Cards Compact & Equal-Height ---
+    // Track which product cards have their history expanded
+    window.expandedProductCardHistorySet = window.expandedProductCardHistorySet || new Set();
+    window.trendTimelineTableExpanded = false;
+
+    const _v7100CleanAndSync = cleanAndSyncVerifiedOrderPricesToCatalog;
+    cleanAndSyncVerifiedOrderPricesToCatalog = function() {
+      const res = _v7100CleanAndSync();
+      // CRITICAL FIX for Point 2 (image_6a8d7c.png):
+      // Overwrite each product's p.priceHistory with the strictly deduplicated verifiedSeries
+      // so Manuka Health 500g never has 22 duplicate pills when there are only 6 verified points!
+      (state.products || []).forEach(p => {
+        const dedupedSeries = collectProductVerifiedPriceSeries(p.name, 'ALL_VERIFIED');
+        p.priceHistory = dedupedSeries.map(pt => ({
+          date: pt.date,
+          scrapedAt: pt.scrapedAt || pt.date,
+          merchant: pt.merchant,
+          price: pt.nzdPrice || pt.rmbPrice,
+          nzdPrice: pt.nzdPrice,
+          rmbPrice: pt.rmbPrice,
+          exchangeRate: pt.exchangeRate,
+          rawPrice: pt.rmbPrice || pt.nzdPrice,
+          rawCurrency: pt.rmbPrice && !pt.nzdPrice ? 'CNY' : 'NZD',
+          currency: pt.rmbPrice && !pt.nzdPrice ? 'CNY' : 'NZD',
+          orderNo: pt.orderNo || '',
+          orderId: pt.orderId || '',
+          isWebVerified: true,
+          note: pt.note || ''
+        }));
+      });
+      return res;
+    };
+    ensureAllProductsHaveCategoriesAndVerifiedPrices = cleanAndSyncVerifiedOrderPricesToCatalog;
+
+    // Override renderProductsTab to render Compact, Equal-Height Product Cards with Thumbnails, Spec/Formula Button, and Collapsible Price History
+    const _v7100RenderProductsTab = renderProductsTab;
+    renderProductsTab = function() {
+      _v7100RenderProductsTab();
+
+      const grid = document.getElementById('productsGrid');
+      if (!grid) return;
+
+      const q = (document.getElementById('prodSearchInput')?.value || '').trim();
+      const cat = document.getElementById('prodCategoryFilter')?.value || 'ALL';
+      const sortMode = document.getElementById('prodSortModeSelect')?.value || state.prodSortMode || 'CATEGORY_BRAND';
+      const stMap = computeProductCatalogStatsMap();
+      const filtered = (state.products || []).filter(p => matchesProductSearchAndCategory(p, q, cat));
+      const list = sortProductsByMode(filtered, sortMode, stMap);
+
+      if (list.length === 0) return;
+
+      grid.innerHTML = list.map(p => {
+        const st = stMap[p.name] || { qty: 0, orders: 0, merchants: new Set(), seriesCount: 1 };
+        const verifiedSeries = collectProductVerifiedPriceSeries(p.name, 'ALL_VERIFIED');
+        const sparklineHtml = buildProductCardSparklineSvg(verifiedSeries);
+        const specSig = extractProductSpecSignature(p.name);
+        const nzdPricesOnly = verifiedSeries.map(h => Number(h.nzdPrice || 0)).filter(v => v > 0);
+        const minPrice = nzdPricesOnly.length > 0 ? Math.min(...nzdPricesOnly) : (p.nzdPrice || 0);
+        const maxPrice = nzdPricesOnly.length > 0 ? Math.max(...nzdPricesOnly) : (p.nzdPrice || 0);
+        const priceTrendBadge = (nzdPricesOnly.length > 1 && minPrice < maxPrice)
+          ? `<span class="text-[10px] bg-blue-50 text-blue-800 border border-blue-200 px-1.5 py-0.2 rounded font-medium">📉 波动 NZ$${minPrice}~${maxPrice}</span>`
+          : '';
+
+        const targetBadgeHtml = typeof buildProductTargetPriceBadge === 'function'
+          ? buildProductTargetPriceBadge(p, verifiedSeries, minPrice)
+          : '';
+
+        const safeName = p.name.replace(/"/g, '&quot;');
+        const thumbSrc = p.imageUrl || getProductDefaultSvgDataUri(p);
+        const hasCustomImgOrNutri = Boolean(p.imageUrl || p.nutritionImageUrl || p.ingredientsText || p.usageText);
+
+        // Build single pill HTML helper
+        const formatHistPill = (h) => {
+          const isDual = h.nzdPrice && h.rmbPrice && h.exchangeRate;
+          const isPureCny = !isDual && (!h.nzdPrice && h.rmbPrice);
+          const ordQuickBtn = h.orderId
+            ? `<button type="button" data-quickview-order="${h.orderId}" class="text-[10px] bg-teal-600 text-white px-1.5 py-0.2 rounded font-bold hover:bg-teal-500 shrink-0" title="查看关联订单详单">📋详单</button>`
+            : (h.orderNo ? `<button type="button" data-quickview-orderno="${h.orderNo}" class="text-[10px] bg-teal-600 text-white px-1.5 py-0.2 rounded font-bold hover:bg-teal-500 shrink-0" title="查看关联订单 #${h.orderNo} 详单">📋详单</button>` : '');
+          if (isDual) {
+            return `<div class="flex items-center justify-between gap-1 text-[11px] bg-teal-50/90 text-teal-950 border border-teal-200 px-2 py-1 rounded-lg">
+              <span class="truncate">📅 <strong>${h.date}</strong> · ${h.merchant}: <strong class="text-rose-700">¥${Number(h.rmbPrice).toFixed(2)}</strong> <span class="text-[10px] text-teal-800">(NZ$${Number(h.nzdPrice).toFixed(2)}·汇率${h.exchangeRate})</span></span>
+              ${ordQuickBtn}
+            </div>`;
+          } else if (isPureCny) {
+            return `<div class="flex items-center justify-between gap-1 text-[11px] bg-amber-50/90 text-amber-950 border border-amber-200 px-2 py-1 rounded-lg">
+              <span class="truncate">📅 <strong>${h.date}</strong> · ${h.merchant}: <strong class="text-amber-800">¥${Number(h.rmbPrice).toFixed(2)}</strong></span>
+              ${ordQuickBtn}
+            </div>`;
+          } else {
+            return `<div class="flex items-center justify-between gap-1 text-[11px] bg-emerald-50/80 text-emerald-950 border border-emerald-200 px-2 py-1 rounded-lg">
+              <span class="truncate">📅 <strong>${h.date}</strong> · ${h.merchant}: <strong>NZ$${Number(h.nzdPrice).toFixed(2)}</strong></span>
+              ${ordQuickBtn}
+            </div>`;
+          }
+        };
+
+        // Compact, collapsible history drawer (shows latest 1 item when collapsed; expands inside a fixed max-h-36 scroll box!)
+        const reversedSeries = verifiedSeries.slice().reverse();
+        const isExpanded = window.expandedProductCardHistorySet.has(p.name);
+        let compactHistoryBoxHtml = '';
+        if (reversedSeries.length === 1) {
+          compactHistoryBoxHtml = `
+            <div class="space-y-1">
+              <div class="text-[11px] text-slate-500 font-medium">✅ 最新已核实单价记录 (1期)：</div>
+              ${formatHistPill(reversedSeries[0])}
+            </div>
+          `;
+        } else if (reversedSeries.length > 1) {
+          const latestPill = formatHistPill(reversedSeries[0]);
+          const allPills = reversedSeries.map(formatHistPill).join('');
+          compactHistoryBoxHtml = `
+            <div class="space-y-1.5">
+              <div class="flex items-center justify-between gap-1">
+                <span class="text-[11px] text-slate-500 font-medium">✅ 历次核实单价 (${reversedSeries.length}期)：</span>
+                <button type="button" data-toggle-card-hist="${safeName}" class="text-[11px] font-bold px-2 py-0.5 rounded-md border transition ${isExpanded ? 'bg-indigo-600 text-white border-indigo-600' : 'bg-slate-100 hover:bg-indigo-50 text-indigo-700 border-slate-200'}">
+                  ${isExpanded ? `▲ 收起明细` : `📂 展开全部 ${reversedSeries.length} 期 ▾`}
+                </button>
+              </div>
+              ${isExpanded
+                ? `<div class="max-h-36 overflow-y-auto custom-scroll space-y-1 pr-1 bg-slate-50/80 p-1.5 rounded-lg border border-slate-200/80">${allPills}</div>`
+                : `<div>${latestPill}</div>`
+              }
+            </div>
+          `;
+        }
+
+        const latestDate = p.nzdDate || (verifiedSeries.length > 0 ? verifiedSeries[verifiedSeries.length - 1].date : '');
+
+        return `
+          <div class="bg-white rounded-xl p-4 shadow-sm border border-slate-200 flex flex-col justify-between gap-2.5 hover:border-emerald-400 transition h-full">
+            <div class="space-y-2">
+              <div class="flex items-start justify-between gap-2">
+                <div class="flex flex-wrap items-center gap-1">
+                  <span class="text-[11px] font-semibold px-2 py-0.5 rounded bg-emerald-50 text-emerald-800 border border-emerald-200">${CATEGORY_ICONS_MAP[p.category] || '📦'} ${p.category || '维生素/钙铁锌/保健'}</span>
+                  <span class="text-[10px] font-bold px-1.5 py-0.2 rounded bg-teal-50 text-teal-800 border border-teal-200 font-mono" title="自动识别的独立规格标识">📏 ${specSig.badgeText}</span>
+                  ${priceTrendBadge}
+                </div>
+                <span class="text-xs font-bold text-slate-700 whitespace-nowrap shrink-0">已买: <strong class="text-emerald-700 text-sm">${st.qty}</strong> 件 (${st.orders}单)</span>
+              </div>
+
+              <!-- Product Thumbnail + Title + Formula/Spec Sheet Button -->
+              <div class="flex items-center gap-2.5 pt-0.5">
+                <button type="button" data-open-prod-spec="${safeName}" class="w-12 h-12 rounded-xl border border-slate-200 bg-slate-50 overflow-hidden shrink-0 hover:ring-2 hover:ring-emerald-400 transition relative group" title="点击查看商品高清大图、背面配方营养表与服用说明">
+                  <img src="${thumbSrc}" alt="${safeName}" class="w-full h-full object-cover" />
+                  <span class="absolute inset-0 bg-slate-900/50 text-white text-[9px] font-bold opacity-0 group-hover:opacity-100 flex items-center justify-center transition">🔬看配方</span>
+                </button>
+                <div class="flex-1 min-w-0">
+                  <h3 class="text-sm font-bold text-slate-900 leading-snug line-clamp-2" title="${safeName}">${p.name}</h3>
+                  <div class="flex flex-wrap items-center gap-1.5 mt-1">
+                    <button type="button" data-open-prod-spec="${safeName}" class="text-[10px] px-1.5 py-0.2 rounded border font-semibold transition ${hasCustomImgOrNutri ? 'bg-indigo-50 text-indigo-800 border-indigo-200 hover:bg-indigo-100' : 'bg-slate-50 text-slate-600 border-slate-200 hover:bg-slate-100'}">
+                      🔬 ${hasCustomImgOrNutri ? '查看实拍图与配方表' : '配方成分与服用说明'}
+                    </button>
+                    ${targetBadgeHtml}
+                  </div>
+                </div>
+              </div>
+
+              ${p.note ? `<div class="text-[11px] text-rose-700 bg-rose-50 border border-rose-200 px-2 py-0.5 rounded inline-block">⚠️ ${p.note}</div>` : ''}
+              ${sparklineHtml}
+              ${compactHistoryBoxHtml}
+            </div>
+
+            <div class="pt-2.5 border-t border-slate-100 space-y-1.5 mt-auto">
+              <div class="flex items-center justify-between gap-2">
+                <div class="flex flex-wrap items-center gap-2.5 text-xs">
+                  <div>
+                    <span class="text-slate-400">NZD:</span>
+                    <strong class="text-slate-800 ml-0.5">${p.nzdPrice ? 'NZ$' + p.nzdPrice : '<span class="text-slate-400 font-normal">RMB直付</span>'}</strong>
+                  </div>
+                  <div>
+                    <span class="text-slate-400">RMB:</span>
+                    <strong class="text-amber-700 ml-0.5">${p.rmbPrice ? '¥' + p.rmbPrice : '未设'}</strong>
+                  </div>
+                </div>
+                <div class="flex flex-wrap items-center gap-1 shrink-0">
+                  <button type="button" data-add-cart-opt="${safeName}" class="text-[11px] bg-teal-50 hover:bg-teal-600 hover:text-white text-teal-800 border border-teal-200 px-2 py-1 rounded font-bold transition" title="加入上方多商家购前比价与凑单模拟器">
+                    ＋比价
+                  </button>
+                  <button type="button" data-trend-prod="${safeName}" class="text-[11px] bg-indigo-50 hover:bg-indigo-600 hover:text-white text-indigo-700 border border-indigo-200 px-2 py-1 rounded font-bold transition" title="在顶部已核实单价趋势大屏中查看">
+                    📈趋势
+                  </button>
+                  <button type="button" data-edit-prod="${safeName}" class="text-[11px] bg-slate-100 hover:bg-emerald-700 hover:text-white text-slate-700 px-2 py-1 rounded font-medium transition" title="编辑单价、上传商品图片与详细配方表">
+                    ✎编辑/配图
+                  </button>
+                </div>
+              </div>
+              <div class="flex items-center justify-between text-[11px] text-slate-400">
+                <span>📅 最近核实: <strong class="text-slate-600">${latestDate || '未记录'}</strong></span>
+                ${p.lastExchangeRate ? `<span class="text-teal-700 font-medium">💱 汇率 ${p.lastExchangeRate}</span>` : ''}
+              </div>
+            </div>
+          </div>
+        `;
+      }).join('');
+    };
+
+    // Also make #trendStudioTimelineTable fixed-height scrollable & collapsible when > 5 rows
+    const _v7100RenderProductPriceTrendStudio = renderProductPriceTrendStudio;
+    renderProductPriceTrendStudio = function(selectedName) {
+      _v7100RenderProductPriceTrendStudio(selectedName);
+      const tableEl = document.getElementById('trendStudioTimelineTable');
+      if (!tableEl) return;
+      const filterMode = document.getElementById('trendStudioFilterMode')?.value || 'ALL_VERIFIED';
+      let series = collectProductVerifiedPriceSeries(currentTrendProductName, filterMode);
+      if (series.length === 0 && filterMode === 'WEB_ONLY') {
+        series = collectProductVerifiedPriceSeries(currentTrendProductName, 'ALL_VERIFIED');
+      }
+      const nzdPoints = series.filter(s => s.nzdPrice && s.nzdPrice > 0);
+      const minNzdPt = nzdPoints.length ? nzdPoints.reduce((a, b) => (b.nzdPrice <= a.nzdPrice ? b : a), nzdPoints[0]) : null;
+      const rmbPoints = series.filter(s => s.rmbPrice && s.rmbPrice > 0);
+      const minRmbPt = rmbPoints.length ? rmbPoints.reduce((a, b) => (b.rmbPrice <= a.rmbPrice ? b : a), rmbPoints[0]) : null;
+
+      const reversed = series.slice().reverse();
+      const needCollapse = reversed.length > 5;
+      const visibleRows = (needCollapse && !window.trendTimelineTableExpanded) ? reversed.slice(0, 5) : reversed;
+
+      tableEl.innerHTML = `
+        <div class="flex flex-wrap items-center justify-between gap-2 mb-2">
+          <div class="flex items-center gap-2 flex-wrap">
+            <span class="text-xs font-bold text-slate-800">📋 历次已核实单价明细档案</span>
+            <span class="text-[10px] bg-indigo-50 text-indigo-800 border border-indigo-200 px-2 py-0.5 rounded font-bold">共 ${reversed.length} 条核实记录</span>
+            <button type="button" data-open-prod-spec="${(currentTrendProductName || '').replace(/"/g, '&quot;')}" class="text-[11px] bg-emerald-50 hover:bg-emerald-100 text-emerald-800 border border-emerald-300 px-2 py-0.5 rounded font-bold transition">
+              🔬 查看此商品图片与详细配方表
+            </button>
+          </div>
+          <div class="flex items-center gap-1.5">
+            ${needCollapse ? `
+              <button type="button" id="btnToggleTrendTimelineExpand" class="text-[11px] bg-indigo-600 hover:bg-indigo-500 text-white font-bold px-2.5 py-0.5 rounded-lg shadow-2xs transition">
+                ${window.trendTimelineTableExpanded ? `▲ 折叠只看最近 5 条` : `📂 展开全部 ${reversed.length} 条记录 ▾`}
+              </button>
+            ` : ''}
+          </div>
+        </div>
+        <div class="max-h-56 overflow-y-auto custom-scroll rounded-lg border border-slate-200 bg-white">
+          <table class="w-full text-left border-collapse text-[11px]">
+            <thead class="sticky top-0 bg-slate-100/95 backdrop-blur-xs z-10 border-b border-slate-200 text-slate-600">
+              <tr>
+                <th class="py-1.5 px-2.5">核实日期</th>
+                <th class="py-1.5 px-2.5">渠道商家</th>
+                <th class="py-1.5 px-2.5">NZD原币单价</th>
+                <th class="py-1.5 px-2.5">RMB实付单价</th>
+                <th class="py-1.5 px-2.5">当时汇率</th>
+                <th class="py-1.5 px-2.5">核验来源 / 关联订单</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-slate-200/60 bg-white">
+              ${visibleRows.map(pt => {
+                const isLowestNzd = minNzdPt && pt.nzdPrice && Math.abs(pt.nzdPrice - minNzdPt.nzdPrice) < 0.01;
+                const isLowestRmb = minRmbPt && pt.rmbPrice && Math.abs(pt.rmbPrice - minRmbPt.rmbPrice) < 0.05;
+                const nzdCellHtml = pt.nzdPrice
+                  ? `<span class="font-bold ${isLowestNzd ? 'text-emerald-700' : 'text-slate-800'}">NZ$${pt.nzdPrice.toFixed(2)}${isLowestNzd ? ' 🟢史低' : ''}</span>`
+                  : `<span class="text-[10px] text-slate-400 font-normal">RMB直付(无纽币)</span>`;
+                const rmbCellHtml = pt.rmbPrice
+                  ? `<span class="font-bold ${isLowestRmb ? 'text-rose-700' : 'text-rose-600'}">¥${pt.rmbPrice.toFixed(2)}${isLowestRmb ? ' 🔥最低' : ''}</span>`
+                  : `<span class="text-[10px] text-slate-400 font-normal">纽币直付</span>`;
+                const ordBtnHtml = pt.orderId
+                  ? `<div class="inline-flex items-center gap-1"><button type="button" data-quickview-order="${pt.orderId}" class="bg-teal-600 hover:bg-teal-500 text-white px-2 py-0.5 rounded font-bold text-[10px] transition">📋 详单</button><span class="font-mono text-indigo-700">#${pt.orderNo}</span></div>`
+                  : (pt.orderNo
+                      ? `<div class="inline-flex items-center gap-1"><button type="button" data-quickview-orderno="${pt.orderNo}" class="bg-teal-600 hover:bg-teal-500 text-white px-2 py-0.5 rounded font-bold text-[10px] transition">📋 详单</button><span class="font-mono text-indigo-700">#${pt.orderNo}</span></div>`
+                      : `<span class="text-slate-500">${pt.sourceType || '台账核实'}</span>`);
+                return `
+                  <tr class="hover:bg-indigo-50/40 transition">
+                    <td class="py-1.5 px-2.5 font-mono font-semibold text-slate-800 whitespace-nowrap">${pt.date}</td>
+                    <td class="py-1.5 px-2.5"><span class="px-1.5 py-0.5 rounded bg-slate-100 text-slate-700 font-medium">${pt.merchant}</span></td>
+                    <td class="py-1.5 px-2.5 font-mono whitespace-nowrap">${nzdCellHtml}</td>
+                    <td class="py-1.5 px-2.5 font-mono whitespace-nowrap">${rmbCellHtml}</td>
+                    <td class="py-1.5 px-2.5 font-mono text-teal-800">${pt.exchangeRate ? pt.exchangeRate : '<span class="text-slate-300">-</span>'}</td>
+                    <td class="py-1.5 px-2.5">${ordBtnHtml}</td>
+                  </tr>
+                `;
+              }).join('')}
+            </tbody>
+          </table>
+        </div>
+        <div class="mt-2 flex flex-wrap items-center justify-between gap-2 text-[11px] text-slate-500">
+          <span>${needCollapse && !window.trendTimelineTableExpanded ? `当前仅显示最近 5 条记录（共 ${reversed.length} 条），点击右上角按钮可展开全部` : `已展示全部 ${reversed.length} 条核实记录（表格固定高度可内部滚动）`}</span>
+          <button type="button" data-inline-back-top="trendSelect" class="bg-emerald-50 hover:bg-emerald-100 text-emerald-800 border border-emerald-300 font-bold px-2.5 py-1 rounded-lg transition">⬆️ 回到顶部切换商品</button>
+        </div>
+      `;
+    };
+
+    // --- PART E: Open Product Spec Sheet Modal & Product Image/Formula Edit Modal ---
+    function openProductSpecSheetModal(prodName) {
+      const p = getProductInfo(prodName);
+      if (!p) return;
+      const modal = document.getElementById('modalProductSpecSheet');
+      const titleEl = document.getElementById('specSheetModalTitle');
+      const bodyEl = document.getElementById('specSheetModalBody');
+      const btnEdit = document.getElementById('btnEditProdFromSpecSheet');
+      if (!modal || !bodyEl) return;
+
+      if (titleEl) titleEl.textContent = `🔬 ${p.name} · 商品大图与配方营养档案`;
+      if (btnEdit) btnEdit.setAttribute('data-target-prod', p.name);
+
+      const mainImg = p.imageUrl || getProductDefaultSvgDataUri(p);
+      const facts = getDefaultSupplementFactsForProduct(p);
+      const specSig = extractProductSpecSignature(p.name);
+      const series = collectProductVerifiedPriceSeries(p.name, 'ALL_VERIFIED');
+      const latestPt = series.length > 0 ? series[series.length - 1] : null;
+
+      bodyEl.innerHTML = `
+        <div class="grid grid-cols-1 sm:grid-cols-12 gap-4 bg-slate-50 p-4 rounded-xl border border-slate-200">
+          <div class="sm:col-span-4 flex flex-col items-center justify-center bg-white rounded-xl p-3 border border-slate-200 shadow-2xs">
+            <img src="${mainImg}" alt="${p.name.replace(/"/g, '&quot;')}" class="w-40 h-40 object-contain rounded-lg" />
+            <span class="text-[10px] text-slate-400 mt-1.5">${p.imageUrl ? '✅ 已上传自定义商品实拍图' : '🎨 系统内置品类高清矢量图'}</span>
+          </div>
+          <div class="sm:col-span-8 space-y-2.5">
+            <div class="flex flex-wrap items-center gap-1.5">
+              <span class="text-xs font-bold px-2.5 py-0.5 rounded-full bg-emerald-100 text-emerald-900">${CATEGORY_ICONS_MAP[p.category] || '📦'} ${p.category}</span>
+              <span class="text-xs font-mono font-bold px-2 py-0.5 rounded bg-teal-100 text-teal-900">规格: ${specSig.badgeText}</span>
+              ${p.unitWeightG ? `<span class="text-xs font-mono px-2 py-0.5 rounded bg-slate-200 text-slate-700">⚖️ 净重 ≈ ${p.unitWeightG}g</span>` : ''}
+            </div>
+            <h4 class="text-base font-extrabold text-slate-900">${p.name}</h4>
+            <div class="grid grid-cols-2 sm:grid-cols-3 gap-2 pt-1">
+              <div class="bg-white p-2 rounded-lg border border-slate-200">
+                <div class="text-[10px] text-slate-400">最新纽币核实价</div>
+                <div class="text-sm font-extrabold text-emerald-700 font-mono">${p.nzdPrice ? 'NZ$' + p.nzdPrice : 'RMB直付'}</div>
+              </div>
+              <div class="bg-white p-2 rounded-lg border border-slate-200">
+                <div class="text-[10px] text-slate-400">最新人民币实付</div>
+                <div class="text-sm font-extrabold text-rose-600 font-mono">${p.rmbPrice ? '¥' + p.rmbPrice : (latestPt?.rmbPrice ? '¥' + latestPt.rmbPrice : '-')}</div>
+              </div>
+              <div class="bg-white p-2 rounded-lg border border-slate-200">
+                <div class="text-[10px] text-slate-400">已核实价格期数</div>
+                <div class="text-sm font-extrabold text-indigo-700">${series.length} 期记录</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <div class="bg-emerald-50/60 border border-emerald-200 rounded-xl p-3.5 space-y-1.5">
+            <div class="font-extrabold text-emerald-950 flex items-center gap-1.5">
+              <span>🧪 核心配方成分与营养含量表 (Supplement Facts)</span>
+            </div>
+            <p class="text-xs text-slate-700 leading-relaxed whitespace-pre-line">${facts.ingredients}</p>
+          </div>
+          <div class="bg-indigo-50/60 border border-indigo-200 rounded-xl p-3.5 space-y-1.5">
+            <div class="font-extrabold text-indigo-950 flex items-center gap-1.5">
+              <span>💡 建议服用方法、适用人群与存储说明</span>
+            </div>
+            <p class="text-xs text-slate-700 leading-relaxed whitespace-pre-line">${facts.usage}</p>
+            <div class="pt-1 text-[11px] text-indigo-800 font-medium">
+              💊 系统药箱设定：每日服用 <strong>${p.dailyDose || parseProductUnitCapacity(p.name).defaultDaily}</strong> ${parseProductUnitCapacity(p.name).unit}/天 ${p.expiryDate ? `· 保质期至 <strong>${p.expiryDate}</strong>` : ''}
+            </div>
+          </div>
+        </div>
+
+        ${p.nutritionImageUrl ? `
+          <div class="border border-indigo-200 rounded-xl p-3.5 bg-slate-50 space-y-2">
+            <div class="font-extrabold text-slate-800 text-xs">📸 瓶身背面配方表 / 营养成分表实拍原图：</div>
+            <div class="bg-white p-2 rounded-lg border border-slate-200 flex justify-center">
+              <img src="${p.nutritionImageUrl}" alt="配方表" class="max-h-96 object-contain rounded" />
+            </div>
+          </div>
+        ` : `
+          <div class="border border-dashed border-slate-300 rounded-xl p-3 text-center text-xs text-slate-500 bg-slate-50/50">
+            💡 您还可以点击右上角 <strong>「✎ 编辑图片/配方」</strong> 上传该保健品瓶身正反面照片或营养成分表截图（系统会自动微缩压缩至 15~40KB 并随云端同步保存）。
+          </div>
+        `}
+      `;
+      modal.classList.remove('hidden');
+    }
+    window.openProductSpecSheetModal = openProductSpecSheetModal;
+
+    // --- PART F: Smart Product Autocomplete Combobox inside #modalOrder (.form-item-prod) ---
+    function findMatchingCatalogProductsForAutocomplete(rawQuery) {
+      const q = String(rawQuery || '').trim().toLowerCase();
+      const stMap = computeProductCatalogStatsMap();
+      const allProds = (state.products || []).slice();
+
+      // Sort by purchase frequency descending by default
+      allProds.sort((a, b) => {
+        const qa = stMap[a.name]?.qty || 0;
+        const qb = stMap[b.name]?.qty || 0;
+        if (qb !== qa) return qb - qa;
+        return a.name.localeCompare(b.name, 'zh-CN');
+      });
+
+      if (!q) return allProds;
+
+      const tokens = q.split(/\s+/).filter(Boolean);
+      const scored = [];
+      allProds.forEach(p => {
+        const hay = [
+          p.name,
+          p.category || '',
+          ...(p.aliases || []),
+          extractProductSpecSignature(p.name).badgeText || ''
+        ].join(' ').toLowerCase();
+
+        if (tokens.every(tk => hay.includes(tk))) {
+          let score = 100;
+          if (p.name.toLowerCase().startsWith(tokens[0])) score += 40;
+          if (p.name.toLowerCase().includes(q)) score += 30;
+          score += Math.min(35, (stMap[p.name]?.qty || 0));
+          scored.push({ product: p, score });
+        }
+      });
+
+      scored.sort((a, b) => b.score - a.score);
+      return scored.map(x => x.product);
+    }
+
+    function attachSmartAutocompleteToProdInput(prodInput, rowDiv) {
+      if (!prodInput || prodInput.dataset.hasSmartAc === '1') return;
+      prodInput.dataset.hasSmartAc = '1';
+      prodInput.removeAttribute('list'); // Replace flaky native datalist with rich custom combobox!
+      prodInput.placeholder = '🔍 输入商品关键词(如: 鱼油 / 护肝 / 400粒)实时跳出候选...';
+
+      const wrapper = prodInput.parentElement;
+      if (wrapper) {
+        wrapper.classList.add('relative');
+      }
+
+      const menu = document.createElement('div');
+      menu.className = 'smart-prod-autocomplete-menu hidden absolute left-0 right-0 top-full mt-1 bg-white border-2 border-emerald-500 rounded-xl shadow-2xl z-50 max-h-64 overflow-y-auto custom-scroll divide-y divide-slate-100';
+      if (wrapper) wrapper.appendChild(menu);
+
+      const renderMenu = (queryText) => {
+        const matches = findMatchingCatalogProductsForAutocomplete(queryText);
+        const stMap = computeProductCatalogStatsMap();
+        if (matches.length === 0) {
+          menu.innerHTML = `
+            <div class="p-2.5 text-xs text-slate-500 flex items-center justify-between">
+              <span>✨ 未匹配到已有商品，直接保存将作为<strong>新商品</strong>自动建档入库</span>
+              <span class="text-[10px] bg-emerald-50 text-emerald-700 px-1.5 py-0.5 rounded font-bold">新商品</span>
+            </div>
+          `;
+          menu.classList.remove('hidden');
+          return;
+        }
+
+        menu.innerHTML = `
+          <div class="px-2.5 py-1 bg-emerald-50/90 text-[10px] font-bold text-emerald-900 flex items-center justify-between sticky top-0 z-10 border-b border-emerald-200">
+            <span>🎯 匹配到系统商品库 ${matches.length} 款商品（点击直接选中并带出核实单价）：</span>
+            <button type="button" class="btn-close-ac text-slate-400 hover:text-slate-700 px-1">✕</button>
+          </div>
+        ` + matches.slice(0, 25).map(p => {
+          const st = stMap[p.name] || { qty: 0, orders: 0 };
+          const spec = extractProductSpecSignature(p.name);
+          const thumb = p.imageUrl || getProductDefaultSvgDataUri(p);
+          const priceStr = (p.nzdPrice && p.rmbPrice)
+            ? `NZ$${p.nzdPrice} / ¥${p.rmbPrice}`
+            : (p.nzdPrice ? `NZ$${p.nzdPrice}` : (p.rmbPrice ? `¥${p.rmbPrice}` : '待设价'));
+          return `
+            <div data-ac-pick="${p.name.replace(/"/g, '&quot;')}" class="px-2.5 py-2 hover:bg-emerald-50/90 cursor-pointer flex items-center justify-between gap-2 transition text-xs">
+              <div class="flex items-center gap-2 min-w-0">
+                <img src="${thumb}" alt="" class="w-7 h-7 rounded-md object-cover border border-slate-200 shrink-0" />
+                <div class="min-w-0">
+                  <div class="font-bold text-slate-900 truncate">${p.name}</div>
+                  <div class="flex items-center gap-1.5 text-[10px] text-slate-500">
+                    <span>${CATEGORY_ICONS_MAP[p.category] || '📦'} ${p.category || ''}</span>
+                    <span class="bg-teal-50 text-teal-800 border border-teal-200 px-1 rounded font-mono">${spec.badgeText}</span>
+                    ${st.qty > 0 ? `<span class="text-emerald-700 font-semibold">已买${st.qty}件</span>` : ''}
+                  </div>
+                </div>
+              </div>
+              <div class="text-right shrink-0 font-mono">
+                <div class="font-extrabold text-emerald-800 text-[11px]">${priceStr}</div>
+                <div class="text-[10px] text-slate-400">点击选用 ↵</div>
+              </div>
+            </div>
+          `;
+        }).join('');
+        menu.classList.remove('hidden');
+      };
+
+      prodInput.addEventListener('focus', () => {
+        renderMenu(prodInput.value);
+      });
+      prodInput.addEventListener('input', () => {
+        renderMenu(prodInput.value);
+      });
+
+      menu.addEventListener('mousedown', (ev) => {
+        // Use mousedown so it fires before input blur!
+        const closeBtn = ev.target.closest('.btn-close-ac');
+        if (closeBtn) {
+          ev.preventDefault();
+          menu.classList.add('hidden');
+          return;
+        }
+        const itemEl = ev.target.closest('[data-ac-pick]');
+        if (itemEl) {
+          ev.preventDefault();
+          const pickedName = itemEl.getAttribute('data-ac-pick');
+          prodInput.value = pickedName;
+          menu.classList.add('hidden');
+          // Trigger change to auto-fill historical verified price & NZD price
+          prodInput.dispatchEvent(new Event('change', { bubbles: true }));
+        }
+      });
+
+      prodInput.addEventListener('blur', () => {
+        setTimeout(() => menu.classList.add('hidden'), 180);
+      });
+    }
+
+    // Wrap addFormItemRow so every newly created item row gets the Smart Product Autocomplete Combobox!
+    const _v7100AddFormItemRow = addFormItemRow;
+    addFormItemRow = function(prodName, qty, unitPrice, nzdUnitPriceOverride) {
+      _v7100AddFormItemRow(prodName, qty, unitPrice, nzdUnitPriceOverride);
+      const container = document.getElementById('formItemsContainer');
+      const lastRow = container ? container.lastElementChild : null;
+      if (lastRow) {
+        const prodInp = lastRow.querySelector('.form-item-prod');
+        attachSmartAutocompleteToProdInput(prodInp, lastRow);
+      }
+    };
+
+    // Also when opening a brand new order (openOrderModal(null, false)), leave the first product row empty so the user can immediately type or pick from the dropdown!
+    const _v7100OpenOrderModal = openOrderModal;
+    openOrderModal = function(orderToEdit, isClone) {
+      _v7100OpenOrderModal(orderToEdit, isClone);
+      if (!orderToEdit && !isClone) {
+        const firstProdInp = document.querySelector('#formItemsContainer .form-item-row .form-item-prod');
+        const firstPriceInp = document.querySelector('#formItemsContainer .form-item-row .form-item-price');
+        const firstNzdInp = document.querySelector('#formItemsContainer .form-item-row .form-item-nzd-price');
+        if (firstProdInp && firstProdInp.value.includes('Manuka Health')) {
+          firstProdInp.value = '';
+          if (firstPriceInp) firstPriceInp.value = '';
+          if (firstNzdInp) firstNzdInp.value = '';
+          updateFormOrderTotalPreview();
+        }
+      }
+      document.querySelectorAll('#formItemsContainer .form-item-row').forEach(row => {
+        const inp = row.querySelector('.form-item-prod');
+        if (inp) attachSmartAutocompleteToProdInput(inp, row);
+      });
+    };
+
+    // --- PART G: Upgrade renderOrdersTab to Render Custom Payment Method Icons & Highlight Active Unread Filter Button ---
+    const _v7100RenderOrdersTab = renderOrdersTab;
+    renderOrdersTab = function() {
+      _v7100RenderOrdersTab();
+
+      // Highlight #btnQuickFilterUnread when filterStatus === 'UNREAD'
+      const fStatus = document.getElementById('filterStatus')?.value || 'ALL';
+      const btnUnread = document.getElementById('btnQuickFilterUnread');
+      if (btnUnread) {
+        const unreadCnt = getActiveOrders().filter(o => !o.cancelled && o.isUnread).length;
+        if (fStatus === 'UNREAD') {
+          btnUnread.className = 'bg-amber-400 hover:bg-amber-300 text-slate-950 border-2 border-amber-600 px-3 py-1 rounded-md font-extrabold shadow-xs transition flex items-center gap-1 ring-2 ring-amber-300';
+          btnUnread.innerHTML = `<span>📬 正在只看未读新单 (${unreadCnt}) · 再点恢复全部</span>`;
+        } else {
+          btnUnread.className = 'bg-amber-100 hover:bg-amber-200 text-amber-950 border border-amber-300 px-2.5 py-1 rounded-md font-bold transition flex items-center gap-1';
+          btnUnread.innerHTML = `<span>📬 未读新订单 (<span id="orderTabUnreadCount">${unreadCnt}</span>)</span>`;
+        }
+      }
+
+      // Replace plain "💳 微信支付" badges in #ordersTableBody with custom SVG/icon badges from renderPaymentMethodBadgeHtml
+      const tbody = document.getElementById('ordersTableBody');
+      if (!tbody) return;
+      const filtered = getFilteredOrders();
+      const trs = tbody.querySelectorAll('tr');
+      filtered.forEach((o, idx) => {
+        const tr = trs[idx];
+        if (!tr || !o.paymentMethod) return;
+        const payTd = tr.children[4];
+        if (!payTd) return;
+        const spans = payTd.querySelectorAll('span');
+        spans.forEach(sp => {
+          if (sp.textContent && sp.textContent.trim().startsWith('💳')) {
+            sp.outerHTML = renderPaymentMethodBadgeHtml(o.paymentMethod);
+          }
+        });
+      });
+    };
+
+    // --- PART H: Inject Section 5 (Payment Method Icons & Image Storage Manager) into #uiCustomLabelsEditorContainer ---
+    const _v7100RenderUiCustomLabelsPanel = renderUiCustomLabelsPanel;
+    renderUiCustomLabelsPanel = function() {
+      _v7100RenderUiCustomLabelsPanel();
+      const container = document.getElementById('uiCustomLabelsEditorContainer');
+      if (!container) return;
+
+      const stats = computeSystemImageStorageStats();
+      const payKeys = Object.keys(DEFAULT_PAYMENT_METHOD_ICONS);
+      const payCardsHtml = payKeys.map(k => {
+        const cfg = getPaymentMethodConfig(k);
+        const safeKey = k.replace(/"/g, '&quot;');
+        const previewBadge = renderPaymentMethodBadgeHtml(k);
+        return `
+          <div class="bg-white p-3 rounded-xl border border-slate-200 space-y-2">
+            <div class="flex items-center justify-between gap-2">
+              <span class="font-bold text-slate-800 text-xs">${k}</span>
+              <div>${previewBadge}</div>
+            </div>
+            <div class="grid grid-cols-1 sm:grid-cols-12 gap-2 items-center">
+              <div class="sm:col-span-5">
+                <label class="block text-[10px] text-slate-500 mb-0.5">显示名称</label>
+                <input type="text" data-payicon-label="${safeKey}" value="${cfg.label.replace(/"/g, '&quot;')}" class="w-full border border-slate-300 rounded-lg px-2 py-1 text-xs font-semibold text-slate-900" />
+              </div>
+              <div class="sm:col-span-4">
+                <label class="block text-[10px] text-slate-500 mb-0.5">自定义 Emoji 或图片URL (留空用内置矢量图标)</label>
+                <input type="text" data-payicon-custom="${safeKey}" value="${(cfg.customIcon || '').replace(/"/g, '&quot;')}" placeholder="默认官方矢量图标" class="w-full border border-slate-300 rounded-lg px-2 py-1 text-xs font-mono" />
+              </div>
+              <div class="sm:col-span-3 flex items-center gap-1 pt-3.5">
+                <label class="cursor-pointer bg-indigo-50 hover:bg-indigo-100 text-indigo-800 border border-indigo-200 text-[10px] font-bold px-2 py-1 rounded-lg transition">
+                  📤 传小图标
+                  <input type="file" accept="image/*" data-payicon-upload="${safeKey}" class="hidden" />
+                </label>
+                <button type="button" data-payicon-reset="${safeKey}" class="text-[10px] text-slate-400 hover:text-rose-600 px-1" title="恢复内置矢量图标">重置</button>
+              </div>
+            </div>
+          </div>
+        `;
+      }).join('');
+
+      container.insertAdjacentHTML('beforeend', `
+        <div class="border-2 border-indigo-200 rounded-xl p-4 bg-gradient-to-r from-indigo-50/70 via-white to-emerald-50/60 space-y-3">
+          <div class="flex flex-wrap items-center justify-between gap-2">
+            <div>
+              <h5 class="font-extrabold text-indigo-950 text-xs sm:text-sm">五、💳 支付方式专属小图标定制 & 🖼️ 全系统图片存储空间监控</h5>
+              <p class="text-[11px] text-slate-600">默认内置 0 体积高清矢量图标（微信绿、支付宝蓝、银联三色、信用卡等）；您也可以修改显示名称或上传自定义小图标（自动微缩至 64×64px，仅 ~1.5KB）。</p>
+            </div>
+            <div class="bg-white border border-emerald-300 rounded-xl px-3 py-1.5 text-[11px] shadow-2xs">
+              <div class="font-bold text-emerald-950">📊 当前全库自定义图片占用：<span class="font-mono text-emerald-700">${stats.totalKb} KB</span> (${stats.imgCount} 张图)</div>
+              <div class="text-[10px] text-slate-500">仅占浏览器本地缓存上限的 <strong>${stats.pctOf5Mb}%</strong> · 自动随 Cloudflare KV 云端备份同步</div>
+            </div>
+          </div>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-2.5">
+            ${payCardsHtml}
+          </div>
+        </div>
+      `);
+    };
+
+    function initV7110Events() {
+      cleanAndSyncVerifiedOrderPricesToCatalog();
+
+      // 1. Product modal image & formula fields population when opening #modalProduct
+      const attachModalProductOpenHook = () => {
+        document.addEventListener('click', (e) => {
+          const editProdBtn = e.target.closest('[data-edit-prod]');
+          if (editProdBtn) {
+            const pname = editProdBtn.getAttribute('data-edit-prod');
+            setTimeout(() => populateProductModalImageAndFormulaFields(pname), 30);
+          }
+          const openSpecBtn = e.target.closest('[data-open-prod-spec]');
+          if (openSpecBtn) {
+            const pname = openSpecBtn.getAttribute('data-open-prod-spec');
+            openProductSpecSheetModal(pname);
+          }
+          const toggleHistBtn = e.target.closest('[data-toggle-card-hist]');
+          if (toggleHistBtn) {
+            const pname = toggleHistBtn.getAttribute('data-toggle-card-hist');
+            if (window.expandedProductCardHistorySet.has(pname)) {
+              window.expandedProductCardHistorySet.delete(pname);
+            } else {
+              window.expandedProductCardHistorySet.add(pname);
+            }
+            renderProductsTab();
+          }
+          const toggleTimelineBtn = e.target.closest('#btnToggleTrendTimelineExpand');
+          if (toggleTimelineBtn) {
+            window.trendTimelineTableExpanded = !window.trendTimelineTableExpanded;
+            renderProductPriceTrendStudio(currentTrendProductName);
+          }
+        });
+      };
+      attachModalProductOpenHook();
+
+      const btnCloseSpec = document.getElementById('btnCloseProductSpecSheet');
+      if (btnCloseSpec) {
+        btnCloseSpec.addEventListener('click', () => {
+          document.getElementById('modalProductSpecSheet')?.classList.add('hidden');
+        });
+      }
+      const btnEditFromSpec = document.getElementById('btnEditProdFromSpecSheet');
+      if (btnEditFromSpec) {
+        btnEditFromSpec.addEventListener('click', () => {
+          const pname = btnEditFromSpec.getAttribute('data-target-prod');
+          document.getElementById('modalProductSpecSheet')?.classList.add('hidden');
+          const p = getProductInfo(pname);
+          if (p) {
+            document.getElementById('modalProductTitle').textContent = '编辑商品、图片与详细配方档案';
+            document.getElementById('editProdOriginalName').value = p.name;
+            document.getElementById('editProdName').value = p.name;
+            document.getElementById('editProdCategory').value = p.category || '维生素/钙铁锌/保健';
+            document.getElementById('editProdNzdPrice').value = p.nzdPrice || '';
+            document.getElementById('editProdRmbPrice').value = p.rmbPrice || '';
+            document.getElementById('editProdRmbShip').value = p.rmbShipPerUnit || '';
+            if (document.getElementById('editProdTargetNzd')) document.getElementById('editProdTargetNzd').value = p.targetNzdPrice || '';
+            if (document.getElementById('editProdWeightG')) document.getElementById('editProdWeightG').value = p.unitWeightG || estimateProductUnitWeightG(p.name) || '';
+            if (document.getElementById('editProdDailyDose')) document.getElementById('editProdDailyDose').value = p.dailyDose || parseProductUnitCapacity(p.name).defaultDaily || '';
+            if (document.getElementById('editProdExpiryDate')) document.getElementById('editProdExpiryDate').value = p.expiryDate || '';
+            populateProductModalImageAndFormulaFields(p.name);
+            document.getElementById('modalProduct')?.classList.remove('hidden');
+          }
+        });
+      }
+
+      // Bind file uploads in #modalProduct
+      const imgFileInp = document.getElementById('editProdImgFileInput');
+      if (imgFileInp) {
+        imgFileInp.addEventListener('change', async (e) => {
+          const file = e.target.files?.[0];
+          if (!file) return;
+          try {
+            const res = await compressImageFileToDataUrl(file, 320, 0.8);
+            const urlInp = document.getElementById('editProdImgUrlInput');
+            const hint = document.getElementById('editProdImgSizeHint');
+            if (urlInp) urlInp.value = res.dataUrl;
+            if (hint) hint.textContent = `✅ 已压缩为 ${res.width}×${res.height} (${res.kb} KB)`;
+            renderEditProdImgPreviews();
+            showToast(`🖼️ 商品图片已智能压缩至 ${res.kb} KB！`);
+          } catch (err) {
+            showToast('图片读取失败，请重试');
+          }
+          e.target.value = '';
+        });
+      }
+
+      const nutriFileInp = document.getElementById('editProdNutriFileInput');
+      if (nutriFileInp) {
+        nutriFileInp.addEventListener('change', async (e) => {
+          const file = e.target.files?.[0];
+          if (!file) return;
+          try {
+            const res = await compressImageFileToDataUrl(file, 820, 0.82);
+            const urlInp = document.getElementById('editProdNutriUrlInput');
+            const hint = document.getElementById('editProdNutriSizeHint');
+            if (urlInp) urlInp.value = res.dataUrl;
+            if (hint) hint.textContent = `✅ 配方图已优化为 ${res.width}×${res.height} (${res.kb} KB)`;
+            renderEditProdImgPreviews();
+            showToast(`🔬 配方表图片已高锐度压缩至 ${res.kb} KB！`);
+          } catch (err) {
+            showToast('配方图读取失败，请重试');
+          }
+          e.target.value = '';
+        });
+      }
+
+      document.getElementById('btnClearEditProdImg')?.addEventListener('click', () => {
+        const inp = document.getElementById('editProdImgUrlInput');
+        if (inp) inp.value = '';
+        renderEditProdImgPreviews();
+      });
+      document.getElementById('btnClearEditProdNutriImg')?.addEventListener('click', () => {
+        const inp = document.getElementById('editProdNutriUrlInput');
+        if (inp) inp.value = '';
+        renderEditProdImgPreviews();
+      });
+      document.getElementById('editProdImgUrlInput')?.addEventListener('input', renderEditProdImgPreviews);
+      document.getElementById('editProdNutriUrlInput')?.addEventListener('input', renderEditProdImgPreviews);
+
+      // Save hook on #btnSaveProductModal to persist imageUrl, nutritionImageUrl, ingredientsText, usageText
+      const btnSaveProd = document.getElementById('btnSaveProductModal');
+      if (btnSaveProd) {
+        btnSaveProd.addEventListener('click', () => {
+          const newName = (document.getElementById('editProdName')?.value || '').trim();
+          const p = getProductInfo(newName);
+          if (p) {
+            p.imageUrl = (document.getElementById('editProdImgUrlInput')?.value || '').trim();
+            p.nutritionImageUrl = (document.getElementById('editProdNutriUrlInput')?.value || '').trim();
+            p.ingredientsText = (document.getElementById('editProdIngredientsText')?.value || '').trim();
+            p.usageText = (document.getElementById('editProdUsageText')?.value || '').trim();
+            saveState(`保存商品「${p.name}」图片与配方档案`);
+            renderProductsTab();
+          }
+        });
+      }
+
+      // Bind Payment Icon customization inside #uiCustomLabelsEditorContainer
+      const labelsCont = document.getElementById('uiCustomLabelsEditorContainer');
+      if (labelsCont) {
+        labelsCont.addEventListener('change', async (e) => {
+          const uploadInp = e.target.closest('[data-payicon-upload]');
+          if (uploadInp) {
+            const key = uploadInp.getAttribute('data-payicon-upload');
+            const file = uploadInp.files?.[0];
+            if (file && key) {
+              const res = await compressImageFileToDataUrl(file, 64, 0.85);
+              state.paymentMethodCustomIcons = state.paymentMethodCustomIcons || {};
+              state.paymentMethodCustomIcons[key] = {
+                ...(state.paymentMethodCustomIcons[key] || {}),
+                customIcon: res.dataUrl
+              };
+              renderUiCustomLabelsPanel();
+              renderOrdersTab();
+              showToast(`💳 已上传「${key}」自定义小图标 (${res.kb} KB)`);
+            }
+            return;
+          }
+        });
+        labelsCont.addEventListener('click', (e) => {
+          const resetBtn = e.target.closest('[data-payicon-reset]');
+          if (resetBtn) {
+            const key = resetBtn.getAttribute('data-payicon-reset');
+            if (state.paymentMethodCustomIcons && state.paymentMethodCustomIcons[key]) {
+              delete state.paymentMethodCustomIcons[key];
+              renderUiCustomLabelsPanel();
+              renderOrdersTab();
+              showToast(`🔄 已恢复「${key}」默认官方矢量图标`);
+            }
+          }
+        });
+      }
+
+      const btnSaveLabels = document.getElementById('btnSaveAllUiLabels');
+      if (btnSaveLabels) {
+        btnSaveLabels.addEventListener('click', () => {
+          state.paymentMethodCustomIcons = state.paymentMethodCustomIcons || {};
+          document.querySelectorAll('[data-payicon-label]').forEach(inp => {
+            const k = inp.getAttribute('data-payicon-label');
+            const val = inp.value.trim();
+            state.paymentMethodCustomIcons[k] = {
+              ...(state.paymentMethodCustomIcons[k] || {}),
+              label: val || k
+            };
+          });
+          document.querySelectorAll('[data-payicon-custom]').forEach(inp => {
+            const k = inp.getAttribute('data-payicon-custom');
+            const val = inp.value.trim();
+            state.paymentMethodCustomIcons[k] = {
+              ...(state.paymentMethodCustomIcons[k] || {}),
+              customIcon: val
+            };
+          });
+          saveState('保存界面名称与支付方式图标设置');
+          renderOrdersTab();
+        });
+      }
+
+      renderProductsTab();
+      renderOrdersTab();
+    }
+
+    function populateProductModalImageAndFormulaFields(prodName) {
+      const p = getProductInfo(prodName);
+      const imgInp = document.getElementById('editProdImgUrlInput');
+      const nutriInp = document.getElementById('editProdNutriUrlInput');
+      const ingInp = document.getElementById('editProdIngredientsText');
+      const useInp = document.getElementById('editProdUsageText');
+      if (!imgInp) return;
+      const facts = p ? getDefaultSupplementFactsForProduct(p) : { ingredients: '', usage: '' };
+      imgInp.value = (p && p.imageUrl) || '';
+      if (nutriInp) nutriInp.value = (p && p.nutritionImageUrl) || '';
+      if (ingInp) ingInp.value = (p && p.ingredientsText) || facts.ingredients || '';
+      if (useInp) useInp.value = (p && p.usageText) || facts.usage || '';
+      renderEditProdImgPreviews();
+    }
+
+    function renderEditProdImgPreviews() {
+      const pname = (document.getElementById('editProdName')?.value || '').trim();
+      const p = getProductInfo(pname) || { name: pname };
+      const imgBox = document.getElementById('editProdImgPreviewBox');
+      const nutriBox = document.getElementById('editProdNutriImgPreviewBox');
+      const imgUrl = (document.getElementById('editProdImgUrlInput')?.value || '').trim();
+      const nutriUrl = (document.getElementById('editProdNutriUrlInput')?.value || '').trim();
+      if (imgBox) {
+        const src = imgUrl || getProductDefaultSvgDataUri(p);
+        imgBox.innerHTML = `<img src="${src}" alt="" class="w-full h-full object-cover" />`;
+      }
+      if (nutriBox) {
+        if (nutriUrl) {
+          nutriBox.innerHTML = `<img src="${nutriUrl}" alt="" class="w-full h-full object-cover" />`;
+        } else {
+          nutriBox.innerHTML = `<span class="text-[10px] text-slate-400 text-center px-1">暂无配方图</span>`;
+        }
+      }
+    }
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', initV7110Events);
+    } else {
+      initV7110Events();
+    }
+
+
     function downloadBlob(content, filename, mimeType) {
       const blob = new Blob([content], { type: mimeType });
       const url = URL.createObjectURL(blob);
@@ -23725,6 +24919,24 @@ export async function onRequestPost(context) {
       <span class="text-sm leading-none">⬆️</span>
       <span>回到顶部</span>
     </button>
+  </div>
+
+
+  <!-- v7.11.0 NEW MODAL: PRODUCT IMAGE & SUPPLEMENT FACTS / FORMULA SHEET VIEWER -->
+  <div id="modalProductSpecSheet" class="fixed inset-0 bg-slate-900/65 backdrop-blur-xs z-50 hidden flex items-center justify-center p-3 sm:p-5">
+    <div class="bg-white rounded-2xl shadow-2xl border border-slate-200 max-w-2xl w-full max-h-[90vh] flex flex-col overflow-hidden">
+      <div class="px-5 py-3.5 bg-gradient-to-r from-emerald-950 via-teal-900 to-indigo-950 text-white flex items-center justify-between gap-2">
+        <div class="flex items-center gap-2 min-w-0">
+          <span class="text-lg">🔬</span>
+          <h3 id="specSheetModalTitle" class="text-sm sm:text-base font-extrabold truncate">商品外观与详细配方营养档案</h3>
+        </div>
+        <div class="flex items-center gap-2 shrink-0">
+          <button type="button" id="btnEditProdFromSpecSheet" class="bg-amber-400 hover:bg-amber-300 text-slate-950 font-extrabold text-xs px-3 py-1 rounded-lg transition">✎ 编辑图片/配方</button>
+          <button type="button" id="btnCloseProductSpecSheet" class="text-emerald-200 hover:text-white text-xl leading-none px-1.5">×</button>
+        </div>
+      </div>
+      <div id="specSheetModalBody" class="p-5 overflow-y-auto custom-scroll space-y-4 text-xs sm:text-sm flex-1"></div>
+    </div>
   </div>
 
 </body>
