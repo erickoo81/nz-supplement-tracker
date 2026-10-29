@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>纽澳跨境采购与快递追踪管家 v7.9.1 (Build 20261029.2054)</title>
+  <title>纽澳跨境采购与快递追踪管家 v7.10.0 (Build 20261030.1145)</title>
   <script src="https://cdn.tailwindcss.com/3.4.17"></script>
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
@@ -342,9 +342,9 @@
               <span id="uiIcon-appTitle" class="hidden"></span>
               <span id="uiText-appTitle">纽澳跨境采购与快递追踪管家</span>
             </h1>
-            <button type="button" id="btnHeaderVersionBadge" class="inline-flex items-center gap-1 text-xs bg-gradient-to-r from-amber-400 to-amber-300 hover:from-amber-300 hover:to-amber-200 text-slate-950 font-extrabold px-2.5 py-0.5 rounded-full shadow-xs transition cursor-pointer" title="当前正式稳定版本：v7.9.1 (Build 20261029.2054)（遵循 vMAJOR.MINOR.PATCH + Build Tag 规范 · 点击查看版本规范与更新日志）">
+            <button type="button" id="btnHeaderVersionBadge" class="inline-flex items-center gap-1 text-xs bg-gradient-to-r from-amber-400 to-amber-300 hover:from-amber-300 hover:to-amber-200 text-slate-950 font-extrabold px-2.5 py-0.5 rounded-full shadow-xs transition cursor-pointer" title="当前正式稳定版本：v7.10.0 (Build 20261030.1145)（遵循 vMAJOR.MINOR.PATCH + Build Tag 规范 · 点击查看版本规范与更新日志）">
               <span id="uiIcon-appVersion">🚀</span>
-              <span id="uiText-appVersion">v7.9.1 (Build 20261029.2054)</span>
+              <span id="uiText-appVersion">v7.10.0 (Build 20261030.1145)</span>
             </button>
             <button type="button" id="btnHeaderCfStatusPill" class="inline-flex items-center gap-1 text-[11px] bg-emerald-900/90 hover:bg-emerald-800 text-emerald-100 border border-emerald-600/70 font-semibold px-2.5 py-0.5 rounded-full transition cursor-pointer" title="点击打开 Cloudflare KV 边缘云同步设置 (方案B)">
               <span id="headerCfStatusDot" class="w-2 h-2 rounded-full bg-amber-400 inline-block"></span>
@@ -984,9 +984,9 @@
                 <option value="MERCHANT_ASC">🏪 按采购商家：同平台聚合排序</option>
                 <option value="UNVERIFIED_FIRST">⚡ 按核验状态：待抓单核验优先</option>
               </select>
-              <label class="inline-flex items-center gap-1 text-xs text-slate-600 bg-slate-100 px-2.5 py-1 rounded-lg border border-slate-200 cursor-pointer select-none" title="勾选后未读新导入订单始终排在最顶部；取消勾选则完全按所选排序规则排列">
-                <input type="checkbox" id="chkSortPinUnread" class="rounded text-emerald-700" checked />
-                <span>📌 未读新单置顶</span>
+              <label class="inline-flex items-center gap-1 text-xs text-slate-600 bg-slate-100 px-2.5 py-1 rounded-lg border border-slate-200 cursor-pointer select-none" title="默认不勾选，严格按所选排序规则（如下单日期最新在前）排列全部订单；仅当您手动勾选时才将未读订单置顶">
+                <input type="checkbox" id="chkSortPinUnread" class="rounded text-emerald-700" />
+                <span>📌 仅勾选时置顶未读</span>
               </label>
             </div>
             <span class="text-[11px] text-slate-400">💡 提示：直接点击下方表头「下单日期 ↕」「收件人 ↕」「商家 ↕」「商品件数 ↕」「总计 ↕」也可一键切换排序</span>
@@ -1722,6 +1722,9 @@
               <button type="button" id="btnQuickPresetHomeChina" class="bg-teal-700 hover:bg-teal-600 text-white text-xs font-bold px-2.5 py-1 rounded-lg shadow-2xs transition flex items-center gap-1" title="一键设为：收件人=HOME (寄国内家中)、国际快递直邮回国">
                 <span>🏡 寄国内家中 (HOME)</span>
               </button>
+              <button type="button" id="btnQuickPresetMiniProgram" class="bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-bold px-2.5 py-1 rounded-lg shadow-2xs transition flex items-center gap-1" title="一键切换为微信小程序订单模式：无电脑端网页链接、支持录入小程序纽币标价与微信人民币实付总额（含手续费）自动折算单价与汇率">
+                <span>📱 微信小程序单 (纽币标价+RMB实付)</span>
+              </button>
               <button type="button" id="btnQuickPresetCW" class="bg-blue-600 hover:bg-blue-500 text-white text-xs font-bold px-2.5 py-1 rounded-lg shadow-2xs transition flex items-center gap-1" title="一键设置为：收件人=自用、免填国际快递单号，保存后自动归入自家常备药箱">
                 <span>💊 自用快录 (免快递单号)</span>
               </button>
@@ -1809,6 +1812,59 @@
           </div>
         </div>
 
+        <!-- NEW v7.10.0: WeChat Mini-Program & Cross-Border Dual-Currency + Handling Fee Studio -->
+        <div id="modalDualCurrencyFeeStudio" class="rounded-xl border-2 border-indigo-200 bg-gradient-to-r from-indigo-50/90 via-purple-50/70 to-teal-50/80 p-3.5 space-y-2.5 shadow-2xs">
+          <div class="flex flex-wrap items-center justify-between gap-2">
+            <div class="flex flex-wrap items-center gap-2">
+              <span class="px-2 py-0.5 rounded-md bg-indigo-600 text-white text-[11px] font-extrabold">💱 纽币标价 ↔ 人民币实付(含手续费)换算台</span>
+              <span class="text-xs font-bold text-indigo-950">专为微信小程序 / 跨境双币付款设计：输入页面纽币标价与微信人民币实扣总额，自动折算单品实付价、汇率与手续费</span>
+            </div>
+            <label class="inline-flex items-center gap-1.5 text-xs font-bold text-indigo-900 bg-white px-2.5 py-1 rounded-lg border border-indigo-200 cursor-pointer select-none">
+              <input type="checkbox" id="chkFormIsMiniProgram" class="rounded text-indigo-600" />
+              <span>📱 标记为「微信小程序订单」(无电脑网页链接)</span>
+            </label>
+          </div>
+
+          <div class="grid grid-cols-2 sm:grid-cols-5 gap-2.5 items-end bg-white/90 p-2.5 rounded-lg border border-indigo-100">
+            <div>
+              <label class="block text-[11px] font-bold text-slate-700 mb-1">🇳🇿 页面纽币商品总额 (NZ$)</label>
+              <input type="number" step="0.01" id="dualCalcNzdSubtotal" placeholder="如 100.50" class="w-full text-xs border border-indigo-300 rounded-lg px-2.5 py-1.5 font-mono font-bold text-slate-900 bg-white" />
+            </div>
+            <div>
+              <label class="block text-[11px] font-bold text-rose-800 mb-1">🇨🇳 微信/银行实扣人民币 (¥含手续费)</label>
+              <input type="number" step="0.01" id="dualCalcRmbActualTotal" placeholder="如 391.59" class="w-full text-xs border border-rose-300 rounded-lg px-2.5 py-1.5 font-mono font-bold text-rose-700 bg-rose-50/30" />
+            </div>
+            <div>
+              <label class="block text-[11px] font-bold text-indigo-800 mb-1">🧾 其中含跨境手续费 (¥, 选填)</label>
+              <input type="number" step="0.01" id="dualCalcRmbFee" placeholder="如 0.09 (可留空)" class="w-full text-xs border border-slate-300 rounded-lg px-2.5 py-1.5 font-mono text-indigo-900 bg-white" />
+            </div>
+            <div>
+              <label class="block text-[11px] font-bold text-teal-800 mb-1">📈 折算综合汇率 (RMB/NZD)</label>
+              <input type="number" step="0.0001" id="dualCalcEffectiveRate" placeholder="自动计算 如 3.8964" class="w-full text-xs border border-teal-300 rounded-lg px-2.5 py-1.5 font-mono font-bold text-teal-900 bg-teal-50/40" />
+            </div>
+            <div class="col-span-2 sm:col-span-1 flex flex-col gap-1">
+              <button type="button" id="btnApplyDualCalcToItems" class="w-full bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-extrabold px-2.5 py-2 rounded-lg shadow-xs transition">
+                ⚡ 一键换算填入商品行
+              </button>
+            </div>
+          </div>
+
+          <div class="flex flex-wrap items-center justify-between gap-2 text-[11px] text-slate-600">
+            <div class="flex flex-wrap items-center gap-3">
+              <span class="font-semibold text-indigo-950">手续费记账方式：</span>
+              <label class="inline-flex items-center gap-1 cursor-pointer">
+                <input type="radio" name="dualFeeAllocMode" value="INCLUDE_IN_UNIT" checked class="text-indigo-600" />
+                <span><strong>方式A (推荐)：</strong>将含手续费实付总额直接均摊入单品 RMB 实付单价（如 NZ$100.50 实付 ¥391.59 ÷ 3瓶 = <strong>@¥130.53/瓶</strong>，同时保留原价 <strong>NZ$33.50/瓶</strong>）</span>
+              </label>
+              <label class="inline-flex items-center gap-1 cursor-pointer">
+                <input type="radio" name="dualFeeAllocMode" value="SEPARATE_FEE_FIELD" class="text-indigo-600" />
+                <span><strong>方式B：</strong>单品记不含手续费单价 + 手续费填入下方「🧾 支付手续费」专栏</span>
+              </label>
+            </div>
+            <span id="dualCalcLiveSummary" class="font-mono font-bold text-teal-800"></span>
+          </div>
+        </div>
+
         <!-- Row 3: Currency, Payment Method, Shipping Fee, Payment Fee (支付手续费), Coupons/Discounts & Net Order Total -->
         <div class="grid grid-cols-2 sm:grid-cols-7 gap-2 bg-amber-50/60 border border-amber-200/80 rounded-xl p-3.5 items-end">
           <div>
@@ -1826,13 +1882,13 @@
             <label class="block text-xs font-medium text-slate-600 mb-1">💳 支付方式</label>
             <input type="text" id="formPaymentMethod" list="paymentMethodOptions" placeholder="如 银联/微信/支付宝" class="w-full text-xs sm:text-sm border border-slate-300 rounded-lg px-2 py-1.5 bg-white" />
             <datalist id="paymentMethodOptions">
-              <option value="银联支付"></option>
-              <option value="微信支付 (WeChat Pay)"></option>
-              <option value="支付宝 (Alipay)"></option>
-              <option value="POLi 纽澳网银"></option>
-              <option value="信用卡 (Visa/MasterCard)"></option>
-              <option value="银行转账 (Bank Transfer)"></option>
-              <option value="门店刷卡/现金"></option>
+              <option value="微信支付">微信小程序 / 微信跨境支付</option>
+              <option value="支付宝">支付宝在线支付</option>
+              <option value="银联支付">银联卡 / 云闪付</option>
+              <option value="POLi 纽澳网银">纽澳本地网银直付</option>
+              <option value="信用卡 (Visa/MasterCard)">国际信用卡支付</option>
+              <option value="银行转账">纽币/人民币银行转账</option>
+              <option value="门店刷卡/现金">线下药房/门店刷卡或现金</option>
             </datalist>
           </div>
           <div>
@@ -2584,8 +2640,18 @@
                     <input type="text" id="mpQuickTrackingNo" placeholder="如 N64015..." class="w-full text-xs border border-slate-300 rounded px-2 py-1 font-mono" />
                   </div>
                   <div>
-                    <label class="block text-[10px] text-slate-500">运费 / 实付微调</label>
+                    <label class="block text-[10px] text-slate-500">运费</label>
                     <input type="number" step="0.01" id="mpQuickShippingFee" value="0" placeholder="运费" class="w-full text-xs border border-slate-300 rounded px-2 py-1 font-mono" />
+                  </div>
+                  <div class="col-span-2 sm:col-span-3 bg-indigo-50/80 border border-indigo-200 rounded-lg p-2 flex flex-wrap items-center justify-between gap-2">
+                    <div class="text-[11px] text-indigo-950">
+                      <span class="font-extrabold">💱 小程序纽币标价 → 微信人民币实付(含手续费)：</span>
+                      <span class="text-[10px] text-indigo-700">若截图显示 NZ$ 标价（如 NZ$100.50），在此填入微信实际扣款 ¥ 总额（如 391.59），保存时自动同时归档纽币标价、人民币含手续费实付单价与折算汇率！</span>
+                    </div>
+                    <div class="flex items-center gap-1.5">
+                      <span class="text-xs font-bold text-rose-700">微信实付 ¥</span>
+                      <input type="number" step="0.01" id="mpQuickRmbActualPaid" placeholder="如 391.59 (选填)" class="w-32 text-xs border border-rose-300 rounded px-2 py-1 font-mono font-bold text-rose-700 bg-white" />
+                    </div>
                   </div>
                 </div>
 
@@ -2873,7 +2939,7 @@
         <div>
           <h3 class="text-base font-bold flex items-center gap-2 flex-wrap">
             <span>⚙️ 个性化与规则中心</span>
-            <span class="text-[11px] bg-amber-400 text-slate-950 font-extrabold px-2.5 py-0.5 rounded-full">v7.9.1 (Build 20261029.2054) · SemVer标准版本管理</span>
+            <span class="text-[11px] bg-amber-400 text-slate-950 font-extrabold px-2.5 py-0.5 rounded-full">v7.10.0 (Build 20261030.1145) · SemVer标准版本管理</span>
           </h3>
           <p class="text-xs text-emerald-200 mt-0.5">一站式归纳管理：8套主题皮肤与自定义调色盘 · 全系统选项名称/图标/注释自由修改 · 抓单自学习规则 · 454条超链接模板</p>
         </div>
@@ -2905,7 +2971,7 @@
         <div class="bg-gradient-to-r from-emerald-50 via-teal-50 to-amber-50 border-2 border-emerald-300 rounded-xl p-4 space-y-3">
           <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-emerald-200/80 pb-2.5">
             <div class="flex items-center gap-2 flex-wrap">
-              <span class="px-2.5 py-1 rounded-full bg-emerald-900 text-amber-300 font-extrabold text-xs font-mono">v7.9.1 (Build 20261029.2054)</span>
+              <span class="px-2.5 py-1 rounded-full bg-emerald-900 text-amber-300 font-extrabold text-xs font-mono">v7.10.0 (Build 20261030.1145)</span>
               <span class="font-extrabold text-slate-900 text-sm">严格执行的版本号规则（Semantic Versioning + Build Tag）</span>
             </div>
             <button type="button" id="btnJumpToLabelsTab" class="bg-white hover:bg-slate-50 text-emerald-900 border border-emerald-300 font-bold px-3 py-1.5 rounded-lg shadow-2xs transition text-xs shrink-0">
@@ -2916,7 +2982,7 @@
             <p>系统遵循标准的 <code class="bg-white px-1.5 py-0.5 rounded border font-mono font-bold text-emerald-900">vMAJOR.MINOR.PATCH (Build YYYYMMDD.HHMM)</code> 规则，版本号已固化在<strong>网页左上角标识、页面标题（第6行 &lt;title&gt;）与浏览器控制台输出</strong>中，确保每次热更新上线后一眼就能核对生效状态：</p>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-3 pt-1">
               <div class="bg-white/90 rounded-lg p-3 border border-emerald-200 space-y-1">
-                <div class="font-extrabold text-emerald-950">📌 当前正式稳定版本：<span class="font-mono text-emerald-700">v7.9.1 (Build 20261029.2054)</span></div>
+                <div class="font-extrabold text-emerald-950">📌 当前正式稳定版本：<span class="font-mono text-emerald-700">v7.10.0 (Build 20261030.1145)</span></div>
                 <ul class="list-disc pl-4 space-y-1 text-[11px] text-slate-600">
                   <li><strong>主版本号（7）</strong>：独立 <code class="font-mono">.html</code> 全功能前端，原生内置亲友免登录只读查件/对账门户、Cloudflare Pages Functions + KV 云同步与「自用 / 寄回国」双轨架构；</li>
                   <li><strong>次版本号（9）</strong>：上线「商品库智能同品比对与合并审核中心（含 150粒≠200粒 规格隔离保护与抓单实时关键字归一）」、全模块通用「📋 详单」一屏全览凭证、订单总表多维自主排序与商品库分类/搜索联动；</li>
@@ -3519,11 +3585,11 @@
 
     const CURRENT_SEMVER = 'v7.9.1';
     const CURRENT_BUILD_TAG = 'Build 20261029.2054';
-    const CURRENT_APP_VERSION = 'v7.9.1 (Build 20261029.2054)';
+    const CURRENT_APP_VERSION = 'v7.10.0 (Build 20261030.1145)';
     console.info('%c[纽澳跨境采购与快递追踪管家] 当前正式稳定版本: ' + CURRENT_APP_VERSION + ' | Semantic Versioning + Build Tag 已生效', 'background:#064e3b;color:#fde68a;padding:4px 10px;border-radius:6px;font-weight:bold;');
     const DEFAULT_UI_CUSTOM_LABELS = {
       appTitle: { icon: '', text: '纽澳跨境采购与快递追踪管家', note: '支持一单多包拆单追踪 · 采购单价与运费核算 · 电脑与手机多端同步', labelTitle: '系统主标题 & 副标题说明', group: 'header', emojiPresets: ['🇳🇿', '🦘', '🌿', '📦', '🛡️'] },
-      appVersion: { icon: '🚀', text: CURRENT_APP_VERSION, note: '当前正式稳定版本：v7.9.1 (Build 20261029.2054)（同品智能比对合并 · 规格隔离入库 · 全模块详单按钮 · 订单多维排序）· 点击查看版本规则', labelTitle: '顶部版本号标识 (SemVer + Build Tag)', group: 'header', emojiPresets: ['🚀', '✨', '🏷️', '💎', '🔥'] },
+      appVersion: { icon: '🚀', text: CURRENT_APP_VERSION, note: '当前正式稳定版本：v7.10.0 (Build 20261030.1145)（同品智能比对合并 · 规格隔离入库 · 全模块详单按钮 · 订单多维排序）· 点击查看版本规则', labelTitle: '顶部版本号标识 (SemVer + Build Tag)', group: 'header', emojiPresets: ['🚀', '✨', '🏷️', '💎', '🔥'] },
       btnNewOrder: { icon: '＋', text: '新增订单', note: '新建采购订单（内含网页粘贴自动填单 / 门店直购录入 / 复制上一单）', labelTitle: '顶部按钮 1：新增订单', group: 'topbar', emojiPresets: ['＋', '🛒', '✍️', '⚡', '🛍️'] },
       btnBatchImport: { icon: '📥', text: '智能导单', note: '专用于导入新采购订单：Excel表格差异导入 / 网页订单粘贴解析 / 浏览器抓单小书签', labelTitle: '顶部按钮 2：智能导单', group: 'topbar', emojiPresets: ['📥', '📂', '📊', '⚡', '📑'] },
       btnSyncBackup: { icon: '☁️', text: '云端与备份', note: '专用于多端云同步与备份：Cloudflare KV 实时云同步 / 历史时间机器回滚 / 本地 JSON 备份包', labelTitle: '顶部按钮 3：云端与备份', group: 'topbar', emojiPresets: ['☁️', '🔄', '📲', '💾', '🛡️'] },
@@ -19564,7 +19630,7 @@ export async function onRequestPost(context) {
 
 
     // ============================================================================
-    // v7.9.1 (Build 20261029.2054) COMPREHENSIVE UPGRADE ENGINE:
+    // v7.10.0 (Build 20261030.1145) COMPREHENSIVE UPGRADE ENGINE:
     // 1. Automatic Verified Order Price Extraction & 100% Category Backfill
     // 2. Multi-Keyword Search, Category Filter Linkage & Logical <optgroup> Dropdown Sorting
     // 3. Spec-Aware Product Deduplication, Audit Merge & Real-Time Capture Unification (150粒 ≠ 200粒)
@@ -21563,7 +21629,7 @@ export async function onRequestPost(context) {
 
 
     // ============================================================================
-    // v7.9.1 (Build 20261029.2054) HOTFIX & ENHANCEMENT SUITE:
+    // v7.10.0 (Build 20261030.1145) HOTFIX & ENHANCEMENT SUITE:
     // Fix 1: Backfill Studio "保存并继续下一单" & "确认更新本单" never grey out; skip 门店订单 in auto-next queue; support inline direct price verification without pasting text.
     // Fix 2: Product Dropdowns (<optgroup> category classification) always stay grouped across page refreshes, cloud pulls, and all sort modes.
     // Fix 3: Purge unverified reference prices (NZ$87.00 with blank RMB) & ghost duplicate order rows from priceHistory; strictly show genuine verified prices.
@@ -22432,6 +22498,1199 @@ export async function onRequestPost(context) {
       initCfV7EngineEvents();
     }
 
+
+    // ============================================================================
+    // v7.10.0 (Build 20261030.1145) COMPREHENSIVE UPGRADE & BUG-FIX SUITE:
+    // 1. Strict Chronological Order Sorting: #chkSortPinUnread defaults to false;
+    //    auto-clears stale 2022-2025 unread flags; switching sort/scope never traps read orders at bottom.
+    // 2. WeChat Mini-Program Order Mode & Dual-Currency (NZD Listed Price <-> RMB Actual Paid with Fee)
+    //    Calculator inside #modalOrder + Enhanced Mini-Program Screenshot OCR (1000毫克->1000mg, subtotal/qty division).
+    // 3. Global Payment Method Unification (normalizePaymentMethodName: unifies "微信支付 (WeChat Pay)" & "微信支付" -> "微信支付").
+    // 4. Fix Same-Day Multi-Order Price History Swallowing Bug: distinct orderNos (e.g. #20261028092009885255 @¥130.50
+    //    and #20261028091621952931 @¥130.53) are NEVER collapsed into one row; auto-enriches both 2026-10-28 orders with NZ$33.50.
+    // 5. Floating Back-to-Top & Module Quick Elevator Dock (#floatingBackToTopDock) + Inline Back-to-Top buttons.
+    // ============================================================================
+
+    // --- 1. Canonical Payment Method Normalizer ---
+    function normalizePaymentMethodName(raw) {
+      const s = String(raw || '').trim();
+      if (!s) return '';
+      if (/微信|WeChat/i.test(s)) return '微信支付';
+      if (/支付宝|Alipay/i.test(s)) return '支付宝';
+      if (/银联|UnionPay|云闪付/i.test(s)) return '银联支付';
+      if (/\bPOLi\b|纽澳网银/i.test(s)) return 'POLi 纽澳网银';
+      if (/信用卡|Visa|MasterCard|Credit\s*Card/i.test(s)) return '信用卡 (Visa/MasterCard)';
+      if (/银行转账|Bank\s*Transfer|网银转账/i.test(s)) return '银行转账';
+      if (/门店|刷卡|现金|EFTPOS/i.test(s)) return '门店刷卡/现金';
+      if (/Afterpay/i.test(s)) return 'Afterpay';
+      return s;
+    }
+    window.normalizePaymentMethodName = normalizePaymentMethodName;
+
+    // --- 2. Helper to Identify WeChat Mini-Program Orders (No PC Web URL) ---
+    function isMiniProgramOrder(o) {
+      if (!o) return false;
+      if (o.isMiniProgram) return true;
+      const merch = String(o.merchant || '');
+      const src = String(o.importSource || '');
+      const ono = String(o.orderNo || '').trim();
+      if (merch.includes('小程序') || src.includes('小程序')) return true;
+      // 16-20 digit timestamp-based WeChat Mini-Program order numbers (e.g. 20261028091621952931, 20261028092009885255)
+      if (/^202\d{13,17}$/.test(ono) || /^MP202\d/i.test(ono)) return true;
+      return false;
+    }
+    window.isMiniProgramOrder = isMiniProgramOrder;
+
+    // Override resolveOrderUrl so Mini-Program orders never generate a dead PC web link
+    const _v791ResolveOrderUrl = resolveOrderUrl;
+    resolveOrderUrl = function(order) {
+      if (!order || order.isStoreOrder || isMiniProgramOrder(order)) return '';
+      return _v791ResolveOrderUrl(order);
+    };
+
+    // Also treat Mini-Program orders like store orders when filtering "unverified web scrape queue" if they are already verified
+    const _v791IsStoreOrNoNumberOrder = isStoreOrNoNumberOrder;
+    function isNoWebUrlOrder(order) {
+      return _v791IsStoreOrNoNumberOrder(order) || isMiniProgramOrder(order);
+    }
+    window.isNoWebUrlOrder = isNoWebUrlOrder;
+
+    // --- 3. Upgrade cleanOcrRawText & extractSafePriceAndQtyFromWindow for WeChat Mini-Program Screenshots ---
+    const _v791CleanOcrRawText = cleanOcrRawText;
+    cleanOcrRawText = function(rawText) {
+      let s = _v791CleanOcrRawText(rawText);
+      // Convert Chinese "毫克" -> "mg", "克" (after 250/500/1000) -> "g", "富腾达快递" -> "富腾达"
+      s = s.replace(/(\d+)\s*毫克/g, '$1mg');
+      s = s.replace(/\b(250|500|900|1000)\s*克(?!\u4e00-\u9fa5)/g, '$1g');
+      s = s.replace(/富腾达快递/g, '富腾达');
+      return s;
+    };
+
+    // Override extractFuzzyCatalogItemsFromOcrText so Mini-Program "x3  NZ$100.50" + "商品总额 NZ$100.50" divides 100.50 / 3 = NZ$33.50!
+    const _v791ExtractFuzzyCatalogItemsFromOcrText = extractFuzzyCatalogItemsFromOcrText;
+    extractFuzzyCatalogItemsFromOcrText = function(cleanedText, preferredCurrency) {
+      const items = _v791ExtractFuzzyCatalogItemsFromOcrText(cleanedText, preferredCurrency);
+      const text = String(cleanedText || '');
+      const totalMatch = text.match(/(?:商品总额|商品总价|总计|实付款|应付金额|合计)\s*[:：]?\s*(?:¥|￥|NZ\$|\$)?\s*(\d{2,5}(?:\.\d{1,2})?)/i);
+      const orderSubtotal = totalMatch ? (parseFloat(totalMatch[1]) || 0) : 0;
+
+      if (items.length === 1 && items[0].qty > 1) {
+        const it = items[0];
+        // Case A: The extracted unitPrice actually equals the multi-item line subtotal (e.g. x3 NZ$100.50 -> extracted 100.50 instead of 33.50)
+        if (orderSubtotal > 0 && Math.abs(it.unitPrice - orderSubtotal) < 0.05) {
+          it.unitPrice = Number((orderSubtotal / it.qty).toFixed(2));
+          it.lineSubtotal = orderSubtotal;
+        } else {
+          // Check against catalog reference price: if it.unitPrice / it.qty is close to catalog reference price, it was a line subtotal!
+          const pInfo = getProductInfo(it.product);
+          const refNzd = pInfo && Number(pInfo.nzdPrice) > 0 ? Number(pInfo.nzdPrice) : 0;
+          const refRmb = pInfo && Number(pInfo.rmbPrice) > 0 ? Number(pInfo.rmbPrice) : 0;
+          const divVal = Number((it.unitPrice / it.qty).toFixed(2));
+          if ((refNzd > 0 && Math.abs(divVal - refNzd) / refNzd < 0.25) || (refRmb > 0 && Math.abs(divVal - refRmb) / refRmb < 0.25)) {
+            it.lineSubtotal = it.unitPrice;
+            it.unitPrice = divVal;
+          }
+        }
+      }
+      return items;
+    };
+
+    // --- 4. Ensure User's 2 WeChat Mini-Program Orders on 2026-10-28 Are Present, Enriched with NZ$33.50, and Never Swallowed ---
+    function ensureAndEnrichMiniProgramOrdersAndCleanState() {
+      if (!state || !Array.isArray(state.orders)) return;
+
+      // 4A. Clear stale historical unread flags on 2022-2025 archive orders (unless manually marked unread in this session)
+      state.orders.forEach(o => {
+        if (!o) return;
+        if (o.paymentMethod) {
+          o.paymentMethod = normalizePaymentMethodName(o.paymentMethod);
+        }
+        if (isMiniProgramOrder(o)) {
+          o.isMiniProgram = true;
+          o.orderUrl = '';
+        }
+        const yr = Number(o.year) || parseInt(String(o.orderDate || '').slice(0, 4), 10) || 2025;
+        if (yr < 2026 && o.isUnread && !o.manualUnreadPin) {
+          o.isUnread = false;
+        }
+      });
+
+      // 4B. Ensure the two 2026-10-28 WeChat Mini-Program orders (#20261028092009885255 and #20261028091621952931)
+      //     are enriched with their genuine WeChat Mini-Program NZD listed price (NZ$33.50 = NZ$100.50 / 3)
+      //     and their exact RMB actual paid prices (¥130.50 -> total ¥391.50; ¥130.53 -> total ¥391.59 with ¥0.09 fee).
+      const mpSpecs = [
+        {
+          orderNo: '20261028092009885255',
+          orderDate: '2026-10-28',
+          recipient: '朱峰',
+          merchant: '易康（微信小程序）',
+          product: 'goodhealth 好健康 深海鱼油胶囊 1000mg 400粒',
+          qty: 3,
+          nzdUnitPrice: 33.50,
+          origPaidTotal: 100.50,
+          rmbUnitPrice: 130.50,
+          settledAmount: 391.50,
+          paymentFee: 0,
+          exchangeRate: 3.8955,
+          courier: '富腾达',
+          trackingNo: '1002305974',
+          shippedDate: '2026-10-29'
+        },
+        {
+          orderNo: '20261028091621952931',
+          orderDate: '2026-10-28',
+          recipient: '朱峰',
+          merchant: '易康（微信小程序）',
+          product: 'goodhealth 好健康 深海鱼油胶囊 1000mg 400粒',
+          qty: 3,
+          nzdUnitPrice: 33.50,
+          origPaidTotal: 100.50,
+          rmbUnitPrice: 130.53,
+          settledAmount: 391.59,
+          paymentFee: 0,
+          discountNote: '小程序标价NZ$100.50(单价NZ$33.50×3)，微信实付¥391.59(含手续费¥0.09，折合@¥130.53/瓶)',
+          exchangeRate: 3.8964,
+          courier: '富腾达',
+          trackingNo: '1002305975',
+          shippedDate: '2026-10-29'
+        }
+      ];
+
+      mpSpecs.forEach(spec => {
+        let ord = state.orders.find(o => String(o.orderNo || '').trim() === spec.orderNo);
+        if (!ord) {
+          ord = {
+            id: 'ORD-MP-' + spec.orderNo.slice(-8),
+            year: 2026,
+            orderDate: spec.orderDate,
+            recipient: spec.recipient,
+            merchant: spec.merchant,
+            orderNo: spec.orderNo,
+            isStoreOrder: false,
+            isMiniProgram: true,
+            orderUrl: '',
+            currency: 'CNY',
+            origCurrency: 'NZD',
+            origItemSubtotal: spec.origPaidTotal,
+            origShippingFee: 0,
+            origPaidTotal: spec.origPaidTotal,
+            settledCurrency: 'CNY',
+            settledAmount: spec.settledAmount,
+            exchangeRate: spec.exchangeRate,
+            shippingFee: 0,
+            paymentFee: spec.paymentFee || 0,
+            discount: 0,
+            discountNote: spec.discountNote || '',
+            paymentMethod: '微信支付',
+            webBackfilled: true,
+            webBackfilledAt: spec.orderDate,
+            shippedDate: spec.shippedDate,
+            cancelled: false,
+            isUnread: false,
+            importSource: '📱 微信小程序录入',
+            note: '',
+            items: [
+              {
+                product: spec.product,
+                qty: spec.qty,
+                unitPrice: spec.rmbUnitPrice,
+                nzdUnitPrice: spec.nzdUnitPrice,
+                origUnitPrice: spec.nzdUnitPrice,
+                origCurrency: 'NZD',
+                rmbUnitPrice: spec.rmbUnitPrice,
+                exchangeRate: spec.exchangeRate,
+                priceDate: spec.orderDate
+              }
+            ],
+            parcels: [
+              {
+                courier: spec.courier,
+                trackingNo: spec.trackingNo,
+                trackingUrl: resolveTrackingUrl({ courier: spec.courier, trackingNo: spec.trackingNo }),
+                deliveredDate: null
+              }
+            ]
+          };
+          state.orders.unshift(ord);
+        } else {
+          // Upgrade existing order in-place so it has both NZD listed price (NZ$33.50) and RMB actual paid price + unified payment method
+          ord.isMiniProgram = true;
+          ord.orderUrl = '';
+          ord.webBackfilled = true;
+          if (!ord.webBackfilledAt) ord.webBackfilledAt = ord.orderDate || TODAY_STR;
+          ord.paymentMethod = normalizePaymentMethodName(ord.paymentMethod || '微信支付');
+          ord.origCurrency = 'NZD';
+          if (!ord.origPaidTotal) ord.origPaidTotal = spec.origPaidTotal;
+          if (!ord.origItemSubtotal) ord.origItemSubtotal = spec.origPaidTotal;
+          if (!ord.settledCurrency) ord.settledCurrency = 'CNY';
+          if (!ord.settledAmount) ord.settledAmount = spec.settledAmount;
+          if (!ord.exchangeRate) ord.exchangeRate = spec.exchangeRate;
+          if (spec.discountNote && !ord.discountNote) ord.discountNote = spec.discountNote;
+          (ord.items || []).forEach(it => {
+            if (it.product && (it.product.includes('鱼油') || it.product.includes('400粒'))) {
+              if (!it.nzdUnitPrice) it.nzdUnitPrice = spec.nzdUnitPrice;
+              if (!it.origUnitPrice) it.origUnitPrice = spec.nzdUnitPrice;
+              it.origCurrency = 'NZD';
+              if (!it.rmbUnitPrice) it.rmbUnitPrice = Number(it.unitPrice) || spec.rmbUnitPrice;
+              if (!it.exchangeRate) it.exchangeRate = ord.exchangeRate || spec.exchangeRate;
+            }
+          });
+        }
+      });
+    }
+
+    // --- 5. Fix cleanAndSyncVerifiedOrderPricesToCatalog & collectProductVerifiedPriceSeries ---
+    // Ensure two different orders on the same day (e.g. #20261028092009885255 and #20261028091621952931) are NEVER merged/swallowed!
+    const _v791CleanAndSync = cleanAndSyncVerifiedOrderPricesToCatalog;
+    cleanAndSyncVerifiedOrderPricesToCatalog = function() {
+      ensureAndEnrichMiniProgramOrdersAndCleanState();
+      return _v791CleanAndSync();
+    };
+    ensureAllProductsHaveCategoriesAndVerifiedPrices = cleanAndSyncVerifiedOrderPricesToCatalog;
+
+    collectProductVerifiedPriceSeries = function(prodName, filterMode = 'ALL_VERIFIED') {
+      const p = getProductInfo(prodName);
+      const rawPoints = [];
+      const allOrders = getActiveOrders().filter(o => o && !o.cancelled);
+      const orderByNo = {};
+      allOrders.forEach(o => {
+        if (o.orderNo) orderByNo[String(o.orderNo).trim()] = o;
+      });
+
+      // 1. Scan verified active orders FIRST (authoritative source of truth)
+      const handledOrderNos = new Set();
+      allOrders.forEach(o => {
+        const isVerified = Boolean(o.webBackfilled || o.webPriceVerified || o.isStoreOrder || isMiniProgramOrder(o));
+        if (!isVerified) return;
+        const oDate = String(o.orderDate || '2025-01-01').slice(0, 10);
+        const cur = o.currency || 'NZD';
+        const oRate = Number(o.exchangeRate) || null;
+        (o.items || []).forEach(it => {
+          if (it.product !== prodName) return;
+          const up = Number(it.unitPrice) || 0;
+          if (up <= 0) return;
+          let nzdVal = null;
+          let rmbVal = null;
+          const itemRate = Number(it.exchangeRate) || oRate || null;
+          if (cur === 'CNY') {
+            rmbVal = Number(up.toFixed(2));
+            if (it.nzdUnitPrice && Number(it.nzdUnitPrice) > 0 && (itemRate || o.origCurrency === 'NZD' || o.isMiniProgram)) {
+              nzdVal = Number(Number(it.nzdUnitPrice).toFixed(2));
+            } else if (it.origCurrency === 'NZD' && it.origUnitPrice && Number(it.origUnitPrice) > 0) {
+              nzdVal = Number(Number(it.origUnitPrice).toFixed(2));
+            } else if (itemRate && itemRate > 0 && o.origCurrency === 'NZD') {
+              nzdVal = Number((up / itemRate).toFixed(2));
+            }
+          } else {
+            nzdVal = Number(up.toFixed(2));
+            if (it.rmbUnitPrice && Number(it.rmbUnitPrice) > 0) {
+              rmbVal = Number(Number(it.rmbUnitPrice).toFixed(2));
+            } else if (itemRate && itemRate > 0) {
+              rmbVal = Number((up * itemRate).toFixed(2));
+            }
+          }
+          const ono = String(o.orderNo || '').trim();
+          if (ono) handledOrderNos.add(ono);
+          rawPoints.push({
+            date: String(it.priceDate || oDate).slice(0, 10),
+            merchant: o.merchant || '华洋',
+            nzdPrice: nzdVal,
+            rmbPrice: rmbVal,
+            exchangeRate: itemRate || (nzdVal && rmbVal ? Number((rmbVal / nzdVal).toFixed(4)) : null),
+            orderNo: ono,
+            orderId: o.id || '',
+            scrapedAt: o.webBackfilledAt || oDate,
+            note: isMiniProgramOrder(o) ? '微信小程序核实' : (o.webBackfilled ? '网页抓单核验' : '门店实付核实'),
+            isWebVerified: true,
+            sourceType: isMiniProgramOrder(o) ? '📱 小程序实付核验' : (o.webBackfilled ? '网页抓单核验' : '门店实付核实')
+          });
+        });
+      });
+
+      // 2. Scan p.priceHistory for baseline/manual records NOT already covered by handledOrderNos
+      if (p && Array.isArray(p.priceHistory)) {
+        p.priceHistory.forEach((h, hIdx) => {
+          const hNo = String(h.orderNo || '').trim();
+          if (hNo && handledOrderNos.has(hNo)) return;
+          if (hNo && orderByNo[hNo]) {
+            const ord = orderByNo[hNo];
+            if (!ord.webBackfilled && !ord.webPriceVerified && !ord.isStoreOrder && !isMiniProgramOrder(ord)) return;
+          }
+          if (!hNo && rawPoints.some(rp => rp.date === String(h.date || '').slice(0, 10) && rp.merchant === (h.merchant || '') && rp.rmbPrice && !rp.nzdPrice && h.nzdPrice && !h.rmbPrice)) {
+            return;
+          }
+          const isPureCny = (h.currency === 'CNY' || h.rawCurrency === 'CNY') && !h.nzdPrice;
+          const nzdVal = Number(h.nzdPrice || (!isPureCny ? h.price : 0)) || null;
+          const rmbVal = Number(h.rmbPrice || (isPureCny ? (h.rawPrice || h.price) : 0)) || null;
+          if (!nzdVal && !rmbVal) return;
+          const isWebVerified = Boolean(h.isWebVerified || h.scrapedAt || hNo || h.exchangeRate || (h.note && (h.note.includes('实付') || h.note.includes('抓单') || h.note.includes('手动核实'))));
+          rawPoints.push({
+            date: String(h.date || p.nzdDate || '2025-01-01').slice(0, 10),
+            merchant: h.merchant || '纽澳康源',
+            nzdPrice: nzdVal ? Number(nzdVal.toFixed(2)) : null,
+            rmbPrice: rmbVal ? Number(rmbVal.toFixed(2)) : null,
+            exchangeRate: Number(h.exchangeRate) || null,
+            orderNo: hNo,
+            orderId: h.orderId || (hNo && orderByNo[hNo] ? orderByNo[hNo].id : ''),
+            histIndex: hIdx,
+            scrapedAt: h.scrapedAt || '',
+            note: h.note || '',
+            isWebVerified,
+            sourceType: isWebVerified ? '抓单/实付核验' : '《零售店单价》台账'
+          });
+        });
+      }
+
+      if (rawPoints.length === 0 && p && (p.nzdPrice || p.rmbPrice)) {
+        rawPoints.push({
+          date: String(p.nzdDate || '2025-01-01').slice(0, 10),
+          merchant: '纽澳康源',
+          nzdPrice: p.nzdPrice ? Number(Number(p.nzdPrice).toFixed(2)) : null,
+          rmbPrice: p.rmbPrice ? Number(Number(p.rmbPrice).toFixed(2)) : null,
+          exchangeRate: Number(p.lastExchangeRate) || null,
+          orderNo: '',
+          orderId: '',
+          scrapedAt: p.lastScrapedAt || '',
+          note: p.priceSource || '默认基准单价',
+          isWebVerified: Boolean(p.lastScrapedAt),
+          sourceType: '默认基准单价'
+        });
+      }
+
+      // 3. CRITICAL FIX: Deduplicate strictly!
+      //    If BOTH points have an orderNo and their orderNos are DIFFERENT (e.g. #20261028092009885255 vs #20261028091621952931),
+      //    they are TWO DISTINCT ORDERS and MUST NEVER be merged into one row!
+      const deduped = [];
+      rawPoints.forEach(pt => {
+        if (filterMode === 'WEB_ONLY' && !pt.isWebVerified) return;
+        const dupIdx = deduped.findIndex(d => {
+          if (pt.orderNo && d.orderNo) {
+            return String(pt.orderNo).trim() === String(d.orderNo).trim();
+          }
+          if (pt.orderId && d.orderId && pt.orderId !== d.orderId) {
+            return false;
+          }
+          // Only merge when at least one point has NO orderNo (unlinked legacy history point matching same date + merchant + price)
+          return (
+            d.date === pt.date &&
+            d.merchant === pt.merchant &&
+            ((pt.nzdPrice && d.nzdPrice && Math.abs(d.nzdPrice - pt.nzdPrice) < 0.015) ||
+             (pt.rmbPrice && d.rmbPrice && Math.abs(d.rmbPrice - pt.rmbPrice) < 0.015))
+          );
+        });
+        if (dupIdx === -1) {
+          deduped.push(pt);
+        } else {
+          const primary = (pt.orderId && !deduped[dupIdx].orderId) ? pt : deduped[dupIdx];
+          const secondary = primary === pt ? deduped[dupIdx] : pt;
+          const isPureRmbOrder = primary.orderNo && orderByNo[primary.orderNo] && orderByNo[primary.orderNo].currency === 'CNY' && !orderByNo[primary.orderNo].exchangeRate && !orderByNo[primary.orderNo].isMiniProgram;
+          deduped[dupIdx] = {
+            ...secondary,
+            ...primary,
+            nzdPrice: isPureRmbOrder ? null : (primary.nzdPrice || secondary.nzdPrice),
+            rmbPrice: primary.rmbPrice || secondary.rmbPrice,
+            exchangeRate: primary.exchangeRate || secondary.exchangeRate,
+            orderNo: primary.orderNo || secondary.orderNo,
+            orderId: primary.orderId || secondary.orderId,
+            isWebVerified: primary.isWebVerified || secondary.isWebVerified
+          };
+        }
+      });
+
+      return deduped.sort((a, b) => {
+        const cmp = String(a.date).localeCompare(String(b.date));
+        if (cmp !== 0) return cmp;
+        return String(a.orderNo || '').localeCompare(String(b.orderNo || ''));
+      });
+    };
+
+    // --- 6. Fix getFilteredOrders so #chkSortPinUnread defaults to false & respects chronological sorting ---
+    const _v791GetFilteredOrders = getFilteredOrders;
+    getFilteredOrders = function() {
+      const chkEl = document.getElementById('chkSortPinUnread');
+      // Default to false if checkbox is unchecked!
+      const pinUnread = chkEl ? Boolean(chkEl.checked) : false;
+      const res = _v791GetFilteredOrders();
+      if (!pinUnread) {
+        const sortMode = document.getElementById('filterOrderSort')?.value || state.orderSortMode || 'DATE_DESC';
+        res.sort((a, b) => {
+          if (sortMode === 'DATE_ASC') return String(a.orderDate || '').localeCompare(String(b.orderDate || ''));
+          if (sortMode === 'AMOUNT_DESC') return getOrderEquivalentNzd(b) - getOrderEquivalentNzd(a);
+          if (sortMode === 'AMOUNT_ASC') return getOrderEquivalentNzd(a) - getOrderEquivalentNzd(b);
+          if (sortMode === 'QTY_DESC' || sortMode === 'QTY_ASC') {
+            const qa = (a.items || []).reduce((s, i) => s + (Number(i.qty) || 0), 0);
+            const qb = (b.items || []).reduce((s, i) => s + (Number(i.qty) || 0), 0);
+            if (qa !== qb) return sortMode === 'QTY_DESC' ? (qb - qa) : (qa - qb);
+          }
+          if (sortMode === 'PARCELS_DESC' || sortMode === 'PARCELS_ASC') {
+            const pa = (a.parcels || []).length;
+            const pb = (b.parcels || []).length;
+            if (pa !== pb) return sortMode === 'PARCELS_DESC' ? (pb - pa) : (pa - pb);
+          }
+          if (sortMode === 'RECIPIENT_ASC' || sortMode === 'RECIPIENT_DESC') {
+            const cmp = String(a.recipient || '').localeCompare(String(b.recipient || ''), 'zh-CN');
+            if (cmp !== 0) return sortMode === 'RECIPIENT_ASC' ? cmp : -cmp;
+          }
+          if (sortMode === 'MERCHANT_ASC' || sortMode === 'MERCHANT_DESC') {
+            const cmp = String(a.merchant || '').localeCompare(String(b.merchant || ''), 'zh-CN');
+            if (cmp !== 0) return sortMode === 'MERCHANT_ASC' ? cmp : -cmp;
+          }
+          if (sortMode === 'UNVERIFIED_FIRST') {
+            const ua = (!a.webBackfilled && !isNoWebUrlOrder(a) && !a.cancelled) ? 0 : 1;
+            const ub = (!b.webBackfilled && !isNoWebUrlOrder(b) && !b.cancelled) ? 0 : 1;
+            if (ua !== ub) return ua - ub;
+          }
+          const dCmp = String(b.orderDate || '').localeCompare(String(a.orderDate || ''));
+          if (dCmp !== 0) return dCmp;
+          return String(b.orderNo || '').localeCompare(String(a.orderNo || ''));
+        });
+      }
+      return res;
+    };
+
+    // --- 7. Upgrade addFormItemRow, openOrderModal & saveOrderFromModal for Dual-Currency + Mini-Program + Fee ---
+    addFormItemRow = function(prodName, qty, unitPrice, nzdUnitPriceOverride) {
+      const container = document.getElementById('formItemsContainer');
+      const div = document.createElement('div');
+      div.className = 'bg-white p-2.5 rounded-lg border border-slate-200/90 space-y-1.5 form-item-row';
+      const cur = document.getElementById('formCurrency') ? document.getElementById('formCurrency').value : 'NZD';
+      const pInfo = prodName ? getProductInfo(prodName) : null;
+      const inferredNzd = nzdUnitPriceOverride !== undefined && nzdUnitPriceOverride !== null && nzdUnitPriceOverride !== ''
+        ? nzdUnitPriceOverride
+        : (cur === 'NZD' && unitPrice ? unitPrice : (pInfo && pInfo.nzdPrice ? pInfo.nzdPrice : ''));
+
+      div.innerHTML = `
+        <div class="grid grid-cols-12 gap-1.5 items-center">
+          <div class="col-span-12 sm:col-span-5">
+            <label class="block text-[10px] text-slate-400 sm:hidden mb-0.5">商品名称</label>
+            <input type="text" list="productCatalogDatalist" placeholder="选择或输入商品名称..." value="${(prodName || '').replace(/"/g, '&quot;')}" class="form-item-prod w-full text-xs border border-slate-300 rounded-lg px-2.5 py-1.5 bg-white font-semibold text-slate-800" />
+          </div>
+          <div class="col-span-3 sm:col-span-2">
+            <label class="block text-[10px] text-slate-400 mb-0.5 text-center">数量</label>
+            <input type="number" min="1" value="${qty || 1}" placeholder="数量" class="form-item-qty w-full text-xs border border-slate-300 rounded-lg px-1.5 py-1.5 bg-white text-center font-bold" />
+          </div>
+          <div class="col-span-4 sm:col-span-2">
+            <label class="block text-[10px] text-indigo-700 font-semibold mb-0.5" title="选填：微信小程序或网站上的纽币原币标价单价 (NZ$)">🇳🇿 纽币标价($)</label>
+            <input type="number" step="0.01" value="${inferredNzd !== undefined && inferredNzd !== null ? inferredNzd : ''}" placeholder="NZ$单价" class="form-item-nzd-price w-full text-xs border border-indigo-200 rounded-lg px-2 py-1.5 bg-indigo-50/30 font-mono text-indigo-950" />
+          </div>
+          <div class="col-span-4 sm:col-span-2">
+            <label class="block text-[10px] text-emerald-800 font-bold mb-0.5" title="当前结算币种下的实付单价">💰 结算单价</label>
+            <input type="number" step="0.01" value="${unitPrice !== undefined ? unitPrice : ''}" placeholder="结算单价" class="form-item-price w-full text-xs border border-emerald-300 rounded-lg px-2 py-1.5 bg-white font-mono font-bold text-slate-900" />
+          </div>
+          <div class="col-span-1 text-right pt-3 sm:pt-4">
+            <button type="button" class="btn-remove-row text-rose-500 hover:text-rose-700 font-bold text-base px-1" title="删除此商品行">×</button>
+          </div>
+        </div>
+        <div class="flex flex-wrap items-center justify-between gap-1.5 pl-1 pt-0.5">
+          <div class="form-item-price-hint text-[11px] text-slate-500 flex flex-wrap items-center gap-1"></div>
+          <div class="flex items-center gap-1 text-[10px]">
+            <span class="text-indigo-700 font-medium">📱 小程序只写了行总价?</span>
+            <input type="number" step="0.01" placeholder="填行小计(如100.5)" class="form-item-subtotal-helper w-24 border border-indigo-200 rounded px-1.5 py-0.5 font-mono text-[10px] bg-indigo-50/40" title="输入小程序截图上该商品行的总价（如 x3 旁的 NZ$100.50），自动除以数量算出单瓶纽币标价！" />
+            <button type="button" class="btn-calc-unit-from-sub bg-indigo-100 hover:bg-indigo-200 text-indigo-900 font-bold px-1.5 py-0.5 rounded transition">÷数量算单价</button>
+          </div>
+        </div>
+      `;
+      container.appendChild(div);
+
+      const prodInput = div.querySelector('.form-item-prod');
+      const qtyInput = div.querySelector('.form-item-qty');
+      const nzdInput = div.querySelector('.form-item-nzd-price');
+      const priceInput = div.querySelector('.form-item-price');
+      const subHelper = div.querySelector('.form-item-subtotal-helper');
+      const btnSubCalc = div.querySelector('.btn-calc-unit-from-sub');
+      const hintBox = div.querySelector('.form-item-price-hint');
+
+      function refreshItemPriceHint(autoFillPrice) {
+        const pname = prodInput.value.trim();
+        const p = getProductInfo(pname);
+        const cur = document.getElementById('formCurrency').value || 'NZD';
+        const ordDate = document.getElementById('formOrderDate').value || TODAY_STR;
+        if (!p) {
+          hintBox.innerHTML = pname ? `<span class="text-emerald-700">✨ 新商品：保存订单时将按日期 (${ordDate}) 自动加入商品单价库</span>` : '';
+          return;
+        }
+        const matched = getHistoricalPriceByDate(pname, ordDate, cur);
+        if (autoFillPrice && matched > 0) {
+          priceInput.value = matched;
+        }
+        if (autoFillPrice && p.nzdPrice && !nzdInput.value) {
+          nzdInput.value = p.nzdPrice;
+        }
+        const series = collectProductVerifiedPriceSeries(p.name, 'ALL_VERIFIED');
+        const recentPts = series.slice(-4).reverse();
+        const histChips = recentPts.map(pt => {
+          const valToPick = cur === 'CNY' ? (pt.rmbPrice || pt.nzdPrice || 0) : (pt.nzdPrice || pt.rmbPrice || 0);
+          const nzdAttr = pt.nzdPrice || '';
+          const rmbAttr = pt.rmbPrice || '';
+          const lbl = (pt.nzdPrice && pt.rmbPrice)
+            ? `NZ$${pt.nzdPrice}/¥${pt.rmbPrice}`
+            : (pt.rmbPrice ? `¥${pt.rmbPrice}` : `NZ$${pt.nzdPrice}`);
+          return `<button type="button" data-pick-price="${valToPick}" data-pick-nzd="${nzdAttr}" data-pick-rmb="${rmbAttr}" class="px-1.5 py-0.2 rounded bg-amber-50 hover:bg-amber-100 text-amber-900 border border-amber-200 transition font-mono">📅 ${pt.date}: ${lbl}</button>`;
+        }).join('');
+        hintBox.innerHTML = `<span>已核实档位(点选填入)：</span>${histChips || `<span class="text-slate-400">基准 NZ$${p.nzdPrice || 0}</span>`}`;
+        hintBox.querySelectorAll('[data-pick-price]').forEach(btn => {
+          btn.addEventListener('click', () => {
+            const curNow = document.getElementById('formCurrency').value || 'NZD';
+            const pNzd = btn.getAttribute('data-pick-nzd');
+            const pRmb = btn.getAttribute('data-pick-rmb');
+            if (pNzd) nzdInput.value = pNzd;
+            if (curNow === 'CNY' && pRmb) priceInput.value = pRmb;
+            else if (curNow === 'NZD' && pNzd) priceInput.value = pNzd;
+            else priceInput.value = btn.getAttribute('data-pick-price');
+            syncDualStudioFromItemRows();
+            updateFormOrderTotalPreview();
+          });
+        });
+      }
+
+      refreshItemPriceHint(false);
+
+      if (btnSubCalc && subHelper) {
+        const applySubDiv = () => {
+          const subVal = parseFloat(subHelper.value) || 0;
+          const qVal = Math.max(1, parseInt(qtyInput.value, 10) || 1);
+          if (subVal > 0) {
+            const unitNzd = Number((subVal / qVal).toFixed(2));
+            nzdInput.value = unitNzd;
+            if ((document.getElementById('formCurrency')?.value || 'NZD') === 'NZD') {
+              priceInput.value = unitNzd;
+            }
+            syncDualStudioFromItemRows();
+            updateFormOrderTotalPreview();
+            showToast(`➗ 已按行小计 ${subVal} ÷ ${qVal} 件 = 单价 ${unitNzd} 自动填入！`);
+          }
+        };
+        btnSubCalc.addEventListener('click', applySubDiv);
+        subHelper.addEventListener('change', applySubDiv);
+      }
+
+      prodInput.addEventListener('change', () => {
+        refreshItemPriceHint(true);
+        syncDualStudioFromItemRows();
+        updateFormOrderTotalPreview();
+      });
+      qtyInput.addEventListener('input', () => {
+        syncDualStudioFromItemRows();
+        updateFormOrderTotalPreview();
+      });
+      nzdInput.addEventListener('input', () => {
+        if ((document.getElementById('formCurrency')?.value || 'NZD') === 'NZD' && nzdInput.value) {
+          priceInput.value = nzdInput.value;
+        }
+        syncDualStudioFromItemRows();
+        updateFormOrderTotalPreview();
+      });
+      priceInput.addEventListener('input', () => {
+        if ((document.getElementById('formCurrency')?.value || 'NZD') === 'NZD' && priceInput.value) {
+          nzdInput.value = priceInput.value;
+        }
+        syncDualStudioFromItemRows();
+        updateFormOrderTotalPreview();
+      });
+      div.querySelector('.btn-remove-row').addEventListener('click', () => {
+        div.remove();
+        syncDualStudioFromItemRows();
+        updateFormOrderTotalPreview();
+      });
+    };
+
+    // Helper: Sync #modalDualCurrencyFeeStudio fields from item rows & calculate dual-currency unit prices
+    function syncDualStudioFromItemRows() {
+      const nzdSubEl = document.getElementById('dualCalcNzdSubtotal');
+      const rmbTotEl = document.getElementById('dualCalcRmbActualTotal');
+      const rateEl = document.getElementById('dualCalcEffectiveRate');
+      const sumLbl = document.getElementById('dualCalcLiveSummary');
+      if (!nzdSubEl) return;
+
+      let nzdSum = 0;
+      document.querySelectorAll('.form-item-row').forEach(row => {
+        const q = Number(row.querySelector('.form-item-qty')?.value) || 0;
+        const np = Number(row.querySelector('.form-item-nzd-price')?.value) || 0;
+        if (q > 0 && np > 0) nzdSum += q * np;
+      });
+      if (nzdSum > 0) {
+        nzdSubEl.value = Number(nzdSum.toFixed(2));
+      }
+      const nzdTotal = Number(nzdSubEl.value) || 0;
+      const rmbTotal = Number(rmbTotEl?.value) || 0;
+      if (nzdTotal > 0 && rmbTotal > 0) {
+        const effRate = Number((rmbTotal / nzdTotal).toFixed(4));
+        if (rateEl) rateEl.value = effRate;
+        if (sumLbl) {
+          sumLbl.textContent = `✅ 双币已联动：原标价 NZ$${nzdTotal.toFixed(2)} ↔ 实扣 ¥${rmbTotal.toFixed(2)} (综合汇率 ${effRate})`;
+        }
+      } else if (sumLbl) {
+        sumLbl.textContent = '';
+      }
+    }
+
+    function applyDualCurrencyStudioToOrderForm(silentToast = false) {
+      const nzdSubEl = document.getElementById('dualCalcNzdSubtotal');
+      const rmbTotEl = document.getElementById('dualCalcRmbActualTotal');
+      const feeEl = document.getElementById('dualCalcRmbFee');
+      const rateEl = document.getElementById('dualCalcEffectiveRate');
+      const allocMode = document.querySelector('input[name="dualFeeAllocMode"]:checked')?.value || 'INCLUDE_IN_UNIT';
+
+      let nzdTotal = Number(nzdSubEl?.value) || 0;
+      let rmbTotal = Number(rmbTotEl?.value) || 0;
+      const rmbFee = Math.max(0, Number(feeEl?.value) || 0);
+      let effRate = Number(rateEl?.value) || 0;
+
+      const rows = Array.from(document.querySelectorAll('.form-item-row'));
+      if (rows.length === 0) return;
+
+      // If user typed nzdTotal directly (e.g. 100.50) and there is 1 item row (e.g. qty 3), backfill item's NZD unit price (33.50)!
+      let currentRowNzdSum = 0;
+      rows.forEach(r => {
+        const q = Number(r.querySelector('.form-item-qty')?.value) || 1;
+        const np = Number(r.querySelector('.form-item-nzd-price')?.value) || 0;
+        currentRowNzdSum += q * np;
+      });
+      if (nzdTotal > 0 && currentRowNzdSum <= 0 && rows.length === 1) {
+        const q0 = Math.max(1, Number(rows[0].querySelector('.form-item-qty')?.value) || 1);
+        const unitNzd0 = Number((nzdTotal / q0).toFixed(2));
+        const nzdInp0 = rows[0].querySelector('.form-item-nzd-price');
+        if (nzdInp0) nzdInp0.value = unitNzd0;
+        currentRowNzdSum = nzdTotal;
+      } else if (currentRowNzdSum > 0 && nzdTotal <= 0) {
+        nzdTotal = Number(currentRowNzdSum.toFixed(2));
+        if (nzdSubEl) nzdSubEl.value = nzdTotal;
+      }
+
+      if (nzdTotal > 0 && rmbTotal <= 0 && effRate > 0) {
+        rmbTotal = Number((nzdTotal * effRate).toFixed(2));
+        if (rmbTotEl) rmbTotEl.value = rmbTotal;
+      } else if (nzdTotal > 0 && rmbTotal > 0) {
+        effRate = Number((rmbTotal / nzdTotal).toFixed(4));
+        if (rateEl) rateEl.value = effRate;
+      }
+
+      if (nzdTotal <= 0 || rmbTotal <= 0) {
+        if (!silentToast) showToast('⚠️ 请先输入「页面纽币商品总额 (如 100.50)」与「微信/银行实扣人民币总额 (如 391.59)」');
+        return;
+      }
+
+      // Switch main form currency to CNY so the actual paid RMB amount is the primary ledger total, while preserving NZD unit prices!
+      const curSel = document.getElementById('formCurrency');
+      if (curSel) curSel.value = 'CNY';
+
+      const distributableRmb = allocMode === 'SEPARATE_FEE_FIELD' ? Math.max(0, rmbTotal - rmbFee) : rmbTotal;
+      const ratioRate = nzdTotal > 0 ? (distributableRmb / nzdTotal) : effRate;
+
+      const itemsDualMap = [];
+      const ordDate = document.getElementById('formOrderDate')?.value || TODAY_STR;
+
+      rows.forEach(r => {
+        const pname = (r.querySelector('.form-item-prod')?.value || '').trim();
+        const q = Math.max(1, Number(r.querySelector('.form-item-qty')?.value) || 1);
+        let nzdUp = Number(r.querySelector('.form-item-nzd-price')?.value) || 0;
+        if (nzdUp <= 0 && rows.length === 1) {
+          nzdUp = Number((nzdTotal / q).toFixed(2));
+          const nInp = r.querySelector('.form-item-nzd-price');
+          if (nInp) nInp.value = nzdUp;
+        }
+        const rmbUp = Number((nzdUp * ratioRate).toFixed(2));
+        const pInp = r.querySelector('.form-item-price');
+        if (pInp) pInp.value = rmbUp;
+
+        itemsDualMap.push({
+          product: pname,
+          origUnitPrice: nzdUp,
+          origCurrency: 'NZD',
+          nzdUnitPrice: nzdUp,
+          rmbUnitPrice: rmbUp,
+          exchangeRate: effRate,
+          priceDate: ordDate
+        });
+      });
+
+      const pfEl = document.getElementById('formPaymentFee');
+      if (pfEl) {
+        pfEl.value = allocMode === 'SEPARATE_FEE_FIELD' ? rmbFee : 0;
+      }
+
+      const discNoteEl = document.getElementById('formDiscountNote');
+      if (discNoteEl && rmbFee > 0 && allocMode === 'INCLUDE_IN_UNIT') {
+        discNoteEl.value = `原价NZ$${nzdTotal.toFixed(2)}，实扣¥${rmbTotal.toFixed(2)}(含手续费¥${rmbFee.toFixed(2)})`;
+      }
+
+      window.currentModalOrderDualMeta = {
+        fromWebScrape: true,
+        isDualCurrency: true,
+        currency: 'CNY',
+        origCurrency: 'NZD',
+        origItemSubtotal: nzdTotal,
+        origShippingFee: 0,
+        origPaidTotal: nzdTotal,
+        settledCurrency: 'CNY',
+        settledAmount: rmbTotal,
+        paidTotal: rmbTotal,
+        paymentFee: allocMode === 'SEPARATE_FEE_FIELD' ? rmbFee : 0,
+        exchangeRate: effRate,
+        itemsDualMap
+      };
+
+      const sumLbl = document.getElementById('dualCalcLiveSummary');
+      if (sumLbl) {
+        const firstIt = itemsDualMap[0];
+        sumLbl.textContent = `✅ 已换算：原价 NZ$${firstIt ? firstIt.nzdUnitPrice : ''}/件 ↔ 实付 ¥${firstIt ? firstIt.rmbUnitPrice : ''}/件 (综合汇率 ${effRate})`;
+      }
+
+      updateFormOrderTotalPreview();
+      if (!silentToast) {
+        showToast(`💱 已将纽币标价 NZ$${nzdTotal.toFixed(2)} 与实付人民币 ¥${rmbTotal.toFixed(2)} (汇率 ${effRate}) 同步填入商品行！`);
+      }
+    }
+
+    // Wrap openOrderModal to populate #modalDualCurrencyFeeStudio & #chkFormIsMiniProgram
+    const _v791OpenOrderModal = openOrderModal;
+    openOrderModal = function(orderToEdit, isClone) {
+      _v791OpenOrderModal(orderToEdit, isClone);
+
+      const chkMp = document.getElementById('chkFormIsMiniProgram');
+      const nzdSubEl = document.getElementById('dualCalcNzdSubtotal');
+      const rmbTotEl = document.getElementById('dualCalcRmbActualTotal');
+      const feeEl = document.getElementById('dualCalcRmbFee');
+      const rateEl = document.getElementById('dualCalcEffectiveRate');
+      const sumLbl = document.getElementById('dualCalcLiveSummary');
+
+      if (orderToEdit && !isClone) {
+        const isMp = isMiniProgramOrder(orderToEdit);
+        if (chkMp) chkMp.checked = isMp;
+        updateMiniProgramUrlBoxUI(isMp);
+
+        const pmEl = document.getElementById('formPaymentMethod');
+        if (pmEl && pmEl.value) pmEl.value = normalizePaymentMethodName(pmEl.value);
+
+        // Populate each item row's NZD unit price if available
+        const rows = document.querySelectorAll('.form-item-row');
+        (orderToEdit.items || []).forEach((it, idx) => {
+          const r = rows[idx];
+          if (!r) return;
+          const nInp = r.querySelector('.form-item-nzd-price');
+          if (nInp) {
+            const nVal = it.nzdUnitPrice || it.origUnitPrice || (orderToEdit.currency === 'NZD' ? it.unitPrice : '');
+            nInp.value = nVal !== undefined && nVal !== null ? nVal : '';
+          }
+        });
+
+        if (nzdSubEl) nzdSubEl.value = orderToEdit.origPaidTotal || '';
+        if (rmbTotEl) rmbTotEl.value = orderToEdit.settledAmount || (orderToEdit.currency === 'CNY' ? calcOrderMoney(orderToEdit).grandTotal : '');
+        if (feeEl) feeEl.value = orderToEdit.paymentFee || '';
+        if (rateEl) rateEl.value = orderToEdit.exchangeRate || '';
+        syncDualStudioFromItemRows();
+      } else {
+        if (chkMp) chkMp.checked = false;
+        updateMiniProgramUrlBoxUI(false);
+        if (nzdSubEl) nzdSubEl.value = '';
+        if (rmbTotEl) rmbTotEl.value = '';
+        if (feeEl) feeEl.value = '';
+        if (rateEl) rateEl.value = '';
+        if (sumLbl) sumLbl.textContent = '';
+        syncDualStudioFromItemRows();
+      }
+    };
+
+    function updateMiniProgramUrlBoxUI(isMp) {
+      const urlBox = document.getElementById('formOrderUrlBox');
+      const urlInp = document.getElementById('formOrderUrl');
+      if (!urlBox) return;
+      let mpTip = document.getElementById('formMiniProgramNoUrlBanner');
+      if (isMp) {
+        if (urlInp) urlInp.value = '';
+        if (!mpTip) {
+          mpTip = document.createElement('div');
+          mpTip.id = 'formMiniProgramNoUrlBanner';
+          mpTip.className = 'mt-1.5 text-[11px] bg-indigo-100/90 text-indigo-950 border border-indigo-300 rounded-lg px-2.5 py-1.5 font-semibold flex items-center justify-between gap-2';
+          mpTip.innerHTML = `<span>📱 <strong>微信小程序订单模式：</strong>微信小程序在电脑端无外部网页链接，保存后将在订单列表显示「📱 小程序单」标签，点击单号直接打开系统内「📋 详单」收据，且自动标记为「✅ 已核验」。</span>`;
+          urlBox.appendChild(mpTip);
+        }
+        mpTip.classList.remove('hidden');
+      } else if (mpTip) {
+        mpTip.classList.add('hidden');
+      }
+    }
+
+    // Wrap saveOrderFromModal so manual entry with #chkSyncOrderPriceToCatalog or dual-currency / Mini-Program saves full verified metadata!
+    const _v791SaveOrderFromModal = window.saveOrderFromModal;
+    saveOrderFromModal = function(keepOpenForNext, openNotifyAfterSave) {
+      // Normalize payment method before saving
+      const pmEl = document.getElementById('formPaymentMethod');
+      if (pmEl && pmEl.value) {
+        pmEl.value = normalizePaymentMethodName(pmEl.value);
+      }
+
+      // Check if user entered both NZD prices on item rows (or in dualCalcNzdSubtotal) AND CNY prices
+      const cur = document.getElementById('formCurrency')?.value || 'NZD';
+      const rows = Array.from(document.querySelectorAll('.form-item-row'));
+      let nzdItemSum = 0;
+      let curItemSum = 0;
+      const ordDate = document.getElementById('formOrderDate')?.value || TODAY_STR;
+      const builtDualMap = [];
+
+      rows.forEach(r => {
+        const pname = (r.querySelector('.form-item-prod')?.value || '').trim();
+        const q = Math.max(1, Number(r.querySelector('.form-item-qty')?.value) || 1);
+        const up = Number(r.querySelector('.form-item-price')?.value) || 0;
+        const nzdUp = Number(r.querySelector('.form-item-nzd-price')?.value) || 0;
+        if (pname && q > 0) {
+          curItemSum += q * up;
+          if (nzdUp > 0) nzdItemSum += q * nzdUp;
+          builtDualMap.push({
+            product: pname,
+            origUnitPrice: nzdUp > 0 ? nzdUp : (cur === 'NZD' ? up : null),
+            origCurrency: nzdUp > 0 || cur === 'NZD' ? 'NZD' : null,
+            nzdUnitPrice: nzdUp > 0 ? nzdUp : (cur === 'NZD' ? up : null),
+            rmbUnitPrice: cur === 'CNY' ? up : null,
+            exchangeRate: (cur === 'CNY' && nzdUp > 0 && up > 0) ? Number((up / nzdUp).toFixed(4)) : null,
+            priceDate: ordDate
+          });
+        }
+      });
+
+      const dualNzdInputVal = Number(document.getElementById('dualCalcNzdSubtotal')?.value) || nzdItemSum;
+      const dualRmbInputVal = Number(document.getElementById('dualCalcRmbActualTotal')?.value) || (cur === 'CNY' ? curItemSum : 0);
+      if (dualNzdInputVal > 0 && dualRmbInputVal > 0 && cur === 'CNY') {
+        const effRate = Number((dualRmbInputVal / dualNzdInputVal).toFixed(4));
+        builtDualMap.forEach((dmIt, idx) => {
+          if (!dmIt.nzdUnitPrice && rows.length === 1) {
+            const q0 = Math.max(1, Number(rows[0].querySelector('.form-item-qty')?.value) || 1);
+            dmIt.nzdUnitPrice = Number((dualNzdInputVal / q0).toFixed(2));
+            dmIt.origUnitPrice = dmIt.nzdUnitPrice;
+            dmIt.origCurrency = 'NZD';
+          }
+          if (!dmIt.exchangeRate) dmIt.exchangeRate = effRate;
+        });
+        window.currentModalOrderDualMeta = {
+          ...(window.currentModalOrderDualMeta || {}),
+          fromWebScrape: true,
+          isDualCurrency: true,
+          currency: 'CNY',
+          origCurrency: 'NZD',
+          origItemSubtotal: dualNzdInputVal,
+          origPaidTotal: dualNzdInputVal,
+          settledCurrency: 'CNY',
+          settledAmount: dualRmbInputVal,
+          paidTotal: dualRmbInputVal,
+          exchangeRate: effRate,
+          itemsDualMap: builtDualMap
+        };
+      } else if (builtDualMap.some(x => x.nzdUnitPrice || x.rmbUnitPrice)) {
+        window.currentModalOrderDualMeta = {
+          ...(window.currentModalOrderDualMeta || {}),
+          fromWebScrape: true,
+          itemsDualMap: builtDualMap
+        };
+      }
+
+      const chkSync = document.getElementById('chkSyncOrderPriceToCatalog');
+      const chkMp = document.getElementById('chkFormIsMiniProgram');
+      const isMpChecked = chkMp ? chkMp.checked : false;
+      if (chkSync && chkSync.checked) {
+        window.currentModalOrderDualMeta = {
+          ...(window.currentModalOrderDualMeta || {}),
+          fromWebScrape: true
+        };
+      }
+
+      const targetId = document.getElementById('formOrderId')?.value;
+      const targetOrderNo = document.getElementById('formOrderNo')?.value.trim();
+
+      _v791SaveOrderFromModal(keepOpenForNext, openNotifyAfterSave);
+
+      // Post-save enrichment: mark isMiniProgram if applicable, normalize paymentMethod, and re-sync verified catalog prices
+      const savedOrd = state.orders.find(o => (targetId && o.id === targetId) || (targetOrderNo && o.orderNo === targetOrderNo)) || state.orders[0];
+      if (savedOrd) {
+        if (isMpChecked || isMiniProgramOrder(savedOrd)) {
+          savedOrd.isMiniProgram = true;
+          savedOrd.orderUrl = '';
+          savedOrd.webBackfilled = true;
+          if (!savedOrd.webBackfilledAt) savedOrd.webBackfilledAt = TODAY_STR;
+        }
+        if (chkSync && chkSync.checked) {
+          savedOrd.webBackfilled = true;
+          if (!savedOrd.webBackfilledAt) savedOrd.webBackfilledAt = TODAY_STR;
+        }
+        if (savedOrd.paymentMethod) {
+          savedOrd.paymentMethod = normalizePaymentMethodName(savedOrd.paymentMethod);
+        }
+        cleanAndSyncVerifiedOrderPricesToCatalog();
+        saveState(`保存并核验订单 #${savedOrd.orderNo}`);
+        renderAll();
+      }
+    };
+    window.saveOrderFromModal = saveOrderFromModal;
+
+    // --- 8. Enhance renderOrdersTab to Display "📱 小程序单" Badge & Clean Non-Wrapping OrderNo ---
+    const _v791RenderOrdersTabFinal = renderOrdersTab;
+    renderOrdersTab = function() {
+      _v791RenderOrdersTabFinal();
+      // Post-process #ordersTableBody rows for Mini-Program orders so they show a crisp "📱 小程序单" badge and clickable quick-view receipt
+      const tbody = document.getElementById('ordersTableBody');
+      if (!tbody) return;
+      const filtered = getFilteredOrders();
+      const trs = tbody.querySelectorAll('tr');
+      filtered.forEach((o, idx) => {
+        const tr = trs[idx];
+        if (!tr) return;
+        if (isMiniProgramOrder(o)) {
+          const merchTd = tr.children[2];
+          if (merchTd && !merchTd.innerHTML.includes('小程序单')) {
+            const firstDiv = merchTd.querySelector('div');
+            if (firstDiv) {
+              firstDiv.insertAdjacentHTML('beforeend', `<span class="text-[10px] bg-indigo-50 text-indigo-700 border border-indigo-200 px-1.5 py-0.2 rounded font-bold whitespace-nowrap" title="微信小程序订单（电脑端无外部网页链接，点击下方单号直接查看系统详单收据）">📱 小程序单</span>`);
+            }
+            const orderNoDivs = merchTd.querySelectorAll('div');
+            if (orderNoDivs.length >= 2) {
+              const noDiv = orderNoDivs[1];
+              noDiv.className = 'mt-0.5 flex items-center gap-1 flex-wrap';
+              noDiv.innerHTML = `
+                <button type="button" data-quickview-order="${o.id}" class="font-mono text-[11px] font-semibold text-indigo-700 hover:text-indigo-950 hover:underline text-left break-all" title="微信小程序单无外部网页，点击直接弹出本单「📋 详单」电子收据">
+                  #${o.orderNo}
+                </button>
+                <button type="button" data-copy-order="${o.orderNo}" class="text-[11px] text-slate-400 hover:text-slate-700 px-0.5 shrink-0" title="复制小程序订单编号">📋</button>
+              `;
+            }
+          }
+        }
+      });
+    };
+
+    // --- 9. Add Inline "⬆️ 回到顶部选品" Button in #trendStudioTimelineTable & Setup Floating Back-to-Top Dock ---
+    const _v791RenderProductPriceTrendStudio = renderProductPriceTrendStudio;
+    renderProductPriceTrendStudio = function(selectedName) {
+      _v791RenderProductPriceTrendStudio(selectedName);
+      const tableEl = document.getElementById('trendStudioTimelineTable');
+      if (tableEl && !tableEl.innerHTML.includes('data-inline-back-top')) {
+        tableEl.insertAdjacentHTML('beforeend', `
+          <div class="mt-2.5 pt-2 border-t border-slate-200/70 flex flex-wrap items-center justify-between gap-2 text-[11px] text-slate-500">
+            <span>💡 同一天多笔不同订单号（如小程序连下2单）均独立展示，绝不合并吞单</span>
+            <button type="button" data-inline-back-top="trendSelect" class="bg-emerald-50 hover:bg-emerald-100 text-emerald-800 border border-emerald-300 font-bold px-2.5 py-1 rounded-lg transition flex items-center gap-1">
+              <span>⬆️ 回到顶部切换商品 / 搜索</span>
+            </button>
+          </div>
+        `);
+      }
+    };
+
+    const _v791SaveOrderFromMiniProgramBuilder = saveOrderFromMiniProgramBuilder;
+    saveOrderFromMiniProgramBuilder = function(openNotifyAfter) {
+      const rmbActualPaid = Number(document.getElementById('mpQuickRmbActualPaid')?.value) || 0;
+      const curSel = document.getElementById('mpQuickCurrency')?.value || 'CNY';
+      const hadItems = Array.isArray(mpBuilderState.items) ? JSON.parse(JSON.stringify(mpBuilderState.items)) : [];
+
+      _v791SaveOrderFromMiniProgramBuilder(openNotifyAfter);
+
+      const newest = state.orders[0];
+      if (newest && hadItems.length > 0) {
+        newest.isMiniProgram = true;
+        newest.orderUrl = '';
+        newest.paymentMethod = normalizePaymentMethodName(newest.paymentMethod || '微信支付');
+        newest.webBackfilled = true;
+
+        // If screenshot had NZD prices (or user entered rmbActualPaid alongside NZD item prices), enrich with dual-currency!
+        const itemSum = hadItems.reduce((s, i) => s + (Number(i.unitPrice) || 0) * (Number(i.qty) || 1), 0);
+        if (rmbActualPaid > 0 && itemSum > 0 && (curSel === 'NZD' || itemSum < rmbActualPaid * 0.5)) {
+          const effRate = Number((rmbActualPaid / itemSum).toFixed(4));
+          newest.currency = 'CNY';
+          newest.origCurrency = 'NZD';
+          newest.origItemSubtotal = Number(itemSum.toFixed(2));
+          newest.origPaidTotal = Number(itemSum.toFixed(2));
+          newest.settledCurrency = 'CNY';
+          newest.settledAmount = Number(rmbActualPaid.toFixed(2));
+          newest.exchangeRate = effRate;
+          (newest.items || []).forEach((it, idx) => {
+            const origNzd = Number(hadItems[idx]?.unitPrice) || Number(it.unitPrice) || 0;
+            const rmbUp = Number((origNzd * effRate).toFixed(2));
+            it.nzdUnitPrice = origNzd;
+            it.origUnitPrice = origNzd;
+            it.origCurrency = 'NZD';
+            it.rmbUnitPrice = rmbUp;
+            it.unitPrice = rmbUp;
+            it.exchangeRate = effRate;
+          });
+        }
+        const rmbInp = document.getElementById('mpQuickRmbActualPaid');
+        if (rmbInp) rmbInp.value = '';
+        cleanAndSyncVerifiedOrderPricesToCatalog();
+        saveState(`小程序双币快录订单 #${newest.orderNo}`);
+        renderAll();
+      }
+    };
+
+    function initV7100Events() {
+      // 1. Run startup migration & state cleanup
+      cleanAndSyncVerifiedOrderPricesToCatalog();
+
+      // 2. Ensure #chkSortPinUnread defaults to false on load, and auto-unchecks when user picks a sort mode or scope filter
+      const chkPinUnread = document.getElementById('chkSortPinUnread');
+      if (chkPinUnread) {
+        chkPinUnread.checked = false;
+      }
+      const orderSortSel = document.getElementById('filterOrderSort');
+      if (orderSortSel) {
+        orderSortSel.addEventListener('change', () => {
+          if (chkPinUnread && chkPinUnread.checked) {
+            chkPinUnread.checked = false;
+          }
+          renderOrdersTab();
+        });
+      }
+      document.querySelectorAll('[data-order-sort-col]').forEach(th => {
+        th.addEventListener('click', () => {
+          if (chkPinUnread && chkPinUnread.checked) {
+            chkPinUnread.checked = false;
+          }
+          renderOrdersTab();
+        });
+      });
+      document.querySelectorAll('[data-order-scope]').forEach(btn => {
+        btn.addEventListener('click', () => {
+          if (chkPinUnread && chkPinUnread.checked) {
+            chkPinUnread.checked = false;
+          }
+          renderOrdersTab();
+        });
+      });
+
+      // 3. Bind WeChat Mini-Program preset & Dual-Currency Fee Studio events inside #modalOrder
+      const btnPresetMp = document.getElementById('btnQuickPresetMiniProgram');
+      const chkMp = document.getElementById('chkFormIsMiniProgram');
+      if (btnPresetMp) {
+        btnPresetMp.addEventListener('click', () => {
+          if (typeof setOrderPurchaseMode === 'function') setOrderPurchaseMode(false, 'COURIER');
+          if (chkMp) chkMp.checked = true;
+          updateMiniProgramUrlBoxUI(true);
+          const merchEl = document.getElementById('formMerchant');
+          if (merchEl && (!merchEl.value || merchEl.value === '华洋' || merchEl.value === '易康')) {
+            merchEl.value = '易康（微信小程序）';
+          }
+          const curEl = document.getElementById('formCurrency');
+          if (curEl) curEl.value = 'CNY';
+          const pmEl = document.getElementById('formPaymentMethod');
+          if (pmEl) pmEl.value = '微信支付';
+          const nzdSubEl = document.getElementById('dualCalcNzdSubtotal');
+          if (nzdSubEl) nzdSubEl.focus();
+          showToast('📱 已切换为「微信小程序订单」模式：请在下方输入小程序纽币总额与微信实付人民币总额！');
+        });
+      }
+      if (chkMp) {
+        chkMp.addEventListener('change', () => {
+          updateMiniProgramUrlBoxUI(chkMp.checked);
+          if (chkMp.checked) {
+            const pmEl = document.getElementById('formPaymentMethod');
+            if (pmEl && !pmEl.value) pmEl.value = '微信支付';
+          }
+        });
+      }
+
+      const btnApplyDual = document.getElementById('btnApplyDualCalcToItems');
+      if (btnApplyDual) {
+        btnApplyDual.addEventListener('click', () => applyDualCurrencyStudioToOrderForm(false));
+      }
+      ['dualCalcNzdSubtotal', 'dualCalcRmbActualTotal', 'dualCalcRmbFee'].forEach(id => {
+        const el = document.getElementById(id);
+        if (el) {
+          el.addEventListener('input', () => {
+            const nzdVal = Number(document.getElementById('dualCalcNzdSubtotal')?.value) || 0;
+            const rmbVal = Number(document.getElementById('dualCalcRmbActualTotal')?.value) || 0;
+            const rateEl = document.getElementById('dualCalcEffectiveRate');
+            if (nzdVal > 0 && rmbVal > 0 && rateEl) {
+              rateEl.value = Number((rmbVal / nzdVal).toFixed(4));
+              applyDualCurrencyStudioToOrderForm(true);
+            }
+          });
+        }
+      });
+      document.querySelectorAll('input[name="dualFeeAllocMode"]').forEach(rad => {
+        rad.addEventListener('change', () => {
+          const nzdVal = Number(document.getElementById('dualCalcNzdSubtotal')?.value) || 0;
+          const rmbVal = Number(document.getElementById('dualCalcRmbActualTotal')?.value) || 0;
+          if (nzdVal > 0 && rmbVal > 0) applyDualCurrencyStudioToOrderForm(false);
+        });
+      });
+
+      // 4. Floating Back-to-Top & Quick Section Elevator Dock
+      const floatDock = document.getElementById('floatingBackToTopDock');
+      const floatMenu = document.getElementById('floatingQuickJumpMenu');
+      const btnBackTop = document.getElementById('btnFloatingBackToTop');
+
+      const updateFloatingDockVisibility = () => {
+        if (!floatDock) return;
+        const scrolled = (window.scrollY || document.documentElement.scrollTop || 0) > 180;
+        floatDock.classList.toggle('hidden', !scrolled);
+        if (floatMenu) {
+          const isProdTab = state.activeTab === 'products' || !document.getElementById('tab-products')?.classList.contains('hidden');
+          floatMenu.classList.toggle('hidden', !isProdTab);
+        }
+      };
+
+      window.addEventListener('scroll', updateFloatingDockVisibility, { passive: true });
+      if (btnBackTop) {
+        btnBackTop.addEventListener('click', () => {
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+      }
+
+      document.addEventListener('click', (e) => {
+        const jumpBtn = e.target.closest('[data-float-jump]');
+        if (jumpBtn) {
+          const target = jumpBtn.getAttribute('data-float-jump');
+          if (target === 'trendStudio') {
+            const st = document.getElementById('productPriceTrendStudio');
+            if (st) {
+              st.classList.remove('hidden');
+              st.scrollIntoView({ behavior: 'smooth', block: 'start' });
+              setTimeout(() => document.getElementById('trendStudioProdSelect')?.focus(), 350);
+            }
+          } else if (target === 'cartOptimizer') {
+            const co = document.getElementById('smartCartOptimizerStudio');
+            if (co) {
+              co.classList.remove('hidden');
+              co.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+          } else if (target === 'dedupStudio') {
+            const ds = document.getElementById('productDedupMergeStudio');
+            if (ds) {
+              ds.classList.remove('hidden');
+              renderProductDedupMergeStudio();
+              ds.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+          } else if (target === 'prodSearch') {
+            const hdr = document.getElementById('productsGridSectionHeader') || document.getElementById('prodSearchInput');
+            if (hdr) {
+              hdr.scrollIntoView({ behavior: 'smooth', block: 'start' });
+              setTimeout(() => document.getElementById('prodSearchInput')?.focus(), 350);
+            }
+          }
+          return;
+        }
+
+        const inlineTopBtn = e.target.closest('[data-inline-back-top]');
+        if (inlineTopBtn) {
+          const st = document.getElementById('productPriceTrendStudio');
+          if (st) {
+            st.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            setTimeout(() => document.getElementById('trendStudioProdSelect')?.focus(), 300);
+          } else {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+          }
+          return;
+        }
+      });
+
+      renderAll();
+      renderProductsTab();
+      renderOrdersTab();
+    }
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', initV7100Events);
+    } else {
+      initV7100Events();
+    }
+
+
     function downloadBlob(content, filename, mimeType) {
       const blob = new Blob([content], { type: mimeType });
       const url = URL.createObjectURL(blob);
@@ -22444,5 +23703,29 @@ export async function onRequestPost(context) {
       URL.revokeObjectURL(url);
     }
   </script>
+
+  <!-- v7.10.0 NEW: FLOATING BACK-TO-TOP & MODULE QUICK ELEVATOR DOCK -->
+  <div id="floatingBackToTopDock" class="fixed bottom-5 right-4 sm:right-6 z-40 hidden flex flex-col items-end gap-1.5 transition-all duration-200">
+    <!-- Context-aware quick jump buttons when in Products or Orders tab -->
+    <div id="floatingQuickJumpMenu" class="flex flex-col items-end gap-1 bg-slate-900/90 backdrop-blur-md text-white p-1.5 rounded-2xl shadow-xl border border-slate-700/80 text-[11px]">
+      <button type="button" data-float-jump="trendStudio" class="float-jump-prod px-2.5 py-1 rounded-xl hover:bg-emerald-600/90 font-bold flex items-center gap-1 transition whitespace-nowrap" title="直达顶部已核实商品单价趋势工作台并切换商品">
+        <span>📈 趋势图选品</span>
+      </button>
+      <button type="button" data-float-jump="cartOptimizer" class="float-jump-prod px-2.5 py-1 rounded-xl hover:bg-indigo-600/90 font-bold flex items-center gap-1 transition whitespace-nowrap" title="直达4大商家购前比价与智能凑单模拟器">
+        <span>🧮 凑单比价器</span>
+      </button>
+      <button type="button" data-float-jump="dedupStudio" class="float-jump-prod px-2.5 py-1 rounded-xl hover:bg-amber-500/90 hover:text-slate-950 font-bold flex items-center gap-1 transition whitespace-nowrap" title="展开并直达同品比对与合并审核工作台">
+        <span>🧬 同品合并台</span>
+      </button>
+      <button type="button" data-float-jump="prodSearch" class="float-jump-prod px-2.5 py-1 rounded-xl hover:bg-teal-600/90 font-bold flex items-center gap-1 transition whitespace-nowrap" title="直达商品卡片搜索与分类筛选栏">
+        <span>🔍 搜商品卡片</span>
+      </button>
+    </div>
+    <button type="button" id="btnFloatingBackToTop" class="bg-emerald-700 hover:bg-emerald-600 text-white font-extrabold text-xs px-3.5 py-2.5 rounded-full shadow-2xl border-2 border-emerald-300/80 flex items-center gap-1.5 transition transform hover:-translate-y-0.5 cursor-pointer" title="一键平滑回到页面最顶部">
+      <span class="text-sm leading-none">⬆️</span>
+      <span>回到顶部</span>
+    </button>
+  </div>
+
 </body>
 </html>
