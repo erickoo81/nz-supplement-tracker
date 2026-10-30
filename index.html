@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>纽澳跨境采购与快递追踪管家 v7.11.0 (Build 20261030.1215)</title>
+  <title>纽澳跨境采购与快递追踪管家 v7.13.0 (Build 20261030.1315)</title>
   <script src="https://cdn.tailwindcss.com/3.4.17"></script>
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
@@ -342,9 +342,9 @@
               <span id="uiIcon-appTitle" class="hidden"></span>
               <span id="uiText-appTitle">纽澳跨境采购与快递追踪管家</span>
             </h1>
-            <button type="button" id="btnHeaderVersionBadge" class="inline-flex items-center gap-1 text-xs bg-gradient-to-r from-amber-400 to-amber-300 hover:from-amber-300 hover:to-amber-200 text-slate-950 font-extrabold px-2.5 py-0.5 rounded-full shadow-xs transition cursor-pointer" title="当前正式稳定版本：v7.11.0 (Build 20261030.1215)（遵循 vMAJOR.MINOR.PATCH + Build Tag 规范 · 点击查看版本规范与更新日志）">
+            <button type="button" id="btnHeaderVersionBadge" class="inline-flex items-center gap-1 text-xs bg-gradient-to-r from-amber-400 to-amber-300 hover:from-amber-300 hover:to-amber-200 text-slate-950 font-extrabold px-2.5 py-0.5 rounded-full shadow-xs transition cursor-pointer" title="当前正式稳定版本：v7.13.0 (Build 20261030.1315)（遵循 vMAJOR.MINOR.PATCH + Build Tag 规范 · 点击查看版本规范与更新日志）">
               <span id="uiIcon-appVersion">🚀</span>
-              <span id="uiText-appVersion">v7.11.0 (Build 20261030.1215)</span>
+              <span id="uiText-appVersion">v7.13.0 (Build 20261030.1315)</span>
             </button>
             <button type="button" id="btnHeaderCfStatusPill" class="inline-flex items-center gap-1 text-[11px] bg-emerald-900/90 hover:bg-emerald-800 text-emerald-100 border border-emerald-600/70 font-semibold px-2.5 py-0.5 rounded-full transition cursor-pointer" title="点击打开 Cloudflare KV 边缘云同步设置 (方案B)">
               <span id="headerCfStatusDot" class="w-2 h-2 rounded-full bg-amber-400 inline-block"></span>
@@ -699,6 +699,9 @@
             </button>
             <button data-pfilter="2026_pending" class="parcel-filter-btn bg-white text-slate-700 hover:bg-slate-100 border border-slate-300 text-xs px-3 py-1.5 rounded-lg font-medium transition">
               2026近期在途 (<span id="cntPending2026">0</span>)
+            </button>
+            <button data-pfilter="overdue_only" id="btnFilterOverdueParcels" class="parcel-filter-btn bg-rose-50 text-rose-800 hover:bg-rose-100 border border-rose-300 text-xs px-3 py-1.5 rounded-lg font-extrabold transition flex items-center gap-1" title="筛选已超过设定天数或超过该快递历史平均时效仍未签收的在途滞留包裹">
+              <span>🚨 在途超期预警 (<span id="cntOverdueParcels">0</span>)</span>
             </button>
             <button data-pfilter="hist_pending" class="parcel-filter-btn bg-white text-slate-700 hover:bg-slate-100 border border-slate-300 text-xs px-3 py-1.5 rounded-lg font-medium transition">
               2023-2025漏填日期 (<span id="cntPendingHist">0</span>)
@@ -1244,12 +1247,34 @@
           <div class="lg:col-span-4 flex flex-col justify-between gap-2.5" id="trendStudioDiagnosticCards">
             <!-- Populated by JS -->
           </div>
-          <div class="lg:col-span-8 bg-slate-50/70 rounded-xl p-3 border border-slate-200/80 flex flex-col justify-between">
-            <div class="flex flex-wrap items-center justify-between gap-2 mb-2">
-              <span class="text-xs font-bold text-slate-700" id="trendStudioChartTitle">价格走势曲线</span>
-              <span class="text-[11px] text-slate-500" id="trendStudioChartSubtitle">点击图上数据点或下方明细可定位关联订单</span>
+          <div class="lg:col-span-8 bg-slate-50/70 rounded-xl p-3 border border-slate-200/80 flex flex-col justify-between space-y-2">
+            <div class="flex flex-wrap items-center justify-between gap-2">
+              <div>
+                <div class="text-xs font-extrabold text-slate-800" id="trendStudioChartTitle">价格走势曲线</div>
+                <div class="text-[11px] text-slate-500 mt-0.5" id="trendStudioChartSubtitle">已自动合并同日同价分箱拆单 · 标出史低/最高/最新价格标签</div>
+              </div>
+              <!-- Intuitive 1-Click Currency Line Switcher + Consolidation Toggle -->
+              <div class="flex flex-wrap items-center gap-1.5">
+                <div class="inline-flex rounded-lg border border-slate-300 bg-white p-0.5 shadow-2xs text-[11px]">
+                  <button type="button" data-chart-cur-pill="SMART_SINGLE" class="chart-cur-pill px-2.5 py-1 rounded-md font-bold bg-indigo-600 text-white transition" title="单线清晰视图：自动按该商品主币种绘制一条清晰折线并直接标出价格数字（告别上下两排点混淆）">
+                    ✨ 单线清晰视图
+                  </button>
+                  <button type="button" data-chart-cur-pill="CNY" class="chart-cur-pill px-2 py-1 rounded-md font-semibold text-slate-600 hover:bg-slate-100 transition" title="仅显示人民币实付单价走势 (¥)">
+                    🇨🇳 仅看RMB(¥)
+                  </button>
+                  <button type="button" data-chart-cur-pill="NZD" class="chart-cur-pill px-2 py-1 rounded-md font-semibold text-slate-600 hover:bg-slate-100 transition" title="仅显示纽币原价走势 (NZ$)">
+                    🇳🇿 仅看NZD($)
+                  </button>
+                  <button type="button" data-chart-cur-pill="DUAL" class="chart-cur-pill px-2 py-1 rounded-md font-semibold text-slate-600 hover:bg-slate-100 transition" title="同时对比纽币标价(蓝方块)与人民币实付(橙圆点)">
+                    💱 双线对比
+                  </button>
+                </div>
+                <button type="button" id="btnToggleChartWaveGrouping" class="text-[11px] bg-emerald-50 hover:bg-emerald-100 text-emerald-800 border border-emerald-300 font-bold px-2 py-1 rounded-lg transition" title="开启后自动将连续相同单价的重复订单合并为价格波段拐点，让趋势图一目了然">
+                  ⚡ 已聚合连续同价点
+                </button>
+              </div>
             </div>
-            <div class="relative w-full h-56 sm:h-64">
+            <div class="relative w-full h-60 sm:h-64 bg-white rounded-lg border border-slate-200/70 p-2">
               <canvas id="productPriceTrendCanvas"></canvas>
             </div>
           </div>
@@ -1294,6 +1319,8 @@
         </div>
         <!-- V7.8 Feature: Historical Best-Price Seasonality & Merchant Win-Rate Bar -->
         <div id="bestPriceSeasonInsightBar" class="bg-gradient-to-r from-teal-50/90 via-emerald-50/70 to-amber-50/70 border border-teal-200/80 rounded-xl px-3.5 py-2.5 text-xs flex flex-wrap items-center justify-between gap-2"></div>
+        <!-- v7.13.0 Feature: Exchange Rate Sensitivity Simulator Bar -->
+        <div id="cartOptExchangeSensitivityBar" class="bg-gradient-to-r from-indigo-50/80 via-slate-50 to-emerald-50/70 border border-indigo-200/80 rounded-xl px-3.5 py-2.5 text-xs"></div>
 
         <!-- Add item bar -->
         <div class="bg-slate-50 p-3 rounded-xl border border-slate-200 flex flex-wrap items-center gap-2">
@@ -1634,6 +1661,21 @@
             <!-- Rendered by JS -->
           </div>
         </div>
+      </div>
+
+      <!-- v7.13.0 NEW MODULE: RECIPIENT PURCHASE PREFERENCE PERSONA & SMART RESTOCK RADAR -->
+      <div id="recipientPreferenceRestockStudio" class="bg-white rounded-2xl p-4 sm:p-5 shadow-sm border border-slate-200 space-y-4">
+        <div class="flex flex-wrap items-center justify-between gap-2 border-b border-slate-100 pb-3">
+          <div>
+            <div class="flex items-center gap-2">
+              <span class="bg-indigo-600 text-white text-[11px] font-extrabold px-2 py-0.5 rounded">v7.13.0 复购雷达</span>
+              <h3 class="text-sm sm:text-base font-extrabold text-slate-800">👥 亲友代购与国内家中 (HOME)「品类偏好画像 & 周期复购清单」</h3>
+            </div>
+            <p class="text-xs text-slate-500 mt-0.5">自动分析每位收件人的历史常购 Top 单品、偏好品类、平均下单间隔周期，支持<strong>「🛒 一键按历史常购建单」</strong>或<strong>「📲 复制复购关怀微信」</strong>。</p>
+          </div>
+          <span class="text-[11px] bg-emerald-50 text-emerald-800 border border-emerald-200 px-2.5 py-1 rounded-lg font-bold">💡 点击任意卡片「一键按常购建单」可直接带出该亲友最爱买的保健品组合</span>
+        </div>
+        <div id="recipientPersonaCardsGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3.5"></div>
       </div>
     </section>
 
@@ -3002,7 +3044,7 @@
         <div>
           <h3 class="text-base font-bold flex items-center gap-2 flex-wrap">
             <span>⚙️ 个性化与规则中心</span>
-            <span class="text-[11px] bg-amber-400 text-slate-950 font-extrabold px-2.5 py-0.5 rounded-full">v7.11.0 (Build 20261030.1215) · SemVer标准版本管理</span>
+            <span class="text-[11px] bg-amber-400 text-slate-950 font-extrabold px-2.5 py-0.5 rounded-full">v7.13.0 (Build 20261030.1315) · SemVer标准版本管理</span>
           </h3>
           <p class="text-xs text-emerald-200 mt-0.5">一站式归纳管理：8套主题皮肤与自定义调色盘 · 全系统选项名称/图标/注释自由修改 · 抓单自学习规则 · 454条超链接模板</p>
         </div>
@@ -3021,6 +3063,9 @@
           <button type="button" data-rulestab="scrape" class="rules-tab-btn bg-white text-slate-700 hover:bg-slate-50 text-xs sm:text-sm font-bold px-3.5 py-2 rounded-lg border border-slate-300 transition flex items-center gap-1.5">
             <span>🧠 抓单自学习规则</span>
           </button>
+          <button type="button" data-rulestab="prodmedia" class="rules-tab-btn bg-white text-slate-700 hover:bg-slate-50 text-xs sm:text-sm font-bold px-3.5 py-2 rounded-lg border border-slate-300 transition flex items-center gap-1.5">
+            <span>🖼️ 商品配图与配方后台</span>
+          </button>
           <button type="button" data-rulestab="links" class="rules-tab-btn bg-white text-slate-700 hover:bg-slate-50 text-xs sm:text-sm font-bold px-3.5 py-2 rounded-lg border border-slate-300 transition flex items-center gap-1.5">
             <span>🔗 订单与快递链接 (454条)</span>
           </button>
@@ -3034,7 +3079,7 @@
         <div class="bg-gradient-to-r from-emerald-50 via-teal-50 to-amber-50 border-2 border-emerald-300 rounded-xl p-4 space-y-3">
           <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-emerald-200/80 pb-2.5">
             <div class="flex items-center gap-2 flex-wrap">
-              <span class="px-2.5 py-1 rounded-full bg-emerald-900 text-amber-300 font-extrabold text-xs font-mono">v7.11.0 (Build 20261030.1215)</span>
+              <span class="px-2.5 py-1 rounded-full bg-emerald-900 text-amber-300 font-extrabold text-xs font-mono">v7.13.0 (Build 20261030.1315)</span>
               <span class="font-extrabold text-slate-900 text-sm">严格执行的版本号规则（Semantic Versioning + Build Tag）</span>
             </div>
             <button type="button" id="btnJumpToLabelsTab" class="bg-white hover:bg-slate-50 text-emerald-900 border border-emerald-300 font-bold px-3 py-1.5 rounded-lg shadow-2xs transition text-xs shrink-0">
@@ -3045,7 +3090,7 @@
             <p>系统遵循标准的 <code class="bg-white px-1.5 py-0.5 rounded border font-mono font-bold text-emerald-900">vMAJOR.MINOR.PATCH (Build YYYYMMDD.HHMM)</code> 规则，版本号已固化在<strong>网页左上角标识、页面标题（第6行 &lt;title&gt;）与浏览器控制台输出</strong>中，确保每次热更新上线后一眼就能核对生效状态：</p>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-3 pt-1">
               <div class="bg-white/90 rounded-lg p-3 border border-emerald-200 space-y-1">
-                <div class="font-extrabold text-emerald-950">📌 当前正式稳定版本：<span class="font-mono text-emerald-700">v7.11.0 (Build 20261030.1215)</span></div>
+                <div class="font-extrabold text-emerald-950">📌 当前正式稳定版本：<span class="font-mono text-emerald-700">v7.13.0 (Build 20261030.1315)</span></div>
                 <ul class="list-disc pl-4 space-y-1 text-[11px] text-slate-600">
                   <li><strong>主版本号（7）</strong>：独立 <code class="font-mono">.html</code> 全功能前端，原生内置亲友免登录只读查件/对账门户、Cloudflare Pages Functions + KV 云同步与「自用 / 寄回国」双轨架构；</li>
                   <li><strong>次版本号（9）</strong>：上线「商品库智能同品比对与合并审核中心（含 150粒≠200粒 规格隔离保护与抓单实时关键字归一）」、全模块通用「📋 详单」一屏全览凭证、订单总表多维自主排序与商品库分类/搜索联动；</li>
@@ -3156,6 +3201,36 @@
         </div>
 
         <div id="uiCustomLabelsEditorContainer" class="space-y-4"></div>
+      </div>
+
+      <!-- TAB PANEL 0C: UNIFIED PRODUCT IMAGES, FORMULA SHEETS & CATALOG BACKEND MANAGER -->
+      <div id="rulesPanel-prodmedia" class="hidden p-5 overflow-y-auto custom-scroll space-y-4 text-xs flex-1">
+        <div class="bg-gradient-to-r from-emerald-50 via-teal-50 to-indigo-50 border border-emerald-200 rounded-xl p-3.5 flex flex-wrap items-center justify-between gap-3">
+          <div class="space-y-0.5 text-slate-700">
+            <div class="font-extrabold text-emerald-950 text-sm">🖼️ 全库商品「外观实拍图 · 背面营养配方表 · 服用指南 · 参考单价」统一后台管理中心</div>
+            <p class="text-[11px] text-slate-600">已将所有商品的编辑、传图与配方维护集中收纳至此处！前台「商品与单价库」卡片及「商品配方弹窗」已切换为<strong>纯净只读展示模式</strong>，方便您日常清爽浏览或截图发给亲友客户，防止误触修改。</p>
+          </div>
+          <div class="flex flex-wrap items-center gap-2 shrink-0">
+            <span id="prodMediaStorageBadge" class="bg-white border border-emerald-300 text-emerald-900 font-mono font-bold px-2.5 py-1 rounded-lg text-[11px]">📊 图片占用计算中...</span>
+            <button type="button" id="btnAddNewProductFromBackend" class="bg-emerald-700 hover:bg-emerald-600 text-white font-bold px-3 py-1.5 rounded-lg shadow-xs transition">
+              ＋ 新增商品建档
+            </button>
+          </div>
+        </div>
+
+        <div class="flex flex-wrap items-center justify-between gap-2 bg-slate-50 p-2.5 rounded-xl border border-slate-200">
+          <div class="flex flex-wrap items-center gap-2 flex-1">
+            <input type="text" id="prodMediaAdminSearch" placeholder="🔍 搜索商品名称、品牌、规格或分类..." class="w-64 sm:w-80 border border-slate-300 rounded-lg px-3 py-1.5 bg-white text-xs" />
+            <select id="prodMediaAdminFilter" class="border border-slate-300 rounded-lg px-2.5 py-1.5 bg-white text-xs font-semibold text-slate-700">
+              <option value="ALL">全部商品</option>
+              <option value="HAS_CUSTOM_IMG">✅ 已上传自定义实拍图/配方图</option>
+              <option value="DEFAULT_SVG_ONLY">🎨 仅使用系统默认矢量图</option>
+            </select>
+          </div>
+          <span class="text-[11px] text-slate-500">💡 点击任意行的「📤 传主图」「🔬 传配方图」可秒传自动压缩，或点「✎ 完整编辑」修改全部参数</span>
+        </div>
+
+        <div id="prodMediaAdminTableContainer" class="border border-slate-200 rounded-xl overflow-hidden bg-white"></div>
       </div>
 
       <!-- TAB PANEL 1: SCRAPE SELF-LEARNING RULES -->
@@ -3351,7 +3426,11 @@
               </button>
               <button type="button" data-notify-mode="arrival_remind" class="notify-mode-btn bg-white hover:bg-slate-100 text-slate-700 font-bold px-2.5 py-2 rounded-lg border border-slate-300 text-left transition flex flex-col gap-0.5">
                 <span>✅ 到货签收提醒</span>
-                <span class="text-[10px] text-slate-500 font-normal">包裹已送达提醒客户查收</span>
+                <span class="text-[10px] text-slate-500 font-normal">包裹已送达+附服用方法</span>
+              </button>
+              <button type="button" data-notify-mode="dosage_guide" class="notify-mode-btn bg-white hover:bg-slate-100 text-slate-700 font-bold px-2.5 py-2 rounded-lg border border-emerald-300 text-left transition flex flex-col gap-0.5">
+                <span>💊 保健品服用指南卡</span>
+                <span class="text-[10px] text-emerald-700 font-normal">汇总所购营养品每日吃法与含量</span>
               </button>
             </div>
           </div>
@@ -3390,6 +3469,10 @@
               <label class="flex items-center gap-2 bg-white px-2.5 py-1.5 rounded-lg border border-slate-200 cursor-pointer hover:border-emerald-400">
                 <input type="checkbox" id="chkNotifyOrderMeta" checked class="rounded text-emerald-600" />
                 <span class="font-semibold">显示下单日期与商家订单号</span>
+              </label>
+              <label class="sm:col-span-2 flex items-center gap-2 bg-emerald-100/75 px-2.5 py-1.5 rounded-lg border border-emerald-300 cursor-pointer hover:border-emerald-500">
+                <input type="checkbox" id="chkNotifySupplementDosage" checked class="rounded text-emerald-700" />
+                <span class="font-extrabold text-emerald-950">💊 底部自动附带本单所购保健品「每日服用方法、核心营养含量与注意事项」贴心卡片</span>
               </label>
               <label class="sm:col-span-2 flex items-center gap-2 bg-indigo-50/80 px-2.5 py-1.5 rounded-lg border border-indigo-200 cursor-pointer hover:border-indigo-400">
                 <input type="checkbox" id="chkNotifyReadonlyLink" checked class="rounded text-indigo-600" />
@@ -3648,11 +3731,11 @@
 
     const CURRENT_SEMVER = 'v7.9.1';
     const CURRENT_BUILD_TAG = 'Build 20261029.2054';
-    const CURRENT_APP_VERSION = 'v7.11.0 (Build 20261030.1215)';
+    const CURRENT_APP_VERSION = 'v7.13.0 (Build 20261030.1315)';
     console.info('%c[纽澳跨境采购与快递追踪管家] 当前正式稳定版本: ' + CURRENT_APP_VERSION + ' | Semantic Versioning + Build Tag 已生效', 'background:#064e3b;color:#fde68a;padding:4px 10px;border-radius:6px;font-weight:bold;');
     const DEFAULT_UI_CUSTOM_LABELS = {
       appTitle: { icon: '', text: '纽澳跨境采购与快递追踪管家', note: '支持一单多包拆单追踪 · 采购单价与运费核算 · 电脑与手机多端同步', labelTitle: '系统主标题 & 副标题说明', group: 'header', emojiPresets: ['🇳🇿', '🦘', '🌿', '📦', '🛡️'] },
-      appVersion: { icon: '🚀', text: CURRENT_APP_VERSION, note: '当前正式稳定版本：v7.11.0 (Build 20261030.1215)（同品智能比对合并 · 规格隔离入库 · 全模块详单按钮 · 订单多维排序）· 点击查看版本规则', labelTitle: '顶部版本号标识 (SemVer + Build Tag)', group: 'header', emojiPresets: ['🚀', '✨', '🏷️', '💎', '🔥'] },
+      appVersion: { icon: '🚀', text: CURRENT_APP_VERSION, note: '当前正式稳定版本：v7.13.0 (Build 20261030.1315)（同品智能比对合并 · 规格隔离入库 · 全模块详单按钮 · 订单多维排序）· 点击查看版本规则', labelTitle: '顶部版本号标识 (SemVer + Build Tag)', group: 'header', emojiPresets: ['🚀', '✨', '🏷️', '💎', '🔥'] },
       btnNewOrder: { icon: '＋', text: '新增订单', note: '新建采购订单（内含网页粘贴自动填单 / 门店直购录入 / 复制上一单）', labelTitle: '顶部按钮 1：新增订单', group: 'topbar', emojiPresets: ['＋', '🛒', '✍️', '⚡', '🛍️'] },
       btnBatchImport: { icon: '📥', text: '智能导单', note: '专用于导入新采购订单：Excel表格差异导入 / 网页订单粘贴解析 / 浏览器抓单小书签', labelTitle: '顶部按钮 2：智能导单', group: 'topbar', emojiPresets: ['📥', '📂', '📊', '⚡', '📑'] },
       btnSyncBackup: { icon: '☁️', text: '云端与备份', note: '专用于多端云同步与备份：Cloudflare KV 实时云同步 / 历史时间机器回滚 / 本地 JSON 备份包', labelTitle: '顶部按钮 3：云端与备份', group: 'topbar', emojiPresets: ['☁️', '🔄', '📲', '💾', '🛡️'] },
@@ -16736,7 +16819,7 @@
     }
 
     if (document.readyState === 'loading') {
-      document.addEventListener('DOMContentLoaded', initBackfillStudioEvents);
+      window.addEventListener('DOMContentLoaded', initBackfillStudioEvents);
     } else {
       initBackfillStudioEvents();
     }
@@ -19693,7 +19776,7 @@ export async function onRequestPost(context) {
 
 
     // ============================================================================
-    // v7.11.0 (Build 20261030.1215) COMPREHENSIVE UPGRADE ENGINE:
+    // v7.13.0 (Build 20261030.1315) COMPREHENSIVE UPGRADE ENGINE:
     // 1. Automatic Verified Order Price Extraction & 100% Category Backfill
     // 2. Multi-Keyword Search, Category Filter Linkage & Logical <optgroup> Dropdown Sorting
     // 3. Spec-Aware Product Deduplication, Audit Merge & Real-Time Capture Unification (150粒 ≠ 200粒)
@@ -21692,7 +21775,7 @@ export async function onRequestPost(context) {
 
 
     // ============================================================================
-    // v7.11.0 (Build 20261030.1215) HOTFIX & ENHANCEMENT SUITE:
+    // v7.13.0 (Build 20261030.1315) HOTFIX & ENHANCEMENT SUITE:
     // Fix 1: Backfill Studio "保存并继续下一单" & "确认更新本单" never grey out; skip 门店订单 in auto-next queue; support inline direct price verification without pasting text.
     // Fix 2: Product Dropdowns (<optgroup> category classification) always stay grouped across page refreshes, cloud pulls, and all sort modes.
     // Fix 3: Purge unverified reference prices (NZ$87.00 with blank RMB) & ghost duplicate order rows from priceHistory; strictly show genuine verified prices.
@@ -22556,14 +22639,14 @@ export async function onRequestPost(context) {
     }
 
     if (document.readyState === 'loading') {
-      document.addEventListener('DOMContentLoaded', initCfV7EngineEvents);
+      window.addEventListener('DOMContentLoaded', initCfV7EngineEvents);
     } else {
       initCfV7EngineEvents();
     }
 
 
     // ============================================================================
-    // v7.11.0 (Build 20261030.1215) COMPREHENSIVE UPGRADE & BUG-FIX SUITE:
+    // v7.13.0 (Build 20261030.1315) COMPREHENSIVE UPGRADE & BUG-FIX SUITE:
     // 1. Strict Chronological Order Sorting: #chkSortPinUnread defaults to false;
     //    auto-clears stale 2022-2025 unread flags; switching sort/scope never traps read orders at bottom.
     // 2. WeChat Mini-Program Order Mode & Dual-Currency (NZD Listed Price <-> RMB Actual Paid with Fee)
@@ -23745,7 +23828,7 @@ export async function onRequestPost(context) {
     }
 
     if (document.readyState === 'loading') {
-      document.addEventListener('DOMContentLoaded', initV7100Events);
+      window.addEventListener('DOMContentLoaded', initV7100Events);
     } else {
       initV7100Events();
     }
@@ -23753,7 +23836,7 @@ export async function onRequestPost(context) {
 
 
     // ============================================================================
-    // v7.11.0 (Build 20261030.1215) COMPREHENSIVE UPGRADE SUITE:
+    // v7.13.0 (Build 20261030.1315) COMPREHENSIVE UPGRADE SUITE:
     // 1. Keep All 95 Unread Reminders Intact + Pure Chronological Mixed Sorting in All Orders
     //    & Dedicated Unread Filter Sorting when "📬 未读新订单" is active.
     // 2. Uniform Compact Product Cards in #productsGrid: Deduplicate p.priceHistory to match
@@ -24879,9 +24962,1490 @@ export async function onRequestPost(context) {
     }
 
     if (document.readyState === 'loading') {
-      document.addEventListener('DOMContentLoaded', initV7110Events);
+      window.addEventListener('DOMContentLoaded', initV7110Events);
     } else {
       initV7110Events();
+    }
+
+
+
+    // ============================================================================
+    // v7.13.0 (Build 20261030.1315) COMPREHENSIVE UPGRADE SUITE:
+    // 1. Consolidate Same-Date Same-Merchant Identical-Price Split Orders (e.g. 2022-11-07 7 split orders @¥220.76)
+    //    while preserving Same-Date Different-Price Orders (e.g. 2026-10-28 @¥130.50 vs @¥130.53).
+    // 2. Crystal-Clear Price Trend Chart Engine:
+    //    - Defaults to "✨ 单线清晰视图 (SMART_SINGLE)" + "⚡ 聚合连续同价点" so there are NEVER two confusing parallel rows of red dots!
+    //    - Directly draws crisp price tags (🟢史低, 🔺最高, 📍最新) right on the canvas points!
+    //    - In "💱 双线对比" mode, uses Indigo Squares (■) for NZD and Amber Circles (●) for RMB (never red circles on both lines).
+    // 3. Pure Read-Only Product Spec Sheet Viewer (#modalProductSpecSheet) & Product Cards:
+    //    - Fixed duplicate 🔬 icon in top-left; removed big yellow "✎ 编辑图片/配方" button from viewer & cards.
+    //    - Added "📲 复制说明发微信" in viewer to share ingredients & dosage instructions with clients/friends in 1 click.
+    //    - Unified all product image/formula/price editing into "⚙️ 个性化与规则中心 → 🖼️ 商品配图与配方后台" (#rulesPanel-prodmedia).
+    // ============================================================================
+
+    window.chartWaveGroupingEnabled = true;
+    window.chartVisualMode = 'SMART_SINGLE'; // 'SMART_SINGLE' | 'CNY' | 'NZD' | 'DUAL'
+
+    // --- 1. Upgrade collectProductVerifiedPriceSeries: Consolidate Same-Date Same-Merchant IDENTICAL Price Split Orders (< 0.005 diff), Keep Different Prices (>= 0.005 diff) Separate ---
+    const _v7110CollectSeries = collectProductVerifiedPriceSeries;
+    collectProductVerifiedPriceSeries = function(prodName, filterMode = 'ALL_VERIFIED') {
+      const rawSeries = _v7110CollectSeries(prodName, filterMode);
+      // Group points that share the EXACT same date + merchant + identical nzdPrice + identical rmbPrice (customs box-splitting on the same day!)
+      // while strictly keeping points with even a ¥0.01 difference (like 2026-10-28 ¥130.50 vs ¥130.53) as separate entries!
+      const grouped = [];
+      rawSeries.forEach(pt => {
+        const sameDaySamePriceIdx = grouped.findIndex(g => {
+          if (g.date !== pt.date || g.merchant !== pt.merchant) return false;
+          const nzdSame = (!g.nzdPrice && !pt.nzdPrice) || (g.nzdPrice && pt.nzdPrice && Math.abs(g.nzdPrice - pt.nzdPrice) < 0.005);
+          const rmbSame = (!g.rmbPrice && !pt.rmbPrice) || (g.rmbPrice && pt.rmbPrice && Math.abs(g.rmbPrice - pt.rmbPrice) < 0.005);
+          return nzdSame && rmbSame;
+        });
+
+        if (sameDaySamePriceIdx === -1) {
+          grouped.push({
+            ...pt,
+            mergedOrders: pt.orderNo ? [{ orderNo: pt.orderNo, orderId: pt.orderId || '' }] : [],
+            splitOrderCount: 1
+          });
+        } else {
+          const target = grouped[sameDaySamePriceIdx];
+          if (pt.orderNo && !target.mergedOrders.some(x => x.orderNo === pt.orderNo)) {
+            target.mergedOrders.push({ orderNo: pt.orderNo, orderId: pt.orderId || '' });
+            target.splitOrderCount = target.mergedOrders.length;
+          }
+          if (!target.orderId && pt.orderId) target.orderId = pt.orderId;
+          if (!target.orderNo && pt.orderNo) target.orderNo = pt.orderNo;
+        }
+      });
+      return grouped;
+    };
+
+    // Helper: Compress consecutive identical-price points into clean price-wave inflection points for the Chart
+    function buildChartPlotSeries(fullSeries, activeCurrencyMode) {
+      if (!window.chartWaveGroupingEnabled || fullSeries.length <= 6) {
+        return fullSeries.map(pt => ({ ...pt, waveCount: pt.splitOrderCount || 1, endDate: pt.date }));
+      }
+      const compressed = [];
+      fullSeries.forEach((pt, idx) => {
+        const prev = compressed[compressed.length - 1];
+        const isLast = idx === fullSeries.length - 1;
+        if (!prev) {
+          compressed.push({ ...pt, waveCount: pt.splitOrderCount || 1, startDate: pt.date, endDate: pt.date });
+          return;
+        }
+        const nzdSame = (!prev.nzdPrice && !pt.nzdPrice) || (prev.nzdPrice && pt.nzdPrice && Math.abs(prev.nzdPrice - pt.nzdPrice) < 0.01);
+        const rmbSame = (!prev.rmbPrice && !pt.rmbPrice) || (prev.rmbPrice && pt.rmbPrice && Math.abs(prev.rmbPrice - pt.rmbPrice) < 0.02);
+
+        const isSamePriceWave = activeCurrencyMode === 'NZD'
+          ? (prev.nzdPrice && pt.nzdPrice && nzdSame)
+          : (activeCurrencyMode === 'CNY'
+              ? (prev.rmbPrice && pt.rmbPrice && rmbSame)
+              : (nzdSame && rmbSame));
+
+        if (isSamePriceWave && !isLast) {
+          prev.waveCount = (prev.waveCount || 1) + (pt.splitOrderCount || 1);
+          prev.endDate = pt.date;
+          if (pt.mergedOrders && prev.mergedOrders) {
+            pt.mergedOrders.forEach(mo => {
+              if (!prev.mergedOrders.some(x => x.orderNo === mo.orderNo)) prev.mergedOrders.push(mo);
+            });
+          }
+        } else {
+          compressed.push({ ...pt, waveCount: pt.splitOrderCount || 1, startDate: pt.date, endDate: pt.date });
+        }
+      });
+      return compressed;
+    }
+
+    // --- 2. Redesign renderProductPriceTrendStudio Chart & Table ---
+    const _v7110RenderTrendStudio = renderProductPriceTrendStudio;
+    renderProductPriceTrendStudio = function(selectedName) {
+      _v7110RenderTrendStudio(selectedName);
+
+      const filterMode = document.getElementById('trendStudioFilterMode')?.value || 'ALL_VERIFIED';
+      let fullSeries = collectProductVerifiedPriceSeries(currentTrendProductName, filterMode);
+      if (fullSeries.length === 0 && filterMode === 'WEB_ONLY') {
+        fullSeries = collectProductVerifiedPriceSeries(currentTrendProductName, 'ALL_VERIFIED');
+      }
+      if (fullSeries.length === 0) return;
+
+      // Determine effective chart mode
+      const hasNzd = fullSeries.some(pt => pt.nzdPrice && pt.nzdPrice > 0);
+      const hasRmb = fullSeries.some(pt => pt.rmbPrice && pt.rmbPrice > 0);
+      const nzdCount = fullSeries.filter(pt => pt.nzdPrice && pt.nzdPrice > 0).length;
+      const rmbCount = fullSeries.filter(pt => pt.rmbPrice && pt.rmbPrice > 0).length;
+
+      let effectiveMode = window.chartVisualMode || 'SMART_SINGLE';
+      if (effectiveMode === 'SMART_SINGLE') {
+        // Pick the currency that covers more points (or CNY if equal) so the chart shows ONE continuous, crystal-clear line!
+        effectiveMode = (rmbCount >= nzdCount && hasRmb) ? 'CNY_SINGLE' : (hasNzd ? 'NZD_SINGLE' : 'CNY_SINGLE');
+      } else if (effectiveMode === 'CNY') {
+        effectiveMode = 'CNY_SINGLE';
+      } else if (effectiveMode === 'NZD') {
+        effectiveMode = 'NZD_SINGLE';
+      }
+
+      // Update pill button active states
+      document.querySelectorAll('[data-chart-cur-pill]').forEach(btn => {
+        const m = btn.getAttribute('data-chart-cur-pill');
+        const isAct = m === (window.chartVisualMode || 'SMART_SINGLE');
+        btn.className = isAct
+          ? 'chart-cur-pill px-2.5 py-1 rounded-md font-bold bg-indigo-600 text-white transition shadow-2xs'
+          : 'chart-cur-pill px-2 py-1 rounded-md font-semibold text-slate-600 hover:bg-slate-100 transition';
+      });
+      const waveBtn = document.getElementById('btnToggleChartWaveGrouping');
+      if (waveBtn) {
+        waveBtn.textContent = window.chartWaveGroupingEnabled ? '⚡ 已聚合连续同价点' : '📋 显示逐笔全量点';
+        waveBtn.className = window.chartWaveGroupingEnabled
+          ? 'text-[11px] bg-emerald-600 hover:bg-emerald-500 text-white font-bold px-2.5 py-1 rounded-lg transition shadow-2xs'
+          : 'text-[11px] bg-slate-100 hover:bg-slate-200 text-slate-700 border border-slate-300 font-semibold px-2.5 py-1 rounded-lg transition';
+      }
+
+      const plotModeKey = effectiveMode === 'NZD_SINGLE' ? 'NZD' : (effectiveMode === 'CNY_SINGLE' ? 'CNY' : 'DUAL');
+      const plotSeries = buildChartPlotSeries(fullSeries, plotModeKey);
+
+      const titleEl = document.getElementById('trendStudioChartTitle');
+      const subEl = document.getElementById('trendStudioChartSubtitle');
+      const totalOrdersCovered = fullSeries.reduce((s, p) => s + (p.splitOrderCount || 1), 0);
+      if (titleEl) {
+        titleEl.textContent = `📈 ${currentTrendProductName} · 已核实价格走势（共 ${fullSeries.length} 期价格档位 / 源自 ${totalOrdersCovered} 笔已核实订单）`;
+      }
+      if (subEl) {
+        if (effectiveMode === 'DUAL') {
+          subEl.innerHTML = `<span class="text-indigo-700 font-bold">■ 蓝方块实线 = NZD纽币单价(左轴)</span> · <span class="text-amber-700 font-bold">● 橙圆点虚线 = RMB实付单价(右轴)</span> · <span class="text-emerald-700 font-bold">🟢 史低</span> / <span class="text-rose-600 font-bold">🔺 最高</span> 直接标于图上`;
+        } else {
+          const curLabel = effectiveMode === 'NZD_SINGLE' ? '🇳🇿 纽币原价 (NZ$)' : '🇨🇳 人民币实付 (¥ RMB)';
+          subEl.innerHTML = `当前为 <strong>${curLabel} 单线清晰视图</strong>（已消除双轴上下重影）· 🟢 绿色大点 = 历史最低好价 · 🔺 玫红三角 = 历史最高价 · 图上直接标出关键价格`;
+        }
+      }
+
+      // Re-build Chart.js with crystal-clear styling & inline value annotations
+      const canvas = document.getElementById('productPriceTrendCanvas');
+      if (canvas && typeof Chart !== 'undefined') {
+        if (productPriceTrendChartInstance) {
+          productPriceTrendChartInstance.destroy();
+          productPriceTrendChartInstance = null;
+        }
+
+        const labels = plotSeries.map(pt => {
+          const multiTag = (pt.waveCount && pt.waveCount > 1) ? ` [${pt.waveCount}单同价]` : '';
+          return `${pt.date.slice(2)} ${pt.merchant}${multiTag}`;
+        });
+
+        const liveRate = (window.cfConfigState?.liveRates?.NZD) || 4.35;
+        const nzdData = plotSeries.map(pt => pt.nzdPrice || (effectiveMode === 'NZD_SINGLE' && pt.rmbPrice ? Number((pt.rmbPrice / (pt.exchangeRate || liveRate)).toFixed(2)) : null));
+        const rmbData = plotSeries.map(pt => pt.rmbPrice || (effectiveMode === 'CNY_SINGLE' && pt.nzdPrice ? Number((pt.nzdPrice * (pt.exchangeRate || liveRate)).toFixed(2)) : null));
+
+        // Find the SINGLE index of global min and SINGLE index of global max so we never paint a whole row of red dots!
+        const findMinMaxIndices = (arr) => {
+          let minVal = Infinity, maxVal = -Infinity, minIdx = -1, maxIdx = -1;
+          arr.forEach((v, i) => {
+            if (v !== null && v > 0) {
+              if (v < minVal) { minVal = v; minIdx = i; }
+              if (v > maxVal) { maxVal = v; maxIdx = i; }
+            }
+          });
+          if (minIdx === maxIdx) maxIdx = -1;
+          return { minVal, maxVal, minIdx, maxIdx };
+        };
+
+        const nzdMM = findMinMaxIndices(nzdData);
+        const rmbMM = findMinMaxIndices(rmbData);
+
+        const datasets = [];
+        if (effectiveMode === 'NZD_SINGLE' || effectiveMode === 'DUAL') {
+          datasets.push({
+            label: 'NZD 纽币核实单价 ($)',
+            data: nzdData,
+            borderColor: '#4f46e5',
+            backgroundColor: 'rgba(79, 70, 229, 0.10)',
+            pointStyle: plotSeries.map((_, i) => i === nzdMM.minIdx ? 'circle' : (i === nzdMM.maxIdx ? 'triangle' : 'rectRounded')),
+            pointBackgroundColor: plotSeries.map((_, i) => i === nzdMM.minIdx ? '#10b981' : (i === nzdMM.maxIdx ? '#f43f5e' : '#4f46e5')),
+            pointBorderColor: '#ffffff',
+            pointBorderWidth: 2,
+            pointRadius: plotSeries.map((_, i) => (i === nzdMM.minIdx || i === nzdMM.maxIdx || i === plotSeries.length - 1) ? 6.5 : 4),
+            pointHoverRadius: 8,
+            borderWidth: 2.5,
+            tension: 0.22,
+            fill: effectiveMode === 'NZD_SINGLE',
+            spanGaps: true,
+            yAxisID: 'yLeft'
+          });
+        }
+
+        if (effectiveMode === 'CNY_SINGLE' || effectiveMode === 'DUAL') {
+          const isSingleCny = effectiveMode === 'CNY_SINGLE';
+          datasets.push({
+            label: 'RMB 人民币实付单价 (¥)',
+            data: rmbData,
+            borderColor: isSingleCny ? '#059669' : '#d97706',
+            backgroundColor: isSingleCny ? 'rgba(5, 150, 105, 0.10)' : 'rgba(217, 119, 6, 0.08)',
+            pointStyle: plotSeries.map((_, i) => i === rmbMM.minIdx ? 'circle' : (i === rmbMM.maxIdx ? 'triangle' : 'circle')),
+            pointBackgroundColor: plotSeries.map((_, i) => i === rmbMM.minIdx ? '#10b981' : (i === rmbMM.maxIdx ? '#f43f5e' : (isSingleCny ? '#059669' : '#d97706'))),
+            pointBorderColor: '#ffffff',
+            pointBorderWidth: 2,
+            pointRadius: plotSeries.map((_, i) => (i === rmbMM.minIdx || i === rmbMM.maxIdx || i === plotSeries.length - 1) ? 6.5 : 4),
+            pointHoverRadius: 8,
+            borderWidth: 2.5,
+            borderDash: effectiveMode === 'DUAL' ? [5, 4] : [],
+            tension: 0.22,
+            fill: isSingleCny,
+            spanGaps: true,
+            yAxisID: effectiveMode === 'DUAL' ? 'yRight' : 'yLeft'
+          });
+        }
+
+        // Inline plugin to draw direct price labels on Min, Max, First, and Latest points
+        const directPriceLabelPlugin = {
+          id: 'directPriceLabels',
+          afterDatasetsDraw(chart) {
+            const ctx = chart.ctx;
+            ctx.save();
+            ctx.font = 'bold 10px Inter, sans-serif';
+            chart.data.datasets.forEach((ds, dsIdx) => {
+              const meta = chart.getDatasetMeta(dsIdx);
+              if (!meta || meta.hidden) return;
+              const isNzdDs = ds.label.includes('NZD');
+              const mm = isNzdDs ? nzdMM : rmbMM;
+              const sym = isNzdDs ? 'NZ$' : '¥';
+              meta.data.forEach((elem, i) => {
+                const val = ds.data[i];
+                if (val === null || val === undefined) return;
+                const isMin = i === mm.minIdx;
+                const isMax = i === mm.maxIdx;
+                const isLast = i === ds.data.length - 1;
+                const isFirst = i === 0 && ds.data.length <= 12;
+                if (!isMin && !isMax && !isLast && !isFirst && ds.data.length > 8) return;
+
+                let prefix = '';
+                let bg = '#1e293b';
+                if (isMin) { prefix = '史低 '; bg = '#047857'; }
+                else if (isMax) { prefix = '最高 '; bg = '#be123c'; }
+                else if (isLast) { prefix = '最新 '; bg = isNzdDs ? '#4338ca' : '#b45309'; }
+
+                const txt = `${prefix}${sym}${Number(val).toFixed(1)}`;
+                const tw = ctx.measureText(txt).width + 8;
+                const th = 16;
+                let tx = elem.x - tw / 2;
+                tx = Math.max(36, Math.min(chart.width - tw - 36, tx));
+                let ty = isNzdDs ? (elem.y - 22) : (effectiveMode === 'DUAL' ? (elem.y + 8) : (elem.y - 22));
+                if (ty < 8) ty = elem.y + 8;
+                if (ty > chart.height - 28) ty = elem.y - 22;
+
+                ctx.fillStyle = bg;
+                ctx.beginPath();
+                if (ctx.roundRect) ctx.roundRect(tx, ty, tw, th, 4);
+                else ctx.rect(tx, ty, tw, th);
+                ctx.fill();
+
+                ctx.fillStyle = '#ffffff';
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'middle';
+                ctx.fillText(txt, tx + tw / 2, ty + th / 2);
+              });
+            });
+            ctx.restore();
+          }
+        };
+
+        const leftValues = (effectiveMode === 'CNY_SINGLE' ? rmbData : nzdData).filter(v => v !== null && v > 0);
+        const lMin = leftValues.length ? Math.min(...leftValues) : 0;
+        const lMax = leftValues.length ? Math.max(...leftValues) : 100;
+        const lPad = Math.max(1.5, (lMax - lMin) * 0.25);
+
+        const rightValues = rmbData.filter(v => v !== null && v > 0);
+        const rMin = rightValues.length ? Math.min(...rightValues) : 0;
+        const rMax = rightValues.length ? Math.max(...rightValues) : 500;
+        const rPad = Math.max(5, (rMax - rMin) * 0.25);
+
+        productPriceTrendChartInstance = new Chart(canvas.getContext('2d'), {
+          type: 'line',
+          data: { labels, datasets },
+          plugins: [directPriceLabelPlugin],
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            layout: { padding: { top: 20, bottom: 6, left: 6, right: 6 } },
+            interaction: { mode: 'index', intersect: false },
+            plugins: {
+              legend: { position: 'top', labels: { usePointStyle: true, boxWidth: 10, font: { size: 11, weight: 'bold' } } },
+              tooltip: {
+                callbacks: {
+                  afterBody(context) {
+                    const idx = context[0] ? context[0].dataIndex : -1;
+                    const pt = plotSeries[idx];
+                    if (!pt) return [];
+                    const lines = [];
+                    if (pt.nzdPrice) lines.push(`🇳🇿 纽币原价: NZ$${pt.nzdPrice.toFixed(2)}`);
+                    if (pt.rmbPrice) lines.push(`🇨🇳 人民币实付: ¥${pt.rmbPrice.toFixed(2)}`);
+                    if (pt.exchangeRate) lines.push(`💱 折算汇率: ${pt.exchangeRate}`);
+                    if (pt.waveCount > 1) {
+                      lines.push(`📦 合并同价订单: 共 ${pt.waveCount} 笔 (${pt.startDate} ~ ${pt.endDate})`);
+                    } else if (pt.orderNo) {
+                      lines.push(`📦 关联订单: #${pt.orderNo}`);
+                    }
+                    return lines;
+                  }
+                }
+              }
+            },
+            scales: {
+              x: { ticks: { font: { size: 10 }, maxRotation: 25 } },
+              yLeft: {
+                type: 'linear',
+                display: true,
+                position: 'left',
+                suggestedMin: Math.max(0, Number((lMin - lPad).toFixed(1))),
+                suggestedMax: Number((lMax + lPad).toFixed(1)),
+                title: { display: true, text: effectiveMode === 'CNY_SINGLE' ? 'RMB 实付单价 (¥)' : 'NZD 纽币单价 ($)', font: { size: 10, weight: 'bold' } },
+                ticks: { font: { size: 10 } }
+              },
+              ...(effectiveMode === 'DUAL' && rightValues.length > 0 ? {
+                yRight: {
+                  type: 'linear',
+                  display: true,
+                  position: 'right',
+                  suggestedMin: Math.max(0, Number((rMin - rPad).toFixed(1))),
+                  suggestedMax: Number((rMax + rPad).toFixed(1)),
+                  grid: { drawOnChartArea: false },
+                  title: { display: true, text: 'RMB 实付单价 (¥)', font: { size: 10, weight: 'bold' } },
+                  ticks: { font: { size: 10 } }
+                }
+              } : {})
+            }
+          }
+        });
+      }
+
+      // Also upgrade #trendStudioTimelineTable to cleanly display merged split orders on the same day (e.g. "📦 同日同价 7 单") while keeping different-price same-day orders separate!
+      const tableEl = document.getElementById('trendStudioTimelineTable');
+      if (tableEl) {
+        const nzdPoints = fullSeries.filter(s => s.nzdPrice && s.nzdPrice > 0);
+        const minNzdPt = nzdPoints.length ? nzdPoints.reduce((a, b) => (b.nzdPrice <= a.nzdPrice ? b : a), nzdPoints[0]) : null;
+        const rmbPoints = fullSeries.filter(s => s.rmbPrice && s.rmbPrice > 0);
+        const minRmbPt = rmbPoints.length ? rmbPoints.reduce((a, b) => (b.rmbPrice <= a.rmbPrice ? b : a), rmbPoints[0]) : null;
+
+        const reversed = fullSeries.slice().reverse();
+        const needCollapse = reversed.length > 5;
+        const visibleRows = (needCollapse && !window.trendTimelineTableExpanded) ? reversed.slice(0, 5) : reversed;
+
+        tableEl.innerHTML = `
+          <div class="flex flex-wrap items-center justify-between gap-2 mb-2">
+            <div class="flex items-center gap-1.5 flex-wrap">
+              <span class="text-xs font-bold text-slate-800">📋 历次已核实单价明细档案</span>
+              <span class="text-[10px] bg-indigo-50 text-indigo-800 border border-indigo-200 px-2 py-0.5 rounded font-bold">${reversed.length} 期价格档位 (源自 ${totalOrdersCovered} 单)</span>
+              <button type="button" data-open-prod-spec="${(currentTrendProductName || '').replace(/"/g, '&quot;')}" class="text-[11px] bg-emerald-50 hover:bg-emerald-100 text-emerald-800 border border-emerald-300 px-2 py-0.5 rounded font-bold transition">
+                🔬 商品说明与营养成分表
+              </button>
+            </div>
+            <div class="flex items-center gap-1.5">
+              ${needCollapse ? `
+                <button type="button" id="btnToggleTrendTimelineExpand" class="text-[11px] bg-indigo-600 hover:bg-indigo-500 text-white font-bold px-2.5 py-0.5 rounded-lg shadow-2xs transition">
+                  ${window.trendTimelineTableExpanded ? `▲ 折叠只看最近 5 期` : `📂 展开全部 ${reversed.length} 期 ▾`}
+                </button>
+              ` : ''}
+            </div>
+          </div>
+          <div class="max-h-56 overflow-y-auto custom-scroll rounded-lg border border-slate-200 bg-white">
+            <table class="w-full text-left border-collapse text-[11px]">
+              <thead class="sticky top-0 bg-slate-100/95 backdrop-blur-xs z-10 border-b border-slate-200 text-slate-600">
+                <tr>
+                  <th class="py-1.5 px-2.5">核实日期</th>
+                  <th class="py-1.5 px-2.5">渠道商家</th>
+                  <th class="py-1.5 px-2.5">NZD原币单价</th>
+                  <th class="py-1.5 px-2.5">RMB实付单价</th>
+                  <th class="py-1.5 px-2.5">当时汇率</th>
+                  <th class="py-1.5 px-2.5">核验来源 / 关联订单</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-slate-200/60 bg-white">
+                ${visibleRows.map(pt => {
+                  const isLowestNzd = minNzdPt && pt.nzdPrice && Math.abs(pt.nzdPrice - minNzdPt.nzdPrice) < 0.01;
+                  const isLowestRmb = minRmbPt && pt.rmbPrice && Math.abs(pt.rmbPrice - minRmbPt.rmbPrice) < 0.05;
+                  const nzdCellHtml = pt.nzdPrice
+                    ? `<span class="font-bold ${isLowestNzd ? 'text-emerald-700' : 'text-slate-800'}">NZ$${pt.nzdPrice.toFixed(2)}${isLowestNzd ? ' 🟢史低' : ''}</span>`
+                    : `<span class="text-[10px] text-slate-400 font-normal">RMB直付(无纽币)</span>`;
+                  const rmbCellHtml = pt.rmbPrice
+                    ? `<span class="font-bold ${isLowestRmb ? 'text-rose-700' : 'text-rose-600'}">¥${pt.rmbPrice.toFixed(2)}${isLowestRmb ? ' 🔥最低' : ''}</span>`
+                    : `<span class="text-[10px] text-slate-400 font-normal">纽币直付</span>`;
+
+                  let ordBtnHtml = '';
+                  if (pt.mergedOrders && pt.mergedOrders.length > 1) {
+                    const firstOrd = pt.mergedOrders[0];
+                    ordBtnHtml = `
+                      <div class="inline-flex items-center gap-1 flex-wrap">
+                        <button type="button" ${firstOrd.orderId ? `data-quickview-order="${firstOrd.orderId}"` : `data-quickview-orderno="${firstOrd.orderNo}"`} class="bg-teal-600 hover:bg-teal-500 text-white px-2 py-0.5 rounded font-bold text-[10px] transition">📋 详单</button>
+                        <span class="font-mono text-indigo-700">#${firstOrd.orderNo}</span>
+                        <span class="text-[10px] bg-amber-100 text-amber-900 border border-amber-300 px-1.5 py-0.2 rounded font-bold" title="同日同价分箱共 ${pt.mergedOrders.length} 笔订单：${pt.mergedOrders.map(m => '#' + m.orderNo).join(', ')}">📦 同日同价共${pt.mergedOrders.length}单</span>
+                      </div>
+                    `;
+                  } else if (pt.orderId) {
+                    ordBtnHtml = `<div class="inline-flex items-center gap-1"><button type="button" data-quickview-order="${pt.orderId}" class="bg-teal-600 hover:bg-teal-500 text-white px-2 py-0.5 rounded font-bold text-[10px] transition">📋 详单</button><span class="font-mono text-indigo-700">#${pt.orderNo}</span></div>`;
+                  } else if (pt.orderNo) {
+                    ordBtnHtml = `<div class="inline-flex items-center gap-1"><button type="button" data-quickview-orderno="${pt.orderNo}" class="bg-teal-600 hover:bg-teal-500 text-white px-2 py-0.5 rounded font-bold text-[10px] transition">📋 详单</button><span class="font-mono text-indigo-700">#${pt.orderNo}</span></div>`;
+                  } else {
+                    ordBtnHtml = `<span class="text-slate-500">${pt.sourceType || '台账核实'}</span>`;
+                  }
+                  return `
+                    <tr class="hover:bg-indigo-50/40 transition">
+                      <td class="py-1.5 px-2.5 font-mono font-semibold text-slate-800 whitespace-nowrap">${pt.date}</td>
+                      <td class="py-1.5 px-2.5"><span class="px-1.5 py-0.5 rounded bg-slate-100 text-slate-700 font-medium">${pt.merchant}</span></td>
+                      <td class="py-1.5 px-2.5 font-mono whitespace-nowrap">${nzdCellHtml}</td>
+                      <td class="py-1.5 px-2.5 font-mono whitespace-nowrap">${rmbCellHtml}</td>
+                      <td class="py-1.5 px-2.5 font-mono text-teal-800">${pt.exchangeRate ? pt.exchangeRate : '<span class="text-slate-300">-</span>'}</td>
+                      <td class="py-1.5 px-2.5">${ordBtnHtml}</td>
+                    </tr>
+                  `;
+                }).join('')}
+              </tbody>
+            </table>
+          </div>
+          <div class="mt-2 flex flex-wrap items-center justify-between gap-2 text-[11px] text-slate-500">
+            <span>💡 同日同价分箱订单已自动归并标注总单数；同日不同单价订单（如差 ¥0.03）均独立保留</span>
+            <button type="button" data-inline-back-top="trendSelect" class="bg-emerald-50 hover:bg-emerald-100 text-emerald-800 border border-emerald-300 font-bold px-2.5 py-1 rounded-lg transition">⬆️ 回到顶部切换商品</button>
+          </div>
+        `;
+      }
+    };
+
+    // --- 3. Redesign openProductSpecSheetModal (Pure Read-Only Showcase, No Duplicate Icon, No Edit Button) ---
+    openProductSpecSheetModal = function(prodName) {
+      const p = getProductInfo(prodName);
+      if (!p) return;
+      const modal = document.getElementById('modalProductSpecSheet');
+      const badgeIconEl = document.getElementById('specSheetModalBadgeIcon');
+      const titleEl = document.getElementById('specSheetModalTitle');
+      const bodyEl = document.getElementById('specSheetModalBody');
+      const btnCopyWeChat = document.getElementById('btnCopySpecSheetToWeChat');
+      if (!modal || !bodyEl) return;
+
+      // Single clean icon in badge, NO duplicate 🔬 inside titleEl.textContent!
+      if (badgeIconEl) badgeIconEl.textContent = CATEGORY_ICONS_MAP[p.category] || '🌿';
+      if (titleEl) titleEl.textContent = `${p.name}`;
+      if (btnCopyWeChat) btnCopyWeChat.setAttribute('data-copy-spec-prod', p.name);
+
+      const mainImg = p.imageUrl || getProductDefaultSvgDataUri(p);
+      const facts = getDefaultSupplementFactsForProduct(p);
+      const specSig = extractProductSpecSignature(p.name);
+      const series = collectProductVerifiedPriceSeries(p.name, 'ALL_VERIFIED');
+      const latestPt = series.length > 0 ? series[series.length - 1] : null;
+
+      bodyEl.innerHTML = `
+        <div class="grid grid-cols-1 sm:grid-cols-12 gap-4 bg-gradient-to-br from-slate-50 via-white to-emerald-50/40 p-4 rounded-xl border border-slate-200 shadow-2xs">
+          <div class="sm:col-span-4 flex flex-col items-center justify-center bg-white rounded-xl p-3 border border-slate-200/80 shadow-2xs">
+            <img src="${mainImg}" alt="${p.name.replace(/"/g, '&quot;')}" class="w-40 h-40 object-contain rounded-lg" />
+          </div>
+          <div class="sm:col-span-8 flex flex-col justify-between space-y-2.5">
+            <div class="space-y-2">
+              <div class="flex flex-wrap items-center gap-1.5">
+                <span class="text-xs font-bold px-2.5 py-0.5 rounded-full bg-emerald-100 text-emerald-900">${CATEGORY_ICONS_MAP[p.category] || '📦'} ${p.category}</span>
+                <span class="text-xs font-mono font-bold px-2 py-0.5 rounded bg-teal-100 text-teal-900">规格: ${specSig.badgeText}</span>
+                ${p.unitWeightG ? `<span class="text-xs font-mono px-2 py-0.5 rounded bg-slate-100 text-slate-700 border border-slate-200">⚖️ 净重 ≈ ${p.unitWeightG}g</span>` : ''}
+              </div>
+              <h4 class="text-base font-extrabold text-slate-900 leading-snug">${p.name}</h4>
+            </div>
+            <div class="grid grid-cols-3 gap-2 pt-1">
+              <div class="bg-white p-2.5 rounded-xl border border-slate-200">
+                <div class="text-[10px] text-slate-400">最新纽币核实价</div>
+                <div class="text-sm font-extrabold text-emerald-700 font-mono mt-0.5">${p.nzdPrice ? 'NZ$' + p.nzdPrice : (latestPt?.nzdPrice ? 'NZ$' + latestPt.nzdPrice : 'RMB直付')}</div>
+              </div>
+              <div class="bg-white p-2.5 rounded-xl border border-slate-200">
+                <div class="text-[10px] text-slate-400">最新人民币实付</div>
+                <div class="text-sm font-extrabold text-rose-600 font-mono mt-0.5">${p.rmbPrice ? '¥' + p.rmbPrice : (latestPt?.rmbPrice ? '¥' + latestPt.rmbPrice : '-')}</div>
+              </div>
+              <div class="bg-white p-2.5 rounded-xl border border-slate-200">
+                <div class="text-[10px] text-slate-400">核实价格档位</div>
+                <div class="text-sm font-extrabold text-indigo-700 mt-0.5">${series.length} 期档案</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
+          <div class="bg-emerald-50/50 border border-emerald-200 rounded-xl p-3.5 space-y-1.5">
+            <div class="font-extrabold text-emerald-950 text-xs flex items-center gap-1.5">
+              <span>🧪 核心营养成分与含量 (Supplement Facts)</span>
+            </div>
+            <p class="text-xs text-slate-700 leading-relaxed whitespace-pre-line">${facts.ingredients}</p>
+          </div>
+          <div class="bg-indigo-50/50 border border-indigo-200 rounded-xl p-3.5 space-y-1.5">
+            <div class="font-extrabold text-indigo-950 text-xs flex items-center gap-1.5">
+              <span>💡 建议服用方法、适用人群与存储说明</span>
+            </div>
+            <p class="text-xs text-slate-700 leading-relaxed whitespace-pre-line">${facts.usage}</p>
+            <div class="pt-1 text-[11px] text-indigo-800 font-medium">
+              💊 日常建议用量：每日 <strong>${p.dailyDose || parseProductUnitCapacity(p.name).defaultDaily}</strong> ${parseProductUnitCapacity(p.name).unit}/天 ${p.expiryDate ? `· 常备批次保质期至 <strong>${p.expiryDate}</strong>` : ''}
+            </div>
+          </div>
+        </div>
+
+        ${p.nutritionImageUrl ? `
+          <div class="border border-slate-200 rounded-xl p-3.5 bg-slate-50 space-y-2">
+            <div class="font-extrabold text-slate-800 text-xs">📊 营养成分表 (Nutrition / Supplement Facts)：</div>
+            <div class="bg-white p-2.5 rounded-xl border border-slate-200 flex justify-center">
+              <img src="${p.nutritionImageUrl}" alt="营养成分表" class="max-h-96 object-contain rounded-lg" />
+            </div>
+          </div>
+        ` : ''}
+      `;
+      modal.classList.remove('hidden');
+    };
+    window.openProductSpecSheetModal = openProductSpecSheetModal;
+
+    // Remove the exposed [✎编辑/配图] button from daily Product Cards in #productsGrid so daily browsing is 100% clean & read-only
+    const _v7110RenderProductsTab = renderProductsTab;
+    renderProductsTab = function() {
+      _v7110RenderProductsTab();
+      const grid = document.getElementById('productsGrid');
+      if (grid) {
+        grid.querySelectorAll('button[data-edit-prod]').forEach(btn => btn.remove());
+      }
+      // Also remove inline edit buttons in #prodInstantSearchMatchesStrip
+      const strip = document.getElementById('prodInstantSearchMatchesStrip');
+      if (strip) {
+        strip.querySelectorAll('button[data-edit-prod]').forEach(btn => btn.remove());
+      }
+    };
+
+    // --- 4. Unified Backend Product Media, Formula & Price Admin Manager (#rulesPanel-prodmedia) ---
+    function renderProductMediaAdminPanel() {
+      const cont = document.getElementById('prodMediaAdminTableContainer');
+      const badge = document.getElementById('prodMediaStorageBadge');
+      if (!cont) return;
+
+      const stats = computeSystemImageStorageStats();
+      if (badge) {
+        badge.textContent = `📊 已传自定义图 ${stats.imgCount} 张 · 共占 ${stats.totalKb} KB (${stats.pctOf5Mb}% 缓存)`;
+      }
+
+      const q = (document.getElementById('prodMediaAdminSearch')?.value || '').trim().toLowerCase();
+      const filterMode = document.getElementById('prodMediaAdminFilter')?.value || 'ALL';
+
+      const filtered = (state.products || []).filter(p => {
+        if (filterMode === 'HAS_CUSTOM_IMG' && !(p.imageUrl || p.nutritionImageUrl)) return false;
+        if (filterMode === 'DEFAULT_SVG_ONLY' && (p.imageUrl || p.nutritionImageUrl)) return false;
+        if (q) {
+          const hay = `${p.name} ${p.category || ''} ${p.ingredientsText || ''} ${p.usageText || ''}`.toLowerCase();
+          if (!hay.includes(q)) return false;
+        }
+        return true;
+      });
+
+      if (filtered.length === 0) {
+        cont.innerHTML = `<div class="p-6 text-center text-slate-400 text-xs">没有找到符合条件的商品档案</div>`;
+        return;
+      }
+
+      cont.innerHTML = `
+        <div class="max-h-[54vh] overflow-y-auto custom-scroll">
+          <table class="w-full text-left border-collapse text-xs">
+            <thead class="sticky top-0 bg-slate-100 border-b border-slate-200 text-slate-600 z-10">
+              <tr>
+                <th class="py-2 px-3">商品主图</th>
+                <th class="py-2 px-2">配方表图</th>
+                <th class="py-2 px-3">商品名称 / 分类 / 规格</th>
+                <th class="py-2 px-3">参考单价</th>
+                <th class="py-2 px-3">核心配方成分 & 服用说明摘要</th>
+                <th class="py-2 px-3 text-right">统一管理操作</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-slate-100">
+              ${filtered.map(p => {
+                const safeName = p.name.replace(/"/g, '&quot;');
+                const mainThumb = p.imageUrl || getProductDefaultSvgDataUri(p);
+                const facts = getDefaultSupplementFactsForProduct(p);
+                const spec = extractProductSpecSignature(p.name);
+                return `
+                  <tr class="hover:bg-slate-50/90 transition">
+                    <td class="py-2 px-3 w-16">
+                      <div class="w-11 h-11 rounded-lg border ${p.imageUrl ? 'border-emerald-400 ring-1 ring-emerald-200' : 'border-slate-200'} bg-white overflow-hidden flex items-center justify-center">
+                        <img src="${mainThumb}" alt="" class="w-full h-full object-cover" />
+                      </div>
+                    </td>
+                    <td class="py-2 px-2 w-16">
+                      ${p.nutritionImageUrl
+                        ? `<div class="w-11 h-11 rounded-lg border border-indigo-400 bg-white overflow-hidden"><img src="${p.nutritionImageUrl}" alt="" class="w-full h-full object-cover" /></div>`
+                        : `<span class="text-[10px] text-slate-400 bg-slate-100 px-1.5 py-0.5 rounded">未传图</span>`
+                      }
+                    </td>
+                    <td class="py-2 px-3 max-w-[230px]">
+                      <div class="font-bold text-slate-900 leading-snug">${p.name}</div>
+                      <div class="flex items-center gap-1 mt-0.5">
+                        <span class="text-[10px] bg-emerald-50 text-emerald-800 border border-emerald-200 px-1.5 rounded">${p.category || '保健品'}</span>
+                        <span class="text-[10px] bg-teal-50 text-teal-800 border border-teal-200 px-1 rounded font-mono">${spec.badgeText}</span>
+                      </div>
+                    </td>
+                    <td class="py-2 px-3 font-mono whitespace-nowrap">
+                      <div class="font-bold text-slate-800">${p.nzdPrice ? 'NZ$' + p.nzdPrice : '-'}</div>
+                      <div class="text-[11px] text-rose-600 font-semibold">${p.rmbPrice ? '¥' + p.rmbPrice : '-'}</div>
+                    </td>
+                    <td class="py-2 px-3 max-w-[260px]">
+                      <div class="text-[11px] text-slate-600 line-clamp-2" title="${facts.ingredients.replace(/"/g, '&quot;')}">🧪 ${facts.ingredients}</div>
+                      <div class="text-[10px] text-indigo-700 line-clamp-1 mt-0.5">💡 ${facts.usage}</div>
+                    </td>
+                    <td class="py-2 px-3 text-right whitespace-nowrap">
+                      <div class="inline-flex items-center gap-1">
+                        <label class="cursor-pointer bg-emerald-50 hover:bg-emerald-600 hover:text-white text-emerald-800 border border-emerald-200 px-2 py-1 rounded-md font-bold text-[11px] transition" title="直接上传并压缩商品主图">
+                          📤主图
+                          <input type="file" accept="image/*" data-admin-quick-mainimg="${safeName}" class="hidden" />
+                        </label>
+                        <label class="cursor-pointer bg-indigo-50 hover:bg-indigo-600 hover:text-white text-indigo-800 border border-indigo-200 px-2 py-1 rounded-md font-bold text-[11px] transition" title="直接上传并压缩背面营养成分表图">
+                          🔬配方图
+                          <input type="file" accept="image/*" data-admin-quick-nutriimg="${safeName}" class="hidden" />
+                        </label>
+                        <button type="button" data-admin-open-edit-prod="${safeName}" class="bg-slate-800 hover:bg-slate-700 text-white px-2.5 py-1 rounded-md font-bold text-[11px] transition">
+                          ✎ 完整编辑
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                `;
+              }).join('')}
+            </tbody>
+          </table>
+        </div>
+      `;
+    }
+    window.renderProductMediaAdminPanel = renderProductMediaAdminPanel;
+
+    // Hook window.switchUnifiedRulesTab so 'prodmedia' tab works seamlessly
+    const _v7110SwitchUnifiedRulesTab = window.switchUnifiedRulesTab;
+    window.switchUnifiedRulesTab = function(tabName) {
+      const panels = {
+        theme: document.getElementById('rulesPanel-theme'),
+        labels: document.getElementById('rulesPanel-labels'),
+        prodmedia: document.getElementById('rulesPanel-prodmedia'),
+        scrape: document.getElementById('rulesPanel-scrape'),
+        links: document.getElementById('rulesPanel-links')
+      };
+      const target = panels[tabName] ? tabName : 'theme';
+      document.querySelectorAll('.rules-tab-btn').forEach(btn => {
+        const isAct = btn.getAttribute('data-rulestab') === target;
+        btn.className = isAct
+          ? 'rules-tab-btn rules-tab-active text-xs sm:text-sm font-bold px-3.5 py-2 rounded-lg border border-slate-300 transition flex items-center gap-1.5'
+          : 'rules-tab-btn bg-white text-slate-700 hover:bg-slate-50 text-xs sm:text-sm font-bold px-3.5 py-2 rounded-lg border border-slate-300 transition flex items-center gap-1.5';
+      });
+      Object.keys(panels).forEach(k => {
+        if (panels[k]) {
+          panels[k].classList.toggle('hidden', k !== target);
+        }
+      });
+      if (target === 'theme' && typeof renderThemeStudioPanel === 'function') renderThemeStudioPanel();
+      if (target === 'labels' && typeof renderUiCustomLabelsPanel === 'function') renderUiCustomLabelsPanel();
+      if (target === 'prodmedia') renderProductMediaAdminPanel();
+      if (target === 'scrape' && typeof renderScrapeRulesModal === 'function') renderScrapeRulesModal();
+      if (target === 'links' && typeof renderLinkRulesModal === 'function') renderLinkRulesModal();
+    };
+
+    function bindV7120UnifiedRulesTab() {
+      window.switchUnifiedRulesTab = function(tabName) {
+        const panels = {
+          theme: document.getElementById('rulesPanel-theme'),
+          labels: document.getElementById('rulesPanel-labels'),
+          prodmedia: document.getElementById('rulesPanel-prodmedia'),
+          scrape: document.getElementById('rulesPanel-scrape'),
+          links: document.getElementById('rulesPanel-links')
+        };
+        const target = panels[tabName] ? tabName : 'theme';
+        document.querySelectorAll('.rules-tab-btn').forEach(btn => {
+          const isAct = btn.getAttribute('data-rulestab') === target;
+          btn.className = isAct
+            ? 'rules-tab-btn rules-tab-active text-xs sm:text-sm font-bold px-3.5 py-2 rounded-lg border border-slate-300 transition flex items-center gap-1.5'
+            : 'rules-tab-btn bg-white text-slate-700 hover:bg-slate-50 text-xs sm:text-sm font-bold px-3.5 py-2 rounded-lg border border-slate-300 transition flex items-center gap-1.5';
+        });
+        Object.keys(panels).forEach(k => {
+          if (panels[k]) {
+            panels[k].classList.toggle('hidden', k !== target);
+          }
+        });
+        if (target === 'theme' && typeof renderThemeStudioPanel === 'function') renderThemeStudioPanel();
+        if (target === 'labels' && typeof renderUiCustomLabelsPanel === 'function') renderUiCustomLabelsPanel();
+        if (target === 'prodmedia') renderProductMediaAdminPanel();
+        if (target === 'scrape' && typeof renderScrapeRulesModal === 'function') renderScrapeRulesModal();
+        if (target === 'links' && typeof renderLinkRulesModal === 'function') renderLinkRulesModal();
+      };
+    }
+
+    function initV7120Events() {
+      bindV7120UnifiedRulesTab();
+      // 1. Add subtle "⚙️ 商品配图与配方后台管理" entry in Products tab top toolbar (replacing scattered card edit buttons)
+      const btnAddProdTop = document.getElementById('btnOpenAddProductModal');
+      if (btnAddProdTop && !document.getElementById('btnOpenProdMediaBackend')) {
+        btnAddProdTop.insertAdjacentHTML('beforebegin', `
+          <button type="button" id="btnOpenProdMediaBackend" class="bg-slate-800 hover:bg-slate-700 text-amber-300 border border-slate-700 text-xs px-3 py-1.5 rounded-lg font-bold transition flex items-center gap-1 shadow-2xs" title="打开统一后台：集中管理全部商品的实拍主图、背面营养成分表、服用说明与参考单价（前台卡片保持纯净只读）">
+            <span>🖼️ 配图与配方后台管理</span>
+          </button>
+        `);
+        document.getElementById('btnOpenProdMediaBackend')?.addEventListener('click', () => {
+          const modal = document.getElementById('modalScrapeRules');
+          if (modal) modal.classList.remove('hidden');
+          window.switchUnifiedRulesTab('prodmedia');
+        });
+      }
+
+      // 2. Bind chart currency pill switcher & wave grouping toggle
+      document.addEventListener('click', (e) => {
+        const curPill = e.target.closest('[data-chart-cur-pill]');
+        if (curPill) {
+          window.chartVisualMode = curPill.getAttribute('data-chart-cur-pill') || 'SMART_SINGLE';
+          const sel = document.getElementById('trendStudioCurrencyMode');
+          if (sel) {
+            sel.value = window.chartVisualMode === 'DUAL' ? 'DUAL' : (window.chartVisualMode === 'NZD' ? 'NZD' : 'CNY');
+          }
+          renderProductPriceTrendStudio(currentTrendProductName);
+          return;
+        }
+
+        const waveBtn = e.target.closest('#btnToggleChartWaveGrouping');
+        if (waveBtn) {
+          window.chartWaveGroupingEnabled = !window.chartWaveGroupingEnabled;
+          renderProductPriceTrendStudio(currentTrendProductName);
+          showToast(window.chartWaveGroupingEnabled ? '⚡ 已开启：连续相同单价自动聚合为波段拐点' : '📋 已切换：显示逐笔订单全量节点');
+          return;
+        }
+
+        const copySpecBtn = e.target.closest('#btnCopySpecSheetToWeChat');
+        if (copySpecBtn) {
+          const pname = copySpecBtn.getAttribute('data-copy-spec-prod');
+          const p = getProductInfo(pname);
+          if (p) {
+            const facts = getDefaultSupplementFactsForProduct(p);
+            const spec = extractProductSpecSignature(p.name);
+            const lines = [
+              `🌿【纽澳正品营养档案】${p.name}`,
+              `📏 规格参数：${spec.badgeText}${p.unitWeightG ? ' (净重≈' + p.unitWeightG + 'g)' : ''}`,
+              `🧪 核心成分：${facts.ingredients}`,
+              `💡 服用方法：${facts.usage}`
+            ];
+            copyTextToClipboard(lines.join('\n'), `「${p.name}」服用说明卡`);
+          }
+          return;
+        }
+
+        const adminEditBtn = e.target.closest('[data-admin-open-edit-prod]');
+        if (adminEditBtn) {
+          const pname = adminEditBtn.getAttribute('data-admin-open-edit-prod');
+          const p = getProductInfo(pname);
+          if (p) {
+            document.getElementById('modalProductTitle').textContent = '编辑商品、图片与详细配方档案';
+            document.getElementById('editProdOriginalName').value = p.name;
+            document.getElementById('editProdName').value = p.name;
+            document.getElementById('editProdCategory').value = p.category || '维生素/钙铁锌/保健';
+            document.getElementById('editProdNzdPrice').value = p.nzdPrice || '';
+            document.getElementById('editProdRmbPrice').value = p.rmbPrice || '';
+            document.getElementById('editProdRmbShip').value = p.rmbShipPerUnit || '';
+            if (document.getElementById('editProdTargetNzd')) document.getElementById('editProdTargetNzd').value = p.targetNzdPrice || '';
+            if (document.getElementById('editProdWeightG')) document.getElementById('editProdWeightG').value = p.unitWeightG || estimateProductUnitWeightG(p.name) || '';
+            if (document.getElementById('editProdDailyDose')) document.getElementById('editProdDailyDose').value = p.dailyDose || parseProductUnitCapacity(p.name).defaultDaily || '';
+            if (document.getElementById('editProdExpiryDate')) document.getElementById('editProdExpiryDate').value = p.expiryDate || '';
+            populateProductModalImageAndFormulaFields(p.name);
+            document.getElementById('modalProduct')?.classList.remove('hidden');
+          }
+          return;
+        }
+      });
+
+      const trendCurSel = document.getElementById('trendStudioCurrencyMode');
+      if (trendCurSel) {
+        trendCurSel.addEventListener('change', () => {
+          window.chartVisualMode = trendCurSel.value;
+          renderProductPriceTrendStudio(currentTrendProductName);
+        });
+      }
+
+      // Bind quick image uploads & search inside #rulesPanel-prodmedia
+      const prodMediaPanel = document.getElementById('rulesPanel-prodmedia');
+      if (prodMediaPanel) {
+        document.getElementById('prodMediaAdminSearch')?.addEventListener('input', renderProductMediaAdminPanel);
+        document.getElementById('prodMediaAdminFilter')?.addEventListener('change', renderProductMediaAdminPanel);
+        document.getElementById('btnAddNewProductFromBackend')?.addEventListener('click', () => {
+          document.getElementById('btnOpenAddProductModal')?.click();
+        });
+        prodMediaPanel.addEventListener('change', async (e) => {
+          const mainInp = e.target.closest('[data-admin-quick-mainimg]');
+          if (mainInp) {
+            const pname = mainInp.getAttribute('data-admin-quick-mainimg');
+            const file = mainInp.files?.[0];
+            const p = getProductInfo(pname);
+            if (p && file) {
+              const res = await compressImageFileToDataUrl(file, 320, 0.8);
+              p.imageUrl = res.dataUrl;
+              saveState(`更新「${p.name}」商品主图`);
+              renderProductMediaAdminPanel();
+              renderProductsTab();
+              showToast(`🖼️ 已更新「${p.name}」主图 (${res.kb} KB)`);
+            }
+            return;
+          }
+          const nutriInp = e.target.closest('[data-admin-quick-nutriimg]');
+          if (nutriInp) {
+            const pname = nutriInp.getAttribute('data-admin-quick-nutriimg');
+            const file = nutriInp.files?.[0];
+            const p = getProductInfo(pname);
+            if (p && file) {
+              const res = await compressImageFileToDataUrl(file, 820, 0.82);
+              p.nutritionImageUrl = res.dataUrl;
+              saveState(`更新「${p.name}」背面配方表图`);
+              renderProductMediaAdminPanel();
+              renderProductsTab();
+              showToast(`🔬 已更新「${p.name}」配方表图 (${res.kb} KB)`);
+            }
+            return;
+          }
+        });
+      }
+
+      // Refresh backend panel when #modalProduct saves
+      document.getElementById('btnSaveProductModal')?.addEventListener('click', () => {
+        setTimeout(renderProductMediaAdminPanel, 50);
+      });
+
+      cleanAndSyncVerifiedOrderPricesToCatalog();
+      renderProductsTab();
+      renderProductPriceTrendStudio(currentTrendProductName);
+    }
+
+    if (document.readyState === 'loading') {
+      window.addEventListener('DOMContentLoaded', initV7120Events);
+    } else {
+      initV7120Events();
+    }
+
+
+
+    // ============================================================================
+    // v7.13.0 (Build 20261030.1315) COMPREHENSIVE OPTIMIZATION SUITE:
+    // 1. In-Transit Parcel Overdue & Unshipped Alert Center (#splitParcelAnomalyStrip +
+    //    "🚨 在途超期预警" Filter + Overdue Threshold Selector + 1-Click Follow-Up Copy).
+    // 2. Customer WeChat Notification Generator: Built-in "💊 保健品服用指南卡" mode &
+    //    auto-appended Supplement Facts / Daily Dosage instructions (#chkNotifySupplementDosage).
+    // 3. Recipient Purchase Preference Persona & Smart Restock Radar (#recipientPreferenceRestockStudio)
+    //    with 1-Click Repeat Order Pre-fill & WeChat Care Message Copy.
+    // 4. Exchange Rate Sensitivity Simulator Bar (#cartOptExchangeSensitivityBar) inside Cart Optimizer.
+    // ============================================================================
+
+    window.overdueDaysThreshold = 15; // Default overdue threshold in days (configurable: 12 / 15 / 18 / 21)
+
+    // --- 1. Compute Overdue In-Transit Parcels, Unshipped Timeout Orders & Split-Order Lag ---
+    function analyzeInTransitOverdueAndAnomalies(validOrders) {
+      const orders = (validOrders || getActiveOrders()).filter(o => o && !o.cancelled && !isSelfUseOrder(o));
+      const cStats = computeCourierStats();
+      const threshold = Number(window.overdueDaysThreshold) || 15;
+
+      const overdueParcels = [];
+      const approachingParcels = [];
+      const unshippedTimeoutOrders = [];
+      const laggingSplitOrders = [];
+      let totalCompleteSplitOrders = 0;
+      let sumSpreadDays = 0;
+
+      // Scan 2026+ active orders for in-transit overdue & unshipped timeout
+      orders.forEach(o => {
+        const isCurrentYear = (Number(o.year) || 2026) >= 2026;
+        const orderElapsed = daysBetween(o.orderDate, TODAY_STR);
+
+        if (!o.parcels || o.parcels.length === 0) {
+          if (isCurrentYear && orderElapsed !== null && orderElapsed >= 4) {
+            unshippedTimeoutOrders.push({ order: o, elapsedDays: orderElapsed });
+          }
+          return;
+        }
+
+        // Check split-order delivery lag
+        const deliv = o.parcels.filter(p => !!p.deliveredDate);
+        const pending = o.parcels.filter(p => !p.deliveredDate);
+        if (o.parcels.length >= 2) {
+          if (deliv.length > 0 && pending.length > 0) {
+            laggingSplitOrders.push({
+              order: o,
+              delivCount: deliv.length,
+              pendingCount: pending.length,
+              pendingParcels: pending,
+              latestDelivDate: deliv.map(p => p.deliveredDate).sort().slice(-1)[0]
+            });
+          } else if (deliv.length === o.parcels.length) {
+            const dTimes = deliv.map(p => new Date(p.deliveredDate).getTime()).filter(t => !isNaN(t));
+            if (dTimes.length >= 2) {
+              const spread = Math.round((Math.max(...dTimes) - Math.min(...dTimes)) / 86400000);
+              totalCompleteSplitOrders++;
+              sumSpreadDays += spread;
+            }
+          }
+        }
+
+        // Check each pending parcel for overdue status
+        if (isCurrentYear) {
+          o.parcels.forEach((p, pIdx) => {
+            if (p.deliveredDate) return;
+            const cAvg = Number(cStats[p.courier]?.avgDays) || 14;
+            const effLimit = Math.min(threshold, Math.max(12, Math.round(cAvg * 1.25)));
+            const el = orderElapsed !== null ? orderElapsed : 0;
+            if (el >= threshold || el >= effLimit) {
+              overdueParcels.push({
+                order: o,
+                parcel: p,
+                pIdx,
+                elapsedDays: el,
+                courierAvgDays: cAvg,
+                exceedDays: Math.max(1, el - Math.min(threshold, Math.round(cAvg)))
+              });
+            } else if (el >= Math.max(7, threshold - 5)) {
+              approachingParcels.push({
+                order: o,
+                parcel: p,
+                pIdx,
+                elapsedDays: el,
+                courierAvgDays: cAvg
+              });
+            }
+          });
+        }
+      });
+
+      const avgSpread = totalCompleteSplitOrders > 0 ? (sumSpreadDays / totalCompleteSplitOrders).toFixed(1) : '2.4';
+      return {
+        overdueParcels,
+        approachingParcels,
+        unshippedTimeoutOrders,
+        laggingSplitOrders,
+        avgSpread,
+        splitOrdersCount: orders.filter(o => Array.isArray(o.parcels) && o.parcels.length >= 2).length
+      };
+    }
+
+    // Upgrade renderSplitParcelAnomalyStrip to be the Comprehensive In-Transit Overdue & Split-Parcel Anomaly Center
+    renderSplitParcelAnomalyStrip = function(validOrders) {
+      const stripEl = document.getElementById('splitParcelAnomalyStrip');
+      if (!stripEl) return;
+
+      const report = analyzeInTransitOverdueAndAnomalies(validOrders);
+      const cntOverdueEl = document.getElementById('cntOverdueParcels');
+      const totalOverdueAlerts = report.overdueParcels.length + report.unshippedTimeoutOrders.length + report.laggingSplitOrders.length;
+      if (cntOverdueEl) {
+        cntOverdueEl.textContent = totalOverdueAlerts;
+      }
+
+      const thresholdSelectHtml = `
+        <div class="inline-flex items-center gap-1 text-[11px] bg-white/90 border border-slate-300 rounded-lg px-2 py-0.5">
+          <span class="text-slate-500">超期标准:</span>
+          <select id="overdueThresholdSelect" class="font-bold text-slate-800 bg-transparent focus:outline-none cursor-pointer">
+            <option value="12" ${window.overdueDaysThreshold == 12 ? 'selected' : ''}>≥ 12 天预警</option>
+            <option value="15" ${window.overdueDaysThreshold == 15 ? 'selected' : ''}>≥ 15 天预警(推荐)</option>
+            <option value="18" ${window.overdueDaysThreshold == 18 ? 'selected' : ''}>≥ 18 天预警</option>
+            <option value="21" ${window.overdueDaysThreshold == 21 ? 'selected' : ''}>≥ 21 天预警</option>
+          </select>
+        </div>
+      `;
+
+      stripEl.classList.remove('hidden');
+
+      if (totalOverdueAlerts > 0) {
+        stripEl.className = 'px-4 sm:px-5 py-3 bg-gradient-to-r from-rose-50 via-amber-50/90 to-rose-50/70 border-b-2 border-rose-300 text-xs space-y-2';
+
+        const overdueItemsHtml = report.overdueParcels.map(it => {
+          const tUrl = resolveTrackingUrl(it.parcel);
+          return `
+            <div class="inline-flex items-center gap-1.5 bg-white border border-rose-300 rounded-lg px-2.5 py-1 shadow-2xs">
+              <span class="bg-rose-600 text-white text-[10px] font-extrabold px-1.5 py-0.2 rounded">🚨 在途 ${it.elapsedDays} 天</span>
+              <span class="font-bold text-slate-900">${it.order.recipient}</span>
+              <span class="text-slate-600">${it.parcel.courier}</span>
+              <a href="${tUrl}" target="_blank" rel="noopener noreferrer" class="font-mono font-bold text-emerald-700 hover:underline">${it.parcel.trackingNo} ↗</a>
+              <button type="button" data-quickview-order="${it.order.id}" class="bg-teal-600 hover:bg-teal-500 text-white text-[10px] font-bold px-1.5 py-0.2 rounded">📋详单</button>
+              <button type="button" data-copy-urge-parcel="${it.order.id}" data-copy-urge-idx="${it.pIdx}" class="bg-rose-100 hover:bg-rose-200 text-rose-900 border border-rose-300 text-[10px] font-bold px-1.5 py-0.2 rounded" title="一键复制发给快递客服或商家的催件查单话术">📲催件话术</button>
+              <button type="button" data-sign-order="${it.order.id}" data-sign-idx="${it.pIdx}" class="bg-emerald-700 hover:bg-emerald-600 text-white text-[10px] font-bold px-1.5 py-0.2 rounded">✍️签收</button>
+            </div>
+          `;
+        }).join('');
+
+        const unshippedHtml = report.unshippedTimeoutOrders.map(it => `
+          <div class="inline-flex items-center gap-1.5 bg-white border border-amber-400 rounded-lg px-2.5 py-1 shadow-2xs">
+            <span class="bg-amber-500 text-slate-950 text-[10px] font-extrabold px-1.5 py-0.2 rounded">⚠️ 下单 ${it.elapsedDays} 天未出单号</span>
+            <span class="font-bold text-slate-900">${it.order.recipient} · ${it.order.merchant} #${it.order.orderNo}</span>
+            <button type="button" data-quickview-order="${it.order.id}" class="bg-teal-600 hover:bg-teal-500 text-white text-[10px] font-bold px-1.5 py-0.2 rounded">📋详单</button>
+            <button type="button" data-edit-order="${it.order.id}" class="bg-amber-400 hover:bg-amber-300 text-slate-950 text-[10px] font-bold px-1.5 py-0.2 rounded">＋补单号</button>
+          </div>
+        `).join('');
+
+        const splitLagHtml = report.laggingSplitOrders.map(it => {
+          const pNos = it.pendingParcels.map(p => `${p.courier}:${p.trackingNo}`).join('、');
+          return `
+            <div class="inline-flex items-center gap-1.5 bg-white border border-amber-300 rounded-lg px-2.5 py-1 shadow-2xs">
+              <span class="bg-amber-600 text-white text-[10px] font-extrabold px-1.5 py-0.2 rounded">📦 拆包掉队</span>
+              <span class="font-bold text-slate-900">#${it.order.orderNo} (${it.order.recipient})</span>
+              <span class="text-emerald-700 font-bold">${it.delivCount}已达</span>/<span class="text-rose-600 font-bold">${it.pendingCount}在途(${pNos})</span>
+              <button type="button" data-quickview-order="${it.order.id}" class="bg-teal-600 hover:bg-teal-500 text-white text-[10px] font-bold px-1.5 py-0.2 rounded">📋详单</button>
+            </div>
+          `;
+        }).join('');
+
+        stripEl.innerHTML = `
+          <div class="flex flex-wrap items-center justify-between gap-2">
+            <div class="flex items-center gap-2 flex-wrap">
+              <span class="bg-rose-600 text-white text-[11px] font-extrabold px-2 py-0.5 rounded-md animate-pulse">🚨 在途超期与异常雷达 (${totalOverdueAlerts}项待跟进)</span>
+              <span class="font-bold text-rose-950">系统检测到以下包裹已超过设定时效或同批拆包掉队，建议点击单号查件或复制催件话术：</span>
+            </div>
+            <div class="flex items-center gap-2">
+              ${thresholdSelectHtml}
+              <span class="text-[11px] text-slate-500">一单多包平均签收差 <strong>${report.avgSpread}天</strong></span>
+            </div>
+          </div>
+          <div class="flex flex-wrap gap-1.5 pt-0.5">
+            ${overdueItemsHtml}
+            ${unshippedHtml}
+            ${splitLagHtml}
+          </div>
+        `;
+      } else {
+        stripEl.className = 'px-4 sm:px-5 py-2.5 bg-emerald-50/70 border-b border-emerald-200/80 text-xs';
+        const approachingNote = report.approachingParcels.length > 0
+          ? ` · 另有 <strong>${report.approachingParcels.length}</strong> 个在途包裹已寄出 ${report.approachingParcels[0].elapsedDays} 天（正常运输中）`
+          : '';
+        stripEl.innerHTML = `
+          <div class="flex flex-wrap items-center justify-between gap-2 text-slate-700">
+            <div class="flex items-center gap-1.5 flex-wrap">
+              <span class="bg-emerald-700 text-white text-[10px] font-extrabold px-2 py-0.5 rounded">🚨 在途超期与拆包雷达</span>
+              <span>✅ 当前<strong>无超过 ${window.overdueDaysThreshold} 天</strong>的在途滞留包裹，且无拆包掉队（全库 ${report.splitOrdersCount} 笔拆包单平均同批签收时差 <strong>${report.avgSpread} 天</strong>${approachingNote}）</span>
+            </div>
+            <div class="flex items-center gap-2">
+              ${thresholdSelectHtml}
+            </div>
+          </div>
+        `;
+      }
+    };
+
+    // Upgrade renderParcelTrackingCards to support state.parcelFilter === 'overdue_only', pin overdue cards to top, and add "📲 催件话术" button on in-transit cards
+    const _v7120RenderParcelTrackingCards = renderParcelTrackingCards;
+    renderParcelTrackingCards = function(validOrders) {
+      const report = analyzeInTransitOverdueAndAnomalies(validOrders);
+      const cntOverdueEl = document.getElementById('cntOverdueParcels');
+      const totalOverdueAlerts = report.overdueParcels.length + report.unshippedTimeoutOrders.length + report.laggingSplitOrders.length;
+      if (cntOverdueEl) cntOverdueEl.textContent = totalOverdueAlerts;
+
+      if (state.parcelFilter === 'overdue_only') {
+        const overdueOrderIds = new Set([
+          ...report.overdueParcels.map(x => x.order.id),
+          ...report.unshippedTimeoutOrders.map(x => x.order.id),
+          ...report.laggingSplitOrders.map(x => x.order.id)
+        ]);
+        const filteredValid = (validOrders || getActiveOrders()).filter(o => overdueOrderIds.has(o.id));
+        const prevFilter = state.parcelFilter;
+        state.parcelFilter = 'all_pending';
+        _v7120RenderParcelTrackingCards(filteredValid);
+        state.parcelFilter = prevFilter;
+        if (filteredValid.length === 0) {
+          const cont = document.getElementById('parcelTrackingCards');
+          if (cont) {
+            cont.innerHTML = `<div class="col-span-2 py-8 text-center text-emerald-800 bg-emerald-50/60 rounded-xl border border-emerald-200 text-xs font-bold">🎉 太棒了！当前没有任何超过 ${window.overdueDaysThreshold} 天的在途超期包裹或拆包掉队记录（您可在上方切换 12天/15天/18天 预警标准）。</div>`;
+          }
+        }
+        return;
+      }
+
+      _v7120RenderParcelTrackingCards(validOrders);
+
+      // Post-enhance in-transit cards in #parcelTrackingCards with "📲 催件" button
+      const cont = document.getElementById('parcelTrackingCards');
+      if (!cont) return;
+      cont.querySelectorAll('[data-sign-order]').forEach(signBtn => {
+        const ordId = signBtn.getAttribute('data-sign-order');
+        const pIdx = signBtn.getAttribute('data-sign-idx');
+        const ord = getActiveOrders().find(o => String(o.id) === String(ordId));
+        if (!ord || !ord.parcels || !ord.parcels[pIdx] || ord.parcels[pIdx].deliveredDate) return;
+        if (signBtn.parentElement && !signBtn.parentElement.querySelector('[data-copy-urge-parcel]')) {
+          signBtn.insertAdjacentHTML('beforebegin', `
+            <button type="button" data-copy-urge-parcel="${ord.id}" data-copy-urge-idx="${pIdx}" class="bg-amber-50 hover:bg-amber-100 text-amber-900 border border-amber-300 text-xs font-bold px-2 py-1 rounded-lg transition" title="一键复制该包裹的催件查单信息（含单号、下单日、收件人），方便发给商家或快递客服查询清关进度">
+              📲 催件
+            </button>
+          `);
+        }
+      });
+    };
+
+    // --- 2. Upgrade Customer WeChat Notification Generator (#modalCustomerNotify) with Supplement Dosage Guide ---
+    const _v7120ApplyNotifyModePreset = applyNotifyModePreset;
+    applyNotifyModePreset = function(mode) {
+      _v7120ApplyNotifyModePreset(mode);
+      const chkDosage = document.getElementById('chkNotifySupplementDosage');
+      const chkItems = document.getElementById('chkNotifyItems');
+      const chkPrices = document.getElementById('chkNotifyPrices');
+      const chkTracking = document.getElementById('chkNotifyTracking');
+      const chkTrackUrl = document.getElementById('chkNotifyTrackUrl');
+      const chkDualRate = document.getElementById('chkNotifyDualRate');
+      const chkOrderMeta = document.getElementById('chkNotifyOrderMeta');
+
+      if (mode === 'dosage_guide') {
+        if (chkItems) chkItems.checked = true;
+        if (chkPrices) chkPrices.checked = false;
+        if (chkTracking) chkTracking.checked = false;
+        if (chkTrackUrl) chkTrackUrl.checked = false;
+        if (chkDualRate) chkDualRate.checked = false;
+        if (chkOrderMeta) chkOrderMeta.checked = false;
+        if (chkDosage) chkDosage.checked = true;
+      } else if (mode === 'arrival_remind' || mode === 'full_combined') {
+        if (chkDosage) chkDosage.checked = true;
+      }
+      renderCustomerNotifyText();
+    };
+
+    const _v7120RenderCustomerNotifyText = renderCustomerNotifyText;
+    renderCustomerNotifyText = function() {
+      _v7120RenderCustomerNotifyText();
+      const textarea = document.getElementById('customerNotifyTextarea');
+      const chkDosage = document.getElementById('chkNotifySupplementDosage');
+      if (!textarea || !chkDosage || !chkDosage.checked) return;
+
+      const rec = currentNotifyState.recipient;
+      const selectedOrds = state.orders
+        .filter(o => !o.cancelled && o.recipient === rec && currentNotifyState.selectedOrderIds.has(o.id))
+        .sort((a, b) => String(b.orderDate).localeCompare(String(a.orderDate)));
+      if (selectedOrds.length === 0) return;
+
+      // Collect unique products across selected orders
+      const uniqueProdNames = [];
+      selectedOrds.forEach(o => {
+        (o.items || []).forEach(it => {
+          if (it.product && !uniqueProdNames.includes(it.product)) {
+            uniqueProdNames.push(it.product);
+          }
+        });
+      });
+      if (uniqueProdNames.length === 0) return;
+
+      const dosageLines = [
+        '',
+        '━━━━━━━━━━━━━━━━━━',
+        '💊【纽澳保健品每日服用与营养指南】'
+      ];
+      uniqueProdNames.forEach((pname, idx) => {
+        const pInfo = getProductInfo(pname) || { name: pname };
+        const facts = getDefaultSupplementFactsForProduct(pInfo);
+        const spec = extractProductSpecSignature(pname);
+        dosageLines.push(`${idx + 1}. 🌿 ${pname} (${spec.badgeText})`);
+        dosageLines.push(`   🧪 核心营养：${facts.ingredients}`);
+        dosageLines.push(`   💡 建议服法：${facts.usage}`);
+      });
+
+      if (currentNotifyState.mode === 'dosage_guide') {
+        textarea.value = [
+          `💌【${rec} · 专属纽澳保健品服用说明卡】`,
+          `${rec} 您好！为您整理了本次采购的 ${uniqueProdNames.length} 款纽澳营养品的成分含量与每日建议服用方法，供您和家人日常参考：`,
+          ...dosageLines,
+          '━━━━━━━━━━━━━━━━━━',
+          '🌟 温馨提示：保健品建议置于阴凉干燥处避光保存，开封后请按时服用完毕。'
+        ].join('\n');
+      } else if (!textarea.value.includes('【纽澳保健品每日服用与营养指南】')) {
+        textarea.value = textarea.value + '\n' + dosageLines.join('\n');
+      }
+    };
+
+    // --- 3. Render Exchange Rate Sensitivity Simulator Bar inside Cart Optimizer (#cartOptExchangeSensitivityBar) ---
+    const _v7120RenderSmartCartOptimizer = typeof renderSmartCartOptimizer === 'function' ? renderSmartCartOptimizer : null;
+    if (_v7120RenderSmartCartOptimizer) {
+      renderSmartCartOptimizer = function() {
+        _v7120RenderSmartCartOptimizer();
+        renderCartExchangeSensitivityBar();
+      };
+    }
+
+    function renderCartExchangeSensitivityBar() {
+      const bar = document.getElementById('cartOptExchangeSensitivityBar');
+      if (!bar) return;
+      const items = (state.cartOptimizerItems && state.cartOptimizerItems.length > 0) ? state.cartOptimizerItems : [];
+      if (items.length === 0) {
+        bar.innerHTML = `<span class="text-slate-400">💱 汇率敏感度速算：在上方添加拟购商品后，将自动对比不同汇率档位（4.00 / 4.20 / 实时汇率 / 4.50）下的折算人民币总成本。</span>`;
+        return;
+      }
+
+      const seriesMap = buildAllProductsVerifiedPriceSeriesMap();
+      const basis = document.getElementById('cartOptPriceBasis')?.value || 'LOWEST';
+      let totalBestNzd = 0;
+      items.forEach(it => {
+        const mPrices = getMerchantUnitPricesForProduct(it.product, seriesMap, basis);
+        let bestP = Infinity;
+        ['华洋', '纽澳康源', '易康', 'CW'].forEach(m => {
+          if (mPrices[m] && mPrices[m].nzd > 0 && mPrices[m].nzd < bestP) bestP = mPrices[m].nzd;
+        });
+        if (bestP === Infinity) {
+          const pInfo = getProductInfo(it.product);
+          bestP = (pInfo && Number(pInfo.nzdPrice)) || 35;
+        }
+        totalBestNzd += bestP * (Number(it.qty) || 1);
+      });
+
+      const liveRate = Number(window.cfConfigState?.liveRates?.NZD) || 4.35;
+      const scenarios = [
+        { label: '🟢 好价换汇档', rate: 3.95, badge: '低位好汇' },
+        { label: '👍 优惠结算档', rate: 4.15, badge: '小程序常汇' },
+        { label: '⚡ 当前参考汇', rate: liveRate, badge: '今日基准', isCurrent: true },
+        { label: '🔺 高位汇率档', rate: 4.50, badge: '高位预警' }
+      ];
+
+      const baseRmbAtLive = totalBestNzd * liveRate;
+      const cardsHtml = scenarios.map(sc => {
+        const rmb = totalBestNzd * sc.rate;
+        const diff = rmb - baseRmbAtLive;
+        const diffStr = Math.abs(diff) < 0.5
+          ? '当前基准'
+          : (diff < 0 ? `省 ¥${Math.abs(diff).toFixed(1)}` : `多花 ¥${diff.toFixed(1)}`);
+        return `
+          <div class="px-2.5 py-1.5 rounded-lg border ${sc.isCurrent ? 'bg-indigo-600 text-white border-indigo-700 font-bold shadow-2xs' : 'bg-white text-slate-700 border-slate-200'} flex items-center justify-between gap-2">
+            <div>
+              <div class="text-[10px] ${sc.isCurrent ? 'text-indigo-100' : 'text-slate-400'}">${sc.label} (${sc.rate.toFixed(2)})</div>
+              <div class="font-mono font-extrabold text-xs ${sc.isCurrent ? 'text-white' : 'text-slate-900'}">¥${rmb.toFixed(1)}</div>
+            </div>
+            <span class="text-[10px] px-1.5 py-0.2 rounded font-mono ${sc.isCurrent ? 'bg-indigo-500 text-amber-300' : (diff < 0 ? 'bg-emerald-50 text-emerald-700 font-bold' : 'bg-rose-50 text-rose-700')}">${diffStr}</span>
+          </div>
+        `;
+      }).join('');
+
+      bar.innerHTML = `
+        <div class="flex flex-wrap items-center justify-between gap-2 mb-1.5">
+          <span class="font-extrabold text-indigo-950">💱 汇率波动敏感度速算（当前清单最优纽币总计 <strong class="font-mono text-emerald-700">NZ$${totalBestNzd.toFixed(2)}</strong>）：</span>
+          <span class="text-[11px] text-slate-500">汇率每波动 0.10，本单人民币成本相差 <strong>¥${(totalBestNzd * 0.1).toFixed(1)}</strong></span>
+        </div>
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-2">${cardsHtml}</div>
+      `;
+    }
+
+    // --- 4. Recipient Purchase Preference Persona & Smart Restock Radar (#recipientPreferenceRestockStudio) ---
+    function renderRecipientPreferenceRestockStudio() {
+      const grid = document.getElementById('recipientPersonaCardsGrid');
+      if (!grid) return;
+
+      const allOrders = getActiveOrders().filter(o => o && !o.cancelled && !isSelfUseOrder(o));
+      const recMap = {};
+
+      allOrders.forEach(o => {
+        const r = o.recipient || 'HOME';
+        if (!recMap[r]) {
+          recMap[r] = {
+            recipient: r,
+            ordersCount: 0,
+            totalQty: 0,
+            totalNzd: 0,
+            dates: [],
+            products: {},
+            categories: {}
+          };
+        }
+        const entry = recMap[r];
+        entry.ordersCount++;
+        if (o.orderDate) entry.dates.push(o.orderDate);
+        entry.totalNzd += getOrderEquivalentNzd(o);
+
+        (o.items || []).forEach(it => {
+          const q = Number(it.qty) || 0;
+          if (!it.product || q <= 0) return;
+          entry.totalQty += q;
+          if (!entry.products[it.product]) {
+            entry.products[it.product] = { name: it.product, qty: 0, orders: 0, lastDate: o.orderDate || '' };
+          }
+          entry.products[it.product].qty += q;
+          entry.products[it.product].orders += 1;
+          if (o.orderDate && o.orderDate > entry.products[it.product].lastDate) {
+            entry.products[it.product].lastDate = o.orderDate;
+          }
+          const pInfo = getProductInfo(it.product);
+          const cat = (pInfo && pInfo.category) || inferProductCategoryByName(it.product);
+          entry.categories[cat] = (entry.categories[cat] || 0) + q;
+        });
+      });
+
+      const recList = Object.values(recMap).sort((a, b) => b.totalQty - a.totalQty);
+      if (recList.length === 0) {
+        grid.innerHTML = `<div class="col-span-3 text-center py-6 text-slate-400 text-xs">暂无收件人历史采购数据</div>`;
+        return;
+      }
+
+      grid.innerHTML = recList.map(rec => {
+        const sortedDates = rec.dates.slice().sort();
+        const latestDate = sortedDates[sortedDates.length - 1] || '-';
+        const daysSinceLast = latestDate !== '-' ? daysBetween(latestDate, TODAY_STR) : null;
+
+        let avgIntervalDays = null;
+        if (sortedDates.length >= 2) {
+          const uniqueDates = [...new Set(sortedDates)];
+          if (uniqueDates.length >= 2) {
+            const totalSpan = daysBetween(uniqueDates[0], uniqueDates[uniqueDates.length - 1]);
+            if (totalSpan && totalSpan > 0) {
+              avgIntervalDays = Math.round(totalSpan / (uniqueDates.length - 1));
+            }
+          }
+        }
+
+        const topProds = Object.values(rec.products).sort((a, b) => b.qty - a.qty).slice(0, 3);
+        const topCat = Object.entries(rec.categories).sort((a, b) => b[1] - a[1])[0]?.[0] || '综合保健';
+        const safeRec = rec.recipient.replace(/"/g, '&quot;');
+
+        const isDueForRestock = avgIntervalDays && daysSinceLast !== null && daysSinceLast >= avgIntervalDays * 0.85;
+        const restockBadge = isDueForRestock
+          ? `<span class="text-[10px] bg-amber-100 text-amber-900 border border-amber-300 px-2 py-0.5 rounded-full font-extrabold">🔔 距上次已 ${daysSinceLast} 天 · 临近复购期</span>`
+          : `<span class="text-[10px] bg-slate-100 text-slate-600 px-2 py-0.5 rounded-full font-medium">最近下单: ${latestDate}</span>`;
+
+        const topProdsHtml = topProds.map((tp, idx) => `
+          <div class="flex items-center justify-between gap-2 text-xs py-1 border-b last:border-b-0 border-slate-100">
+            <span class="truncate font-medium text-slate-800">${idx + 1}. ${tp.name}</span>
+            <span class="shrink-0 font-mono font-bold text-emerald-700 bg-emerald-50 px-1.5 py-0.2 rounded">累计 ${tp.qty} 件 (${tp.orders}单)</span>
+          </div>
+        `).join('');
+
+        return `
+          <div class="bg-slate-50/70 rounded-xl p-4 border border-slate-200 flex flex-col justify-between gap-3 hover:border-indigo-300 transition">
+            <div class="space-y-2.5">
+              <div class="flex items-center justify-between gap-2 flex-wrap">
+                <div class="flex items-center gap-1.5">
+                  <span class="text-sm font-extrabold text-slate-900">${rec.recipient === 'HOME' ? '🏡 HOME (国内家中)' : '👤 ' + rec.recipient}</span>
+                  <span class="text-[10px] bg-indigo-50 text-indigo-800 border border-indigo-200 px-1.5 py-0.2 rounded font-bold">${CATEGORY_ICONS_MAP[topCat] || '📦'} 偏好: ${topCat}</span>
+                </div>
+                ${restockBadge}
+              </div>
+
+              <div class="grid grid-cols-3 gap-2 text-center bg-white p-2 rounded-lg border border-slate-200/80 text-xs">
+                <div>
+                  <div class="text-[10px] text-slate-400">累计订单</div>
+                  <div class="font-extrabold text-slate-800">${rec.ordersCount} 单</div>
+                </div>
+                <div>
+                  <div class="text-[10px] text-slate-400">累计件数</div>
+                  <div class="font-extrabold text-emerald-700">${rec.totalQty} 件</div>
+                </div>
+                <div>
+                  <div class="text-[10px] text-slate-400">平均复购周期</div>
+                  <div class="font-extrabold text-indigo-700">${avgIntervalDays ? `约 ${avgIntervalDays} 天` : '按需采购'}</div>
+                </div>
+              </div>
+
+              <div class="bg-white rounded-lg p-2.5 border border-slate-200/80 space-y-1">
+                <div class="text-[10px] font-bold text-slate-400">🏆 最常回购 Top 3 核心单品：</div>
+                ${topProdsHtml}
+              </div>
+            </div>
+
+            <div class="flex items-center justify-between gap-2 pt-2 border-t border-slate-200/80">
+              <button type="button" data-restock-copy-care="${safeRec}" class="flex-1 bg-white hover:bg-indigo-50 text-indigo-800 border border-indigo-200 text-xs font-bold py-1.5 px-2.5 rounded-lg transition">
+                📲 复制复购关怀微信
+              </button>
+              <button type="button" data-restock-prefill-order="${safeRec}" class="flex-1 bg-emerald-700 hover:bg-emerald-600 text-white text-xs font-bold py-1.5 px-2.5 rounded-lg shadow-2xs transition">
+                🛒 一键按常购建单
+              </button>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    // Hook renderAnalyticsTab so #recipientPreferenceRestockStudio renders automatically
+    if (typeof renderAnalyticsTab === 'function') {
+      const _v7120RenderAnalyticsTab = renderAnalyticsTab;
+      renderAnalyticsTab = function(validOrders) {
+        _v7120RenderAnalyticsTab(validOrders || getActiveOrders().filter(o => !o.cancelled));
+        renderRecipientPreferenceRestockStudio();
+      };
+    }
+
+    function initV7130Events() {
+      // 1. Overdue threshold change & parcel urge copy & recipient restock actions
+      document.addEventListener('change', (e) => {
+        if (e.target && e.target.id === 'overdueThresholdSelect') {
+          window.overdueDaysThreshold = parseInt(e.target.value, 10) || 15;
+          renderAll();
+          showToast(`🚨 已将「在途超期预警标准」切换为 ≥ ${window.overdueDaysThreshold} 天！`);
+        }
+        if (e.target && e.target.id === 'chkNotifySupplementDosage') {
+          renderCustomerNotifyText();
+        }
+      });
+
+      document.addEventListener('click', (e) => {
+        const urgeBtn = e.target.closest('[data-copy-urge-parcel]');
+        if (urgeBtn) {
+          const ordId = urgeBtn.getAttribute('data-copy-urge-parcel');
+          const pIdx = parseInt(urgeBtn.getAttribute('data-copy-urge-idx'), 10) || 0;
+          const ord = getActiveOrders().find(o => String(o.id) === String(ordId));
+          const p = ord && ord.parcels ? ord.parcels[pIdx] : null;
+          if (ord && p) {
+            const elapsed = daysBetween(ord.orderDate, TODAY_STR) || 0;
+            const itemsStr = (ord.items || []).map(x => `${x.product}×${x.qty}`).join('、');
+            const urgeTxt = [
+              `【跨境物流查件/催件咨询】`,
+              `您好，帮忙查一下这笔跨境包裹的最新清关与派送进度：`,
+              `• 快递公司：${p.courier}`,
+              `• 物流单号：${p.trackingNo}`,
+              `• 关联订单号：#${ord.orderNo} (${ord.merchant})`,
+              `• 下单日期：${ord.orderDate}（已寄出 ${elapsed} 天）`,
+              `• 收件人：${ord.recipient}`,
+              `• 包裹商品：${itemsStr}`,
+              `麻烦核实目前包裹所在节点，谢谢！`
+            ].join('\n');
+            copyTextToClipboard(urgeTxt, `运单 ${p.trackingNo} 催件查单话术`);
+          }
+          return;
+        }
+
+        const prefillBtn = e.target.closest('[data-restock-prefill-order]');
+        if (prefillBtn) {
+          const rec = prefillBtn.getAttribute('data-restock-prefill-order');
+          const recOrds = getActiveOrders().filter(o => !o.cancelled && o.recipient === rec);
+          const prodCounts = {};
+          recOrds.forEach(o => {
+            (o.items || []).forEach(it => {
+              if (!it.product) return;
+              if (!prodCounts[it.product]) prodCounts[it.product] = { name: it.product, totalQty: 0, orders: 0 };
+              prodCounts[it.product].totalQty += (Number(it.qty) || 1);
+              prodCounts[it.product].orders += 1;
+            });
+          });
+          const topItems = Object.values(prodCounts).sort((a, b) => b.totalQty - a.totalQty).slice(0, 2);
+          openOrderModal(null, false);
+          const recInp = document.getElementById('formRecipient');
+          if (recInp) recInp.value = rec;
+          const cont = document.getElementById('formItemsContainer');
+          if (cont && topItems.length > 0) {
+            cont.innerHTML = '';
+            topItems.forEach(tp => {
+              const avgQty = Math.max(1, Math.round(tp.totalQty / Math.max(1, tp.orders)));
+              const pInfo = getProductInfo(tp.name);
+              const refPrice = (pInfo && pInfo.nzdPrice) || (pInfo && pInfo.rmbPrice) || '';
+              addFormItemRow(tp.name, avgQty, refPrice);
+            });
+            updateFormOrderTotalPreview();
+          }
+          showToast(`🛒 已为您自动填入「${rec}」最常回购的 ${topItems.length} 款商品与常买数量！`);
+          return;
+        }
+
+        const careBtn = e.target.closest('[data-restock-copy-care]');
+        if (careBtn) {
+          const rec = careBtn.getAttribute('data-restock-copy-care');
+          const recOrds = getActiveOrders().filter(o => !o.cancelled && o.recipient === rec).sort((a, b) => String(b.orderDate).localeCompare(String(a.orderDate)));
+          const lastOrd = recOrds[0];
+          const prodCounts = {};
+          recOrds.forEach(o => {
+            (o.items || []).forEach(it => {
+              if (it.product) prodCounts[it.product] = (prodCounts[it.product] || 0) + (Number(it.qty) || 1);
+            });
+          });
+          const topNames = Object.entries(prodCounts).sort((a, b) => b[1] - a[1]).slice(0, 3).map(x => x[0]);
+          const msg = [
+            `${rec === 'HOME' ? '家人' : rec} 您好！🌿`,
+            `算了一下时间，上次帮您寄出的纽澳保健品（${lastOrd ? lastOrd.orderDate : '近期'}：${topNames.join('、')}）应该快吃得差不多啦。`,
+            `最近新西兰这边药房和商城正好有好价活动，请问近期需要帮您补货直邮吗？需要的话随时跟我说一声，我帮您安排最优渠道下单！`
+          ].join('\n');
+          copyTextToClipboard(msg, `「${rec}」复购关怀微信文案`);
+          return;
+        }
+      });
+
+      renderAll();
+      renderCartExchangeSensitivityBar();
+      renderRecipientPreferenceRestockStudio();
+    }
+
+    if (document.readyState === 'loading') {
+      window.addEventListener('DOMContentLoaded', initV7130Events);
+    } else {
+      initV7130Events();
     }
 
 
@@ -24925,13 +26489,18 @@ export async function onRequestPost(context) {
   <!-- v7.11.0 NEW MODAL: PRODUCT IMAGE & SUPPLEMENT FACTS / FORMULA SHEET VIEWER -->
   <div id="modalProductSpecSheet" class="fixed inset-0 bg-slate-900/65 backdrop-blur-xs z-50 hidden flex items-center justify-center p-3 sm:p-5">
     <div class="bg-white rounded-2xl shadow-2xl border border-slate-200 max-w-2xl w-full max-h-[90vh] flex flex-col overflow-hidden">
-      <div class="px-5 py-3.5 bg-gradient-to-r from-emerald-950 via-teal-900 to-indigo-950 text-white flex items-center justify-between gap-2">
+      <div class="px-5 py-3.5 bg-gradient-to-r from-emerald-950 via-teal-900 to-slate-900 text-white flex items-center justify-between gap-2">
         <div class="flex items-center gap-2 min-w-0">
-          <span class="text-lg">🔬</span>
-          <h3 id="specSheetModalTitle" class="text-sm sm:text-base font-extrabold truncate">商品外观与详细配方营养档案</h3>
+          <span id="specSheetModalBadgeIcon" class="w-7 h-7 rounded-lg bg-white/10 border border-white/15 flex items-center justify-center text-sm shrink-0">🌿</span>
+          <div class="min-w-0">
+            <h3 id="specSheetModalTitle" class="text-sm sm:text-base font-extrabold truncate">商品营养成分与服用说明档案</h3>
+            <p class="text-[10px] text-emerald-200/90">纯享只读说明书视图（如需维护配图或配方，请前往顶栏「⚙️ 规则与设置 → 🖼️ 商品配图与配方后台」）</p>
+          </div>
         </div>
         <div class="flex items-center gap-2 shrink-0">
-          <button type="button" id="btnEditProdFromSpecSheet" class="bg-amber-400 hover:bg-amber-300 text-slate-950 font-extrabold text-xs px-3 py-1 rounded-lg transition">✎ 编辑图片/配方</button>
+          <button type="button" id="btnCopySpecSheetToWeChat" class="bg-white/15 hover:bg-white/25 text-white border border-white/25 font-semibold text-xs px-2.5 py-1 rounded-lg transition flex items-center gap-1" title="一键复制该商品的成分含量与每日服用方法，可直接粘贴发给微信客户或亲友">
+            <span>📲 复制说明发微信</span>
+          </button>
           <button type="button" id="btnCloseProductSpecSheet" class="text-emerald-200 hover:text-white text-xl leading-none px-1.5">×</button>
         </div>
       </div>
