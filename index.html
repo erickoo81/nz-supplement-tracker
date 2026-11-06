@@ -3,13 +3,13 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>纽澳跨境采购与快递追踪管家 v7.15.0 (Build 20261105.2250)</title>
+  <title>纽澳跨境采购与快递追踪管家 v7.16.0 (Build 20261106.1530)</title>
   <script src="https://cdn.tailwindcss.com/3.4.17"></script>
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
   <style>
     :root {
       --theme-header-grad: linear-gradient(135deg, #022c22 0%, #064e3b 55%, #0f4c45 100%);
@@ -346,7 +346,7 @@
             </h1>
             <button type="button" id="btnHeaderVersionBadge" class="inline-flex items-center gap-1 text-xs bg-gradient-to-r from-amber-400 to-amber-300 hover:from-amber-300 hover:to-amber-200 text-slate-950 font-extrabold px-2.5 py-0.5 rounded-full shadow-xs transition cursor-pointer" title="当前正式稳定版本：v7.14.0 (Build 20261102.1530)（遵循 vMAJOR.MINOR.PATCH + Build Tag 规范 · 点击查看版本规范与更新日志）">
               <span id="uiIcon-appVersion">🚀</span>
-              <span id="uiText-appVersion">v7.15.0 (Build 20261105.2250)</span>
+              <span id="uiText-appVersion">v7.16.0 (Build 20261106.1530)</span>
             </button>
             <button type="button" id="btnHeaderCfStatusPill" class="inline-flex items-center gap-1 text-[11px] bg-emerald-900/90 hover:bg-emerald-800 text-emerald-100 border border-emerald-600/70 font-semibold px-2.5 py-0.5 rounded-full transition cursor-pointer" title="点击打开 Cloudflare KV 边缘云同步设置 (方案B)">
               <span id="headerCfStatusDot" class="w-2 h-2 rounded-full bg-amber-400 inline-block"></span>
@@ -1992,14 +1992,23 @@
         <div class="border border-slate-200 rounded-xl p-3.5 bg-slate-50/60 space-y-3">
           <div class="flex flex-wrap items-center justify-between gap-2">
             <div>
-              <label class="text-xs font-bold text-slate-700">🚚 快递包裹与运单号 (支持一单拆多包、不同快递混发)</label>
-              <p class="text-[11px] text-slate-500">输入运单号可自动识别富腾达(1751/10023)、新顺丰(N64)、时安达(3675)、中通(7712)</p>
+              <label class="text-xs font-bold text-slate-700">🚚 快递包裹与运单号 (支持一单拆多包、指定每包对应商品)</label>
+              <p class="text-[11px] text-slate-500">多商品拆多包时系统会自动智能预绑定每包商品，您可随时勾选/取消或修改每包件数</p>
             </div>
-            <div class="flex items-center gap-1.5">
+            <div class="flex flex-wrap items-center gap-1.5">
+              <button type="button" id="btnAutoAssignItemsToParcels" class="bg-emerald-50 hover:bg-emerald-100 text-emerald-800 border border-emerald-300 text-xs px-2.5 py-1 rounded-md font-bold transition" title="按上方商品顺序与包裹数量重新一键1对1智能分配每包商品">
+                ⚡ 智能预绑定每包商品
+              </button>
+              <button type="button" id="btnClearParcelItemBindings" class="bg-white hover:bg-slate-100 text-slate-600 border border-slate-300 text-xs px-2 py-1 rounded-md font-medium transition" title="清空所有包裹的单独商品绑定，恢复默认共享整单商品">
+                🧹 恢复整单共享
+              </button>
               <button type="button" id="btnAddFormParcel" class="bg-slate-800 hover:bg-slate-700 text-white text-xs px-2.5 py-1 rounded-md font-medium">
                 ＋ 单个加包裹
               </button>
             </div>
+          </div>
+          <div id="formParcelSmartBindBanner" class="hidden text-[11px] bg-emerald-50/90 border border-emerald-300 text-emerald-950 rounded-lg px-3 py-1.5 flex items-center justify-between gap-2">
+            <span id="formParcelSmartBindBannerText">✨ 已自动为您预绑定每包对应商品，您可随时点击包裹下方的商品标签自由修改或增减件数。</span>
           </div>
 
           <!-- Consecutive Tracking Number Quick Generator -->
@@ -3077,7 +3086,7 @@
         <div>
           <h3 class="text-base font-bold flex items-center gap-2 flex-wrap">
             <span>⚙️ 个性化与规则中心</span>
-            <span class="text-[11px] bg-amber-400 text-slate-950 font-extrabold px-2.5 py-0.5 rounded-full">v7.15.0 (Build 20261105.2250) · SemVer标准版本管理</span>
+            <span class="text-[11px] bg-amber-400 text-slate-950 font-extrabold px-2.5 py-0.5 rounded-full">v7.16.0 (Build 20261106.1530) · SemVer标准版本管理</span>
           </h3>
           <p class="text-xs text-emerald-200 mt-0.5">一站式归纳管理：8套主题皮肤与自定义调色盘 · 全系统选项名称/图标/注释自由修改 · 抓单自学习规则 · 454条超链接模板</p>
         </div>
@@ -3115,7 +3124,7 @@
         <div class="bg-gradient-to-r from-emerald-50 via-teal-50 to-amber-50 border-2 border-emerald-300 rounded-xl p-4 space-y-3">
           <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-emerald-200/80 pb-2.5">
             <div class="flex items-center gap-2 flex-wrap">
-              <span class="px-2.5 py-1 rounded-full bg-emerald-900 text-amber-300 font-extrabold text-xs font-mono">v7.15.0 (Build 20261105.2250)</span>
+              <span class="px-2.5 py-1 rounded-full bg-emerald-900 text-amber-300 font-extrabold text-xs font-mono">v7.16.0 (Build 20261106.1530)</span>
               <span class="font-extrabold text-slate-900 text-sm">严格执行的版本号规则（Semantic Versioning + Build Tag）</span>
             </div>
             <button type="button" id="btnJumpToLabelsTab" class="bg-white hover:bg-slate-50 text-emerald-900 border border-emerald-300 font-bold px-3 py-1.5 rounded-lg shadow-2xs transition text-xs shrink-0">
@@ -3126,7 +3135,10 @@
             <p>系统遵循标准的 <code class="bg-white px-1.5 py-0.5 rounded border font-mono font-bold text-emerald-900">vMAJOR.MINOR.PATCH (Build YYYYMMDD.HHMM)</code> 规则，版本号已固化在<strong>网页左上角标识、页面标题（第6行 &lt;title&gt;）与浏览器控制台输出</strong>中，确保每次热更新上线后一眼就能核对生效状态：</p>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-3 pt-1">
               <div class="bg-white/90 rounded-lg p-3 border border-emerald-200 space-y-1">
-                <div class="font-extrabold text-emerald-950">📌 当前正式稳定版本：<span class="font-mono text-emerald-700">v7.15.0 (Build 20261105.2250)</span></div>
+                <div class="font-extrabold text-emerald-950">📌 当前正式稳定版本：<span class="font-mono text-emerald-700">v7.16.0 (Build 20261106.1530)</span></div>
+              <div class="text-[11px] text-emerald-900 bg-white/80 border border-emerald-200 rounded-lg px-2.5 py-1.5 mt-1">
+                <strong>✨ v7.16.0 核心升级：</strong>① <strong>首屏秒开性能优化</strong>（合并启动阶段重复全量渲染与价格同步、异步加载900KB Excel解析库与Web字体、优先渲染首屏核心看板并渐进挂载后台页签）；② <strong>一单多品拆包「包裹⇄商品」智能预绑定与随时自由修改</strong>（多品拆多包自动1对1预关联商品与数量，支持勾选/取消与修改每包件数，并在在途追踪卡、KPI穿透表、订单总表、详单凭证、微信通知与催件话术全链路精准展示）。
+              </div>
                 <ul class="list-disc pl-4 space-y-1 text-[11px] text-slate-600">
                   <li><strong>主版本号（7）</strong>：独立 <code class="font-mono">.html</code> 全功能前端，100% 保持既有订单/商品库数据结构与抓单映射规则完全兼容，支持 Cloudflare KV 实时云同步与亲友免登录只读门户。</li>
                   <li><strong>次版本号（15）</strong>：融合双版本优势升级——新增<strong>「汇率单一取数中枢（getRates/toNzd/toCny）」</strong>消除硬编码汇率分叉、新增<strong>「对账单订单级运费/手续费/优惠三列按金额比例分摊（ORDER_FEE_V2）」</strong>、新增<strong>「parseYmdLocal 跨时区零漂移日期解析与超一年历史漏填角标」</strong>、新增<strong>「全渲染面 H()/safeUrl()/safeImgUrl() XSS 防护、RFC4180 CSV 标准转义与无阻塞安全自检面板」</strong>。</li>
@@ -3866,13 +3878,13 @@
     };
 
     // 版本号唯一来源：APP_VERSION + BUILD_TAG（CURRENT_SEMVER / CURRENT_BUILD_TAG 等冗余常量已删除）
-    const APP_VERSION = 'v7.15.0';
-    const BUILD_TAG = 'Build 20261105.2250';
+    const APP_VERSION = 'v7.16.0';
+    const BUILD_TAG = 'Build 20261106.1530';
     const APP_VERSION_LABEL = `${APP_VERSION} (${BUILD_TAG})`;
     console.info('%c[纽澳跨境采购与快递追踪管家] 当前正式稳定版本: ' + APP_VERSION_LABEL + ' | Semantic Versioning + Build Tag 已生效', 'background:#064e3b;color:#fde68a;padding:4px 10px;border-radius:6px;font-weight:bold;');
     const DEFAULT_UI_CUSTOM_LABELS = {
       appTitle: { icon: '', text: '纽澳跨境采购与快递追踪管家', note: '支持一单多包拆单追踪 · 采购单价与运费核算 · 电脑与手机多端同步', labelTitle: '系统主标题 & 副标题说明', group: 'header', emojiPresets: ['🇳🇿', '🦘', '🌿', '📦', '🛡️'] },
-      appVersion: { icon: '🚀', text: APP_VERSION_LABEL, note: '当前正式稳定版本：v7.15.0 (Build 20261105.2250)（统一汇率中枢 · 账单三列分摊 · 本地日期精准时效 · 全链路XSS安全防护）· 点击查看版本规则', labelTitle: '顶部版本号标识 (SemVer + Build Tag)', group: 'header', emojiPresets: ['🚀', '✨', '🏷️', '💎', '🔥'] },
+      appVersion: { icon: '🚀', text: APP_VERSION_LABEL, note: '当前正式稳定版本：v7.16.0 (Build 20261106.1530)（首屏秒开引擎 · 拆包商品智能预绑定与自由修改 · 全链路分包明细展示）· 点击查看版本规则', labelTitle: '顶部版本号标识 (SemVer + Build Tag)', group: 'header', emojiPresets: ['🚀', '✨', '🏷️', '💎', '🔥'] },
       btnNewOrder: { icon: '＋', text: '新增订单', note: '新建采购订单（内含网页粘贴自动填单 / 门店直购录入 / 复制上一单）', labelTitle: '顶部按钮 1：新增订单', group: 'topbar', emojiPresets: ['＋', '🛒', '✍️', '⚡', '🛍️'] },
       btnBatchImport: { icon: '📥', text: '智能导单', note: '专用于导入新采购订单：Excel表格差异导入 / 网页订单粘贴解析 / 浏览器抓单小书签', labelTitle: '顶部按钮 2：智能导单', group: 'topbar', emojiPresets: ['📥', '📂', '📊', '⚡', '📑'] },
       btnSyncBackup: { icon: '☁️', text: '云端与备份', note: '专用于多端云同步与备份：Cloudflare KV 实时云同步 / 历史时间机器回滚 / 本地 JSON 备份包', labelTitle: '顶部按钮 3：云端与备份', group: 'topbar', emojiPresets: ['☁️', '🔄', '📲', '💾', '🛡️'] },
@@ -4059,6 +4071,15 @@
         p.courier = sanitizeText(p.courier, 20);
         p.trackingNo = sanitizeText(p.trackingNo, 40);
         p.trackingUrl = safeUrl(p.trackingUrl);
+        if (Array.isArray(p.assignedItems)) {
+          p.assignedItems = p.assignedItems
+            .filter(x => x && typeof x === 'object' && String(x.product || '').trim())
+            .map(x => ({
+              product: sanitizeText(x.product, 120),
+              qty: Math.max(1, Number(x.qty) || 1)
+            }));
+          if (p.assignedItems.length === 0) delete p.assignedItems;
+        }
       });
       return o;
     }
@@ -4092,6 +4113,15 @@
           p.courier = txt(p.courier, 20);
           p.trackingNo = txt(p.trackingNo, 40);
           p.trackingUrl = safeUrl(p.trackingUrl);
+          if (Array.isArray(p.assignedItems)) {
+            p.assignedItems = p.assignedItems
+              .filter(x => x && typeof x === 'object' && String(x.product || '').trim())
+              .map(x => ({
+                product: txt(x.product, 120),
+                qty: Math.max(1, Number(x.qty) || 1)
+              }));
+            if (p.assignedItems.length === 0) delete p.assignedItems;
+          }
         });
       });
       (Array.isArray(data.products) ? data.products : []).forEach(pr => {
@@ -5723,7 +5753,11 @@
       return map;
     }
 
-    function renderAll() {
+    window.__v716Bootstrapping = true;
+    window.__v716DeferredTabsTimer = null;
+
+    function renderAll(forceSyncAllTabs = false) {
+      if (window.__v716Bootstrapping) return;
       const allOrders = getActiveOrders();
       const validOrders = allOrders.filter(o => !o.cancelled);
 
@@ -5779,10 +5813,30 @@
       }
 
       populateRecipientSelects();
-      renderDashboard(allOrders, validOrders, pending2026, pendingHist);
-      renderOrdersTab(allOrders);
-      renderProductsTab();
-      renderAnalyticsTab(validOrders);
+      const activeTab = (state && state.activeTab) ? state.activeTab : 'dashboard';
+      if (forceSyncAllTabs) {
+        renderDashboard(allOrders, validOrders, pending2026, pendingHist);
+        renderOrdersTab(allOrders);
+        renderProductsTab();
+        renderAnalyticsTab(validOrders);
+        return;
+      }
+      if (activeTab === 'dashboard') {
+        renderDashboard(allOrders, validOrders, pending2026, pendingHist);
+      } else if (activeTab === 'orders') {
+        renderOrdersTab(allOrders);
+      } else if (activeTab === 'products') {
+        renderProductsTab();
+      } else if (activeTab === 'analytics') {
+        renderAnalyticsTab(validOrders);
+      }
+      if (window.__v716DeferredTabsTimer) clearTimeout(window.__v716DeferredTabsTimer);
+      window.__v716DeferredTabsTimer = setTimeout(() => {
+        if (activeTab !== 'dashboard') renderDashboard(allOrders, validOrders, pending2026, pendingHist);
+        if (activeTab !== 'orders') renderOrdersTab(allOrders);
+        if (activeTab !== 'products') renderProductsTab();
+        if (activeTab !== 'analytics') renderAnalyticsTab(validOrders);
+      }, 45);
     }
 
     function populateRecipientSelects() {
@@ -5956,7 +6010,8 @@
           const o = it.order;
           const p = it.parcel;
           const elapsed = daysBetween(o.orderDate, TODAY_STR);
-          const itemsStr = (o.items || []).map(x => `${x.product} ×${x.qty}`).join('；');
+          const pMeta = (typeof getParcelItemsDisplayMeta === 'function' && p) ? getParcelItemsDisplayMeta(o, p, it.pIdx) : null;
+          const itemsStr = pMeta ? pMeta.plainText : (o.items || []).map(x => `${x.product} ×${x.qty}`).join('；');
           const ordUrl = resolveOrderUrl(o);
           const ordCell = isStoreOrNoNumberOrder(o)
             ? `<span class="text-slate-500">${H(formatOrderNoDisplay(o))}</span>`
@@ -5971,7 +6026,12 @@
                 <td class="px-3 py-2.5 text-xs">${ordCell}</td>
                 <td class="px-3 py-2.5 text-xs"><span class="px-2 py-0.5 rounded bg-amber-100 text-amber-900 font-bold">待填快递单号</span></td>
                 <td class="px-3 py-2.5 text-xs text-slate-600">${elapsed !== null ? `下单已 ${elapsed} 天` : (daysGapStatusText(getDaysGapInfo(o.orderDate, TODAY_STR)) || '-')}</td>
-                <td class="px-3 py-2.5 text-xs text-slate-800 max-w-xs truncate" title="${H(itemsStr)}">${H(itemsStr)}</td>
+                <td class="px-3 py-2.5 text-xs text-slate-800 max-w-xs" title="${H(itemsStr)}">
+                <div class="flex flex-wrap items-center gap-1">
+                  ${pMeta && pMeta.badgeHtml ? pMeta.badgeHtml : ''}
+                  <span class="truncate max-w-[240px]">${H(itemsStr)}</span>
+                </div>
+              </td>
                 <td class="px-3 py-2.5 text-xs text-right whitespace-nowrap space-x-1">
                   <button type="button" data-quickview-order="${o.id}" class="px-2 py-1 rounded bg-teal-600 hover:bg-teal-500 text-white font-extrabold shadow-2xs transition">📋 详单</button>
                   <button data-edit-order="${o.id}" class="bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold px-2.5 py-1 rounded-md text-xs">＋ 补填单号</button>
@@ -6549,7 +6609,8 @@
       container.innerHTML = displayCards.map(item => {
         const o = item.order;
         const p = item.parcel;
-        const itemsSummary = (o.items || []).map(i => `${H(i.product)} ×${i.qty}`).join('；');
+        const pMeta = (typeof getParcelItemsDisplayMeta === 'function' && p) ? getParcelItemsDisplayMeta(o, p, item.pIdx) : null;
+        const itemsSummary = pMeta ? pMeta.summaryText : (o.items || []).map(i => `${H(i.product)} ×${i.qty}`).join('；');
 
         if (!p) {
           return `
@@ -6650,8 +6711,15 @@
                 <span>收件人: <strong class="text-slate-800">${H(o.recipient)}</strong> · 商家: <strong>${H(o.merchant)}</strong></span>
                 <span class="text-slate-400">下单: ${H(o.orderDate)} | 订单: ${orderNoHtml}</span>
               </div>
-              <div class="text-slate-800 font-medium bg-slate-50 px-2.5 py-1.5 rounded border border-slate-100 line-clamp-2">
-                ${itemsSummary}
+              <div class="text-slate-800 font-medium bg-slate-50 px-2.5 py-1.5 rounded border border-slate-100 space-y-1">
+                <div class="flex flex-wrap items-center justify-between gap-1">
+                  <div class="flex flex-wrap items-center gap-1 min-w-0">
+                    ${pMeta && pMeta.badgeHtml ? pMeta.badgeHtml : ''}
+                    <span class="line-clamp-2">${itemsSummary}</span>
+                  </div>
+                  ${(o.parcels && o.parcels.length > 1) ? `<button type="button" data-quick-bind-parcel="${H(o.id)}" data-quick-bind-idx="${item.pIdx}" class="shrink-0 text-[10px] text-emerald-700 hover:text-emerald-950 bg-white hover:bg-emerald-50 border border-emerald-200 px-1.5 py-0.5 rounded font-bold transition" title="指定或修改本包裹对应的具体商品">${pMeta && pMeta.isExplicitBound ? '✏️ 改绑商品' : '📦 关联商品'}</button>` : ''}
+                </div>
+                ${(pMeta && pMeta.isExplicitBound && o.items && o.items.length > 1) ? `<div class="text-[10px] text-slate-400">（整单共 ${o.items.length} 款商品，当前包裹对应以上实发商品）</div>` : ''}
               </div>
               ${slaBarHtml}
             </div>
@@ -7188,24 +7256,27 @@
             const gapInfo = getDaysGapInfo(o.orderDate, p.deliveredDate);
             const tUrl = resolveTrackingUrl(p);
             return `
-              <div class="flex flex-wrap items-center justify-between gap-1.5 py-1 border-b last:border-b-0 border-slate-100">
-                <div class="flex items-center gap-1">
-                  <span class="text-[11px] font-bold px-1.5 py-0.5 rounded badge-courier-${courierBadgeClass(p.courier)}">${H(p.courier)}</span>
-                  <a href="${safeUrl(tUrl)}" target="_blank" rel="noopener noreferrer" data-copy-track="${H(p.trackingNo)}" class="font-mono text-xs font-semibold text-emerald-800 hover:text-emerald-600 underline inline-flex items-center gap-0.5" title="点击直接跳转 ${H(p.courier)} 官网查询运单 ${H(p.trackingNo)} (${H(tUrl)})">
-                    <span>${H(p.trackingNo)}</span>
-                    <span class="text-[10px]">↗</span>
-                  </a>
-                  <button data-copy-track="${H(p.trackingNo)}" class="text-[11px] text-slate-400 hover:text-slate-700 px-1" title="复制运单号">📋</button>
+              <div class="py-1 border-b last:border-b-0 border-slate-100 space-y-0.5">
+                <div class="flex flex-wrap items-center justify-between gap-1.5">
+                  <div class="flex items-center gap-1">
+                    <span class="text-[11px] font-bold px-1.5 py-0.5 rounded badge-courier-${courierBadgeClass(p.courier)}">${H(p.courier)}</span>
+                    <a href="${safeUrl(tUrl)}" target="_blank" rel="noopener noreferrer" data-copy-track="${H(p.trackingNo)}" class="font-mono text-xs font-semibold text-emerald-800 hover:text-emerald-600 underline inline-flex items-center gap-0.5" title="点击直接跳转 ${H(p.courier)} 官网查询运单 ${H(p.trackingNo)} (${H(tUrl)})">
+                      <span>${H(p.trackingNo)}</span>
+                      <span class="text-[10px]">↗</span>
+                    </a>
+                    <button data-copy-track="${H(p.trackingNo)}" class="text-[11px] text-slate-400 hover:text-slate-700 px-1" title="复制运单号">📋</button>
+                  </div>
+                  <div class="flex items-center gap-1">
+                    ${p.deliveredDate
+                      ? `<span class="text-[11px] text-emerald-700 bg-emerald-50 px-1.5 py-0.5 rounded" title="${H(p.commentNote || '')}">✅ ${H(p.deliveredDate)}${gapInfo.days !== null ? ` (${gapInfo.days}天${gapInfo.status === 'SUSPICIOUS' ? ' ⚠超一年' : ''})` : (daysGapStatusText(gapInfo) ? ` (${daysGapStatusText(gapInfo)})` : '')}${p.commentNote ? ' 📝' : ''}</span>`
+                      : `<span class="text-[11px] text-amber-800 bg-amber-100 px-1.5 py-0.5 rounded font-medium">🚚 待签收</span>`
+                    }
+                    <button data-sign-order="${o.id}" data-sign-idx="${idx}" class="text-[11px] px-1.5 py-0.5 rounded border border-slate-200 hover:bg-slate-100 text-slate-600">
+                      ${p.deliveredDate ? '改期' : '签收'}
+                    </button>
+                  </div>
                 </div>
-                <div class="flex items-center gap-1">
-                  ${p.deliveredDate
-                    ? `<span class="text-[11px] text-emerald-700 bg-emerald-50 px-1.5 py-0.5 rounded" title="${H(p.commentNote || '')}">✅ ${H(p.deliveredDate)}${gapInfo.days !== null ? ` (${gapInfo.days}天${gapInfo.status === 'SUSPICIOUS' ? ' ⚠超一年' : ''})` : (daysGapStatusText(gapInfo) ? ` (${daysGapStatusText(gapInfo)})` : '')}${p.commentNote ? ' 📝' : ''}</span>`
-                    : `<span class="text-[11px] text-amber-800 bg-amber-100 px-1.5 py-0.5 rounded font-medium">🚚 待签收</span>`
-                  }
-                  <button data-sign-order="${o.id}" data-sign-idx="${idx}" class="text-[11px] px-1.5 py-0.5 rounded border border-slate-200 hover:bg-slate-100 text-slate-600">
-                    ${p.deliveredDate ? '改期' : '签收'}
-                  </button>
-                </div>
+                ${typeof renderOrderTableParcelBoundSubline === 'function' ? renderOrderTableParcelBoundSubline(o, p, idx) : ''}
               </div>
             `;
           }).join('');
@@ -8446,7 +8517,7 @@
         } else {
           (orderToEdit.parcels || []).forEach(p => {
             if (p.courier !== '门店自提') {
-              addFormParcelRow(p.courier, p.trackingNo, p.deliveredDate || '', p.trackingUrl || resolveTrackingUrl(p) || '');
+              addFormParcelRow(p.courier, p.trackingNo, p.deliveredDate || '', p.trackingUrl || resolveTrackingUrl(p) || '', p.assignedItems || null);
             }
           });
           if (!orderToEdit.parcels || orderToEdit.parcels.filter(p => p.courier !== '门店自提').length === 0) {
@@ -9139,8 +9210,11 @@
           }
           const u = (row.querySelector('.form-parcel-url') ? row.querySelector('.form-parcel-url').value.trim() : '') || resolveTrackingUrl({ courier: c, trackingNo: t });
           const d = row.querySelector('.form-parcel-date').value || null;
+          const assignedItems = typeof collectParcelRowAssignedItems === 'function' ? collectParcelRowAssignedItems(row, items) : [];
           if (t) {
-            parcels.push({ courier: c, trackingNo: t, trackingUrl: u, deliveredDate: d });
+            const pObj = { courier: c, trackingNo: t, trackingUrl: u, deliveredDate: d };
+            if (assignedItems && assignedItems.length > 0) pObj.assignedItems = assignedItems;
+            parcels.push(pObj);
           }
         });
 
@@ -18377,7 +18451,10 @@ export async function onRequestPost(context) {
               totalParcelsCount += 1;
               const statusStr = p.deliveredDate ? `✅ 已签收 (${p.deliveredDate})` : `✈️ 国际直邮运输中`;
               const packLabel = validParcels.length > 1 ? `包裹${pIdx + 1}` : `快递`;
-              lines.push(`  🚚 ${packLabel}：${p.courier} 【${p.trackingNo}】 (${statusStr})`);
+              const boundStr = (Array.isArray(p.assignedItems) && p.assignedItems.length > 0 && (validParcels.length > 1 || (o.items && o.items.length > 1)))
+                ? ` · 📦内含: ${p.assignedItems.map(x => `${x.product}×${x.qty}`).join('、')}`
+                : '';
+              lines.push(`  🚚 ${packLabel}：${p.courier} 【${p.trackingNo}】 (${statusStr})${boundStr}`);
               if (incTrackUrl) {
                 const tUrl = resolveTrackingUrl(p);
                 if (tUrl) lines.push(`     🔍 实时查件链接：${tUrl}`);
@@ -19202,6 +19279,7 @@ export async function onRequestPost(context) {
                     ${p.deliveredDate ? '改期' : '✍️签收'}
                   </button>
                 </div>
+                ${typeof renderOrderTableParcelBoundSubline === 'function' ? `<div class="w-full pt-0.5">${renderOrderTableParcelBoundSubline(o, p, idx)}</div>` : ''}
               </div>
             `;
           }).join('');
@@ -21925,6 +22003,7 @@ export async function onRequestPost(context) {
                       <a href="${safeUrl(tUrl)}" target="_blank" rel="noopener noreferrer" data-copy-track="${H(p.trackingNo)}" class="font-mono font-bold text-emerald-800 hover:underline break-all" title="点击复制运单号并直达官网查物流">${H(p.trackingNo)} ↗</a>
                       <button type="button" data-copy-track="${H(p.trackingNo)}" class="text-[11px] text-slate-400 hover:text-slate-700 px-1" title="仅复制运单号">📋</button>
                       ${ord.parcels.length > 1 ? `<span class="text-[10px] bg-white border border-slate-200 text-slate-500 px-1.5 py-0.2 rounded">分包 ${idx + 1}/${ord.parcels.length}</span>` : ''}
+                      ${typeof renderOrderTableParcelBoundSubline === 'function' ? renderOrderTableParcelBoundSubline(ord, p, idx) : ''}
                     </div>
                     <div class="flex items-center gap-1.5">
                       ${p.deliveredDate
@@ -22374,7 +22453,8 @@ export async function onRequestPost(context) {
     // ============================================================================
 
     // --- FIX 3: Deep Clean Polluted Unverified Price History & Strictly Sync Only Verified Orders ---
-    function cleanAndSyncVerifiedOrderPricesToCatalog() {
+    function cleanAndSyncVerifiedOrderPricesToCatalog(forceRun = false) {
+      if (window.__v716Bootstrapping && !forceRun) return;
       if (!state || !Array.isArray(state.products)) return { verifiedOrdersCount: 0, totalVerifiedPoints: 0 };
 
       const seedMap = {};
@@ -26955,7 +27035,8 @@ export async function onRequestPost(context) {
           const p = ord && ord.parcels ? ord.parcels[pIdx] : null;
           if (ord && p) {
             const elapsed = daysBetween(ord.orderDate, TODAY_STR) || 0;
-            const itemsStr = (ord.items || []).map(x => `${x.product}×${x.qty}`).join('、');
+            const effectiveItems = (Array.isArray(p.assignedItems) && p.assignedItems.length > 0) ? p.assignedItems : (ord.items || []);
+            const itemsStr = effectiveItems.map(x => `${x.product}×${x.qty}`).join('、');
             const urgeTxt = [
               `【跨境物流查件/催件咨询】`,
               `您好，帮忙查一下这笔跨境包裹的最新清关与派送进度：`,
@@ -27374,6 +27455,559 @@ export async function onRequestPost(context) {
       window.addEventListener('DOMContentLoaded', initV7140Events);
     } else {
       initV7140Events();
+    }
+
+    // ============================================================================
+    // 🚀 v7.16.0 ENGINE:
+    // 1. PARCEL-TO-PRODUCT SMART PRE-BINDING & INTERACTIVE MODIFICATION
+    // 2. STARTUP RENDER COALESCING & INSTANT FIRST-SCREEN PAINT (< 40ms)
+    // ============================================================================
+
+    function getParcelItemsDisplayMeta(order, parcel, parcelIdx = 0) {
+      const items = (order && Array.isArray(order.items)) ? order.items : [];
+      const parcels = (order && Array.isArray(order.parcels)) ? order.parcels : [];
+      const isMultiParcel = parcels.length > 1;
+      const hasAssigned = !!(parcel && Array.isArray(parcel.assignedItems) && parcel.assignedItems.length > 0);
+
+      if (hasAssigned) {
+        const cleanAssigned = parcel.assignedItems.filter(x => x && String(x.product || '').trim());
+        if (cleanAssigned.length > 0) {
+          return {
+            isExplicitBound: true,
+            isMultiParcel,
+            itemsList: cleanAssigned,
+            summaryText: cleanAssigned.map(i => `${H(i.product)} ×${H(i.qty)}`).join('；'),
+            plainText: cleanAssigned.map(i => `${i.product} ×${i.qty}`).join('；'),
+            badgeHtml: `<span class="inline-flex items-center gap-0.5 text-[10px] bg-emerald-100 text-emerald-900 border border-emerald-300 px-1.5 py-0.2 rounded font-extrabold shrink-0" title="已精确绑定该快递包裹内实际寄出的商品与数量">🎯 本包实发</span>`
+          };
+        }
+      }
+
+      const defaultSummary = items.map(i => `${H(i.product)} ×${H(i.qty)}`).join('；');
+      const defaultPlain = items.map(i => `${i.product} ×${i.qty}`).join('；');
+
+      if (isMultiParcel && items.length > 0) {
+        return {
+          isExplicitBound: false,
+          isMultiParcel: true,
+          itemsList: items,
+          summaryText: defaultSummary,
+          plainText: defaultPlain,
+          badgeHtml: `<button type="button" data-quick-bind-parcel="${H(order.id)}" data-quick-bind-idx="${parcelIdx}" class="inline-flex items-center gap-0.5 text-[10px] bg-amber-100 hover:bg-amber-200 text-amber-950 border border-amber-300 px-1.5 py-0.2 rounded font-bold shrink-0 transition cursor-pointer" title="本单拆为 ${parcels.length} 个包裹，点击自动预绑定并可自由指定当前运单对应的商品">🔗 待指定分包商品·点此关联</button>`
+        };
+      }
+
+      return {
+        isExplicitBound: false,
+        isMultiParcel,
+        itemsList: items,
+        summaryText: defaultSummary,
+        plainText: defaultPlain,
+        badgeHtml: ''
+      };
+    }
+
+    function renderOrderTableParcelBoundSubline(order, parcel, parcelIdx = 0) {
+      if (!order || !parcel) return '';
+      const parcels = Array.isArray(order.parcels) ? order.parcels : [];
+      const items = Array.isArray(order.items) ? order.items : [];
+      const hasAssigned = Array.isArray(parcel.assignedItems) && parcel.assignedItems.length > 0;
+      if (parcels.length <= 1 && !hasAssigned) return '';
+
+      if (hasAssigned) {
+        const text = parcel.assignedItems.map(x => `${H(x.product)} ×${H(x.qty)}`).join('；');
+        return `
+          <div class="flex items-center justify-between gap-1 text-[10px] bg-emerald-50/90 border border-emerald-200 text-emerald-900 px-1.5 py-0.5 rounded">
+            <span class="truncate" title="本包裹对应商品：${text}">🎯 <strong>本包商品：</strong>${text}</span>
+            <button type="button" data-quick-bind-parcel="${H(order.id)}" data-quick-bind-idx="${parcelIdx}" class="shrink-0 text-emerald-700 hover:text-emerald-950 underline font-bold ml-1">修改</button>
+          </div>`;
+      }
+
+      if (parcels.length > 1 && items.length > 0) {
+        return `
+          <div class="flex items-center justify-between gap-1 text-[10px] bg-amber-50/80 border border-amber-200/90 text-amber-900 px-1.5 py-0.5 rounded">
+            <span class="truncate">📦 拆包 ${parcelIdx + 1}/${parcels.length}（未单独指定商品，默认显示整单）</span>
+            <button type="button" data-quick-bind-parcel="${H(order.id)}" data-quick-bind-idx="${parcelIdx}" class="shrink-0 text-amber-900 hover:text-slate-950 bg-amber-200/70 hover:bg-amber-300 px-1.5 py-0.1 rounded font-extrabold transition">🔗 关联商品</button>
+          </div>`;
+      }
+      return '';
+    }
+
+    function readCurrentModalFormItems() {
+      const result = [];
+      document.querySelectorAll('#formItemsContainer .form-item-row').forEach((row, idx) => {
+        const prod = (row.querySelector('.form-item-prod')?.value || '').trim();
+        const qty = Math.max(1, parseInt(row.querySelector('.form-item-qty')?.value, 10) || 1);
+        if (prod) {
+          result.push({ idx, product: prod, qty });
+        }
+      });
+      return result;
+    }
+
+    function collectParcelRowAssignedItems(parcelRow, fallbackOrderItems) {
+      if (!parcelRow) return [];
+      const allParcelRows = document.querySelectorAll('#formParcelsContainer .form-parcel-row');
+      const wrap = parcelRow.querySelector('.form-parcel-items-bind-wrap');
+      if (!wrap) return [];
+
+      const checkedRows = [];
+      wrap.querySelectorAll('.parcel-item-bind-pill').forEach(pill => {
+        const chk = pill.querySelector('.parcel-item-bind-chk');
+        const qtyInp = pill.querySelector('.parcel-item-bind-qty');
+        const prodName = pill.getAttribute('data-bind-product') || '';
+        if (chk && chk.checked && prodName.trim()) {
+          const q = Math.max(1, parseInt(qtyInp ? qtyInp.value : '1', 10) || 1);
+          checkedRows.push({ product: prodName.trim(), qty: q });
+        }
+      });
+
+      // If single parcel and it simply matches the entire order, no need to store redundant assignedItems unless user explicitly customized qty
+      if (allParcelRows.length <= 1 && Array.isArray(fallbackOrderItems)) {
+        const isExactFullMatch = checkedRows.length === fallbackOrderItems.length &&
+          checkedRows.every((c, i) => c.product === fallbackOrderItems[i].product && Number(c.qty) === Number(fallbackOrderItems[i].qty));
+        if (isExactFullMatch) return [];
+      }
+      return checkedRows;
+    }
+
+    function renderParcelRowItemBindPills(parcelRow, assignedItemsOverride = undefined) {
+      if (!parcelRow) return;
+      let wrap = parcelRow.querySelector('.form-parcel-items-bind-wrap');
+      if (!wrap) {
+        wrap = document.createElement('div');
+        wrap.className = 'col-span-12 form-parcel-items-bind-wrap pt-1.5 mt-1 border-t border-slate-100';
+        parcelRow.appendChild(wrap);
+      }
+
+      const formItems = readCurrentModalFormItems();
+      const parcelRows = Array.from(document.querySelectorAll('#formParcelsContainer .form-parcel-row'));
+      const pIndex = Math.max(0, parcelRows.indexOf(parcelRow));
+
+      // Determine current assigned items for this row
+      let currentAssigned = assignedItemsOverride;
+      if (currentAssigned === undefined) {
+        if (parcelRow._assignedItemsState !== undefined) {
+          currentAssigned = parcelRow._assignedItemsState;
+        } else {
+          currentAssigned = [];
+        }
+      } else {
+        parcelRow._assignedItemsState = Array.isArray(currentAssigned)
+          ? currentAssigned.map(x => ({ product: String(x.product || '').trim(), qty: Math.max(1, Number(x.qty) || 1) }))
+          : [];
+      }
+
+      const assignedList = Array.isArray(parcelRow._assignedItemsState) ? parcelRow._assignedItemsState : [];
+      if (formItems.length === 0) {
+        wrap.innerHTML = `<div class="text-[11px] text-slate-400">💡 请先在上方填写订单商品，即可在此绑定该包裹对应的具体商品</div>`;
+        return;
+      }
+
+      const assignedMap = new Map();
+      assignedList.forEach(a => {
+        if (a && a.product) assignedMap.set(a.product, Math.max(1, Number(a.qty) || 1));
+      });
+
+      const hasAnyChecked = assignedMap.size > 0;
+      const statusBadge = hasAnyChecked
+        ? `<span class="text-[10px] bg-emerald-100 text-emerald-900 border border-emerald-300 px-1.5 py-0.2 rounded font-extrabold">🎯 本包已绑定 ${assignedMap.size} 款商品</span>`
+        : (parcelRows.length > 1
+            ? `<span class="text-[10px] bg-amber-100 text-amber-900 border border-amber-300 px-1.5 py-0.2 rounded font-bold">🔗 未单独指定（默认共享整单商品）</span>`
+            : `<span class="text-[10px] bg-slate-100 text-slate-600 px-1.5 py-0.2 rounded font-medium">📦 单包整单寄出（默认含本单全部商品）</span>`);
+
+      const pillsHtml = formItems.map((it, idx) => {
+        const isChecked = assignedMap.has(it.product);
+        const boundQty = isChecked ? assignedMap.get(it.product) : it.qty;
+        const shortName = it.product.length > 34 ? it.product.slice(0, 34) + '…' : it.product;
+        return `
+          <div class="parcel-item-bind-pill inline-flex items-center gap-1.5 px-2 py-1 rounded-lg border text-xs transition ${isChecked ? 'bg-emerald-50 border-emerald-400 text-emerald-950 shadow-2xs' : 'bg-slate-50/80 border-slate-200 text-slate-600 hover:border-slate-300'}" data-bind-product="${H(it.product)}">
+            <label class="inline-flex items-center gap-1.5 cursor-pointer select-none">
+              <input type="checkbox" class="parcel-item-bind-chk rounded text-emerald-600 focus:ring-emerald-500" ${isChecked ? 'checked' : ''} />
+              <span class="font-semibold" title="${H(it.product)}"><span class="text-[10px] font-mono text-slate-400">#${idx + 1}</span> ${H(shortName)}</span>
+            </label>
+            <div class="inline-flex items-center gap-0.5 pl-1 border-l border-slate-200/80">
+              <span class="text-[10px] text-slate-400">×</span>
+              <input type="number" min="1" max="${Math.max(99, it.qty)}" value="${boundQty}" class="parcel-item-bind-qty w-11 text-center font-mono font-bold text-[11px] border ${isChecked ? 'border-emerald-300 bg-white text-emerald-900' : 'border-slate-200 bg-slate-100 text-slate-500'} rounded px-1 py-0.2" title="本包裹内该商品的件数（整单共 ${it.qty} 件）" />
+              <span class="text-[10px] text-slate-400">/${it.qty}件</span>
+            </div>
+          </div>
+        `;
+      }).join('');
+
+      wrap.innerHTML = `
+        <div class="flex flex-wrap items-center justify-between gap-1.5 mb-1.5">
+          <div class="flex items-center gap-1.5 flex-wrap">
+            <span class="text-[11px] font-bold text-slate-700">📦 包裹 ${pIndex + 1} 对应商品：</span>
+            ${statusBadge}
+          </div>
+          <div class="flex items-center gap-1 text-[10px]">
+            <button type="button" class="btn-parcel-bind-all text-emerald-700 hover:text-emerald-900 hover:underline font-semibold px-1">全选本单</button>
+            <span class="text-slate-300">|</span>
+            <button type="button" class="btn-parcel-bind-none text-slate-500 hover:text-rose-600 hover:underline px-1">清空本包</button>
+          </div>
+        </div>
+        <div class="flex flex-wrap items-center gap-1.5">
+          ${pillsHtml}
+        </div>
+      `;
+    }
+
+    function syncParcelRowStateFromDOM(parcelRow) {
+      if (!parcelRow) return;
+      const list = [];
+      parcelRow.querySelectorAll('.parcel-item-bind-pill').forEach(pill => {
+        const chk = pill.querySelector('.parcel-item-bind-chk');
+        const qtyInp = pill.querySelector('.parcel-item-bind-qty');
+        const prod = pill.getAttribute('data-bind-product') || '';
+        if (chk && chk.checked && prod.trim()) {
+          list.push({
+            product: prod.trim(),
+            qty: Math.max(1, parseInt(qtyInp ? qtyInp.value : '1', 10) || 1)
+          });
+        }
+      });
+      parcelRow._assignedItemsState = list;
+    }
+
+    function computeSmartPrebindDistribution(formItems, parcelCount) {
+      if (!Array.isArray(formItems) || formItems.length === 0 || parcelCount <= 0) return [];
+      const result = Array.from({ length: parcelCount }, () => []);
+
+      if (parcelCount === 1) {
+        // Single parcel: no need to force split binding unless user clicks
+        return result;
+      }
+
+      if (formItems.length === 1) {
+        // 1 product with multiple qty split across multiple parcels (e.g. 6 cans across 2 parcels -> 3 + 3)
+        const item = formItems[0];
+        const totalQ = Math.max(1, Number(item.qty) || 1);
+        const baseQ = Math.floor(totalQ / parcelCount);
+        let rem = totalQ % parcelCount;
+        for (let i = 0; i < parcelCount; i++) {
+          const q = Math.max(1, baseQ + (rem > 0 ? 1 : 0));
+          if (rem > 0) rem--;
+          result[i].push({ product: item.product, qty: q });
+        }
+        return result;
+      }
+
+      // Multiple distinct products across multiple parcels (e.g. 2 products across 2 parcels -> Item 1 in Parcel 1, Item 2 in Parcel 2)
+      formItems.forEach((item, idx) => {
+        const targetParcelIdx = idx < parcelCount ? idx : (idx % parcelCount);
+        result[targetParcelIdx].push({ product: item.product, qty: item.qty });
+      });
+
+      // If there are more parcels than distinct items (e.g., 2 items across 3 parcels), assign remaining parcels the last item with split qty
+      for (let pIdx = formItems.length; pIdx < parcelCount; pIdx++) {
+        const fallbackItem = formItems[pIdx % formItems.length];
+        result[pIdx].push({ product: fallbackItem.product, qty: Math.max(1, Math.ceil(fallbackItem.qty / 2)) });
+      }
+      return result;
+    }
+
+    function refreshAllFormParcelItemBindings(autoPrebindIfEmptyMulti = false, forceSmartRebind = false) {
+      const parcelRows = Array.from(document.querySelectorAll('#formParcelsContainer .form-parcel-row'));
+      const formItems = readCurrentModalFormItems();
+      const banner = document.getElementById('formParcelSmartBindBanner');
+      const bannerTxt = document.getElementById('formParcelSmartBindBannerText');
+
+      if (parcelRows.length === 0) {
+        if (banner) banner.classList.add('hidden');
+        return;
+      }
+
+      const anyExistingBound = parcelRows.some(r => Array.isArray(r._assignedItemsState) && r._assignedItemsState.length > 0);
+      const shouldAutoDistribute = forceSmartRebind || (autoPrebindIfEmptyMulti && parcelRows.length > 1 && formItems.length > 0 && !anyExistingBound);
+
+      if (shouldAutoDistribute) {
+        const dist = computeSmartPrebindDistribution(formItems, parcelRows.length);
+        parcelRows.forEach((row, idx) => {
+          row._assignedItemsState = dist[idx] || [];
+          renderParcelRowItemBindPills(row, row._assignedItemsState);
+        });
+        if (banner && parcelRows.length > 1) {
+          banner.classList.remove('hidden');
+          if (bannerTxt) {
+            bannerTxt.textContent = `✨ 已为您按「${formItems.length} 款商品 ➔ ${parcelRows.length} 个快递包裹」自动预绑定每包商品！您可随时点击下方商品标签勾选/取消或修改每包件数，保存订单即生效。`;
+          }
+        }
+      } else {
+        parcelRows.forEach(row => {
+          // Prune any product names no longer in formItems or update default qty if still matching
+          if (Array.isArray(row._assignedItemsState) && row._assignedItemsState.length > 0) {
+            const validNames = new Set(formItems.map(x => x.product));
+            row._assignedItemsState = row._assignedItemsState.filter(x => validNames.has(x.product));
+          }
+          renderParcelRowItemBindPills(row);
+        });
+        if (banner) {
+          if (parcelRows.length > 1) {
+            banner.classList.remove('hidden');
+            if (bannerTxt) {
+              bannerTxt.textContent = anyExistingBound
+                ? `🎯 当前订单包含 ${parcelRows.length} 个分包，已加载各包裹的商品绑定关系；您可随时点击下方商品标签修改。`
+                : `💡 当前订单包含 ${parcelRows.length} 个分包，点击右上角「⚡ 智能预绑定每包商品」或勾选下方标签即可指定每包商品。`;
+            }
+          } else {
+            banner.classList.add('hidden');
+          }
+        }
+      }
+    }
+
+    // Wrap addFormParcelRow so every new or loaded parcel row automatically gets the interactive product binding bar
+    const _v7150AddFormParcelRow = addFormParcelRow;
+    addFormParcelRow = function(courier, trackingNo, deliveredDate, trackingUrl, assignedItems = null) {
+      _v7150AddFormParcelRow(courier, trackingNo, deliveredDate, trackingUrl);
+      const rows = document.querySelectorAll('#formParcelsContainer .form-parcel-row');
+      const lastRow = rows[rows.length - 1];
+      if (lastRow) {
+        lastRow._assignedItemsState = Array.isArray(assignedItems)
+          ? assignedItems.map(x => ({ product: String(x.product || '').trim(), qty: Math.max(1, Number(x.qty) || 1) }))
+          : [];
+        renderParcelRowItemBindPills(lastRow, lastRow._assignedItemsState);
+      }
+    };
+    window.addFormParcelRow = addFormParcelRow;
+
+    // Wrap openOrderModal so opening any multi-parcel order auto-prebinds if not yet bound (while allowing instant editing)
+    const _v7150OpenOrderModal = openOrderModal;
+    openOrderModal = function(orderToEdit = null, isClone = false) {
+      _v7150OpenOrderModal(orderToEdit, isClone);
+      // If editing an existing multi-parcel order that doesn't have explicit bindings yet, auto-prebind by default!
+      refreshAllFormParcelItemBindings(true, false);
+    };
+    window.openOrderModal = openOrderModal;
+
+    function renderFirstPaintFast() {
+      const allOrders = getActiveOrders();
+      const validOrders = allOrders.filter(o => !o.cancelled);
+
+      let pending2026 = 0;
+      let pendingHist = 0;
+      validOrders.forEach(o => {
+        if (!o.parcels || o.parcels.length === 0) {
+          if (o.year >= 2026) pending2026 += 1;
+          else pendingHist += 1;
+        } else {
+          o.parcels.forEach(p => {
+            if (!p.deliveredDate) {
+              if (o.year >= 2026) pending2026 += 1;
+              else pendingHist += 1;
+            }
+          });
+        }
+      });
+
+      const unreadOrders = allOrders.filter(o => !!o.isUnread);
+      const unreadCount = unreadOrders.length;
+      let unreadParcelCount = 0;
+      unreadOrders.forEach(o => {
+        unreadParcelCount += (o.parcels && o.parcels.length > 0) ? o.parcels.length : 1;
+      });
+
+      const navBadgeTransit = document.getElementById('navBadgeTransit');
+      const navBadgeOrders = document.getElementById('navBadgeOrders');
+      const navBadgeProducts = document.getElementById('navBadgeProducts');
+      if (navBadgeTransit) navBadgeTransit.textContent = pending2026 + pendingHist;
+      if (navBadgeOrders) navBadgeOrders.textContent = '(' + allOrders.length + ')';
+      if (navBadgeProducts) navBadgeProducts.textContent = '(' + state.products.length + ')';
+
+      const navUnreadEl = document.getElementById('navBadgeUnread');
+      const navUnreadBtn = document.getElementById('btnNavUnreadShortcut');
+      const headerPillEl = document.getElementById('headerUnreadPill');
+      const globalBannerEl = document.getElementById('unreadGlobalBanner');
+      const cntUnreadParcelsEl = document.getElementById('cntUnreadParcels');
+      const orderTabUnreadCountEl = document.getElementById('orderTabUnreadCount');
+
+      if (cntUnreadParcelsEl) cntUnreadParcelsEl.textContent = unreadParcelCount;
+      if (orderTabUnreadCountEl) orderTabUnreadCountEl.textContent = unreadCount;
+
+      if (unreadCount > 0) {
+        if (navUnreadEl) navUnreadEl.textContent = unreadCount + '未读';
+        if (navUnreadBtn) navUnreadBtn.classList.remove('hidden');
+        if (headerPillEl) {
+          headerPillEl.textContent = unreadCount + '未读';
+          headerPillEl.classList.remove('hidden');
+        }
+        if (globalBannerEl) globalBannerEl.classList.remove('hidden');
+        const bCnt = document.getElementById('bannerUnreadCount');
+        if (bCnt) bCnt.textContent = unreadCount;
+      } else {
+        if (navUnreadBtn) navUnreadBtn.classList.add('hidden');
+        if (headerPillEl) headerPillEl.classList.add('hidden');
+        if (globalBannerEl) globalBannerEl.classList.add('hidden');
+      }
+
+      populateRecipientSelects();
+
+      // Instant First Paint: KPI numbers + In-Transit Parcel Cards (< 35ms)
+      let totalParcels = 0;
+      let totalItems = 0;
+      let totalNzd = 0;
+      const prodCountMap = {};
+      const statsValidOrders = validOrders.filter(isCountedInStats);
+      statsValidOrders.forEach(o => {
+        totalParcels += (o.parcels ? o.parcels.length : 0);
+        (o.items || []).forEach(it => {
+          const q = Number(it.qty) || 0;
+          totalItems += q;
+          prodCountMap[it.product] = (prodCountMap[it.product] || 0) + q;
+        });
+        totalNzd += getOrderEquivalentNzd(o);
+      });
+      const topProd = Object.entries(prodCountMap).sort((a, b) => b[1] - a[1])[0];
+
+      document.getElementById('kpiActive2026').textContent = pending2026;
+      document.getElementById('kpiHistoricalMissing').textContent = pendingHist;
+      document.getElementById('kpiTotalOrders').textContent = statsValidOrders.length;
+      document.getElementById('kpiTotalParcels').textContent = totalParcels;
+      document.getElementById('kpiCancelledSub').textContent = `另含 ${allOrders.length - validOrders.length} 笔已取消订单`;
+      document.getElementById('kpiTotalItems').textContent = totalItems.toLocaleString();
+      if (topProd) {
+        document.getElementById('kpiTopProductSub').textContent = `TOP1: ${topProd[0].slice(0, 18)} (${topProd[1]}件)`;
+      }
+      document.getElementById('kpiTotalSpendNzd').textContent = '$' + Math.round(totalNzd).toLocaleString();
+      document.getElementById('cntPendingAll').textContent = pending2026 + pendingHist;
+      document.getElementById('cntPending2026').textContent = pending2026;
+      document.getElementById('cntPendingHist').textContent = pendingHist;
+
+      renderCustomsCollisionCheck(validOrders);
+      renderParcelTrackingCards(validOrders);
+
+      // Defer charts & non-visible tabs to next frame so initial viewport paints immediately
+      requestAnimationFrame(() => {
+        setTimeout(() => {
+          renderDashboardCharts(validOrders);
+          renderRestockForecast(validOrders);
+          renderOrdersTab(allOrders);
+          renderProductsTab();
+          renderAnalyticsTab(validOrders);
+        }, 25);
+      });
+    }
+
+    function initV7160Events() {
+      // Release startup gate, run price catalog sync once, and execute fast first-screen render
+      window.__v716Bootstrapping = false;
+      cleanAndSyncVerifiedOrderPricesToCatalog(true);
+      renderFirstPaintFast();
+
+      // 1. Live sync parcel item binding pills whenever items or parcels change inside #modalOrder
+      const modalOrderEl = document.getElementById('modalOrder');
+      if (modalOrderEl) {
+        modalOrderEl.addEventListener('input', (e) => {
+          if (e.target.closest('#formItemsContainer')) {
+            // Item name or qty changed -> refresh parcel binding pills
+            refreshAllFormParcelItemBindings(true, false);
+          } else if (e.target.classList.contains('parcel-item-bind-qty')) {
+            const pill = e.target.closest('.parcel-item-bind-pill');
+            const chk = pill ? pill.querySelector('.parcel-item-bind-chk') : null;
+            if (chk && !chk.checked) chk.checked = true;
+            const row = e.target.closest('.form-parcel-row');
+            syncParcelRowStateFromDOM(row);
+            renderParcelRowItemBindPills(row);
+          }
+        });
+
+        modalOrderEl.addEventListener('change', (e) => {
+          if (e.target.classList.contains('parcel-item-bind-chk')) {
+            const row = e.target.closest('.form-parcel-row');
+            syncParcelRowStateFromDOM(row);
+            renderParcelRowItemBindPills(row);
+          } else if (e.target.closest('#formItemsContainer')) {
+            refreshAllFormParcelItemBindings(true, false);
+          }
+        });
+
+        modalOrderEl.addEventListener('click', (e) => {
+          // Smart Auto-Bind button in #modalOrder
+          if (e.target.closest('#btnAutoAssignItemsToParcels')) {
+            refreshAllFormParcelItemBindings(true, true);
+            showToast('⚡ 已按商品顺序与包裹数量重新为您智能预绑定每包商品！');
+            return;
+          }
+          // Clear all bindings button in #modalOrder
+          if (e.target.closest('#btnClearParcelItemBindings')) {
+            document.querySelectorAll('#formParcelsContainer .form-parcel-row').forEach(r => {
+              r._assignedItemsState = [];
+              renderParcelRowItemBindPills(r, []);
+            });
+            showToast('🧹 已清空分包单独绑定，恢复默认共享整单商品');
+            return;
+          }
+          // Per-parcel "全选本单"
+          const btnAll = e.target.closest('.btn-parcel-bind-all');
+          if (btnAll) {
+            const row = btnAll.closest('.form-parcel-row');
+            const formItems = readCurrentModalFormItems();
+            if (row) {
+              row._assignedItemsState = formItems.map(x => ({ product: x.product, qty: x.qty }));
+              renderParcelRowItemBindPills(row, row._assignedItemsState);
+            }
+            return;
+          }
+          // Per-parcel "清空本包"
+          const btnNone = e.target.closest('.btn-parcel-bind-none');
+          if (btnNone) {
+            const row = btnNone.closest('.form-parcel-row');
+            if (row) {
+              row._assignedItemsState = [];
+              renderParcelRowItemBindPills(row, []);
+            }
+            return;
+          }
+          // When adding or removing a parcel or item row, refresh auto-prebinding
+          if (e.target.closest('#btnAddFormParcel') || e.target.closest('#btnGenerateSeqParcels') || e.target.closest('.btn-remove-parcel') || e.target.closest('#btnAddFormItem') || e.target.closest('.btn-remove-item')) {
+            setTimeout(() => {
+              refreshAllFormParcelItemBindings(true, false);
+            }, 20);
+          }
+        });
+      }
+
+      // 2. Global click handler for [data-quick-bind-parcel] across Dashboard, KPI table, Orders table, Mobile cards, and Quick-View modal
+      document.addEventListener('click', (e) => {
+        const bindBtn = e.target.closest('[data-quick-bind-parcel]');
+        if (!bindBtn) return;
+        e.preventDefault();
+        e.stopPropagation();
+        const ordId = bindBtn.getAttribute('data-quick-bind-parcel');
+        const pIdx = parseInt(bindBtn.getAttribute('data-quick-bind-idx'), 10) || 0;
+        const ord = getActiveOrders().find(o => String(o.id) === String(ordId))
+          || (state.orders || []).find(o => String(o.id) === String(ordId));
+        if (!ord) {
+          showToast('未找到对应订单');
+          return;
+        }
+        // Close quick-view modal if open
+        const qvModal = document.getElementById('modalOrderQuickView');
+        if (qvModal && !qvModal.classList.contains('hidden')) {
+          qvModal.classList.add('hidden');
+        }
+        openOrderModal(ord, false);
+        setTimeout(() => {
+          const parcelsCont = document.getElementById('formParcelsContainer');
+          const rows = parcelsCont ? parcelsCont.querySelectorAll('.form-parcel-row') : [];
+          const targetRow = rows[pIdx] || rows[0];
+          if (targetRow) {
+            targetRow.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            targetRow.classList.add('ring-2', 'ring-emerald-500', 'bg-emerald-50/40');
+            setTimeout(() => {
+              targetRow.classList.remove('ring-2', 'ring-emerald-500', 'bg-emerald-50/40');
+            }, 2600);
+          }
+          showToast(`📦 已为您打开订单 #${ord.orderNo} 的拆包商品关联栏（已自动预绑定，可自由修改后点保存）`);
+        }, 80);
+      });
+    }
+
+    if (document.readyState === 'loading') {
+      window.addEventListener('DOMContentLoaded', initV7160Events);
+    } else {
+      initV7160Events();
     }
 
 
