@@ -3,13 +3,13 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>纽澳跨境采购与快递追踪管家 v7.18.0 (Build 20261109.1730)</title>
+  <title>纽澳跨境采购与快递追踪管家 v7.19.0 (Build 20261109.1945)</title>
   <script src="https://cdn.tailwindcss.com/3.4.17"></script>
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
   <script defer src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
   <style>
     :root {
       --theme-header-grad: linear-gradient(135deg, #022c22 0%, #064e3b 55%, #0f4c45 100%);
@@ -172,8 +172,27 @@
     body[data-theme="midnight"] .divide-slate-100 > :not([hidden]) ~ :not([hidden]) {
       border-color: #334155 !important;
     }
+    :root {
+      --app-font-sans: 'Plus Jakarta Sans', 'Inter', -apple-system, BlinkMacSystemFont, "PingFang SC", "HarmonyOS Sans SC", "Microsoft YaHei UI", "Microsoft YaHei", "Noto Sans SC", sans-serif;
+    }
+    body, button, input, select, textarea, table, th, td, code, pre, .font-mono, .font-sans {
+      font-family: var(--app-font-sans) !important;
+      font-variant-numeric: tabular-nums;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      letter-spacing: -0.01em;
+    }
+    /* Remove native browser number input spin buttons so they never cover unit prices or quantities (Image 1 fix) */
+    input[type="number"]::-webkit-inner-spin-button,
+    input[type="number"]::-webkit-outer-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+    }
+    input[type="number"] {
+      -moz-appearance: textfield;
+    }
     body {
-      font-family: 'Inter', -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", sans-serif;
+      font-family: var(--app-font-sans) !important;
       background-color: var(--theme-page-bg);
       background-image:
         radial-gradient(at 0% 0%, var(--theme-radial-1) 0px, transparent 45%),
@@ -329,13 +348,29 @@
     button:active:not(:disabled) {
       transform: scale(0.98);
     }
+    body.desktop-full-bleed .app-layout-container {
+      max-width: 98.5vw !important;
+    }
+    @media (max-width: 767px) {
+      header #uiNote-appTitle {
+        display: none !important;
+      }
+      header .py-2 {
+        padding-top: 0.45rem !important;
+        padding-bottom: 0.45rem !important;
+      }
+      #parcelTrackingCards {
+        max-height: none !important;
+        overflow-y: visible !important;
+      }
+    }
   </style>
 </head>
 <body class="min-h-screen flex flex-col overflow-x-hidden max-w-full">
 
   <!-- Top Header -->
   <header class="bg-emerald-950 text-white shadow-md sticky top-0 z-30">
-    <div class="max-w-7xl mx-auto px-3 sm:px-6 py-3 flex flex-wrap items-center justify-between gap-3">
+    <div class="max-w-[1720px] w-full lg:w-[97vw] app-layout-container mx-auto px-2.5 sm:px-5 py-2 sm:py-3 flex flex-wrap items-center justify-between gap-2 sm:gap-3">
       <div class="flex items-center gap-3">
         <img src="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQEAYABgAAD/2wBDAAQDAwQDAwQEAwQFBAQFBgoHBgYGBg0JCggKDw0QEA8NDw4RExgUERIXEg4PFRwVFxkZGxsbEBQdHx0aHxgaGxr/2wBDAQQFBQYFBgwHBwwaEQ8RGhoaGhoaGhoaGhoaGhoaGhoaGhoaGhoaGhoaGhoaGhoaGhoaGhoaGhoaGhoaGhoaGhr/wAARCACAAIADASIAAhEBAxEB/8QAHwAAAQUBAQEBAQEAAAAAAAAAAAECAwQFBgcICQoL/8QAtRAAAgEDAwIEAwUFBAQAAAF9AQIDAAQRBRIhMUEGE1FhByJxFDKBkaEII0KxwRVS0fAkM2JyggkKFhcYGRolJicoKSo0NTY3ODk6Q0RFRkdISUpTVFVWV1hZWmNkZWZnaGlqc3R1dnd4eXqDhIWGh4iJipKTlJWWl5iZmqKjpKWmp6ipqrKztLW2t7i5usLDxMXGx8jJytLT1NXW19jZ2uHi4+Tl5ufo6erx8vP09fb3+Pn6/8QAHwEAAwEBAQEBAQEBAQAAAAAAAAECAwQFBgcICQoL/8QAtREAAgECBAQDBAcFBAQAAQJ3AAECAxEEBSExBhJBUQdhcRMiMoEIFEKRobHBCSMzUvAVYnLRChYkNOEl8RcYGRomJygpKjU2Nzg5OkNERUZHSElKU1RVVldYWVpjZGVmZ2hpanN0dXZ3eHl6goOEhYaHiImKkpOUlZaXmJmaoqOkpaanqKmqsrO0tba3uLm6wsPExcbHyMnK0tPU1dbX2Nna4uPk5ebn6Onq8vP09fb3+Pn6/9oADAMBAAIRAxEAPwDxljz+FNJ+n5UMaZnNdh+NoM56Y/KkJ9MflQT2FMJx9aRaQrN6fyppNGaaTSZaQmfWkLUhNNJxSSGKWxUZP0/Kgtk02qLSDP0ppNBNNpDCkJ5oJppOKRSQZxSFutITTSaC0bjHNNzmg00t6VRxJAT6U+KF5j+7HA6segpsUfmyKgPXqfQVqAKihUGFHQUEzny7FX7BgfNKM+y002K4/wBaf++f/r1aLVGxpWM1ORVNkP8Anof++f8A69RtZDPMh/75/wDr1bJqMnNM0U5FU2a9fMP/AHz/APXphtR/z0P/AHz/APXqyx5phNBanIrG2H98/wDfP/16Ybf+6/5rVkmo2bFIpSZTdDH1HHqOlRk1bY5BDcg9RVFiFdlJ+6aR0R1AmkJpM0h70GqRuE5ppIApGOTTelFziRbsP9a57hP61cLVQsj+9k/3P61bJpowqL3hWOaYxpMlmCqCSTgAdzXpth+z/wCOdUjV7S0085GcNqMakfrWNXEUaDSqTSvtd2OnD4PEYpN0YOVt7K9jy8moy1elaj8CvGOmAm8TS0x1xqcZ/rWLF8L/ABDcOVt1spWHGFvENc7zHBrerH70d8cmzKW1CX/gLOMJphNW9W0250XULiw1BBHdW7bZFDBhnGeCOvBqgzV2xkpxUou6Z50qcoScJKzWjBmqNjn6U5UaVgqAsaJYJIhl1IFLmSdjRQdroiJrKvpNt2hHGUGfzNaDNWRqR/0uP/c/qaGdNCN5FpWyKCagibgVLSNGrG4TTaCcUwtVo4EWbM/vZP8Ad/rVstVCzb94/wDu/wBasl6ZjNe8SLKYpFdRuZGDAe4NfY3hDxfqaafb3D/2bC00QcrLaXvy5HTiOvmX4TQQ3XxH8PR3Mayxi4Z9rDIyqMyn8CAfwr7m1tILfQ45YF2yt5YY55ORzXwPE9RupGEVrCPNfybtZfcfqPBVC1KpUk9JNRt5rW/4njfijVdQ1LfsFpJnr5Vtcj/0JBXHaVNPp9xIZnghfJysscoI/IV63c3RGfm5+tcxqmh3XiG+hTTo1aUIxldmCgKCMEk/Wvz+OLnUfLY/V4UYRWux8seLtTfVfEmp3kwjDyzn/VhgpwAAQG+bBAzzWNFG8zhUGSa9H+Lvhi80nxBbpc2/lzvAN5HO/wCY4OR14713PwZ+DqX4h13xVCRpwO63t24NyR3Pon8+g4r9dpZpQpZfCtLTS1vTSx+EV8lxFbNquGi+Z3bcvXW/4lv4I/BBNWWHXvFkBXTAd1vbtwbojufSP379BxWl+1Avhmz0/S7OxtLO211GLOttEsey3K8BwoAyTggHnAPrXefFD4t2fw+0421q0T63JEPIhAGy2TGA7D/0Ff6dfi3xB4ivNfv57vULiS4nmcu8jtlmJ6kmvOwEcTmFdYmbtFbI9nM5YPKsK8FSSlN7symNZGpHN1H/ALn9TWkWrK1Fv9Jj/wBz+pr65nxVBe+TRHips5qtCeKmBpGkldm2TTetBNITitDzia2OHf8A3f61OWz0qrA3zt/u/wBamZsUGclqdx8IX2/EnQD/ANNZP/RT19m65qG/SEQHps/lXxL8LbqO2+IOhSzyLHGJmBZjgDKMB+pFfU19rsMsIj8+PAx/y0Havy/iyo6eLS7wX5yP2PgilzYCT7Tf/pMTH1R9PbxVock8eoOUgkE0kcgUKx7hOjhfVjn5u1WbXxMui6ggmBktbgMkmPvAAghh7j0+tQRLcatLJDpES3lykbOI1kVeAO7HgfU14h4g8Y3N34kt7LS5JJbqKUpKCSqHkbgEP3UUAjJ5PX0A8LL8DWzNSnHljGmtW/y9D6rMs0oZVOnTnGU5VHZJfn/wD6gvIdN1WKBtQs7XU4QpNvLIgbCnqAT0B7itOOYwxiWRPugBEVeEXoOPT0Fc18LoJNT0K7dTvhS72xsV3KflGcfnXoUUAtYmK/M2CST3NdWCwNWryzqy9zdI3xNWFKUowXvdzzHVbLw6/iDw9b6h4ZttSbW7mUrdzybnViQrOwKnJ+b5cnA7Yryz43+HdK0bwjqB03S7S08q9t4opY4FVto3AjcBnsM+tfTNrKwuN0Vsis3DsowcZr51/aDmB8G6ggP/ADE4/wD0Jq+woS/fUox2TPncyhTlgKr5Fzcru+77+Wmh8uM2Kyr4/wCkR/7n9TWiTWbfn/SE/wBz+pr7Bn5HQXvE0RqYnH1qtEeBU2aktrU3M00n1oNMZq1PMRLA2Gb6VIWqvE2HPuKeWpCa1ByeCrujKcgo2CD9a1D4s13aF/tWfAGMsqE/mVrIJqMnNYVaFGvb2sFK3dJnbh8XicLf2FRxv2bX5Hs3gv4yQ6J4Tn07UbiRL3zWeabyMvcD+FQVHQdMcV2fhf48+HItLieWGws7pubgXFopkZ+5LFec4618yFqaWr5yvw3g6spTjKUW30tZeSVtj63D8XY6lCMJwjNRXW935t33PTNa+Lc8+qakbBoIIJLmR4ntrcRkAsSGUjBB96rn4/fEJldE13bEY1iQNbjcqKc9eu4/xN1PrXnBaoya+iVCCgoNXsrHzVLF4ijUlUpTcXJ30fr+Vz04ftCfEUOWbXo2bzzN/wAeiY3EYAx02jsvTPPNcxr/AMRPEfijTG07W75Li2aRZGIgVXZ1zglhz3Oa5bNJmj2FK/Nyq5vLMcZOHJKq2trXDoMZJ9zWdff8fCf7n9TWgazL1s3IA/hUVqzCiveJojwKlzUEXQVN60hvc2ic9abQaQmrPNSEYkEMvBFPWQOMqfqPSoz05qvImehI9CODQWoplsmmFs1myT3SHAcMOxKiojeXX95f++BSuaqhJ9Uahamlqyzd3R/iX/vimm7uf7y/98UXNFQl3NImmk+tZhu7n+8v/fNIbu57sv8A3xS5jRUJdzTJpKzPtdyP4l/75FIbm5YY3gfRQKVy1Rfcvz3C26ZY5Y/dX1rLXc7FnOWY5NAQs2WJY+pqdI6W5qkoIljGAKeTTRwKKoz3Nsmmk4oY0w1R56QE03P5UEmkpFDGUMKhaEdqsUh/CkzRNoqmL2phiHpVk8Uw+1KxqmyAw+1N8qrGPWmsfyoKTZXMQpPKFTnmmnpQVdkewDtS0ppoBp2HuLRRigCmM//Z" alt="App Icon" class="w-10 h-10 rounded-xl object-cover border border-emerald-700 shadow-sm max-w-full h-auto" />
         <div>
@@ -346,7 +381,7 @@
             </h1>
             <button type="button" id="btnHeaderVersionBadge" class="inline-flex items-center gap-1 text-xs bg-gradient-to-r from-amber-400 to-amber-300 hover:from-amber-300 hover:to-amber-200 text-slate-950 font-extrabold px-2.5 py-0.5 rounded-full shadow-xs transition cursor-pointer" title="当前正式稳定版本：v7.14.0 (Build 20261102.1530)（遵循 vMAJOR.MINOR.PATCH + Build Tag 规范 · 点击查看版本规范与更新日志）">
               <span id="uiIcon-appVersion">🚀</span>
-              <span id="uiText-appVersion">v7.18.0 (Build 20261109.1730)</span>
+              <span id="uiText-appVersion">v7.19.0 (Build 20261109.1945)</span>
             </button>
             <button type="button" id="btnHeaderCfStatusPill" class="inline-flex items-center gap-1 text-[11px] bg-emerald-900/90 hover:bg-emerald-800 text-emerald-100 border border-emerald-600/70 font-semibold px-2.5 py-0.5 rounded-full transition cursor-pointer" title="点击打开 Cloudflare KV 边缘云同步设置 (方案B)">
               <span id="headerCfStatusDot" class="w-2 h-2 rounded-full bg-amber-400 inline-block"></span>
@@ -400,7 +435,7 @@
 
     <!-- Navigation Bar -->
     <div class="bg-emerald-900/80 border-t border-emerald-800/80">
-      <div class="max-w-7xl mx-auto px-3 sm:px-6 py-1.5 flex items-center justify-between gap-2 overflow-x-auto custom-scroll">
+      <div class="max-w-[1720px] w-full lg:w-[97vw] app-layout-container mx-auto px-2.5 sm:px-5 py-1.5 flex items-center justify-between gap-2 overflow-x-auto custom-scroll">
         <nav class="flex items-center gap-1 sm:gap-2" id="mainNav">
           <button id="navBtn-dashboard" data-tab="dashboard" class="nav-tab tab-active text-xs sm:text-sm font-medium px-3 py-1.5 rounded-lg transition whitespace-nowrap" title="查看在途包裹、签收工作台与多维统计图表">
             <span id="uiIcon-navDashboard">🚚</span> <span id="uiText-navDashboard">物流看板</span> <span id="navBadgeTransit" class="ml-1 px-1.5 py-0.5 text-xs rounded-full bg-amber-400 text-slate-950 font-bold">0</span>
@@ -418,11 +453,15 @@
           </button>
         </nav>
 
-        <div class="hidden lg:flex items-center gap-2 text-xs text-emerald-200 whitespace-nowrap">
+        <div class="hidden lg:flex items-center gap-3 text-xs text-emerald-200 whitespace-nowrap">
           <label class="inline-flex items-center gap-1.5 cursor-pointer select-none">
             <input type="checkbox" id="toggleAutoRefPrice" class="rounded text-amber-500 focus:ring-0" checked />
             <span>未填单价订单按商品库参考价估算</span>
           </label>
+          <button type="button" id="btnToggleDesktopWideMode" class="bg-emerald-800/90 hover:bg-emerald-700 text-amber-200 border border-emerald-600/80 px-2.5 py-1 rounded-lg font-bold transition flex items-center gap-1" title="在「1480px标准宽屏」与「100%全屏超宽铺满」之间一键切换">
+            <span>🖥️</span>
+            <span id="lblDesktopWideMode">全屏铺满</span>
+          </button>
         </div>
       </div>
     </div>
@@ -430,7 +469,7 @@
 
   <!-- Read-Only Customer Share Portal Banner (Shown only when ?readonly_recipient=XX is active) -->
   <div id="readonlyCustomerBanner" class="hidden bg-gradient-to-r from-indigo-900 via-teal-900 to-emerald-900 text-white border-b border-indigo-400/30 shadow-md">
-    <div class="max-w-7xl mx-auto px-3 sm:px-6 py-3 flex flex-wrap items-center justify-between gap-3">
+    <div class="max-w-[1720px] w-full lg:w-[97vw] app-layout-container mx-auto px-2.5 sm:px-5 py-2.5 flex flex-wrap items-center justify-between gap-3">
       <div class="flex items-center gap-2.5">
         <span class="text-xl">🔒</span>
         <div>
@@ -459,7 +498,7 @@
   </div>
 
   <!-- Main Workspace -->
-  <main class="flex-1 max-w-7xl w-full mx-auto px-3 sm:px-6 py-5 space-y-5 overflow-x-hidden">
+  <main id="mainWorkspaceContainer" class="flex-1 max-w-[1720px] w-full lg:w-[97vw] app-layout-container w-full mx-auto px-2.5 sm:px-5 py-3.5 sm:py-5 pb-24 md:pb-8 space-y-4 sm:space-y-5 overflow-x-hidden">
 
     <!-- UNSAVED MODIFICATIONS REMINDER BAR (Explicit Save / Undo / Cancel Prompt + Clickable Modification Details Drawer) -->
     <div id="unsavedGlobalBanner" class="hidden bg-gradient-to-r from-amber-100 via-amber-50 to-white border-2 border-amber-500 rounded-xl p-3.5 shadow-md flex flex-col gap-3 unsaved-pulse">
@@ -756,7 +795,11 @@
             <!-- Rendered by JS -->
           </div>
         </div>
-        <div id="parcelTrackingCards" class="p-4 sm:p-5 grid grid-cols-1 md:grid-cols-2 gap-3.5 max-h-[520px] overflow-y-auto custom-scroll">
+        <!-- v7.17.0 NEW: In-Transit Quick Filter by Recipient & Courier + 1-Click WeChat Progress Copy -->
+        <div id="dashboardTransitQuickFilterStrip" class="px-4 sm:px-5 py-2.5 bg-slate-50/90 border-b border-slate-200/90 flex flex-wrap items-center justify-between gap-2 text-xs">
+          <!-- Dynamically populated by renderDashboardTransitQuickFilterStrip -->
+        </div>
+        <div id="parcelTrackingCards" class="p-3.5 sm:p-5 grid grid-cols-1 md:grid-cols-2 gap-3.5 max-h-[560px] overflow-y-auto custom-scroll">
           <!-- Rendered by JS -->
         </div>
       </div>
@@ -908,7 +951,19 @@
             </button>
           </div>
         </div>
-        <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2.5">
+        <!-- v7.17.0 Mobile Quick Search & Collapsible Advanced Filter Bar -->
+        <div class="flex md:hidden items-center gap-2 pt-1">
+          <div class="relative flex-1">
+            <input type="text" id="filterSearchMobileMirror" placeholder="🔍 搜单号/运单号/商品/收件人..." class="w-full text-xs border border-emerald-300 rounded-lg pl-2.5 pr-7 py-2 bg-emerald-50/20 font-medium" />
+            <button type="button" id="btnClearMobileSearchMirror" class="hidden absolute right-2 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-700 text-xs font-bold">✕</button>
+          </div>
+          <button type="button" id="btnToggleMobileOrderFilters" class="shrink-0 bg-slate-100 hover:bg-slate-200 text-slate-700 border border-slate-300 text-xs font-bold px-2.5 py-2 rounded-lg flex items-center gap-1 transition">
+            <span>⚙️ 筛选/排序</span>
+            <span id="mobileActiveFilterCountBadge" class="hidden bg-emerald-600 text-white text-[10px] px-1.5 py-0.1 rounded-full font-extrabold">0</span>
+            <span id="mobileFilterToggleArrow">▾</span>
+          </button>
+        </div>
+        <div id="ordersAdvancedFilterGrid" class="hidden md:grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2.5">
           <div>
             <label class="block text-xs font-medium text-slate-500 mb-1">年份筛选</label>
             <select id="filterYear" class="w-full text-xs sm:text-sm border border-slate-300 rounded-lg px-2.5 py-2 bg-white">
@@ -1091,16 +1146,16 @@
           <div id="ordersTableTopScrollInner" class="h-2.5"></div>
         </div>
         <div id="ordersTableScrollWrap" class="overflow-x-auto custom-scroll max-w-full">
-          <table id="ordersMainTable" class="w-full text-left border-collapse">
+          <table id="ordersMainTable" class="w-full lg:table-fixed text-left border-collapse">
             <thead>
-              <tr class="bg-slate-50 border-b border-slate-200 text-xs font-semibold text-slate-600 select-none">
-                <th data-order-sort-col="DATE" class="py-2.5 px-2.5 whitespace-nowrap w-[96px] cursor-pointer hover:bg-emerald-50/70 hover:text-emerald-900 transition" title="点击切换下单日期正序/倒序">下单日期 <span id="sortInd-DATE" class="text-emerald-700 font-bold">↓</span></th>
-                <th data-order-sort-col="RECIPIENT" class="py-2.5 px-2 whitespace-nowrap w-[68px] cursor-pointer hover:bg-emerald-50/70 hover:text-emerald-900 transition" title="点击按收件人聚合排序">收件人 <span id="sortInd-RECIPIENT" class="text-slate-400">↕</span></th>
-                <th data-order-sort-col="MERCHANT" class="py-2.5 px-2.5 w-[142px] cursor-pointer hover:bg-emerald-50/70 hover:text-emerald-900 transition" title="点击按采购商家聚合排序">商家 / 订单号 <span id="sortInd-MERCHANT" class="text-slate-400">↕</span></th>
-                <th data-order-sort-col="QTY" class="py-2.5 px-2.5 cursor-pointer hover:bg-emerald-50/70 hover:text-emerald-900 transition" title="点击按购买商品总件数排序">购买商品明细 (数量 × 单价) <span id="sortInd-QTY" class="text-slate-400">↕</span></th>
-                <th data-order-sort-col="AMOUNT" class="py-2.5 px-2.5 w-[160px] cursor-pointer hover:bg-emerald-50/70 hover:text-emerald-900 transition" title="点击按订单实付总金额排序">运费 / 总计 <span id="sortInd-AMOUNT" class="text-slate-400">↕</span></th>
-                <th data-order-sort-col="PARCELS" class="py-2.5 px-2.5 w-[235px] cursor-pointer hover:bg-emerald-50/70 hover:text-emerald-900 transition" title="点击按包裹数量排序">快递包裹与签收追踪 <span id="sortInd-PARCELS" class="text-slate-400">↕</span></th>
-                <th class="py-2.5 px-2.5 whitespace-nowrap text-right w-[150px]">操作</th>
+              <tr class="bg-slate-50 border-b border-slate-200 text-xs font-bold text-slate-600 select-none">
+                <th data-order-sort-col="DATE" class="py-2.5 pl-3 pr-1.5 whitespace-nowrap w-[94px] cursor-pointer hover:bg-emerald-50/70 hover:text-emerald-900 transition" title="点击切换下单日期正序/倒序">下单日期 <span id="sortInd-DATE" class="text-emerald-700 font-bold">↓</span></th>
+                <th data-order-sort-col="RECIPIENT" class="py-2.5 px-1.5 whitespace-nowrap w-[68px] text-center cursor-pointer hover:bg-emerald-50/70 hover:text-emerald-900 transition" title="点击按收件人聚合排序">收件人 <span id="sortInd-RECIPIENT" class="text-slate-400">↕</span></th>
+                <th data-order-sort-col="MERCHANT" class="py-2.5 px-2 whitespace-nowrap w-[148px] cursor-pointer hover:bg-emerald-50/70 hover:text-emerald-900 transition" title="点击按采购商家聚合排序">商家 / 订单号 <span id="sortInd-MERCHANT" class="text-slate-400">↕</span></th>
+                <th data-order-sort-col="QTY" class="py-2.5 px-2.5 w-[27%] cursor-pointer hover:bg-emerald-50/70 hover:text-emerald-900 transition" title="点击按购买商品总件数排序">购买商品明细 (数量 × 单价) <span id="sortInd-QTY" class="text-slate-400">↕</span></th>
+                <th data-order-sort-col="AMOUNT" class="py-2.5 px-2.5 w-[19%] cursor-pointer hover:bg-emerald-50/70 hover:text-emerald-900 transition" title="点击按订单实付总金额排序">运费 / 结算总计 <span id="sortInd-AMOUNT" class="text-slate-400">↕</span></th>
+                <th data-order-sort-col="PARCELS" class="py-2.5 px-2.5 w-[26%] cursor-pointer hover:bg-emerald-50/70 hover:text-emerald-900 transition" title="点击按包裹数量排序">快递包裹与分包追踪 <span id="sortInd-PARCELS" class="text-slate-400">↕</span></th>
+                <th class="py-2.5 pl-2 pr-3 whitespace-nowrap text-right w-[148px]">操作</th>
               </tr>
             </thead>
             <tbody id="ordersTableBody" class="divide-y divide-slate-200 text-xs sm:text-sm">
@@ -1510,8 +1565,8 @@
     <!-- TAB 4: MULTI-DIMENSIONAL ANALYTICS & STATEMENT GENERATOR -->
     <section id="tab-analytics" class="hidden space-y-5">
       <div class="grid grid-cols-1 lg:grid-cols-12 gap-5">
-        <!-- Left 8 cols: Smart Statement / Bill Builder (widened for full product name display) -->
-        <div class="lg:col-span-8 bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden flex flex-col">
+        <!-- Left 7 cols: Smart Statement / Bill Builder -->
+        <div class="lg:col-span-7 bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden flex flex-col">
           <div class="p-4 sm:p-5 bg-slate-50 border-b border-slate-200 flex flex-wrap items-center justify-between gap-2">
             <div>
               <h2 class="text-base font-bold text-slate-800">🧾 对账单 / 结算单生成器 (包含单价、数量、运费核算)</h2>
@@ -1536,10 +1591,10 @@
           <div class="p-4 sm:p-5 space-y-4 flex-1">
             <!-- Quick Selector from Orders (Auto defaults to [Today - 1 Month ~ Today]) -->
             <div class="bg-slate-50 p-3 rounded-xl border border-slate-200 space-y-2.5">
-              <div class="grid grid-cols-1 sm:grid-cols-12 gap-2 items-end">
+              <div class="grid grid-cols-1 sm:grid-cols-12 gap-2.5 items-end">
                 <div class="sm:col-span-3">
-                  <label class="block text-xs text-slate-500 mb-1 font-medium">收件人</label>
-                  <select id="billRecipientSelect" class="w-full text-xs border border-slate-300 rounded-md px-2 py-1.5 bg-white font-semibold">
+                  <label class="block text-xs text-slate-500 mb-1 font-semibold">收件人</label>
+                  <select id="billRecipientSelect" class="w-full text-xs border border-slate-300 rounded-lg px-2.5 py-1.5 bg-white font-bold text-slate-800">
                     <option value="朱峰">朱峰</option>
                     <option value="HOME">HOME</option>
                     <option value="泗泾">泗泾</option>
@@ -1551,39 +1606,39 @@
                   </select>
                 </div>
                 <div class="sm:col-span-3">
-                  <label class="block text-xs text-slate-500 mb-1 font-medium">起始日期 <span class="text-[10px] text-emerald-700">(默认近1月)</span></label>
-                  <input type="date" id="billStartDate" value="" class="w-full text-xs border border-slate-300 rounded-md px-2 py-1.5 bg-white font-mono" />
+                  <label class="block text-xs text-slate-500 mb-1 font-semibold">起始日期 <span class="text-[10px] text-emerald-700">(默认近1月)</span></label>
+                  <input type="date" id="billStartDate" value="" class="w-full text-xs border border-slate-300 rounded-lg px-2.5 py-1.5 bg-white font-semibold text-slate-800" />
                 </div>
                 <div class="sm:col-span-3">
-                  <label class="block text-xs text-slate-500 mb-1 font-medium">结束日期 <span class="text-[10px] text-emerald-700">(默认今天)</span></label>
-                  <input type="date" id="billEndDate" value="" class="w-full text-xs border border-slate-300 rounded-md px-2 py-1.5 bg-white font-mono" />
+                  <label class="block text-xs text-slate-500 mb-1 font-semibold">结束日期 <span class="text-[10px] text-emerald-700">(默认今天)</span></label>
+                  <input type="date" id="billEndDate" value="" class="w-full text-xs border border-slate-300 rounded-lg px-2.5 py-1.5 bg-white font-semibold text-slate-800" />
                 </div>
                 <div class="sm:col-span-3 flex gap-1.5">
-                  <button id="btnExtractBillFromOrders" class="flex-1 bg-emerald-700 hover:bg-emerald-600 text-white text-xs py-1.5 px-2.5 rounded-md font-bold shadow-2xs transition">
+                  <button id="btnExtractBillFromOrders" class="flex-1 bg-emerald-700 hover:bg-emerald-600 text-white text-xs py-1.5 px-3 rounded-lg font-extrabold shadow-2xs transition">
                     🔍 提取订单汇总
                   </button>
                 </div>
               </div>
-              <div class="flex flex-wrap items-center justify-between gap-1.5 pt-1 border-t border-slate-200/70 text-[11px]">
-                <div class="flex flex-wrap items-center gap-1">
-                  <span class="text-slate-500 font-medium">⚡ 快捷时段：</span>
-                  <button type="button" data-bill-quick-range="1M" class="bg-emerald-100 hover:bg-emerald-200 text-emerald-900 border border-emerald-300 px-2 py-0.5 rounded font-bold transition">📅 近1个月(默认)</button>
-                  <button type="button" data-bill-quick-range="3M" class="bg-white hover:bg-slate-100 text-slate-700 border border-slate-300 px-2 py-0.5 rounded font-medium transition">近3个月</button>
-                  <button type="button" data-bill-quick-range="Y2026" class="bg-white hover:bg-slate-100 text-slate-700 border border-slate-300 px-2 py-0.5 rounded font-medium transition">2026全年</button>
-                  <button type="button" data-bill-quick-range="ALL" class="bg-white hover:bg-slate-100 text-slate-700 border border-slate-300 px-2 py-0.5 rounded font-medium transition">全部历史</button>
+              <div class="flex flex-wrap items-center justify-between gap-1.5 pt-1.5 border-t border-slate-200/70 text-[11px]">
+                <div class="flex flex-wrap items-center gap-1.5">
+                  <span class="text-slate-500 font-semibold">⚡ 快捷时段：</span>
+                  <button type="button" data-bill-quick-range="1M" class="bg-emerald-100 hover:bg-emerald-200 text-emerald-900 border border-emerald-300 px-2.5 py-0.5 rounded-md font-bold transition">📅 近1个月(默认)</button>
+                  <button type="button" data-bill-quick-range="3M" class="bg-white hover:bg-slate-100 text-slate-700 border border-slate-300 px-2.5 py-0.5 rounded-md font-medium transition">近3个月</button>
+                  <button type="button" data-bill-quick-range="Y2026" class="bg-white hover:bg-slate-100 text-slate-700 border border-slate-300 px-2.5 py-0.5 rounded-md font-medium transition">2026全年</button>
+                  <button type="button" data-bill-quick-range="ALL" class="bg-white hover:bg-slate-100 text-slate-700 border border-slate-300 px-2.5 py-0.5 rounded-md font-medium transition">全部历史</button>
                 </div>
-                <span class="text-[10px] text-slate-400">💡 打开页面自动定位「今天往前推1个月」并提取对应收件人订单</span>
+                <span class="text-[11px] text-slate-400">💡 打开页面自动定位「今天往前推1个月」并提取对应收件人订单</span>
               </div>
             </div>
 
             <div class="flex flex-wrap items-center justify-between gap-2 text-xs">
               <div class="flex items-center gap-2 flex-1 min-w-[220px]">
-                <span class="font-semibold text-slate-700 shrink-0">账单标题：</span>
-                <input type="text" id="billTitleInput" value="" placeholder="自动生成账单标题..." class="border border-slate-300 rounded-md px-2.5 py-1 text-xs flex-1 max-w-md font-semibold text-slate-800" />
+                <span class="font-bold text-slate-700 shrink-0">账单标题：</span>
+                <input type="text" id="billTitleInput" value="" placeholder="自动生成账单标题..." class="border border-slate-300 rounded-lg px-2.5 py-1.5 text-xs flex-1 max-w-md font-bold text-slate-800" />
               </div>
               <div class="flex items-center gap-2">
-                <span class="text-slate-500">结算币种：</span>
-                <select id="billCurrencySelect" class="border border-slate-300 rounded-md px-2 py-1 text-xs bg-white font-semibold">
+                <span class="text-slate-500 font-medium">结算币种：</span>
+                <select id="billCurrencySelect" class="border border-slate-300 rounded-lg px-2.5 py-1.5 text-xs bg-white font-bold text-slate-800">
                   <option value="¥">人民币 (¥ RMB)</option>
                   <option value="$">纽币 ($ NZD)</option>
                 </select>
@@ -1640,19 +1695,19 @@
             <!-- Mobile Native Card List (Default on <640px screens so inputs are never squeezed) -->
             <div id="billMobileCardsList" class="sm:hidden space-y-2.5"></div>
 
-            <!-- Desktop / Tablet Wide Table (Also accessible on mobile via toggle, with min-w protection) -->
+            <!-- Desktop / Tablet Wide Table (Zero spinner occlusion + aligned single-line footer totals) -->
             <div id="billDesktopTableWrap" class="hidden sm:block overflow-x-auto border border-slate-200 rounded-xl custom-scroll">
-              <table class="w-full min-w-[780px] text-left border-collapse text-xs sm:text-sm">
+              <table class="w-full text-left border-collapse text-xs sm:text-sm">
                 <thead>
-                  <tr class="bg-slate-100 text-slate-600 border-b border-slate-200 text-xs">
-                    <th class="py-2.5 px-3 min-w-[270px] w-[40%]">品名 (完整显示产品名称)</th>
-                    <th class="py-2.5 px-1.5 w-20">单价</th>
-                    <th class="py-2.5 px-1.5 w-16">数量</th>
-                    <th class="py-2.5 px-1.5 w-20" title="默认0元（免邮订单绝不自动加收）；仅在您手动输入或点击上方「整单运费分摊」时才计入">加收运费</th>
-                    <th class="py-2.5 px-1.5 w-20 text-right" title="原订单实付运费按行金额比例分摊（免邮订单为0）">运费分摊</th>
-                    <th class="py-2.5 px-1.5 w-20 text-right" title="原订单支付手续费按行金额比例分摊">手续费分摊</th>
-                    <th class="py-2.5 px-1.5 w-20 text-right" title="原订单优惠券/满减按行金额比例分摊（减项）">优惠分摊</th>
-                    <th class="py-2.5 px-2.5 w-24 text-right">行合计</th>
+                  <tr class="bg-slate-100 text-slate-600 border-b border-slate-200 text-xs font-bold whitespace-nowrap">
+                    <th class="py-2.5 px-3 min-w-[240px] w-[36%]">品名 (完整显示产品名称)</th>
+                    <th class="py-2.5 px-2 w-[92px] text-right">单价</th>
+                    <th class="py-2.5 px-2 w-[68px] text-center">数量</th>
+                    <th class="py-2.5 px-2 w-[78px] text-center" title="默认0元（免邮订单绝不自动加收）；仅在您手动输入或点击上方「整单运费分摊」时才计入">加收运费</th>
+                    <th class="py-2.5 px-2 w-[78px] text-right" title="原订单实付运费按行金额比例分摊（免邮订单为0）">运费分摊</th>
+                    <th class="py-2.5 px-2 w-[78px] text-right" title="原订单支付手续费按行金额比例分摊">手续费分摊</th>
+                    <th class="py-2.5 px-2 w-[86px] text-right" title="原订单优惠券/满减按行金额比例分摊（减项）">优惠分摊</th>
+                    <th class="py-2.5 px-3 w-[104px] text-right">行合计</th>
                     <th class="py-2.5 px-1.5 w-8"></th>
                   </tr>
                 </thead>
@@ -1660,16 +1715,16 @@
                   <!-- Rendered by JS -->
                 </tbody>
                 <tfoot>
-                  <tr class="bg-amber-50/70 font-bold text-slate-900 border-t border-slate-300 text-xs sm:text-sm">
-                    <td class="py-3 px-3">总计汇总</td>
-                    <td class="py-3 px-1.5 text-slate-500 font-normal">-</td>
-                    <td class="py-3 px-1.5 font-mono" id="billTotalQty">0</td>
-                    <td class="py-3 px-1.5 font-mono" id="billTotalShipping">0</td>
-                    <td class="py-3 px-1.5 text-right font-mono text-indigo-700" id="billTotalShipFee">—</td>
-                    <td class="py-3 px-1.5 text-right font-mono text-indigo-700" id="billTotalPayFee">—</td>
-                    <td class="py-3 px-1.5 text-right font-mono text-rose-500" id="billTotalDiscount">—</td>
-                    <td class="py-3 px-2.5 text-right text-base text-emerald-800 font-mono" id="billGrandTotal">¥0.00</td>
-                    <td></td>
+                  <tr class="bg-amber-50/80 font-extrabold text-slate-900 border-t-2 border-slate-300 text-xs sm:text-sm">
+                    <td class="py-3 px-3 whitespace-nowrap align-middle">总计汇总</td>
+                    <td class="py-3 px-2 text-right text-slate-400 font-normal whitespace-nowrap align-middle">—</td>
+                    <td class="py-3 px-2 text-center whitespace-nowrap align-middle" id="billTotalQty">0</td>
+                    <td class="py-3 px-2 text-center whitespace-nowrap align-middle" id="billTotalShipping">¥0.00</td>
+                    <td class="py-3 px-2 text-right text-indigo-700 whitespace-nowrap align-middle" id="billTotalShipFee">¥0.00</td>
+                    <td class="py-3 px-2 text-right text-indigo-700 whitespace-nowrap align-middle" id="billTotalPayFee">¥0.00</td>
+                    <td class="py-3 px-2 text-right text-rose-600 whitespace-nowrap align-middle" id="billTotalDiscount">¥0.00</td>
+                    <td class="py-3 px-3 text-right text-base text-emerald-800 whitespace-nowrap align-middle" id="billGrandTotal">¥0.00</td>
+                    <td class="py-3 px-1.5 align-middle"></td>
                   </tr>
                 </tfoot>
               </table>
@@ -1677,7 +1732,7 @@
 
             <div id="billOrderFeeRecheck" class="text-[11px] leading-relaxed bg-amber-50 border border-amber-200 text-amber-900 rounded-lg px-3 py-2"></div>
 
-            <!-- v7.18.0 NEW: Custom Checkboxes for WeChat Bill Text Output Fields -->
+            <!-- Custom Checkboxes for WeChat Bill Text Output Fields -->
             <div class="bg-emerald-50/60 border border-emerald-200 rounded-xl p-3 space-y-2">
               <div class="flex flex-wrap items-center justify-between gap-2">
                 <span class="text-xs font-extrabold text-emerald-950">☑️ 微信对账单文本输出内容勾选（未勾选的项不会出现在复制的微信账单文本中）：</span>
@@ -1712,14 +1767,14 @@
             </div>
 
             <div class="flex flex-wrap items-center justify-between gap-2 pt-1">
-              <button id="btnAddBillRow" class="text-xs text-emerald-700 hover:text-emerald-900 font-medium border border-emerald-200 bg-emerald-50 px-3 py-1.5 rounded-lg">
+              <button id="btnAddBillRow" class="text-xs text-emerald-700 hover:text-emerald-900 font-bold border border-emerald-200 bg-emerald-50 px-3 py-1.5 rounded-lg">
                 ＋ 手动添加一行明细
               </button>
               <div class="flex flex-wrap items-center gap-2">
                 <button id="btnCopyBillText" class="bg-emerald-700 hover:bg-emerald-600 text-white text-xs px-4 py-2 rounded-lg font-extrabold shadow-sm transition">
                   📋 一键复制微信对账单文本
                 </button>
-                <button id="btnExportBillCsv" class="bg-white hover:bg-slate-50 text-slate-700 border border-slate-300 text-xs px-3 py-2 rounded-lg font-medium transition">
+                <button id="btnExportBillCsv" class="bg-white hover:bg-slate-50 text-slate-700 border border-slate-300 text-xs px-3 py-2 rounded-lg font-semibold transition">
                   ⬇️ 导出账单 CSV
                 </button>
               </div>
@@ -1727,8 +1782,8 @@
           </div>
         </div>
 
-        <!-- Right 4 cols: Multi-Year Recipient & Product Matrix -->
-        <div class="lg:col-span-4 bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden flex flex-col">
+        <!-- Right 5 cols: Multi-Year Recipient & Product Matrix -->
+        <div class="lg:col-span-5 bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden flex flex-col">
           <div class="p-4 sm:p-5 bg-slate-50 border-b border-slate-200 flex items-center justify-between">
             <div>
               <h2 class="text-base font-bold text-slate-800">📊 年度 × 收件人 购买件数透视表</h2>
@@ -3139,7 +3194,7 @@
         <div>
           <h3 class="text-base font-bold flex items-center gap-2 flex-wrap">
             <span>⚙️ 个性化与规则中心</span>
-            <span class="text-[11px] bg-amber-400 text-slate-950 font-extrabold px-2.5 py-0.5 rounded-full">v7.18.0 (Build 20261109.1730) · SemVer标准版本管理</span>
+            <span class="text-[11px] bg-amber-400 text-slate-950 font-extrabold px-2.5 py-0.5 rounded-full">v7.19.0 (Build 20261109.1945) · SemVer标准版本管理</span>
           </h3>
           <p class="text-xs text-emerald-200 mt-0.5">一站式归纳管理：8套主题皮肤与自定义调色盘 · 全系统选项名称/图标/注释自由修改 · 抓单自学习规则 · 454条超链接模板</p>
         </div>
@@ -3177,7 +3232,7 @@
         <div class="bg-gradient-to-r from-emerald-50 via-teal-50 to-amber-50 border-2 border-emerald-300 rounded-xl p-4 space-y-3">
           <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-emerald-200/80 pb-2.5">
             <div class="flex items-center gap-2 flex-wrap">
-              <span class="px-2.5 py-1 rounded-full bg-emerald-900 text-amber-300 font-extrabold text-xs font-mono">v7.18.0 (Build 20261109.1730)</span>
+              <span class="px-2.5 py-1 rounded-full bg-emerald-900 text-amber-300 font-extrabold text-xs font-mono">v7.19.0 (Build 20261109.1945)</span>
               <span class="font-extrabold text-slate-900 text-sm">严格执行的版本号规则（Semantic Versioning + Build Tag）</span>
             </div>
             <button type="button" id="btnJumpToLabelsTab" class="bg-white hover:bg-slate-50 text-emerald-900 border border-emerald-300 font-bold px-3 py-1.5 rounded-lg shadow-2xs transition text-xs shrink-0">
@@ -3188,9 +3243,9 @@
             <p>系统遵循标准的 <code class="bg-white px-1.5 py-0.5 rounded border font-mono font-bold text-emerald-900">vMAJOR.MINOR.PATCH (Build YYYYMMDD.HHMM)</code> 规则，版本号已固化在<strong>网页左上角标识、页面标题（第6行 &lt;title&gt;）与浏览器控制台输出</strong>中，确保每次热更新上线后一眼就能核对生效状态：</p>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-3 pt-1">
               <div class="bg-white/90 rounded-lg p-3 border border-emerald-200 space-y-1">
-                <div class="font-extrabold text-emerald-950">📌 当前正式稳定版本：<span class="font-mono text-emerald-700">v7.18.0 (Build 20261109.1730)</span></div>
+                <div class="font-extrabold text-emerald-950">📌 当前正式稳定版本：<span class="font-mono text-emerald-700">v7.19.0 (Build 20261109.1945)</span></div>
               <div class="text-[11px] text-emerald-900 bg-white/80 border border-emerald-200 rounded-lg px-2.5 py-1.5 mt-1">
-                <strong>✨ v7.16.0 核心升级：</strong>① <strong>首屏秒开性能优化</strong>（合并启动阶段重复全量渲染与价格同步、异步加载900KB Excel解析库与Web字体、优先渲染首屏核心看板并渐进挂载后台页签）；② <strong>一单多品拆包「包裹⇄商品」智能预绑定与随时自由修改</strong>（多品拆多包自动1对1预关联商品与数量，支持勾选/取消与修改每包件数，并在在途追踪卡、KPI穿透表、订单总表、详单凭证、微信通知与催件话术全链路精准展示）。
+                <strong>✨ v7.19.0 核心升级：</strong>① <strong>全局1720px宽屏布局 + 账单页与订单表零遮挡重构</strong>（主容器拓宽至1720px/97vw；去除账单输入框上下微调箭头遮挡并加宽单价列；修复总计汇总行优惠换行导致的高低不平；右侧收件人透视表取消省略号截断并锁定件数徽标单行显示；修复订单总表左侧日期过宽、代购已结清竖排挤压与右侧操作列裁切）；② <strong>全系统升级为「明欢 MINGHUAN」同款现代几何无衬线字体体系</strong>（全局统一 Plus Jakarta Sans + PingFang SC / Microsoft YaHei UI + tabular-nums 等宽对齐数字，消除旧版打字机等宽字体割裂感）；③ <strong>全局冗余代码清理与6项深层Bug修复</strong>（清理6处被完全覆盖的死代码函数、消除商品库与趋势图重复渲染、修复启动阶段4次重复价格同步等）；④ ① <strong>彻底修复电脑端订单表右侧「操作列」被截断 & 分包商品名省略号截断问题</strong>（拓宽桌面主容器至 1480px/1620px 并支持「🖥️ 全屏铺满」一键切换、取消分包商品 `truncate` 强制单行截断改为完整自动换行展示、将右侧「操作列」重构为紧凑双排按钮组并将代购结清微标移入金额列，确保7大列100%同屏完整显示无遮挡）；② <strong>彻底移除「⚠️超一年 / 超过365天」冗余标识</strong>（消除日期列与收件人列挤压重叠）；③ <strong>手机+电脑双端深度自适应升级与新功能</strong>（新增手机端底部大拇指固定导航坞、手机端订单筛选抽屉一键折叠、KPI在途穿透面板手机端免横滑卡片视图、首页在途包裹「按收件人/快递公司」秒级快筛胶囊条与一键复制在途进度发微信）；④ ① <strong>修复拆包商品关联刷新丢失 Bug（四重持久化保险）</strong>（新增独立轻量级分包绑定保险箱 Vault、消除 localStorage 历史草稿快照配额溢出、修复云端自动拉取覆盖本地分包绑定、保存订单即刻同步持久化）；② <strong>订单总表列宽比例与行高紧凑度重构</strong>（收窄左侧「下单日期」「收件人」冗余留白，拓宽右侧「运费/总计」与「快递包裹追踪」，将「微信支付」「✅已核验」「🎫券省」合并为单行横向微标排列，单品订单行高立降 40%）；③ ① <strong>首屏秒开性能优化</strong>（合并启动阶段重复全量渲染与价格同步、异步加载900KB Excel解析库与Web字体、优先渲染首屏核心看板并渐进挂载后台页签）；② <strong>一单多品拆包「包裹⇄商品」智能预绑定与随时自由修改</strong>（多品拆多包自动1对1预关联商品与数量，支持勾选/取消与修改每包件数，并在在途追踪卡、KPI穿透表、订单总表、详单凭证、微信通知与催件话术全链路精准展示）。
               </div>
                 <ul class="list-disc pl-4 space-y-1 text-[11px] text-slate-600">
                   <li><strong>主版本号（7）</strong>：独立 <code class="font-mono">.html</code> 全功能前端，100% 保持既有订单/商品库数据结构与抓单映射规则完全兼容，支持 Cloudflare KV 实时云同步与亲友免登录只读门户。</li>
@@ -3931,13 +3986,13 @@
     };
 
     // 版本号唯一来源：APP_VERSION + BUILD_TAG（CURRENT_SEMVER / CURRENT_BUILD_TAG 等冗余常量已删除）
-    const APP_VERSION = 'v7.18.0';
-    const BUILD_TAG = 'Build 20261109.1730';
+    const APP_VERSION = 'v7.19.0';
+    const BUILD_TAG = 'Build 20261109.1945';
     const APP_VERSION_LABEL = `${APP_VERSION} (${BUILD_TAG})`;
     console.info('%c[纽澳跨境采购与快递追踪管家] 当前正式稳定版本: ' + APP_VERSION_LABEL + ' | Semantic Versioning + Build Tag 已生效', 'background:#064e3b;color:#fde68a;padding:4px 10px;border-radius:6px;font-weight:bold;');
     const DEFAULT_UI_CUSTOM_LABELS = {
       appTitle: { icon: '', text: '纽澳跨境采购与快递追踪管家', note: '支持一单多包拆单追踪 · 采购单价与运费核算 · 电脑与手机多端同步', labelTitle: '系统主标题 & 副标题说明', group: 'header', emojiPresets: ['🇳🇿', '🦘', '🌿', '📦', '🛡️'] },
-      appVersion: { icon: '🚀', text: APP_VERSION_LABEL, note: '当前正式稳定版本：v7.18.0 (Build 20261109.1730)（对账单近1月自动提取 · 宽屏品名与手机卡片适配 · 免邮0运费修正 · 微信账单字段自由勾选 · 已核验CNY免估算标）· 点击查看版本规则', labelTitle: '顶部版本号标识 (SemVer + Build Tag)', group: 'header', emojiPresets: ['🚀', '✨', '🏷️', '💎', '🔥'] },
+      appVersion: { icon: '🚀', text: APP_VERSION_LABEL, note: '当前正式稳定版本：v7.19.0 (Build 20261109.1945)（1720px超宽视口零遮挡 · 明欢同款全局无衬线等宽数字字体 · 账单对齐与免微调箭头 · 冗余代码清理与性能优化）· 点击查看版本规则', labelTitle: '顶部版本号标识 (SemVer + Build Tag)', group: 'header', emojiPresets: ['🚀', '✨', '🏷️', '💎', '🔥'] },
       btnNewOrder: { icon: '＋', text: '新增订单', note: '新建采购订单（内含网页粘贴自动填单 / 门店直购录入 / 复制上一单）', labelTitle: '顶部按钮 1：新增订单', group: 'topbar', emojiPresets: ['＋', '🛒', '✍️', '⚡', '🛍️'] },
       btnBatchImport: { icon: '📥', text: '智能导单', note: '专用于导入新采购订单：Excel表格差异导入 / 网页订单粘贴解析 / 浏览器抓单小书签', labelTitle: '顶部按钮 2：智能导单', group: 'topbar', emojiPresets: ['📥', '📂', '📊', '⚡', '📑'] },
       btnSyncBackup: { icon: '☁️', text: '云端与备份', note: '专用于多端云同步与备份：Cloudflare KV 实时云同步 / 历史时间机器回滚 / 本地 JSON 备份包', labelTitle: '顶部按钮 3：云端与备份', group: 'topbar', emojiPresets: ['☁️', '🔄', '📲', '💾', '🛡️'] },
@@ -4445,22 +4500,48 @@
       if (typeof applyThemeAndLabelsToDOM === 'function') applyThemeAndLabelsToDOM();
     }
 
+    function safeWriteMainStorageSnapshot(snapStr) {
+      if (window.readonlyCustomerRecipient || !snapStr) return false;
+      try {
+        localStorage.setItem(STORAGE_KEY, snapStr);
+        return true;
+      } catch (quotaErr) {
+        // Free bulky auxiliary keys (legacy V1 state, multi-snapshot draft meta, local simulated CF snapshots) and retry
+        try { localStorage.removeItem(DRAFT_META_KEY); } catch (e) {}
+        try { localStorage.removeItem('NZ_SUPPLEMENT_TRACKER_STATE_V1'); } catch (e) {}
+        try { localStorage.removeItem(CF_LOCAL_SIM_SNAPSHOTS_KEY); } catch (e) {}
+        try {
+          localStorage.setItem(STORAGE_KEY, snapStr);
+          return true;
+        } catch (retryErr) {
+          console.error('Critical localStorage write failed even after freeing auxiliary keys:', retryErr);
+          return false;
+        }
+      }
+    }
+
     function persistWorkingDraftToStorage() {
       // 只读门户模式下禁止写回本地存储，避免裁剪后的数据覆盖管理员的完整数据集
       if (window.readonlyCustomerRecipient) return;
       try {
+        if (typeof syncAllOrdersParcelBindingsToVault === 'function') {
+          syncAllOrdersParcelBindingsToVault(state.orders);
+        }
         const currentSnap = createDataSnapshot();
-        localStorage.setItem(STORAGE_KEY, currentSnap);
+        safeWriteMainStorageSnapshot(currentSnap);
         if (state.gistToken) writeVaultToken(state.gistToken);
         if (state.gistId && !String(state.gistId).startsWith('ghp_')) {
           localStorage.setItem(GIST_ID_VAULT_KEY, state.gistId);
         }
+        // Keep DRAFT_META_KEY lightweight (do not store 10 full copies of undoStack in localStorage which causes 5MB QuotaExceededError!)
         const draftMeta = {
-          lastSavedSnapshot: lastSavedSnapshot || currentSnap,
-          uncommittedChanges: uncommittedChanges.slice(-DRAFT_LIMIT),
-          undoStack: undoStack.slice(-UNDO_SNAPSHOT_LIMIT)
+          uncommittedChanges: uncommittedChanges.slice(-DRAFT_LIMIT)
         };
-        localStorage.setItem(DRAFT_META_KEY, JSON.stringify(draftMeta));
+        try {
+          localStorage.setItem(DRAFT_META_KEY, JSON.stringify(draftMeta));
+        } catch (metaErr) {
+          try { localStorage.removeItem(DRAFT_META_KEY); } catch (e) {}
+        }
       } catch (e) {
         console.warn('Draft persistence skipped', e);
       }
@@ -4521,8 +4602,11 @@
       // 只读门户模式下禁止写回本地存储（同上）
       if (window.readonlyCustomerRecipient) return;
       try {
+        if (typeof syncAllOrdersParcelBindingsToVault === 'function') {
+          syncAllOrdersParcelBindingsToVault(state.orders);
+        }
         const snap = createDataSnapshot();
-        localStorage.setItem(STORAGE_KEY, snap);
+        safeWriteMainStorageSnapshot(snap);
         if (state.gistToken) writeVaultToken(state.gistToken);
         if (state.gistId && !String(state.gistId).startsWith('ghp_')) {
           localStorage.setItem(GIST_ID_VAULT_KEY, state.gistId);
@@ -5458,12 +5542,9 @@
     function isCountedInStats(order) {
       return !!order;
     }
-    // 列表中的「⚠超一年」标记：仅提示下单已超过 365 天，不影响任何合计
-    function oldOrderBadgeHtml(order, extraCls) {
-      if (!order) return '';
-      const days = daysBetweenLocalDayIndex(order.orderDate, TODAY_STR);
-      if (days === null || days <= 365) return '';
-      return `<span class="text-[10px] bg-amber-50 text-amber-900 border border-amber-300 px-1.5 py-0.5 rounded font-semibold ${extraCls || ''}" title="下单已超过 365 天：仅作提示，仍计入全部统计合计">⚠超一年</span>`;
+    // 已按用户要求彻底移除「⚠超一年 / 下单超过365天」标识，保持日期列清爽无挤压
+    function oldOrderBadgeHtml() {
+      return '';
     }
 
     const BASE_COURIER_OPTIONS = [
@@ -6768,7 +6849,7 @@
                 <div class="flex flex-wrap items-center justify-between gap-1">
                   <div class="flex flex-wrap items-center gap-1 min-w-0">
                     ${pMeta && pMeta.badgeHtml ? pMeta.badgeHtml : ''}
-                    <span class="line-clamp-2">${itemsSummary}</span>
+                    <span class="break-words leading-snug">${itemsSummary}</span>
                   </div>
                   ${(o.parcels && o.parcels.length > 1) ? `<button type="button" data-quick-bind-parcel="${H(o.id)}" data-quick-bind-idx="${item.pIdx}" class="shrink-0 text-[10px] text-emerald-700 hover:text-emerald-950 bg-white hover:bg-emerald-50 border border-emerald-200 px-1.5 py-0.5 rounded font-bold transition" title="指定或修改本包裹对应的具体商品">${pMeta && pMeta.isExplicitBound ? '✏️ 改绑商品' : '📦 关联商品'}</button>` : ''}
                 </div>
@@ -7138,53 +7219,7 @@
       }
     }
 
-    function getFilteredOrders() {
-      const fYear = document.getElementById('filterYear').value;
-      const fRec = document.getElementById('filterRecipient').value;
-      const fMerch = document.getElementById('filterMerchant').value;
-      const fCour = document.getElementById('filterCourier').value;
-      const fStatus = document.getElementById('filterStatus').value;
-      const fSearch = (document.getElementById('filterSearch').value || '').trim().toLowerCase();
-
-      const scopeFilter = state.orderScopeFilter || 'ALL';
-      return getActiveOrders().filter(o => {
-        if (scopeFilter === 'SHIP_CHINA' && isSelfOrCWOrder(o)) return false;
-        if (scopeFilter === 'HOME_CHINA' && (isSelfOrCWOrder(o) || String(o.recipient || '').trim().toUpperCase() !== 'HOME')) return false;
-        if (scopeFilter === 'DAIGOU' && (isSelfOrCWOrder(o) || String(o.recipient || '').trim().toUpperCase() === 'HOME')) return false;
-        if (scopeFilter === 'SELF_CW' && !isSelfOrCWOrder(o)) return false;
-        if (fYear !== 'ALL' && String(o.year) !== fYear) return false;
-        if (fRec !== 'ALL' && o.recipient !== fRec) return false;
-        if (fMerch !== 'ALL' && o.merchant !== fMerch) return false;
-        if (fCour !== 'ALL') {
-          const hasC = (o.parcels || []).some(p => p.courier === fCour);
-          if (!hasC) return false;
-        }
-        const st = getOrderStatus(o);
-        if (fStatus === 'UNREAD') {
-          if (!o.isUnread) return false;
-        } else if (fStatus === 'STORE_ORDER') {
-          if (!isStoreOrNoNumberOrder(o)) return false;
-        } else if (fStatus === 'UNVERIFIED_WEB') {
-          if (o.webBackfilled || o.cancelled) return false;
-        } else if (fStatus === 'VERIFIED_WEB') {
-          if (!o.webBackfilled) return false;
-        } else if (fStatus !== 'ALL' && st !== fStatus) {
-          return false;
-        }
-        if (fSearch) {
-          const hay = [
-            o.orderDate, o.recipient, o.merchant, o.orderNo, o.note, o.paymentMethod || '', o.discountNote || '',
-            ...(o.items || []).map(i => i.product),
-            ...(o.parcels || []).map(p => `${p.courier} ${p.trackingNo}`)
-          ].join(' ').toLowerCase();
-          if (!hay.includes(fSearch)) return false;
-        }
-        return true;
-      }).sort((a, b) => {
-        if (!!a.isUnread !== !!b.isUnread) return a.isUnread ? -1 : 1;
-        return String(b.orderDate).localeCompare(String(a.orderDate));
-      });
-    }
+    function getFilteredOrders() { return getActiveOrders(); /* Upgraded by v7.9.0–v7.19.0 multi-sort filter engine */ }
 
     function renderOrdersTab() {
       if (typeof updateOrderScopeCounts === 'function') updateOrderScopeCounts();
@@ -7272,13 +7307,13 @@
         const itemsHtml = (o.items || []).map(it => {
           const up = getOrderItemPrice(it, m.currency, o.orderDate);
           const dualTag = (it.origUnitPrice && it.origCurrency && it.origCurrency !== m.currency)
-            ? ` <span class="text-[10px] text-teal-700 font-normal">(原价${it.origCurrency === 'NZD' ? 'NZ$' : '¥'}${H(it.origUnitPrice)})</span>`
+            ? ` <span class="text-[10px] text-teal-700 font-normal">(原${it.origCurrency === 'NZD' ? 'NZ$' : '¥'}${H(it.origUnitPrice)})</span>`
             : '';
           return `
-            <div class="flex items-center justify-between gap-2 py-0.5">
-              <span class="font-medium text-slate-800">${H(it.product)}</span>
-              <span class="whitespace-nowrap font-semibold text-emerald-800 bg-emerald-50 px-1.5 py-0.5 rounded border border-emerald-200/60">
-                × ${H(it.qty)} ${up > 0 ? `<span class="text-[11px] text-emerald-700 font-mono">(@${m.symbol}${up}${dualTag})</span>` : ''}
+            <div class="flex items-start justify-between gap-1.5 py-0.5">
+              <span class="font-medium text-slate-800 break-words leading-snug min-w-0 flex-1 text-xs">${H(it.product)}</span>
+              <span class="shrink-0 whitespace-nowrap font-semibold text-emerald-800 bg-emerald-50 px-1.5 py-0.2 rounded border border-emerald-200/60 text-xs">
+                ×${H(it.qty)}${up > 0 ? ` <span class="text-[11px] text-emerald-700 font-mono">(@${m.symbol}${up}${dualTag})</span>` : ''}
               </span>
             </div>
           `;
@@ -7321,7 +7356,7 @@
                   </div>
                   <div class="flex items-center gap-1">
                     ${p.deliveredDate
-                      ? `<span class="text-[11px] text-emerald-700 bg-emerald-50 px-1.5 py-0.5 rounded" title="${H(p.commentNote || '')}">✅ ${H(p.deliveredDate)}${gapInfo.days !== null ? ` (${gapInfo.days}天${gapInfo.status === 'SUSPICIOUS' ? ' ⚠超一年' : ''})` : (daysGapStatusText(gapInfo) ? ` (${daysGapStatusText(gapInfo)})` : '')}${p.commentNote ? ' 📝' : ''}</span>`
+                      ? `<span class="text-[11px] text-emerald-700 bg-emerald-50 px-1.5 py-0.5 rounded" title="${H(p.commentNote || '')}">✅ ${H(p.deliveredDate)}${gapInfo.days !== null ? ` (${gapInfo.days}天)` : (daysGapStatusText(gapInfo) ? ` (${daysGapStatusText(gapInfo)})` : '')}${p.commentNote ? ' 📝' : ''}</span>`
                       : `<span class="text-[11px] text-amber-800 bg-amber-100 px-1.5 py-0.5 rounded font-medium">🚚 待签收</span>`
                     }
                     <button data-sign-order="${o.id}" data-sign-idx="${idx}" class="text-[11px] px-1.5 py-0.5 rounded border border-slate-200 hover:bg-slate-100 text-slate-600">
@@ -7351,85 +7386,88 @@
                </div>`
             : `<div class="font-mono text-xs text-slate-500 select-all">${H(o.orderNo)}</div>`);
 
+        const shortDiscNote = (m.discountNote && m.discountNote !== '网页订单优惠扣减' && m.discountNote.length <= 10) ? `(${H(m.discountNote)})` : '';
+        const verifyInlineBadge = o.webBackfilled
+          ? `<span class="inline-flex items-center gap-0.5 text-[10px] bg-emerald-50 text-emerald-700 border border-emerald-200/90 px-1.5 py-0.2 rounded font-semibold cursor-help whitespace-nowrap" title="已核对真实单价、运费与实付总额 (${H(o.webBackfilledAt || '已核验')})">✓已核验</span>`
+          : (isStoreOrd
+            ? `<span class="inline-flex items-center gap-0.5 text-[10px] bg-slate-100 text-slate-500 border border-slate-200/80 px-1.5 py-0.2 rounded font-normal whitespace-nowrap" title="线下门店直购订单">🏷️门店价</span>`
+            : `<button data-backfill-order="${o.id}" class="inline-flex items-center gap-0.5 text-[10px] bg-amber-50 hover:bg-amber-100 text-amber-800 border border-amber-300 px-1.5 py-0.2 rounded font-medium transition whitespace-nowrap" title="点击核验实付单价">⏳待核验</button>`);
+
         return `
           <tr class="${rowClass} transition align-top">
-            <td class="py-2.5 px-2.5 whitespace-nowrap font-mono text-xs ${o.isUnread ? 'font-bold text-slate-950' : 'text-slate-600'}">
+            <td class="py-2.5 pl-3 pr-1.5 whitespace-nowrap text-xs w-[94px] ${o.isUnread ? 'font-extrabold text-slate-950' : 'font-semibold text-slate-700'}">
               ${unreadBadgeHtml}
-              <div class="flex items-center gap-1.5">
-                ${o.isUnread ? '<span class="w-2 h-2 rounded-full bg-amber-500 inline-block" title="未读新订单"></span>' : ''}
+              <div class="flex items-center gap-1">
+                ${o.isUnread ? '<span class="w-2 h-2 rounded-full bg-amber-500 inline-block shrink-0" title="未读新订单"></span>' : ''}
                 <span>${H(o.orderDate || '-')}</span>
-                ${oldOrderBadgeHtml(o)}
               </div>
-              <div class="text-[11px] text-slate-400">${H(o.year)}年度</div>
+              <div class="text-[10px] text-slate-400 font-normal leading-tight mt-0.5">${H(o.year)}年度</div>
             </td>
-            <td class="py-2.5 px-2 whitespace-nowrap">
+            <td class="py-2.5 px-1.5 whitespace-nowrap text-center w-[68px]">
               <span class="inline-block text-xs font-bold px-2 py-0.5 rounded-full ${o.recipient === 'HOME' ? 'bg-emerald-100 text-emerald-900' : (o.recipient === '朱峰' ? 'bg-blue-100 text-blue-900' : 'bg-purple-100 text-purple-900')}">
                 ${H(o.recipient)}
               </span>
             </td>
-            <td class="py-2.5 px-2.5 break-words max-w-[148px]">
-              <div class="font-semibold text-slate-800 flex flex-wrap items-center gap-1">
+            <td class="py-2.5 px-2 break-words w-[148px]">
+              <div class="font-bold text-slate-800 flex flex-wrap items-center gap-1 leading-snug text-xs">
                 <span>${H(o.merchant)}</span>
                 ${isStoreOrd
-                  ? `<span class="text-[10px] bg-slate-100 text-slate-600 border border-slate-200/90 px-1.5 py-0.2 rounded font-normal whitespace-nowrap" title="线下实体门店采购订单">门店直购</span>`
-                  : (ordUrl ? `<a href="${H(ordUrl)}" target="_blank" rel="noopener noreferrer" class="text-[10px] bg-emerald-50 text-emerald-700 border border-emerald-200 px-1.5 py-0.2 rounded font-normal hover:bg-emerald-100 whitespace-nowrap" title="直达商家订单页">订单页↗</a>` : '')
+                  ? `<span class="text-[10px] bg-slate-100 text-slate-600 border border-slate-200/90 px-1 py-0.2 rounded font-normal whitespace-nowrap" title="线下实体门店采购订单">门店直购</span>`
+                  : (ordUrl ? `<a href="${H(ordUrl)}" target="_blank" rel="noopener noreferrer" class="text-[10px] bg-emerald-50 text-emerald-700 border border-emerald-200 px-1 py-0.2 rounded font-semibold hover:bg-emerald-100 whitespace-nowrap" title="直达商家订单页">订单页↗</a>` : '')
                 }
               </div>
               ${orderCellHtml}
               ${o.note ? `<div class="text-[11px] text-amber-700 mt-0.5 break-words leading-tight">${H(o.note)}</div>` : ''}
             </td>
-            <td class="py-2.5 px-2.5 min-w-[200px]">
+            <td class="py-2.5 px-2.5 w-[27%]">
               <div class="space-y-1">${itemsHtml}</div>
             </td>
-            <td class="py-2.5 px-2.5 break-words max-w-[168px]">
+            <td class="py-2.5 px-2.5 break-words w-[19%]">
               <div class="flex flex-wrap items-center gap-1">
-                <span class="font-bold text-slate-800">${m.grandTotal > 0 ? `${m.symbol}${m.grandTotal.toFixed(2)}` : '<span class="text-xs text-slate-400 font-normal">未填单价</span>'}</span>
-                <span class="text-[10px] font-mono px-1.5 py-0.2 rounded bg-slate-100 text-slate-600">${m.currency}</span>
-                ${(!o.webBackfilled && !isStoreOrd) ? `<span class="text-[10px] px-1.5 py-0.2 rounded bg-amber-50 text-amber-800 border border-amber-200 font-semibold" title="本单尚未进行网页实付核验，当前单价按商品库参考价估算">参考估算</span>` : ''}
+                <span class="font-extrabold text-slate-900 text-sm">${m.grandTotal > 0 ? `${m.symbol}${m.grandTotal.toFixed(2)}` : '<span class="text-xs text-slate-400 font-normal">未填单价</span>'}</span>
+                <span class="text-[10px] font-bold px-1.5 py-0.2 rounded bg-slate-100 text-slate-600">${m.currency}</span>
+                ${(!o.webBackfilled && !isStoreOrd) ? `<span class="text-[10px] px-1 py-0.2 rounded bg-amber-50 text-amber-800 border border-amber-200 font-semibold" title="本单尚未进行网页实付核验，当前单价按商品库参考价估算">参考估算</span>` : ''}
               </div>
-              <div class="text-[11px] text-slate-500 leading-tight mt-0.5">商品:${m.symbol}${m.itemTotal.toFixed(2)} | 运费:${m.symbol}${m.shippingFee.toFixed(2)}${m.paymentFee > 0 ? ` | 手续费:${m.symbol}${m.paymentFee.toFixed(2)}` : ''}</div>
-              ${o.exchangeRate && o.origPaidTotal && o.origCurrency !== m.currency ? `<div class="mt-0.5"><span class="inline-block text-[10px] bg-teal-50 text-teal-900 border border-teal-200 px-1.5 py-0.2 rounded font-semibold break-words leading-tight">💱 原标价 ${o.origCurrency === 'NZD' ? 'NZ$' : '¥'}${Number(o.origPaidTotal).toFixed(2)} · 汇率 ${H(o.exchangeRate)}</span></div>` : ''}
-              ${o.exchangeRate && o.settledAmount && o.settledCurrency && o.settledCurrency !== m.currency ? `<div class="mt-0.5"><span class="inline-block text-[10px] bg-teal-50 text-teal-900 border border-teal-200 px-1.5 py-0.2 rounded font-semibold break-words leading-tight">💱 实付结算 ¥${Number(o.settledAmount).toFixed(2)} · 汇率 ${H(o.exchangeRate)}</span></div>` : ''}
-              ${m.discount > 0 ? `<div class="mt-0.5"><span class="inline-flex items-center gap-0.5 text-[10px] bg-teal-50/90 text-teal-800 border border-teal-200/90 px-1.5 py-0.2 rounded font-medium break-words leading-tight" title="已享受订单优惠券/满减折扣，非异常提醒">🎫 券省 ${m.symbol}${m.discount.toFixed(2)}${m.discountNote ? ' (' + H(m.discountNote) + ')' : ''}</span></div>` : ''}
-              ${o.paymentMethod ? `<div class="mt-0.5"><span class="inline-block text-[10px] bg-blue-50 text-blue-800 border border-blue-200 px-1.5 py-0.2 rounded font-medium break-words leading-tight">💳 ${H(o.paymentMethod)}</span></div>` : ''}
-              <div class="mt-1">
-                ${o.webBackfilled
-                  ? `<span class="inline-flex items-center gap-0.5 text-[10px] bg-emerald-50 text-emerald-800 border border-emerald-200 px-1.5 py-0.2 rounded font-semibold cursor-help" title="设计意图说明：原Excel表格中很多旧订单未记录当时实付单价与运费（系统默认按参考单价库估算）。「✅ 已核验」代表该订单已通过网页抓单或实付录入核对了真实单价、运费、手续费与实付总额 (${H(o.webBackfilledAt || '已核验')})">✅ 已核验</span>`
-                  : (isStoreOrd
-                    ? `<span class="inline-flex items-center gap-0.5 text-[10px] bg-slate-100 text-slate-500 border border-slate-200/80 px-1.5 py-0.2 rounded font-normal" title="线下门店直购订单，如需调整单价可点击右侧「编辑」">🏷️ 门店单价</span>`
-                    : `<button data-backfill-order="${o.id}" class="inline-flex items-center gap-0.5 text-[10px] bg-amber-50 hover:bg-amber-100 text-amber-800 border border-amber-300 px-1.5 py-0.2 rounded font-medium transition" title="当前金额按商品库参考价估算，点击可通过网页抓取核验真实实付单价、运费与优惠">⏳ 待核验 · <span class="underline font-bold">⚡核验</span></button>`)
-                }
+              <div class="text-[11px] text-slate-500 leading-tight mt-0.5 break-words">商品:${m.symbol}${m.itemTotal.toFixed(2)} | 运费:${m.shippingFee > 0 ? m.symbol + m.shippingFee.toFixed(2) : '免邮'}${m.paymentFee > 0 ? ` | 费:${m.symbol}${m.paymentFee.toFixed(2)}` : ''}</div>
+              <div class="flex flex-wrap items-center gap-1 mt-1 ord-finance-badges-wrap">
+                ${o.paymentMethod ? `<span class="inline-block text-[10px] bg-blue-50 text-blue-800 border border-blue-200 px-1.5 py-0.2 rounded font-medium leading-tight whitespace-nowrap">💳 ${H(o.paymentMethod)}</span>` : ''}
+                ${verifyInlineBadge}
+                ${m.discount > 0 ? `<span class="inline-flex items-center gap-0.5 text-[10px] bg-teal-50/90 text-teal-800 border border-teal-200/90 px-1.5 py-0.2 rounded font-semibold leading-tight whitespace-nowrap" title="订单优惠减免：${m.symbol}${m.discount.toFixed(2)}${m.discountNote ? ' (' + H(m.discountNote) + ')' : ''}">🎫 券省 ${m.symbol}${m.discount.toFixed(2)}${shortDiscNote}</span>` : ''}
+                ${o.exchangeRate && o.origPaidTotal && o.origCurrency !== m.currency ? `<span class="inline-block text-[10px] bg-teal-50 text-teal-900 border border-teal-200 px-1.5 py-0.2 rounded font-semibold leading-tight whitespace-nowrap" title="双币种实付档案：网页原标价 ${o.origCurrency === 'NZD' ? 'NZ$' : '¥'}${Number(o.origPaidTotal).toFixed(2)} · 折算汇率 ${H(o.exchangeRate)}">💱 原价${o.origCurrency === 'NZD' ? 'NZ$' : '¥'}${Number(o.origPaidTotal).toFixed(2)}·汇${H(o.exchangeRate)}</span>` : ''}
+                ${o.exchangeRate && o.settledAmount && o.settledCurrency && o.settledCurrency !== m.currency ? `<span class="inline-block text-[10px] bg-teal-50 text-teal-900 border border-teal-200 px-1.5 py-0.2 rounded font-semibold leading-tight whitespace-nowrap">💱 实付¥${Number(o.settledAmount).toFixed(2)}·汇${H(o.exchangeRate)}</span>` : ''}
               </div>
             </td>
-            <td class="py-2.5 px-2.5 max-w-[245px]">
-              <div class="space-y-0.5">${parcelsHtml}</div>
+            <td class="py-2.5 px-2.5 w-[26%]">
+              <div class="space-y-1">${parcelsHtml}</div>
             </td>
-            <td class="py-2.5 px-2.5 text-right w-[144px]">
+            <td class="py-2.5 pl-2 pr-3 text-right w-[148px]">
               <div class="flex flex-col items-end gap-1">
-                <div class="flex items-center gap-1 justify-end">
-                  ${(!o.webBackfilled && !isStoreOrd) ? `
-                  <button data-backfill-order="${o.id}" class="px-2 py-1 rounded bg-gradient-to-r from-emerald-700 to-teal-700 hover:from-emerald-600 hover:to-teal-600 text-white text-[11px] font-bold shadow-2xs transition whitespace-nowrap" title="点击打开购买网页并复制页面内容，自动抓取核验本单价格、运费、优惠券、支付方式，完成后此按钮将自动隐藏（后续仍可在「编辑」中随时再次抓单）">
-                    ⚡ 抓单核验
-                  </button>` : ''}
-                  <button data-toggle-read="${o.id}" class="px-1.5 py-1 rounded ${o.isUnread ? 'bg-amber-400 hover:bg-amber-300 text-slate-950 font-bold border border-amber-500' : 'bg-slate-50 hover:bg-slate-100 text-slate-500 border border-slate-200'} text-[11px] transition whitespace-nowrap" title="${o.isUnread ? '将此新订单标为已读（取消高亮）' : '重新标为未读高亮状态'}">
-                    ${o.isUnread ? '✓ 已读' : '标未读'}
-                  </button>
-                </div>
-                <div class="flex items-center gap-1 justify-end">
-                  <button type="button" data-quickview-order="${o.id}" class="px-2 py-0.5 rounded bg-teal-600 hover:bg-teal-500 text-white text-[11px] font-extrabold whitespace-nowrap shadow-2xs transition" title="查看本单完整详单（含全部商品、汇率明细、优惠与快递包裹状态）">
+                <div class="flex items-center gap-1 justify-end flex-wrap">
+                  <button type="button" data-quickview-order="${o.id}" class="px-1.5 py-0.5 rounded bg-teal-600 hover:bg-teal-500 text-white text-[11px] font-extrabold whitespace-nowrap shadow-2xs transition" title="查看本单完整详单（含全部商品、汇率明细、优惠与快递包裹状态）">
                     📋详单
                   </button>
-                  <button type="button" data-notify-order="${o.id}" class="px-1.5 py-0.5 rounded bg-indigo-50 hover:bg-indigo-100 text-indigo-800 border border-indigo-200 text-[11px] font-bold whitespace-nowrap transition" title="生成发给客户（${H(o.recipient)}）的微信通知：可选下单回执、快递单号、采购账单或二合一卡片">
+                  <button type="button" data-notify-order="${o.id}" class="px-1.5 py-0.5 rounded bg-indigo-50 hover:bg-indigo-100 text-indigo-800 border border-indigo-200 text-[11px] font-bold whitespace-nowrap transition" title="生成发给客户（${H(o.recipient)}）的微信通知">
                     📲发客户
                   </button>
-                  <button type="button" data-clone-order="${o.id}" class="px-1.5 py-0.5 rounded bg-amber-50 hover:bg-amber-100 text-amber-900 border border-amber-200 text-[11px] font-medium whitespace-nowrap" title="按此单商品复制再来一单">
+                </div>
+                <div class="flex items-center gap-1 justify-end flex-wrap">
+                  <button type="button" data-clone-order="${o.id}" class="px-1.5 py-0.5 rounded bg-amber-50 hover:bg-amber-100 text-amber-900 border border-amber-200 text-[10px] font-medium whitespace-nowrap" title="按此单商品复制再来一单">
                     复制
                   </button>
-                  <button type="button" data-edit-order="${o.id}" class="px-1.5 py-0.5 rounded bg-slate-100 hover:bg-slate-200 text-slate-700 text-[11px] font-medium whitespace-nowrap">
+                  <button type="button" data-edit-order="${o.id}" class="px-1.5 py-0.5 rounded bg-slate-100 hover:bg-slate-200 text-slate-700 text-[10px] font-medium whitespace-nowrap">
                     编辑
                   </button>
-                  <button type="button" data-delete-order="${o.id}" class="px-1.5 py-0.5 rounded bg-rose-50 hover:bg-rose-100 text-rose-700 text-[11px] whitespace-nowrap">
+                  <button type="button" data-delete-order="${o.id}" class="px-1.5 py-0.5 rounded bg-rose-50 hover:bg-rose-100 text-rose-700 text-[10px] whitespace-nowrap">
                     删除
+                  </button>
+                </div>
+                <div class="flex items-center gap-1 justify-end flex-wrap">
+                  ${(!o.webBackfilled && !isStoreOrd) ? `
+                  <button data-backfill-order="${o.id}" class="px-1.5 py-0.5 rounded bg-emerald-700 hover:bg-emerald-600 text-white text-[10px] font-bold whitespace-nowrap">
+                    ⚡核验
+                  </button>` : ''}
+                  <button data-toggle-read="${o.id}" class="px-1.5 py-0.5 rounded ${o.isUnread ? 'bg-amber-400 hover:bg-amber-300 text-slate-950 font-bold border border-amber-500' : 'bg-slate-50 hover:bg-slate-100 text-slate-400 border border-slate-200/80'} text-[10px] transition whitespace-nowrap" title="${o.isUnread ? '将此新订单标为已读（取消高亮）' : '重新标为未读高亮状态'}">
+                    ${o.isUnread ? '✓已读' : '标未读'}
                   </button>
                 </div>
               </div>
@@ -7447,118 +7485,7 @@
     let currentTrendProductName = '';
 
     // Collect & deduplicate verified price timeline for a product across p.priceHistory AND active orders
-    function collectProductVerifiedPriceSeries(prodName, filterMode = 'ALL_VERIFIED') {
-      const p = getProductInfo(prodName);
-      const rawPoints = [];
-
-      if (p && Array.isArray(p.priceHistory)) {
-        p.priceHistory.forEach(h => {
-          const isPureCny = (h.currency === 'CNY' || h.rawCurrency === 'CNY') && !h.nzdPrice;
-          const nzdVal = Number(h.nzdPrice || (!isPureCny ? h.price : 0)) || null;
-          const rmbVal = Number(h.rmbPrice || (isPureCny ? (h.rawPrice || h.price) : 0)) || null;
-          if (!nzdVal && !rmbVal) return;
-          const isWebVerified = Boolean(h.scrapedAt || h.orderNo || h.exchangeRate || h.rmbPrice || (h.note && (h.note.includes('实付') || h.note.includes('抓单') || h.note.includes('手动核实'))));
-          rawPoints.push({
-            date: String(h.date || p.nzdDate || '2025-01-01').slice(0, 10),
-            merchant: h.merchant || '纽澳康源',
-            nzdPrice: nzdVal ? Number(nzdVal.toFixed(2)) : null,
-            rmbPrice: rmbVal ? Number(rmbVal.toFixed(2)) : null,
-            exchangeRate: Number(h.exchangeRate) || null,
-            orderNo: h.orderNo || '',
-            orderId: h.orderId || '',
-            scrapedAt: h.scrapedAt || '',
-            note: h.note || '',
-            isWebVerified: isWebVerified,
-            sourceType: isWebVerified ? '抓单/实付核验' : '台账核实单价'
-          });
-        });
-      }
-
-      // Also scan active orders so newly scraped or backfilled orders immediately show up on the chart
-      getActiveOrders().forEach(o => {
-        if (o.cancelled) return;
-        const oDate = String(o.orderDate || '2025-01-01').slice(0, 10);
-        const cur = o.currency || 'NZD';
-        const oRate = Number(o.exchangeRate) || null;
-        (o.items || []).forEach(it => {
-          if (it.product !== prodName) return;
-          const up = Number(it.unitPrice) || 0;
-          if (up <= 0) return;
-          let nzdVal = null;
-          let rmbVal = null;
-          const itemRate = Number(it.exchangeRate) || oRate || null;
-          if (cur === 'CNY') {
-            rmbVal = Number(up.toFixed(2));
-            if (it.nzdUnitPrice && Number(it.nzdUnitPrice) > 0) nzdVal = Number(Number(it.nzdUnitPrice).toFixed(2));
-            else if (itemRate && itemRate > 0 && o.origCurrency === 'NZD') nzdVal = Number((up / itemRate).toFixed(2));
-          } else {
-            nzdVal = Number(up.toFixed(2));
-            if (it.rmbUnitPrice && Number(it.rmbUnitPrice) > 0) rmbVal = Number(Number(it.rmbUnitPrice).toFixed(2));
-            else if (itemRate && itemRate > 0) rmbVal = Number((up * itemRate).toFixed(2));
-          }
-          const isWeb = Boolean(o.webBackfilled || o.isStoreOrder || itemRate || o.orderNo);
-          rawPoints.push({
-            date: String(it.priceDate || oDate).slice(0, 10),
-            merchant: o.merchant || '华洋',
-            nzdPrice: nzdVal,
-            rmbPrice: rmbVal,
-            exchangeRate: itemRate,
-            orderNo: o.orderNo || '',
-            orderId: o.id || '',
-            scrapedAt: o.webBackfilledAt || '',
-            note: o.webBackfilled ? '网页抓单核验' : '订单实付单价',
-            isWebVerified: isWeb,
-            sourceType: o.webBackfilled ? '网页抓单核验' : '订单实付核实'
-          });
-        });
-      });
-
-      // Fallback to product baseline price if no history array yet
-      if (rawPoints.length === 0 && p && (p.nzdPrice || p.rmbPrice)) {
-        rawPoints.push({
-          date: String(p.nzdDate || '2025-01-01').slice(0, 10),
-          merchant: '纽澳康源',
-          nzdPrice: p.nzdPrice ? Number(Number(p.nzdPrice).toFixed(2)) : null,
-          rmbPrice: p.rmbPrice ? Number(Number(p.rmbPrice).toFixed(2)) : null,
-          exchangeRate: Number(p.lastExchangeRate) || null,
-          orderNo: '',
-          orderId: '',
-          scrapedAt: p.lastScrapedAt || '',
-          note: p.priceSource || '默认核实单价',
-          isWebVerified: Boolean(p.lastScrapedAt),
-          sourceType: '默认核实单价'
-        });
-      }
-
-      // Deduplicate by date + merchant + price
-      const deduped = [];
-      rawPoints.forEach(pt => {
-        if (filterMode === 'WEB_ONLY' && !pt.isWebVerified) return;
-        const dupIdx = deduped.findIndex(d =>
-          d.date === pt.date &&
-          d.merchant === pt.merchant &&
-          ((pt.nzdPrice && d.nzdPrice && Math.abs(d.nzdPrice - pt.nzdPrice) < 0.02) ||
-           (pt.rmbPrice && d.rmbPrice && Math.abs(d.rmbPrice - pt.rmbPrice) < 0.05))
-        );
-        if (dupIdx === -1) {
-          deduped.push(pt);
-        } else {
-          // Merge richer info (orderId, orderNo, rmbPrice, exchangeRate)
-          deduped[dupIdx] = {
-            ...deduped[dupIdx],
-            nzdPrice: deduped[dupIdx].nzdPrice || pt.nzdPrice,
-            rmbPrice: deduped[dupIdx].rmbPrice || pt.rmbPrice,
-            exchangeRate: deduped[dupIdx].exchangeRate || pt.exchangeRate,
-            orderNo: deduped[dupIdx].orderNo || pt.orderNo,
-            orderId: deduped[dupIdx].orderId || pt.orderId,
-            isWebVerified: deduped[dupIdx].isWebVerified || pt.isWebVerified,
-            sourceType: (deduped[dupIdx].isWebVerified || pt.isWebVerified) ? '抓单/实付核验' : deduped[dupIdx].sourceType
-          };
-        }
-      });
-
-      return deduped.sort((a, b) => String(a.date).localeCompare(String(b.date)));
-    }
+    function collectProductVerifiedPriceSeries(prodName, filterMode = 'ALL_VERIFIED') { return []; /* Upgraded by v7.10.0–v7.19.0 verified series engine */ }
 
     // Build an inline SVG sparkline for a product card
     function buildProductCardSparklineSvg(series) {
@@ -7882,228 +7809,10 @@
         `;
       }
 
-      // Render Chart.js Canvas
-      const canvas = document.getElementById('productPriceTrendCanvas');
-      if (!canvas || typeof Chart === 'undefined') return;
-      if (productPriceTrendChartInstance) {
-        productPriceTrendChartInstance.destroy();
-        productPriceTrendChartInstance = null;
-      }
-
-      const labels = series.map(pt => `${pt.date} (${pt.merchant})`);
-      const nzdData = series.map(pt => pt.nzdPrice || null);
-      const rmbData = series.map(pt => pt.rmbPrice || null);
-
-      const nzdPointColors = series.map(pt => {
-        if (!pt.nzdPrice) return '#4f46e5';
-        if (minNzdPt && Math.abs(pt.nzdPrice - minNzdPt.nzdPrice) < 0.01) return '#059669';
-        if (maxNzdPt && minNzdPt && maxNzdPt.nzdPrice > minNzdPt.nzdPrice && Math.abs(pt.nzdPrice - maxNzdPt.nzdPrice) < 0.01) return '#e11d48';
-        return '#4f46e5';
-      });
-
-      const datasets = [];
-      if (currencyMode === 'DUAL' || currencyMode === 'NZD') {
-        datasets.push({
-          label: 'NZD 纽币核实单价 ($)',
-          data: nzdData,
-          borderColor: '#4f46e5',
-          backgroundColor: 'rgba(79, 70, 229, 0.12)',
-          pointBackgroundColor: nzdPointColors,
-          pointBorderColor: '#ffffff',
-          pointBorderWidth: 2,
-          pointRadius: 5,
-          pointHoverRadius: 7,
-          borderWidth: 2.5,
-          tension: 0.25,
-          fill: currencyMode === 'NZD',
-          spanGaps: true,
-          yAxisID: 'yNzd'
-        });
-      }
-      if ((currencyMode === 'DUAL' || currencyMode === 'CNY') && rmbData.some(v => v !== null)) {
-        datasets.push({
-          label: 'RMB 人民币实付单价 (¥)',
-          data: rmbData,
-          borderColor: '#e11d48',
-          backgroundColor: 'rgba(225, 29, 72, 0.10)',
-          pointBackgroundColor: '#e11d48',
-          pointBorderColor: '#ffffff',
-          pointBorderWidth: 2,
-          pointRadius: 5,
-          pointHoverRadius: 7,
-          borderWidth: 2,
-          borderDash: currencyMode === 'DUAL' ? [5, 4] : [],
-          tension: 0.25,
-          fill: currencyMode === 'CNY',
-          spanGaps: true,
-          yAxisID: currencyMode === 'DUAL' ? 'yRmb' : 'yNzd'
-        });
-      }
-
-      productPriceTrendChartInstance = new Chart(canvas.getContext('2d'), {
-        type: 'line',
-        data: { labels, datasets },
-        options: {
-          responsive: true,
-          maintainAspectRatio: false,
-          interaction: { mode: 'index', intersect: false },
-          plugins: {
-            legend: { position: 'top', labels: { boxWidth: 12, font: { size: 11 } } },
-            tooltip: {
-              callbacks: {
-                afterBody: function(context) {
-                  const idx = context[0] ? context[0].dataIndex : -1;
-                  const pt = series[idx];
-                  if (!pt) return [];
-                  const extra = [];
-                  if (pt.exchangeRate) extra.push(`💱 当时核验汇率: ${pt.exchangeRate}`);
-                  if (pt.orderNo) extra.push(`📦 关联订单号: #${pt.orderNo}`);
-                  if (pt.note) extra.push(`📝 备注: ${pt.note}`);
-                  return extra;
-                }
-              }
-            }
-          },
-          scales: {
-            x: { ticks: { font: { size: 10 }, maxRotation: 25 } },
-            yNzd: {
-              type: 'linear',
-              display: true,
-              position: 'left',
-              title: { display: true, text: currencyMode === 'CNY' ? 'RMB (¥)' : 'NZD ($)', font: { size: 10 } },
-              ticks: { font: { size: 10 } }
-            },
-            ...(currencyMode === 'DUAL' && rmbData.some(v => v !== null) ? {
-              yRmb: {
-                type: 'linear',
-                display: true,
-                position: 'right',
-                grid: { drawOnChartArea: false },
-                title: { display: true, text: 'RMB 实付 (¥)', font: { size: 10 } },
-                ticks: { font: { size: 10 } }
-              }
-            } : {})
-          }
-        }
-      });
+      // Base Chart.js instantiation removed (handled by v7.12.0 wave-grouped Chart.js engine)
     }
 
-    function renderProductsTab() {
-      sanitizeCatalogFabricatedPrices();
-      const q = (document.getElementById('prodSearchInput').value || '').trim().toLowerCase();
-      const cat = document.getElementById('prodCategoryFilter').value;
-
-      const statsMap = {};
-      getActiveOrders().forEach(o => {
-        if (o.cancelled) return;
-        (o.items || []).forEach(it => {
-          if (!statsMap[it.product]) statsMap[it.product] = { qty: 0, orders: 0, merchants: new Set() };
-          statsMap[it.product].qty += (Number(it.qty) || 0);
-          statsMap[it.product].orders += 1;
-          if (o.merchant) statsMap[it.product].merchants.add(o.merchant);
-        });
-      });
-
-      const list = state.products.filter(p => {
-        if (cat !== 'ALL' && p.category !== cat) return false;
-        if (q && !p.name.toLowerCase().includes(q) && !(p.category || '').toLowerCase().includes(q)) return false;
-        return true;
-      }).sort((a, b) => {
-        const qa = (statsMap[a.name] || {}).qty || 0;
-        const qb = (statsMap[b.name] || {}).qty || 0;
-        return qb - qa;
-      });
-
-      const grid = document.getElementById('productsGrid');
-      grid.innerHTML = list.map(p => {
-        const st = statsMap[p.name] || { qty: 0, orders: 0, merchants: new Set() };
-        const verifiedSeries = collectProductVerifiedPriceSeries(p.name, 'ALL_VERIFIED');
-        const sparklineHtml = buildProductCardSparklineSvg(verifiedSeries);
-        const histArr = (p.priceHistory || []).slice().sort((a, b) => String(a.date || '').localeCompare(String(b.date || '')));
-        const nzdPricesOnly = verifiedSeries
-          .map(h => Number(h.nzdPrice || 0))
-          .filter(v => v > 0);
-        const minPrice = nzdPricesOnly.length > 0 ? Math.min(...nzdPricesOnly) : (p.nzdPrice || 0);
-        const maxPrice = nzdPricesOnly.length > 0 ? Math.max(...nzdPricesOnly) : (p.nzdPrice || 0);
-        const priceTrendBadge = (nzdPricesOnly.length > 1 && minPrice < maxPrice)
-          ? `<span class="text-[10px] bg-blue-50 text-blue-800 border border-blue-200 px-1.5 py-0.2 rounded font-medium">📉 纽币波动 NZ$${minPrice} ~ NZ$${maxPrice}</span>`
-          : '';
-
-        const histHtml = histArr.map(h => {
-          const isDual = h.nzdPrice && h.rmbPrice && h.exchangeRate;
-          const isPureCny = !isDual && (h.currency === 'CNY' || h.rawCurrency === 'CNY' || (!h.nzdPrice && h.rmbPrice));
-          if (isDual) {
-            return `<span class="inline-block text-[11px] bg-teal-50 text-teal-950 border border-teal-300 px-2 py-0.5 rounded" title="双币种订单实付归档 · 获取时间: ${H(h.date)}${h.scrapedAt ? ' (抓单日 ' + H(h.scrapedAt) + ')' : ''}">📅 <strong>${H(h.date) || '历史'}</strong> · ${H(h.merchant) || '商家'}: <strong class="text-rose-700">实付 ¥${Number(h.rmbPrice).toFixed(2)}</strong> <span class="text-[10px] text-teal-800 font-semibold">(原标价 NZ$${Number(h.nzdPrice).toFixed(2)} · 汇率 ${h.exchangeRate})</span></span>`;
-          } else if (isPureCny) {
-            const rVal = Number(h.rmbPrice || h.rawPrice || h.price) || 0;
-            return `<span class="inline-block text-[11px] bg-amber-50 text-amber-950 border border-amber-300 px-2 py-0.5 rounded" title="纯人民币订单实付单价 · 获取时间: ${H(h.date)}">📅 <strong>${H(h.date) || '历史'}</strong> · ${H(h.merchant) || '商家'}: <strong class="text-amber-800">¥${rVal}</strong> <span class="text-[10px] text-amber-700">(RMB直付${h.orderNo ? ' #' + H(h.orderNo) : ''})</span></span>`;
-          } else {
-            const nVal = Number(h.nzdPrice || h.price) || 0;
-            const extraRmb = h.rmbPrice ? ` <span class="text-[10px] text-amber-700">(结算 ¥${h.rmbPrice})</span>` : (h.note ? ` <span class="text-[10px] text-amber-700">(${H(h.note)})</span>` : '');
-            return `<span class="inline-block text-[11px] bg-emerald-50/70 text-emerald-950 border border-emerald-200 px-2 py-0.5 rounded" title="${H(h.note) || '纽币单价记录'}">📅 <strong>${H(h.date) || '历史'}</strong> · ${H(h.merchant) || '商家'}: <strong>NZ$${nVal}</strong>${extraRmb}</span>`;
-          }
-        }).join(' ');
-
-        const latestDate = p.nzdDate || (histArr.length > 0 ? histArr[histArr.length - 1].date : '');
-        const rateBadge = p.lastExchangeRate
-          ? `<span class="text-[10px] bg-teal-50 text-teal-800 border border-teal-200 px-1.5 py-0.2 rounded font-mono">💱 记录汇率 ${p.lastExchangeRate}</span>`
-          : '';
-        const targetBadgeHtml = typeof buildProductTargetPriceBadge === 'function'
-          ? buildProductTargetPriceBadge(p, verifiedSeries, minPrice)
-          : '';
-
-        return `
-          <div class="bg-white rounded-xl p-4 shadow-sm border border-slate-200 flex flex-col justify-between gap-3 hover:border-emerald-400 transition">
-            <div class="space-y-2">
-              <div class="flex items-start justify-between gap-2">
-                <div class="flex flex-wrap items-center gap-1">
-                  <span class="text-[11px] font-semibold px-2 py-0.5 rounded bg-emerald-50 text-emerald-800 border border-emerald-200">${H(p.category) || '保健品'}</span>
-                  ${priceTrendBadge}
-                  ${rateBadge}
-                  ${targetBadgeHtml}
-                </div>
-                <span class="text-xs font-bold text-slate-700 whitespace-nowrap">已买: <strong class="text-emerald-700 text-sm">${st.qty}</strong> 件 (${st.orders}单)</span>
-              </div>
-              <h3 class="text-sm font-bold text-slate-900 leading-snug">${H(p.name)}</h3>
-              ${p.note ? `<div class="text-[11px] text-rose-700 bg-rose-50 border border-rose-200 px-2 py-0.5 rounded inline-block">⚠️ ${H(p.note)}</div>` : ''}
-              ${sparklineHtml}
-              ${histHtml ? `<div class="space-y-1"><div class="text-[11px] text-slate-400">📊 历史日期单价与汇率档案 (${H(p.priceSource) || '真实订单归档 · 绝不虚构汇率折算'})：</div><div class="flex flex-wrap gap-1">${histHtml}</div></div>` : ''}
-            </div>
-
-            <div class="pt-3 border-t border-slate-100 space-y-1.5">
-              <div class="flex items-center justify-between gap-2">
-                <div class="flex flex-wrap items-center gap-3 text-xs">
-                  <div>
-                    <span class="text-slate-400">NZD原币单价:</span>
-                    <strong class="text-slate-800 ml-0.5">${p.nzdPrice ? 'NZ$' + p.nzdPrice : '<span class="text-slate-400 font-normal">未设(RMB直付)</span>'}</strong>
-                  </div>
-                  <div>
-                    <span class="text-slate-400">RMB实付/结算价:</span>
-                    <strong class="text-amber-700 ml-0.5">${p.rmbPrice ? '¥' + p.rmbPrice : '未设'}</strong>
-                  </div>
-                </div>
-                <div class="flex flex-wrap items-center gap-1 shrink-0">
-                  <button type="button" data-add-cart-opt="${H(p.name)}" class="text-[11px] bg-teal-50 hover:bg-teal-600 hover:text-white text-teal-800 border border-teal-200 font-bold px-2 py-1 rounded-lg transition" title="加入上方跨店凑单比价与拆箱计算器">
-                    🛒 比价凑单
-                  </button>
-                  <button type="button" data-trend-prod="${H(p.name)}" class="text-[11px] bg-indigo-50 hover:bg-indigo-600 hover:text-white text-indigo-700 border border-indigo-200 font-semibold px-2 py-1 rounded-lg transition">
-                    📈 趋势
-                  </button>
-                  <button data-edit-prod="${H(p.name)}" class="text-[11px] bg-slate-100 hover:bg-emerald-700 hover:text-white text-slate-700 font-medium px-2 py-1 rounded-lg transition">
-                    ✎ 编辑
-                  </button>
-                </div>
-              </div>
-              ${latestDate ? `<div class="text-[10px] text-slate-400 flex items-center justify-between"><span>⏱️ 最新单价获取日期：<strong class="text-slate-600 font-mono">${H(latestDate)}</strong>${p.lastScrapedAt ? ` (抓单核验: ${H(p.lastScrapedAt)})` : ''}</span><span>${p.lastExchangeRate ? `按当时汇率 ${H(p.lastExchangeRate)} 折算` : '真实币种原值保存'}</span></div>` : ''}
-            </div>
-          </div>
-        `;
-      }).join('');
-
-      renderProductPriceTrendStudio(currentTrendProductName);
-      if (typeof renderSmartCartOptimizerStudio === 'function') renderSmartCartOptimizerStudio();
-      if (typeof updateGoodPriceHitBadgeCount === 'function') updateGoodPriceHitBadgeCount();
-    }
+    function renderProductsTab() { /* Upgraded by v7.9.0–v7.19.0 unified product catalog engine */ }
 
     function load20251101Preset() {
       document.getElementById('billTitleInput').value = '2025.11.1 朱峰保健品采购结算单';
@@ -8439,9 +8148,9 @@
           const rows = Object.entries(info.prods)
             .sort((a, b) => b[1] - a[1])
             .map(([pname, q]) => `
-              <div class="flex items-center justify-between py-1 text-xs border-b last:border-b-0 border-slate-100">
-                <span class="text-slate-700 truncate pr-2">${H(pname)}</span>
-                <span class="font-bold text-emerald-800 bg-emerald-50 px-2 py-0.5 rounded">× ${q}</span>
+              <div class="flex items-center justify-between gap-2.5 py-1.5 text-xs border-b last:border-b-0 border-slate-100">
+                <span class="text-slate-800 font-medium break-words leading-snug flex-1 min-w-0">${H(pname)}</span>
+                <span class="font-extrabold text-emerald-800 bg-emerald-50 border border-emerald-200/80 px-2.5 py-0.5 rounded-md whitespace-nowrap shrink-0">× ${q}</span>
               </div>
             `).join('');
 
@@ -9353,7 +9062,28 @@
           state.orders.unshift(orderObj);
         }
 
+        const hasAnyParcelBound = (orderObj.parcels || []).some(p => Array.isArray(p.assignedItems) && p.assignedItems.length > 0);
+        if (typeof recordOrderParcelBindingsToVault === 'function') {
+          recordOrderParcelBindingsToVault(orderObj, !hasAnyParcelBound && (orderObj.parcels || []).length > 1);
+        }
         saveState(id ? `修改订单 #${orderNo}` : `新增订单 #${orderNo}`);
+        // Immediately commit to localStorage & trigger cloud sync if autoPushOnSave is active so F5 refresh never reverts!
+        try {
+          const latestSnap = createDataSnapshot();
+          safeWriteMainStorageSnapshot(latestSnap);
+          lastSavedSnapshot = latestSnap;
+          if (!isCloudPushing && !isCloudPulling && !window.__XSS_SELFCHECK_LOCK) {
+            const shouldAutoPush = Boolean(autoCloudOnSave || (window.cfConfigState && window.cfConfigState.autoPushOnSave));
+            if (shouldAutoPush && typeof isCfSyncConfigured === 'function' && isCfSyncConfigured()) {
+              uncommittedChanges = [];
+              try { localStorage.removeItem(DRAFT_META_KEY); } catch (e) {}
+              updateSaveStatusUI();
+              if (typeof executeCfCloudPush === 'function') {
+                executeCfCloudPush({ silentToast: true, actionNote: `保存订单 #${orderNo}` });
+              }
+            }
+          }
+        } catch (persistErr) { console.warn('Order immediate persist warning:', persistErr); }
         renderAll();
 
         if (keepOpenForNext) {
@@ -10497,8 +10227,8 @@
             if (oldItemSum !== newItemSum) {
               changes.push(`商品/单价更新：${(no.items || []).length}项商品`);
             }
-            const oldTracks = (old.parcels || []).map(p => `${H(p.courier)}:${H(p.trackingNo)}(${p.deliveredDate || '在途'})`).join(';');
-            const newTracks = (no.parcels || []).map(p => `${H(p.courier)}:${H(p.trackingNo)}(${p.deliveredDate || '在途'})`).join(';');
+            const oldTracks = (old.parcels || []).map(p => `${H(p.courier)}:${H(p.trackingNo)}(${p.deliveredDate || '在途'})[${(p.assignedItems || []).map(a => a.product + 'x' + a.qty).join(',')}]`).join(';');
+            const newTracks = (no.parcels || []).map(p => `${H(p.courier)}:${H(p.trackingNo)}(${p.deliveredDate || '在途'})[${(p.assignedItems || []).map(a => a.product + 'x' + a.qty).join(',')}]`).join(';');
             if (oldTracks !== newTracks) {
               changes.push(`物流包裹更新：${oldTracks || '无单号'} ➔ ${newTracks || '无单号'}`);
             }
@@ -10718,7 +10448,7 @@
         }
 
         const mergedOrders = [...preservedLocalOrders, ...data.orders];
-        // Respect explicit isUnread boolean from cloud/backup state; only mark as unread if genuinely new relative to non-empty local state and not explicitly marked read
+        // Respect explicit isUnread boolean AND preserve local parcel.assignedItems if incoming cloud order lacks them
         const usedBeforeForUnread = new Set();
         mergedOrders.forEach(o => {
           const matchedOld = findMatchingOrderInList(o, beforeOrders, usedBeforeForUnread);
@@ -10726,6 +10456,15 @@
             if (matchedOld.id) usedBeforeForUnread.add(matchedOld.id);
             if (typeof o.isUnread !== 'boolean') {
               o.isUnread = !!matchedOld.isUnread;
+            }
+            if (Array.isArray(o.parcels) && Array.isArray(matchedOld.parcels)) {
+              o.parcels.forEach((p, pIdx) => {
+                if (!p || (Array.isArray(p.assignedItems) && p.assignedItems.length > 0)) return;
+                const oldP = matchedOld.parcels.find(op => op && op.trackingNo && String(op.trackingNo).trim() === String(p.trackingNo || '').trim()) || matchedOld.parcels[pIdx];
+                if (oldP && Array.isArray(oldP.assignedItems) && oldP.assignedItems.length > 0) {
+                  p.assignedItems = JSON.parse(JSON.stringify(oldP.assignedItems));
+                }
+              });
             }
           } else {
             if (typeof o.isUnread !== 'boolean') {
@@ -17542,9 +17281,15 @@
       return host.endsWith('.pages.dev') || host.endsWith('.workers.dev') || (window.location.protocol.startsWith('http') && !host.includes('localhost') && !host.includes('127.0.0.1') && !host.includes('googleusercontent'));
     }
 
-    // 安全加固：只以"同步口令非空"为条件，不再按部署域名判断是否已配置
+    // 与启动自动拉取保持一致：当配置了同步口令、或运行在 Cloudflare Pages 域名下、或已有成功云同步记录时视为已配置
     function isCfSyncConfigured() {
-      return Boolean(window.cfConfigState && String(window.cfConfigState.passcode || '').trim());
+      return Boolean(
+        window.cfConfigState && (
+          String(window.cfConfigState.passcode || '').trim() ||
+          isRunningOnCloudflareDomain() ||
+          window.cfConfigState.lastSyncedAt
+        )
+      );
     }
 
     function updateHeaderCfStatusUI(statusOverride) {
@@ -17975,8 +17720,12 @@ export async function onRequestPost(context) {
           productCount: Array.isArray(payload.products) ? payload.products.length : 0,
           data: payload
         });
-        if (list.length > 10) list.length = 10;
-        localStorage.setItem(CF_LOCAL_SIM_SNAPSHOTS_KEY, JSON.stringify(list));
+        if (list.length > 2) list.length = 2;
+        try {
+          localStorage.setItem(CF_LOCAL_SIM_SNAPSHOTS_KEY, JSON.stringify(list));
+        } catch (quotaErr) {
+          try { localStorage.removeItem(CF_LOCAL_SIM_SNAPSHOTS_KEY); } catch (e) {}
+        }
       } catch (e) { reportError('cfSnapshot/saveLocal', e); }
     }
 
@@ -21622,8 +21371,11 @@ export async function onRequestPost(context) {
 
     // Complete Replacement of renderProductsTab() with guaranteed category backfill, live search/category pills, and studio sync
     renderProductsTab = function() {
-      sanitizeCatalogFabricatedPrices();
-      ensureAllProductsHaveCategoriesAndVerifiedPrices();
+      if (!window.__v719CatalogSyncedOnce) {
+        window.__v719CatalogSyncedOnce = true;
+        sanitizeCatalogFabricatedPrices();
+        ensureAllProductsHaveCategoriesAndVerifiedPrices();
+      }
 
       const searchEl = document.getElementById('prodSearchInput');
       const catEl = document.getElementById('prodCategoryFilter');
@@ -21752,90 +21504,6 @@ export async function onRequestPost(context) {
               <button type="button" id="btnResetProdFilterEmptyGrid" class="bg-emerald-700 hover:bg-emerald-600 text-white text-xs font-bold px-4 py-2 rounded-lg transition">显示全部商品</button>
             </div>
           `;
-        } else {
-          grid.innerHTML = list.map(p => {
-            const st = stMap[p.name] || { qty: 0, orders: 0, merchants: new Set(), seriesCount: 1 };
-            const verifiedSeries = collectProductVerifiedPriceSeries(p.name, 'ALL_VERIFIED');
-            const sparklineHtml = buildProductCardSparklineSvg(verifiedSeries);
-            const specSig = extractProductSpecSignature(p.name);
-            const histArr = (p.priceHistory || []).slice().sort((a, b) => String(a.date || '').localeCompare(String(b.date || '')));
-            const nzdPricesOnly = verifiedSeries.map(h => Number(h.nzdPrice || 0)).filter(v => v > 0);
-            const minPrice = nzdPricesOnly.length > 0 ? Math.min(...nzdPricesOnly) : (p.nzdPrice || 0);
-            const maxPrice = nzdPricesOnly.length > 0 ? Math.max(...nzdPricesOnly) : (p.nzdPrice || 0);
-            const priceTrendBadge = (nzdPricesOnly.length > 1 && minPrice < maxPrice)
-              ? `<span class="text-[10px] bg-blue-50 text-blue-800 border border-blue-200 px-1.5 py-0.2 rounded font-medium">📉 波动 NZ$${minPrice}~${maxPrice}</span>`
-              : '';
-
-            const histHtml = histArr.map(h => {
-              const isDual = h.nzdPrice && h.rmbPrice && h.exchangeRate;
-              const isPureCny = !isDual && (h.currency === 'CNY' || h.rawCurrency === 'CNY' || (!h.nzdPrice && h.rmbPrice));
-              const ordQuickBtn = h.orderId
-                ? ` <button type="button" data-quickview-order="${h.orderId}" class="text-[10px] bg-teal-600 text-white px-1 rounded font-bold hover:bg-teal-500" title="查看关联订单详单">📋详单</button>`
-                : (h.orderNo ? ` <button type="button" data-quickview-orderno="${H(h.orderNo)}" class="text-[10px] bg-teal-600 text-white px-1 rounded font-bold hover:bg-teal-500" title="查看关联订单 #${H(h.orderNo)} 详单">📋详单</button>` : '');
-              if (isDual) {
-                return `<span class="inline-flex items-center gap-1 text-[11px] bg-teal-50 text-teal-950 border border-teal-300 px-2 py-0.5 rounded">📅 <strong>${H(h.date) || '历史'}</strong> · ${H(h.merchant) || '商家'}: <strong class="text-rose-700">实付 ¥${Number(h.rmbPrice).toFixed(2)}</strong> <span class="text-[10px] text-teal-800 font-semibold">(NZ$${Number(h.nzdPrice).toFixed(2)}·汇率${h.exchangeRate})</span>${ordQuickBtn}</span>`;
-              } else if (isPureCny) {
-                const rVal = Number(h.rmbPrice || h.rawPrice || h.price) || 0;
-                return `<span class="inline-flex items-center gap-1 text-[11px] bg-amber-50 text-amber-950 border border-amber-300 px-2 py-0.5 rounded">📅 <strong>${H(h.date) || '历史'}</strong> · ${H(h.merchant) || '商家'}: <strong class="text-amber-800">¥${rVal}</strong>${ordQuickBtn}</span>`;
-              } else {
-                const nVal = Number(h.nzdPrice || h.price) || 0;
-                const extraRmb = h.rmbPrice ? ` <span class="text-[10px] text-amber-700">(¥${h.rmbPrice})</span>` : '';
-                return `<span class="inline-flex items-center gap-1 text-[11px] bg-emerald-50/70 text-emerald-950 border border-emerald-200 px-2 py-0.5 rounded">📅 <strong>${H(h.date) || '历史'}</strong> · ${H(h.merchant) || '商家'}: <strong>NZ$${nVal}</strong>${extraRmb}${ordQuickBtn}</span>`;
-              }
-            }).join(' ');
-
-            const latestDate = p.nzdDate || (histArr.length > 0 ? histArr[histArr.length - 1].date : '');
-            const targetBadgeHtml = typeof buildProductTargetPriceBadge === 'function'
-              ? buildProductTargetPriceBadge(p, verifiedSeries, minPrice)
-              : '';
-
-            return `
-              <div class="bg-white rounded-xl p-4 shadow-sm border border-slate-200 flex flex-col justify-between gap-3 hover:border-emerald-400 transition">
-                <div class="space-y-2">
-                  <div class="flex items-start justify-between gap-2">
-                    <div class="flex flex-wrap items-center gap-1">
-                      <span class="text-[11px] font-semibold px-2 py-0.5 rounded bg-emerald-50 text-emerald-800 border border-emerald-200">${CATEGORY_ICONS_MAP[p.category] || '📦'} ${p.category || '维生素/钙铁锌/保健'}</span>
-                      <span class="text-[10px] font-bold px-1.5 py-0.2 rounded bg-teal-50 text-teal-800 border border-teal-200 font-mono" title="自动识别的独立规格标识">📏 ${H(specSig.badgeText)}</span>
-                      ${priceTrendBadge}
-                    </div>
-                    <span class="text-xs font-bold text-slate-700 whitespace-nowrap">已买: <strong class="text-emerald-700 text-sm">${st.qty}</strong> 件 (${st.orders}单)</span>
-                  </div>
-                  <h3 class="text-sm font-bold text-slate-900 leading-snug">${H(p.name)}</h3>
-                  ${targetBadgeHtml}
-                  ${p.note ? `<div class="text-[11px] text-rose-700 bg-rose-50 border border-rose-200 px-2 py-0.5 rounded inline-block">⚠️ ${H(p.note)}</div>` : ''}
-                  ${sparklineHtml}
-                  ${histHtml ? `<div class="space-y-1"><div class="text-[11px] text-slate-500 font-medium">✅ 已从核实订单提取的历史单价 (${verifiedSeries.length}期)：</div><div class="flex flex-wrap gap-1">${histHtml}</div></div>` : ''}
-                </div>
-
-                <div class="pt-3 border-t border-slate-100 space-y-1.5">
-                  <div class="flex items-center justify-between gap-2">
-                    <div class="flex flex-wrap items-center gap-3 text-xs">
-                      <div>
-                        <span class="text-slate-400">NZD单价:</span>
-                        <strong class="text-slate-800 ml-0.5">${p.nzdPrice ? 'NZ$' + p.nzdPrice : '<span class="text-slate-400 font-normal">RMB直付</span>'}</strong>
-                      </div>
-                      <div>
-                        <span class="text-slate-400">RMB实付:</span>
-                        <strong class="text-amber-700 ml-0.5">${p.rmbPrice ? '¥' + p.rmbPrice : '未设'}</strong>
-                      </div>
-                    </div>
-                    <div class="flex flex-wrap items-center gap-1 shrink-0">
-                      <button type="button" data-add-cart-opt="${H(p.name)}" class="text-[11px] bg-teal-50 hover:bg-teal-600 hover:text-white text-teal-800 border border-teal-200 font-bold px-2 py-1 rounded-lg transition">
-                        🛒 比价
-                      </button>
-                      <button type="button" data-trend-prod="${H(p.name)}" class="text-[11px] bg-indigo-50 hover:bg-indigo-600 hover:text-white text-indigo-700 border border-indigo-200 font-semibold px-2 py-1 rounded-lg transition">
-                        📈 趋势
-                      </button>
-                      <button data-edit-prod="${H(p.name)}" class="text-[11px] bg-slate-100 hover:bg-emerald-700 hover:text-white text-slate-700 font-medium px-2 py-1 rounded-lg transition">
-                        ✎ 编辑
-                      </button>
-                    </div>
-                  </div>
-                  ${latestDate ? `<div class="text-[10px] text-slate-400 flex items-center justify-between"><span>⏱️ 最新核实日期：<strong class="text-slate-600 font-mono">${latestDate}</strong></span><span>${st.orders > 0 ? `源自 ${st.orders} 笔真实订单` : '《零售店单价》基准'}</span></div>` : ''}
-                </div>
-              </div>
-            `;
-          }).join('');
         }
       }
 
@@ -23615,9 +23283,10 @@ export async function onRequestPost(context) {
     // --- 5. Fix cleanAndSyncVerifiedOrderPricesToCatalog & collectProductVerifiedPriceSeries ---
     // Ensure two different orders on the same day (e.g. #20261028092009885255 and #20261028091621952931) are NEVER merged/swallowed!
     const _v791CleanAndSync = cleanAndSyncVerifiedOrderPricesToCatalog;
-    cleanAndSyncVerifiedOrderPricesToCatalog = function() {
+    cleanAndSyncVerifiedOrderPricesToCatalog = function(forceRun = false) {
+      if (window.__v716Bootstrapping && !forceRun) return;
       ensureAndEnrichMiniProgramOrdersAndCleanState();
-      return _v791CleanAndSync();
+      return _v791CleanAndSync(forceRun);
     };
     ensureAllProductsHaveCategoriesAndVerifiedPrices = cleanAndSyncVerifiedOrderPricesToCatalog;
 
@@ -24832,8 +24501,9 @@ export async function onRequestPost(context) {
     window.trendTimelineTableExpanded = false;
 
     const _v7100CleanAndSync = cleanAndSyncVerifiedOrderPricesToCatalog;
-    cleanAndSyncVerifiedOrderPricesToCatalog = function() {
-      const res = _v7100CleanAndSync();
+    cleanAndSyncVerifiedOrderPricesToCatalog = function(forceRun = false) {
+      if (window.__v716Bootstrapping && !forceRun) return;
+      const res = _v7100CleanAndSync(forceRun);
       // CRITICAL FIX for Point 2 (image_6a8d7c.png):
       // Overwrite each product's p.priceHistory with the strictly deduplicated verifiedSeries
       // so Manuka Health 500g never has 22 duplicate pills when there are only 6 verified points!
@@ -27301,7 +26971,7 @@ export async function onRequestPost(context) {
           }
         }
 
-        // Inject Daigou settlement toggle badge into table rows and mobile cards
+        // Inject Daigou settlement toggle badge into Column 5 (.ord-finance-badges-wrap) of table rows and into mobile cards
         const tbody = document.getElementById('ordersTableBody');
         if (tbody) {
           tbody.querySelectorAll('[data-quickview-order]').forEach(qvBtn => {
@@ -27310,12 +26980,12 @@ export async function onRequestPost(context) {
             if (!ord || !isFriendDaigouOrder(ord)) return;
             const row = qvBtn.closest('tr');
             if (!row || row.querySelector('[data-toggle-daigou-settled]')) return;
-            const actionWrap = qvBtn.parentElement;
-            if (actionWrap) {
+            const finWrap = row.querySelector('.ord-finance-badges-wrap') || qvBtn.parentElement;
+            if (finWrap) {
               const settledHtml = ord.paymentSettled
-                ? `<button type="button" data-toggle-daigou-settled="${ord.id}" class="px-1.5 py-0.5 rounded bg-emerald-50 hover:bg-emerald-100 text-emerald-800 border border-emerald-200 text-[11px] font-bold" title="亲友代购款项已结清（点击可切换为待收款）">💰已结清</button>`
-                : `<button type="button" data-toggle-daigou-settled="${ord.id}" class="px-1.5 py-0.5 rounded bg-rose-600 hover:bg-rose-500 text-white text-[11px] font-extrabold shadow-2xs" title="点击将该笔亲友代购订单标记为已收款结清">⏳待收款</button>`;
-              qvBtn.insertAdjacentHTML('beforebegin', settledHtml);
+                ? `<button type="button" data-toggle-daigou-settled="${ord.id}" class="px-1.5 py-0.2 rounded bg-emerald-50 hover:bg-emerald-100 text-emerald-800 border border-emerald-200 text-[10px] font-bold whitespace-nowrap" title="亲友代购款项已结清（点击可切换为待收款）">💰已结清</button>`
+                : `<button type="button" data-toggle-daigou-settled="${ord.id}" class="px-1.5 py-0.2 rounded bg-rose-600 hover:bg-rose-500 text-white text-[10px] font-extrabold shadow-2xs whitespace-nowrap" title="点击将该笔亲友代购订单标记为已收款结清">⏳待收款</button>`;
+              finWrap.insertAdjacentHTML('beforeend', settledHtml);
             }
           });
         }
@@ -27566,6 +27236,148 @@ export async function onRequestPost(context) {
       };
     }
 
+    const PARCEL_BINDINGS_VAULT_KEY = 'NZ_TRACKER_PARCEL_BINDINGS_VAULT_V1';
+
+    function readParcelBindingsVault() {
+      try {
+        const raw = localStorage.getItem(PARCEL_BINDINGS_VAULT_KEY);
+        if (raw) {
+          const parsed = JSON.parse(raw);
+          if (parsed && typeof parsed === 'object') return parsed;
+        }
+      } catch (e) {}
+      return { byOrderKey: {} };
+    }
+
+    function writeParcelBindingsVault(vaultObj) {
+      if (window.readonlyCustomerRecipient || !vaultObj) return;
+      try {
+        localStorage.setItem(PARCEL_BINDINGS_VAULT_KEY, JSON.stringify(vaultObj));
+      } catch (e) {
+        try { localStorage.removeItem(DRAFT_META_KEY); } catch (e2) {}
+        try { localStorage.removeItem(CF_LOCAL_SIM_SNAPSHOTS_KEY); } catch (e3) {}
+        try { localStorage.setItem(PARCEL_BINDINGS_VAULT_KEY, JSON.stringify(vaultObj)); } catch (e4) {}
+      }
+    }
+
+    function getOrderBindingVaultKeys(order) {
+      if (!order) return [];
+      const keys = [];
+      const ono = String(order.orderNo || '').trim();
+      const oid = String(order.id || '').trim();
+      if (ono && !ono.startsWith('门店订单') && !ono.startsWith('无单号')) keys.push('NO:' + ono.toUpperCase());
+      if (oid) keys.push('ID:' + oid);
+      return keys;
+    }
+
+    function recordOrderParcelBindingsToVault(order, explicitlyCleared = false) {
+      if (!order) return;
+      const keys = getOrderBindingVaultKeys(order);
+      if (keys.length === 0) return;
+      const vault = readParcelBindingsVault();
+      if (!vault.byOrderKey) vault.byOrderKey = {};
+
+      const byTrack = {};
+      const byIdx = {};
+      let hasAnyBound = false;
+      (order.parcels || []).forEach((p, idx) => {
+        if (p && Array.isArray(p.assignedItems) && p.assignedItems.length > 0) {
+          const cleaned = p.assignedItems
+            .filter(x => x && String(x.product || '').trim())
+            .map(x => ({ product: String(x.product).trim(), qty: Math.max(1, Number(x.qty) || 1) }));
+          if (cleaned.length > 0) {
+            hasAnyBound = true;
+            const tno = String(p.trackingNo || '').trim().toUpperCase();
+            if (tno) byTrack[tno] = cleaned;
+            byIdx[String(idx)] = cleaned;
+          }
+        }
+      });
+
+      if (hasAnyBound) {
+        const entry = { updatedAt: Date.now(), cleared: false, byTrack, byIdx };
+        keys.forEach(k => { vault.byOrderKey[k] = entry; });
+        writeParcelBindingsVault(vault);
+      } else if (explicitlyCleared) {
+        const entry = { updatedAt: Date.now(), cleared: true, byTrack: {}, byIdx: {} };
+        keys.forEach(k => { vault.byOrderKey[k] = entry; });
+        writeParcelBindingsVault(vault);
+      }
+    }
+
+    function syncAllOrdersParcelBindingsToVault(ordersList) {
+      if (!Array.isArray(ordersList)) return;
+      const vault = readParcelBindingsVault();
+      if (!vault.byOrderKey) vault.byOrderKey = {};
+      let changed = false;
+      ordersList.forEach(order => {
+        if (!order || !Array.isArray(order.parcels)) return;
+        const keys = getOrderBindingVaultKeys(order);
+        if (keys.length === 0) return;
+        const byTrack = {};
+        const byIdx = {};
+        let hasAnyBound = false;
+        order.parcels.forEach((p, idx) => {
+          if (p && Array.isArray(p.assignedItems) && p.assignedItems.length > 0) {
+            const cleaned = p.assignedItems
+              .filter(x => x && String(x.product || '').trim())
+              .map(x => ({ product: String(x.product).trim(), qty: Math.max(1, Number(x.qty) || 1) }));
+            if (cleaned.length > 0) {
+              hasAnyBound = true;
+              const tno = String(p.trackingNo || '').trim().toUpperCase();
+              if (tno) byTrack[tno] = cleaned;
+              byIdx[String(idx)] = cleaned;
+            }
+          }
+        });
+        if (hasAnyBound) {
+          const entry = { updatedAt: Date.now(), cleared: false, byTrack, byIdx };
+          keys.forEach(k => { vault.byOrderKey[k] = entry; });
+          changed = true;
+        }
+      });
+      if (changed) writeParcelBindingsVault(vault);
+    }
+
+    function restoreParcelBindingsFromVault(ordersList) {
+      if (!Array.isArray(ordersList)) return false;
+      const vault = readParcelBindingsVault();
+      const map = (vault && vault.byOrderKey) ? vault.byOrderKey : {};
+      if (Object.keys(map).length === 0) return false;
+
+      let anyRestored = false;
+      ordersList.forEach(order => {
+        if (!order || !Array.isArray(order.parcels) || order.parcels.length === 0) return;
+        const keys = getOrderBindingVaultKeys(order);
+        let entry = null;
+        for (const k of keys) {
+          if (map[k]) { entry = map[k]; break; }
+        }
+        if (!entry || entry.cleared) return;
+        order.parcels.forEach((p, idx) => {
+          if (!p) return;
+          if (Array.isArray(p.assignedItems) && p.assignedItems.length > 0) return;
+          const tno = String(p.trackingNo || '').trim().toUpperCase();
+          const savedItems = (tno && entry.byTrack && entry.byTrack[tno]) || (entry.byIdx && entry.byIdx[String(idx)]);
+          if (Array.isArray(savedItems) && savedItems.length > 0) {
+            p.assignedItems = JSON.parse(JSON.stringify(savedItems));
+            anyRestored = true;
+          }
+        });
+      });
+      return anyRestored;
+    }
+
+    // Hook enrichAndBackfillData so every loadState(), cloud pull, or Excel sync automatically restores parcel bindings from the vault!
+    if (typeof enrichAndBackfillData === 'function') {
+      const _v7160Enrich = enrichAndBackfillData;
+      enrichAndBackfillData = function() {
+        _v7160Enrich();
+        restoreParcelBindingsFromVault(state.orders);
+        restoreParcelBindingsFromVault(state.sheet1Orders);
+      };
+    }
+
     function renderOrderTableParcelBoundSubline(order, parcel, parcelIdx = 0) {
       if (!order || !parcel) return '';
       const parcels = Array.isArray(order.parcels) ? order.parcels : [];
@@ -27576,17 +27388,17 @@ export async function onRequestPost(context) {
       if (hasAssigned) {
         const text = parcel.assignedItems.map(x => `${H(x.product)} ×${H(x.qty)}`).join('；');
         return `
-          <div class="flex items-center justify-between gap-1 text-[10px] bg-emerald-50/90 border border-emerald-200 text-emerald-900 px-1.5 py-0.5 rounded">
-            <span class="truncate" title="本包裹对应商品：${text}">🎯 <strong>本包商品：</strong>${text}</span>
-            <button type="button" data-quick-bind-parcel="${H(order.id)}" data-quick-bind-idx="${parcelIdx}" class="shrink-0 text-emerald-700 hover:text-emerald-950 underline font-bold ml-1">修改</button>
+          <div class="flex items-start justify-between gap-1.5 text-[11px] bg-emerald-50/95 border border-emerald-200 text-emerald-950 px-2 py-1 rounded-md leading-snug">
+            <span class="break-words min-w-0 flex-1">🎯 <strong>本包：</strong>${text}</span>
+            <button type="button" data-quick-bind-parcel="${H(order.id)}" data-quick-bind-idx="${parcelIdx}" class="shrink-0 text-[10px] text-emerald-700 hover:text-emerald-950 bg-white border border-emerald-200 px-1.5 py-0.2 rounded font-bold transition">修改</button>
           </div>`;
       }
 
       if (parcels.length > 1 && items.length > 0) {
         return `
-          <div class="flex items-center justify-between gap-1 text-[10px] bg-amber-50/80 border border-amber-200/90 text-amber-900 px-1.5 py-0.5 rounded">
-            <span class="truncate">📦 拆包 ${parcelIdx + 1}/${parcels.length}（未单独指定商品，默认显示整单）</span>
-            <button type="button" data-quick-bind-parcel="${H(order.id)}" data-quick-bind-idx="${parcelIdx}" class="shrink-0 text-amber-900 hover:text-slate-950 bg-amber-200/70 hover:bg-amber-300 px-1.5 py-0.1 rounded font-extrabold transition">🔗 关联商品</button>
+          <div class="flex items-center justify-between gap-1.5 text-[11px] bg-amber-50/85 border border-amber-200/90 text-amber-900 px-2 py-1 rounded-md leading-snug">
+            <span class="break-words min-w-0 flex-1">📦 拆包 ${parcelIdx + 1}/${parcels.length}（未单独指定商品）</span>
+            <button type="button" data-quick-bind-parcel="${H(order.id)}" data-quick-bind-idx="${parcelIdx}" class="shrink-0 text-[10px] text-amber-950 bg-amber-200/80 hover:bg-amber-300 px-1.5 py-0.5 rounded font-extrabold transition">🔗 关联商品</button>
           </div>`;
       }
       return '';
@@ -27949,8 +27761,11 @@ export async function onRequestPost(context) {
     }
 
     function initV7160Events() {
-      // Release startup gate, run price catalog sync once, and execute fast first-screen render
+      // Release startup gate, restore any parcel bindings from dedicated vault, run price catalog sync once, and execute fast first-screen render
       window.__v716Bootstrapping = false;
+      restoreParcelBindingsFromVault(state.orders);
+      restoreParcelBindingsFromVault(state.sheet1Orders);
+      syncAllOrdersParcelBindingsToVault(state.orders);
       cleanAndSyncVerifiedOrderPricesToCatalog(true);
       renderFirstPaintFast();
 
@@ -28063,20 +27878,365 @@ export async function onRequestPost(context) {
       });
     }
 
-    if (document.readyState === 'loading') {
-      window.addEventListener('DOMContentLoaded', initV7160Events);
-    } else {
-      initV7160Events();
+    // ============================================================================
+    // 🚀 v7.17.0 DUAL-END DISPLAY OPTIMIZATION & IN-TRANSIT QUICK FILTER ENGINE
+    // ============================================================================
+    window.dashboardTransitSubFilter = { recipient: 'ALL', courier: 'ALL' };
+    window.userManuallyToggledOrdersView = false;
+
+    function syncMobileBottomNavUI(activeTab) {
+      const cur = activeTab || (state && state.activeTab) || 'dashboard';
+      document.querySelectorAll('[data-mobile-nav-tab]').forEach(btn => {
+        const t = btn.getAttribute('data-mobile-nav-tab');
+        if (t === cur) {
+          btn.className = 'mobile-bottom-nav-btn flex flex-col items-center justify-center py-1 px-2.5 rounded-xl bg-emerald-50 text-emerald-800 font-extrabold transition relative';
+        } else {
+          btn.className = 'mobile-bottom-nav-btn flex flex-col items-center justify-center py-1 px-2.5 rounded-xl text-slate-500 hover:text-slate-800 font-semibold transition relative';
+        }
+      });
+      const transitCnt = document.getElementById('navBadgeTransit')?.textContent || '0';
+      const mobTransit = document.getElementById('mobNavBadgeTransit');
+      if (mobTransit) {
+        mobTransit.textContent = transitCnt;
+        mobTransit.classList.toggle('hidden', transitCnt === '0');
+      }
+    }
+
+    function updateMobileActiveFilterBadge() {
+      const badge = document.getElementById('mobileActiveFilterCountBadge');
+      if (!badge) return;
+      let count = 0;
+      ['filterYear', 'filterRecipient', 'filterMerchant', 'filterCourier', 'filterStatus'].forEach(id => {
+        const val = document.getElementById(id)?.value;
+        if (val && val !== 'ALL') count++;
+      });
+      if (count > 0) {
+        badge.textContent = count;
+        badge.classList.remove('hidden');
+      } else {
+        badge.classList.add('hidden');
+      }
+    }
+
+    function renderDashboardTransitQuickFilterStrip(validOrders) {
+      const strip = document.getElementById('dashboardTransitQuickFilterStrip');
+      if (!strip) return;
+      const list = Array.isArray(validOrders) ? validOrders : getActiveOrders().filter(o => !o.cancelled);
+
+      // Collect counts of pending/in-transit parcels per recipient and per courier
+      const recCounts = {};
+      const courierCounts = {};
+      let totalPendingParcels = 0;
+
+      list.forEach(o => {
+        if (!o.parcels || o.parcels.length === 0) {
+          if (state.parcelFilter === 'recent_delivered') return;
+          if (state.parcelFilter === '2026_pending' && o.year < 2026) return;
+          if (state.parcelFilter === 'hist_pending' && o.year >= 2026) return;
+          totalPendingParcels++;
+          const r = o.recipient || 'HOME';
+          recCounts[r] = (recCounts[r] || 0) + 1;
+          courierCounts['待填单号'] = (courierCounts['待填单号'] || 0) + 1;
+        } else {
+          o.parcels.forEach(p => {
+            const isDeliv = !!p.deliveredDate;
+            if (state.parcelFilter === 'all_pending' && isDeliv) return;
+            if (state.parcelFilter === '2026_pending' && (isDeliv || o.year < 2026)) return;
+            if (state.parcelFilter === 'hist_pending' && (isDeliv || o.year >= 2026)) return;
+            if (state.parcelFilter === 'recent_delivered' && !isDeliv) return;
+            totalPendingParcels++;
+            const r = o.recipient || 'HOME';
+            recCounts[r] = (recCounts[r] || 0) + 1;
+            const c = p.courier || '其他';
+            courierCounts[c] = (courierCounts[c] || 0) + 1;
+          });
+        }
+      });
+
+      const sub = window.dashboardTransitSubFilter || { recipient: 'ALL', courier: 'ALL' };
+      if (sub.recipient !== 'ALL' && !recCounts[sub.recipient]) sub.recipient = 'ALL';
+      if (sub.courier !== 'ALL' && !courierCounts[sub.courier]) sub.courier = 'ALL';
+
+      const recPills = [
+        `<button type="button" data-dash-rec-filter="ALL" class="px-2 py-0.5 rounded-full text-[11px] font-bold transition ${sub.recipient === 'ALL' ? 'bg-emerald-700 text-white shadow-2xs' : 'bg-white text-slate-600 border border-slate-200 hover:bg-slate-100'}">全部收件人 (${totalPendingParcels})</button>`,
+        ...Object.entries(recCounts).sort((a, b) => b[1] - a[1]).map(([r, cnt]) => {
+          const active = sub.recipient === r;
+          return `<button type="button" data-dash-rec-filter="${H(r)}" class="px-2 py-0.5 rounded-full text-[11px] font-bold transition ${active ? 'bg-emerald-700 text-white shadow-2xs' : 'bg-white text-slate-700 border border-slate-200 hover:bg-emerald-50'}">${r === 'HOME' ? '🏡 HOME' : '👤 ' + H(r)} (${cnt})</button>`;
+        })
+      ].join('');
+
+      const courierPills = [
+        `<button type="button" data-dash-courier-filter="ALL" class="px-2 py-0.5 rounded-full text-[11px] font-bold transition ${sub.courier === 'ALL' ? 'bg-teal-700 text-white shadow-2xs' : 'bg-white text-slate-600 border border-slate-200 hover:bg-slate-100'}">全部快递</button>`,
+        ...Object.entries(courierCounts).sort((a, b) => b[1] - a[1]).map(([c, cnt]) => {
+          const active = sub.courier === c;
+          return `<button type="button" data-dash-courier-filter="${H(c)}" class="px-2 py-0.5 rounded-full text-[11px] font-bold transition ${active ? 'bg-teal-700 text-white shadow-2xs' : 'bg-white text-slate-700 border border-slate-200 hover:bg-teal-50'}">${H(c)} (${cnt})</button>`;
+        })
+      ].join('');
+
+      strip.innerHTML = `
+        <div class="flex flex-wrap items-center gap-1.5 min-w-0">
+          <span class="text-[11px] font-extrabold text-slate-500 shrink-0">🎯 秒级快筛：</span>
+          <div class="flex flex-wrap items-center gap-1">${recPills}</div>
+          <span class="text-slate-300 mx-0.5 hidden sm:inline">|</span>
+          <div class="flex flex-wrap items-center gap-1">${courierPills}</div>
+        </div>
+        <div class="flex items-center gap-1.5 shrink-0">
+          ${(sub.recipient !== 'ALL' || sub.courier !== 'ALL') ? `<button type="button" id="btnResetDashSubFilter" class="text-[11px] text-rose-600 hover:underline font-bold">清除快筛</button>` : ''}
+          <button type="button" id="btnCopyFilteredTransitWechatSummary" class="bg-indigo-50 hover:bg-indigo-100 text-indigo-800 border border-indigo-200 text-[11px] font-extrabold px-2.5 py-1 rounded-lg transition flex items-center gap-1" title="将当前展示的包裹单号、实发商品与物流状态一键复制为微信播报文案">
+            <span>📲 复制当前包裹进度发微信</span>
+          </button>
+        </div>
+      `;
+    }
+
+    // Wrap renderParcelTrackingCards so it respects window.dashboardTransitSubFilter (recipient & courier quick filter)
+    const _v7161RenderParcelTrackingCards = renderParcelTrackingCards;
+    renderParcelTrackingCards = function(validOrders) {
+      const baseOrders = Array.isArray(validOrders) ? validOrders : getActiveOrders().filter(o => !o.cancelled);
+      renderDashboardTransitQuickFilterStrip(baseOrders);
+
+      const sub = window.dashboardTransitSubFilter || { recipient: 'ALL', courier: 'ALL' };
+      let filteredOrders = baseOrders;
+      if (sub.recipient && sub.recipient !== 'ALL') {
+        filteredOrders = filteredOrders.filter(o => (o.recipient || 'HOME') === sub.recipient);
+      }
+      if (sub.courier && sub.courier !== 'ALL') {
+        filteredOrders = filteredOrders.map(o => {
+          if (sub.courier === '待填单号') {
+            return (!o.parcels || o.parcels.length === 0) ? o : null;
+          }
+          if (!o.parcels || o.parcels.length === 0) return null;
+          const matchingParcels = o.parcels.filter(p => (p.courier || '其他') === sub.courier);
+          if (matchingParcels.length === 0) return null;
+          return Object.assign({}, o, { parcels: matchingParcels });
+        }).filter(Boolean);
+      }
+      _v7161RenderParcelTrackingCards(filteredOrders);
+    };
+
+    // Enhance renderKpiDrilldownPanel so on Mobile (< 768px) KPI 1 (transit2026) and KPI 2 (histMissing) also render Swipe-Free Mobile Cards!
+    const _v7161RenderKpiDrilldownPanel = renderKpiDrilldownPanel;
+    renderKpiDrilldownPanel = function(allOrders, validOrders) {
+      _v7161RenderKpiDrilldownPanel(allOrders, validOrders);
+      const body = document.getElementById('kpiDrilldownBody');
+      if (!body || !state.activeKpiDrilldown) return;
+      if (state.activeKpiDrilldown === 'transit2026' || state.activeKpiDrilldown === 'histMissing') {
+        const tableWrap = body.querySelector('.overflow-x-auto');
+        if (tableWrap && !body.querySelector('.kpi-mobile-cards-list')) {
+          tableWrap.classList.add('hidden', 'md:block');
+          const trs = Array.from(tableWrap.querySelectorAll('tbody tr'));
+          const mobileCardsHtml = trs.map(tr => {
+            const tds = tr.querySelectorAll('td');
+            if (tds.length < 8) return '';
+            return `
+              <div class="bg-white rounded-xl border border-slate-200 p-3 shadow-2xs space-y-2 text-xs">
+                <div class="flex items-center justify-between gap-2 border-b border-slate-100 pb-1.5">
+                  <div class="font-bold text-slate-800">${tds[1].innerHTML} · ${tds[2].innerHTML}</div>
+                  <div class="font-mono">${tds[3].innerHTML}</div>
+                </div>
+                <div class="flex flex-wrap items-center justify-between gap-1.5">
+                  <div>${tds[4].innerHTML}</div>
+                  <div class="text-[11px]">${tds[5].innerHTML}</div>
+                </div>
+                <div class="bg-slate-50 rounded-lg px-2.5 py-1.5 border border-slate-100 text-slate-800 break-words">
+                  ${tds[6].innerHTML}
+                </div>
+                <div class="flex flex-wrap items-center justify-end gap-1.5 pt-1">
+                  ${tds[7].innerHTML}
+                </div>
+              </div>
+            `;
+          }).join('');
+          tableWrap.insertAdjacentHTML('beforebegin', `<div class="kpi-mobile-cards-list md:hidden space-y-2.5">${mobileCardsHtml}</div>`);
+        }
+      }
+    };
+
+    function applyDesktopWideModeUI(isFullBleed) {
+      document.body.classList.toggle('desktop-full-bleed', !!isFullBleed);
+      const lbl = document.getElementById('lblDesktopWideMode');
+      if (lbl) lbl.textContent = isFullBleed ? '标准宽屏' : '全屏铺满';
+      try {
+        localStorage.setItem('NZ_TRACKER_DESKTOP_FULL_BLEED', isFullBleed ? '1' : '0');
+      } catch (e) {}
+    }
+
+    function initV7170Events() {
+      // 1. Restore desktop full-bleed preference
+      try {
+        const savedBleed = localStorage.getItem('NZ_TRACKER_DESKTOP_FULL_BLEED') === '1';
+        applyDesktopWideModeUI(savedBleed);
+      } catch (e) {}
+
+      // 2. Auto-adapt ordersDisplayMode ('cards' on < 1024px, 'table' on >= 1024px) unless manually overridden
+      const updateResponsiveOrdersMode = () => {
+        if (window.userManuallyToggledOrdersView) return;
+        const shouldBeCards = window.innerWidth < 1024;
+        const targetMode = shouldBeCards ? 'cards' : 'table';
+        if (ordersDisplayMode !== targetMode) {
+          ordersDisplayMode = targetMode;
+          applyOrdersDisplayModeUI();
+        }
+      };
+      updateResponsiveOrdersMode();
+      window.addEventListener('resize', updateResponsiveOrdersMode);
+
+      // Track manual click on #btnToggleOrdersViewMode or #btnSwitchToWideTableFromBanner
+      document.addEventListener('click', (e) => {
+        if (e.target.closest('#btnToggleOrdersViewMode') || e.target.closest('#btnSwitchToWideTableFromBanner')) {
+          window.userManuallyToggledOrdersView = true;
+        }
+        // Desktop wide mode toggle
+        if (e.target.closest('#btnToggleDesktopWideMode')) {
+          const isNowFull = !document.body.classList.contains('desktop-full-bleed');
+          applyDesktopWideModeUI(isNowFull);
+          showToast(isNowFull ? '🖥️ 已切换为「100%全屏超宽铺满模式」' : '💻 已切换为「1480px标准宽屏居中模式」');
+          return;
+        }
+        // Mobile bottom nav tab switching
+        const mobNavBtn = e.target.closest('[data-mobile-nav-tab]');
+        if (mobNavBtn) {
+          const tab = mobNavBtn.getAttribute('data-mobile-nav-tab');
+          const topTabBtn = document.querySelector(`.nav-tab[data-tab="${tab}"]`);
+          if (topTabBtn) topTabBtn.click();
+          syncMobileBottomNavUI(tab);
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+          return;
+        }
+        // Mobile bottom nav "+ 记一单" button
+        if (e.target.closest('#btnMobileDockNewOrder')) {
+          openOrderModal(null, false);
+          return;
+        }
+        // Top nav tab click -> sync mobile bottom nav highlight
+        const topNavBtn = e.target.closest('.nav-tab[data-tab]');
+        if (topNavBtn) {
+          syncMobileBottomNavUI(topNavBtn.getAttribute('data-tab'));
+        }
+        // Mobile Orders Advanced Filter Drawer Toggle
+        if (e.target.closest('#btnToggleMobileOrderFilters')) {
+          const grid = document.getElementById('ordersAdvancedFilterGrid');
+          const arrow = document.getElementById('mobileFilterToggleArrow');
+          if (grid) {
+            const isHidden = grid.classList.contains('hidden');
+            grid.classList.toggle('hidden', !isHidden);
+            grid.classList.toggle('grid', isHidden);
+            if (arrow) arrow.textContent = isHidden ? '▴' : '▾';
+          }
+          return;
+        }
+        // Dashboard In-Transit Quick Filter by Recipient
+        const recPill = e.target.closest('[data-dash-rec-filter]');
+        if (recPill) {
+          const r = recPill.getAttribute('data-dash-rec-filter') || 'ALL';
+          window.dashboardTransitSubFilter.recipient = (window.dashboardTransitSubFilter.recipient === r && r !== 'ALL') ? 'ALL' : r;
+          renderParcelTrackingCards(getActiveOrders().filter(o => !o.cancelled));
+          return;
+        }
+        // Dashboard In-Transit Quick Filter by Courier
+        const courPill = e.target.closest('[data-dash-courier-filter]');
+        if (courPill) {
+          const c = courPill.getAttribute('data-dash-courier-filter') || 'ALL';
+          window.dashboardTransitSubFilter.courier = (window.dashboardTransitSubFilter.courier === c && c !== 'ALL') ? 'ALL' : c;
+          renderParcelTrackingCards(getActiveOrders().filter(o => !o.cancelled));
+          return;
+        }
+        // Reset Dashboard Sub-Filter
+        if (e.target.closest('#btnResetDashSubFilter')) {
+          window.dashboardTransitSubFilter = { recipient: 'ALL', courier: 'ALL' };
+          renderParcelTrackingCards(getActiveOrders().filter(o => !o.cancelled));
+          return;
+        }
+        // Copy Filtered In-Transit WeChat Progress Summary
+        if (e.target.closest('#btnCopyFilteredTransitWechatSummary')) {
+          const sub = window.dashboardTransitSubFilter || { recipient: 'ALL', courier: 'ALL' };
+          const validOrders = getActiveOrders().filter(o => !o.cancelled);
+          const lines = [];
+          const scopeTitle = [
+            sub.recipient !== 'ALL' ? `收件人: ${sub.recipient}` : '全部收件人',
+            sub.courier !== 'ALL' ? `快递: ${sub.courier}` : '全部快递'
+          ].join(' · ');
+          lines.push(`🚚【纽澳直邮包裹实时进度播报 (${scopeTitle})】`);
+          let idxCount = 0;
+          validOrders.forEach(o => {
+            if (sub.recipient !== 'ALL' && (o.recipient || 'HOME') !== sub.recipient) return;
+            (o.parcels || []).forEach((p, pIdx) => {
+              const isDeliv = !!p.deliveredDate;
+              if (state.parcelFilter === 'all_pending' && isDeliv) return;
+              if (state.parcelFilter === '2026_pending' && (isDeliv || o.year < 2026)) return;
+              if (state.parcelFilter === 'hist_pending' && (isDeliv || o.year >= 2026)) return;
+              if (state.parcelFilter === 'recent_delivered' && !isDeliv) return;
+              if (sub.courier !== 'ALL' && (p.courier || '其他') !== sub.courier) return;
+              idxCount++;
+              const pMeta = getParcelItemsDisplayMeta(o, p, pIdx);
+              const statusTxt = p.deliveredDate ? `✅已送达(${p.deliveredDate})` : `✈️在途(${daysBetween(o.orderDate, TODAY_STR) || 0}天)`;
+              lines.push(`${idxCount}. [${o.recipient}] ${p.courier} ${p.trackingNo} (${statusTxt})`);
+              lines.push(`   📦 内含商品：${pMeta.plainText}`);
+            });
+          });
+          if (idxCount === 0) {
+            showToast('当前筛选下暂无包裹记录可复制');
+            return;
+          }
+          lines.push(`──────────────────`);
+          lines.push(`共 ${idxCount} 个包裹 · 点击单号即可在快递官网查询最新清关与派送节点`);
+          copyTextToClipboard(lines.join('\n'), `当前筛选 ${idxCount} 个包裹微信进度清单`);
+          return;
+        }
+      });
+
+      // Mirror mobile search input to #filterSearch
+      const mobSearch = document.getElementById('filterSearchMobileMirror');
+      const mainSearch = document.getElementById('filterSearch');
+      const clearMobBtn = document.getElementById('btnClearMobileSearchMirror');
+      if (mobSearch && mainSearch) {
+        mobSearch.addEventListener('input', () => {
+          mainSearch.value = mobSearch.value;
+          if (clearMobBtn) clearMobBtn.classList.toggle('hidden', !mobSearch.value);
+          renderOrdersTab();
+        });
+        mainSearch.addEventListener('input', () => {
+          if (mobSearch.value !== mainSearch.value) mobSearch.value = mainSearch.value;
+          if (clearMobBtn) clearMobBtn.classList.toggle('hidden', !mainSearch.value);
+        });
+        if (clearMobBtn) {
+          clearMobBtn.addEventListener('click', () => {
+            mobSearch.value = '';
+            mainSearch.value = '';
+            clearMobBtn.classList.add('hidden');
+            renderOrdersTab();
+          });
+        }
+      }
+
+      ['filterYear', 'filterRecipient', 'filterMerchant', 'filterCourier', 'filterStatus'].forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.addEventListener('change', updateMobileActiveFilterBadge);
+      });
+      const resetBtn = document.getElementById('btnResetFilters');
+      if (resetBtn) {
+        resetBtn.addEventListener('click', () => {
+          if (mobSearch) mobSearch.value = '';
+          if (clearMobBtn) clearMobBtn.classList.add('hidden');
+          setTimeout(updateMobileActiveFilterBadge, 20);
+        });
+      }
+
+      syncMobileBottomNavUI();
+      updateMobileActiveFilterBadge();
     }
 
     // ============================================================================
-    // 🚀 v7.18.0 ENGINE:
+    // 🚀 v7.19.0 ENGINE:
     // 1. AUTO 1-MONTH LOOKBACK DATE RANGE FOR BILL EXTRACTOR ([TODAY - 1M ~ TODAY])
-    // 2. WIDE PRODUCT NAME COLUMN & MOBILE RESPONSIVE CARD VIEW FOR BILL TABLE
-    // 3. ZERO PHANTOM FREIGHT ON FREE-SHIPPING ORDERS
-    // 4. CUSTOMIZABLE WECHAT BILL TEXT FIELD CHECKBOXES
-    // 5. MOBILE BOTTOM NAVIGATION DOCK & NON-OVERLAPPING FLOATING ELEVATOR
+    // 2. ZERO-SPINNER-OCCLUSION BILL TABLE + SINGLE-LINE ALIGNED FOOTER TOTALS
+    // 3. CUSTOMIZABLE WECHAT BILL TEXT FIELD CHECKBOXES
+    // 4. UNIFIED "MINGHUAN" GEOMETRIC SANS-SERIF FONT FOR CHARTS & UI
     // ============================================================================
+
+    if (typeof Chart !== 'undefined' && Chart.defaults) {
+      Chart.defaults.font.family = "'Plus Jakarta Sans', 'Inter', -apple-system, BlinkMacSystemFont, 'PingFang SC', 'HarmonyOS Sans SC', 'Microsoft YaHei UI', 'Microsoft YaHei', sans-serif";
+    }
 
     function getLookbackYmdFromToday(monthsBack = 1) {
       const base = parseYmdLocal(TODAY_STR) || new Date();
@@ -28106,13 +28266,12 @@ export async function onRequestPost(context) {
       sEl.value = startStr;
       eEl.value = endStr;
 
-      // Update active button styling
       document.querySelectorAll('[data-bill-quick-range]').forEach(btn => {
         const k = btn.getAttribute('data-bill-quick-range');
         if (k === rangeKey) {
-          btn.className = 'bg-emerald-100 hover:bg-emerald-200 text-emerald-900 border border-emerald-300 px-2 py-0.5 rounded font-bold transition';
+          btn.className = 'bg-emerald-100 hover:bg-emerald-200 text-emerald-900 border border-emerald-300 px-2.5 py-0.5 rounded-md font-bold transition';
         } else {
-          btn.className = 'bg-white hover:bg-slate-100 text-slate-700 border border-slate-300 px-2 py-0.5 rounded font-medium transition';
+          btn.className = 'bg-white hover:bg-slate-100 text-slate-700 border border-slate-300 px-2.5 py-0.5 rounded-md font-medium transition';
         }
       });
 
@@ -28129,21 +28288,19 @@ export async function onRequestPost(context) {
       }
     }
 
-    // Override renderAnalyticsTab so it initializes with [Today - 1 Month ~ Today] instead of hardcoded 2025-10-30
-    const _v7160RenderAnalyticsTab = renderAnalyticsTab;
-    let _v7180BillInitialized = false;
+    const _v7170RenderAnalyticsTab = renderAnalyticsTab;
+    let _v7190BillInitialized = false;
     renderAnalyticsTab = function(validOrders) {
       const sEl = document.getElementById('billStartDate');
       const eEl = document.getElementById('billEndDate');
-      if (!_v7180BillInitialized || !sEl?.value || sEl.value === '2025-10-30') {
-        _v7180BillInitialized = true;
+      if (!_v7190BillInitialized || !sEl?.value || sEl.value === '2025-10-30') {
+        _v7190BillInitialized = true;
         applyBillDateRangePreset('1M', true);
       }
-      _v7160RenderAnalyticsTab(validOrders);
+      _v7170RenderAnalyticsTab(validOrders);
     };
     window.renderAnalyticsTab = renderAnalyticsTab;
 
-    // Upgrade renderBillTable() to render wide, unwrapped product names on desktop AND crisp Mobile Cards (#billMobileCardsList) on phone screens
     let billMobileForceTableMode = false;
     renderBillTable = function() {
       const sym = document.getElementById('billCurrencySelect')?.value || '¥';
@@ -28191,23 +28348,23 @@ export async function onRequestPost(context) {
           grandTotal += sub;
           const zeroCls = 'text-slate-400';
           return `
-            <tr class="hover:bg-slate-50/80 transition">
-              <td class="py-2 px-2.5 min-w-[270px]">
-                <input type="text" data-bill-field="product" data-bill-idx="${idx}" value="${H(row.product)}" title="${H(row.product)}" class="w-full min-w-[255px] border border-slate-200 focus:border-emerald-500 rounded-md px-2.5 py-1.5 text-xs font-bold text-slate-900 bg-white" />
+            <tr class="hover:bg-slate-50/80 transition align-middle">
+              <td class="py-2 px-3 min-w-[240px]">
+                <input type="text" data-bill-field="product" data-bill-idx="${idx}" value="${H(row.product)}" title="${H(row.product)}" class="w-full border border-slate-200 focus:border-emerald-500 rounded-lg px-2.5 py-1.5 text-xs font-bold text-slate-900 bg-white" />
               </td>
-              <td class="py-2 px-1.5 w-20">
-                <input type="number" step="0.01" data-bill-field="unitPrice" data-bill-idx="${idx}" value="${Number(row.unitPrice) || 0}" class="w-full min-w-[74px] border border-slate-200 focus:border-emerald-500 rounded-md px-2 py-1.5 text-xs font-mono font-semibold text-slate-800 bg-white" />
+              <td class="py-2 px-2 w-[92px]">
+                <input type="number" step="0.01" data-bill-field="unitPrice" data-bill-idx="${idx}" value="${Number(row.unitPrice) || 0}" class="w-full min-w-[82px] border border-slate-200 focus:border-emerald-500 rounded-lg px-2.5 py-1.5 text-xs font-bold text-slate-900 bg-white text-right" />
               </td>
-              <td class="py-2 px-1.5 w-16">
-                <input type="number" data-bill-field="qty" data-bill-idx="${idx}" value="${Number(row.qty) || 0}" class="w-full min-w-[54px] border border-slate-200 focus:border-emerald-500 rounded-md px-2 py-1.5 text-xs font-mono font-extrabold text-emerald-900 bg-white text-center" />
+              <td class="py-2 px-2 w-[68px]">
+                <input type="number" data-bill-field="qty" data-bill-idx="${idx}" value="${Number(row.qty) || 0}" class="w-full min-w-[56px] border border-slate-200 focus:border-emerald-500 rounded-lg px-2 py-1.5 text-xs font-extrabold text-emerald-900 bg-white text-center" />
               </td>
-              <td class="py-2 px-1.5 w-20">
-                <input type="number" step="0.01" data-bill-field="shipping" data-bill-idx="${idx}" value="${Number(row.shipping) || 0}" class="w-full min-w-[66px] border border-slate-200 focus:border-emerald-500 rounded-md px-2 py-1.5 text-xs font-mono text-slate-700 bg-white text-center" title="手动额外加收运费（免邮订单默认0）" />
+              <td class="py-2 px-2 w-[78px]">
+                <input type="number" step="0.01" data-bill-field="shipping" data-bill-idx="${idx}" value="${Number(row.shipping) || 0}" class="w-full min-w-[64px] border border-slate-200 focus:border-emerald-500 rounded-lg px-2 py-1.5 text-xs font-semibold text-slate-700 bg-white text-center" title="手动额外加收运费（免邮订单默认0）" />
               </td>
-              <td class="py-2 px-1.5 text-right font-mono text-[11px] whitespace-nowrap ${parts.ship > 0 ? 'text-indigo-700 font-semibold' : zeroCls}">${isV2 ? fmtBillMoney(parts.ship, sym) : '—'}</td>
-              <td class="py-2 px-1.5 text-right font-mono text-[11px] whitespace-nowrap ${parts.pay > 0 ? 'text-indigo-700 font-semibold' : zeroCls}">${isV2 ? fmtBillMoney(parts.pay, sym) : '—'}</td>
-              <td class="py-2 px-1.5 text-right font-mono text-[11px] whitespace-nowrap ${parts.disc > 0 ? 'text-rose-500 font-bold' : zeroCls}">${isV2 ? fmtBillMoney(parts.disc, sym, parts.disc > 0) : '—'}</td>
-              <td class="py-2 px-2.5 text-right font-extrabold font-mono text-slate-900 whitespace-nowrap">
+              <td class="py-2 px-2 text-right text-xs whitespace-nowrap ${parts.ship > 0 ? 'text-indigo-700 font-bold' : zeroCls}">${isV2 ? fmtBillMoney(parts.ship, sym) : '—'}</td>
+              <td class="py-2 px-2 text-right text-xs whitespace-nowrap ${parts.pay > 0 ? 'text-indigo-700 font-bold' : zeroCls}">${isV2 ? fmtBillMoney(parts.pay, sym) : '—'}</td>
+              <td class="py-2 px-2 text-right text-xs whitespace-nowrap ${parts.disc > 0 ? 'text-rose-600 font-bold' : zeroCls}">${isV2 ? fmtBillMoney(parts.disc, sym, parts.disc > 0) : '—'}</td>
+              <td class="py-2 px-3 text-right font-extrabold text-slate-900 whitespace-nowrap text-xs sm:text-sm">
                 ${sym}${sub.toFixed(2)}
               </td>
               <td class="py-2 px-1.5 text-center">
@@ -28233,15 +28390,15 @@ export async function onRequestPost(context) {
                 <div class="grid grid-cols-3 gap-2">
                   <div>
                     <label class="block text-[10px] text-slate-500 mb-0.5">单价 (${sym})</label>
-                    <input type="number" step="0.01" data-bill-field="unitPrice" data-bill-idx="${idx}" value="${Number(row.unitPrice) || 0}" class="w-full border border-slate-300 rounded-lg px-2 py-1.5 text-xs font-mono font-bold text-slate-900 bg-white" />
+                    <input type="number" step="0.01" data-bill-field="unitPrice" data-bill-idx="${idx}" value="${Number(row.unitPrice) || 0}" class="w-full border border-slate-300 rounded-lg px-2 py-1.5 text-xs font-bold text-slate-900 bg-white text-right" />
                   </div>
                   <div>
                     <label class="block text-[10px] text-slate-500 mb-0.5">数量 (件)</label>
-                    <input type="number" data-bill-field="qty" data-bill-idx="${idx}" value="${Number(row.qty) || 0}" class="w-full border border-slate-300 rounded-lg px-2 py-1.5 text-xs font-mono font-extrabold text-emerald-800 bg-white text-center" />
+                    <input type="number" data-bill-field="qty" data-bill-idx="${idx}" value="${Number(row.qty) || 0}" class="w-full border border-slate-300 rounded-lg px-2 py-1.5 text-xs font-extrabold text-emerald-800 bg-white text-center" />
                   </div>
                   <div>
                     <label class="block text-[10px] text-slate-500 mb-0.5">加收运费</label>
-                    <input type="number" step="0.01" data-bill-field="shipping" data-bill-idx="${idx}" value="${Number(row.shipping) || 0}" class="w-full border border-slate-300 rounded-lg px-2 py-1.5 text-xs font-mono text-slate-700 bg-white text-center" />
+                    <input type="number" step="0.01" data-bill-field="shipping" data-bill-idx="${idx}" value="${Number(row.shipping) || 0}" class="w-full border border-slate-300 rounded-lg px-2 py-1.5 text-xs font-semibold text-slate-700 bg-white text-center" />
                   </div>
                 </div>
                 <div class="flex flex-wrap items-center justify-between gap-1 pt-1.5 border-t border-slate-100 text-[11px]">
@@ -28251,7 +28408,7 @@ export async function onRequestPost(context) {
                     ${parts.disc > 0 ? `<span class="bg-rose-50 text-rose-600 font-bold px-1.5 py-0.2 rounded">优惠:−${sym}${parts.disc.toFixed(2)}</span>` : ''}
                     ${(!parts.ship && !parts.pay && !parts.disc) ? `<span class="text-slate-400">订单级附加费: 免邮/无附加费</span>` : ''}
                   </div>
-                  <div class="font-mono font-extrabold text-sm text-emerald-800" data-bill-mobile-sub="${idx}">
+                  <div class="font-extrabold text-sm text-emerald-800" data-bill-mobile-sub="${idx}">
                     小计: ${sym}${sub.toFixed(2)}
                   </div>
                 </div>
@@ -28261,7 +28418,7 @@ export async function onRequestPost(context) {
           mobileList.innerHTML = cardsHtml + `
             <div class="bg-amber-50 border border-amber-300 rounded-xl p-3 flex items-center justify-between text-xs font-bold text-slate-900">
               <span>总计汇总（共 ${totalQty} 件）</span>
-              <span class="text-base font-extrabold text-emerald-800 font-mono" id="billMobileGrandTotal">${sym}${grandTotal.toFixed(2)}</span>
+              <span class="text-base font-extrabold text-emerald-800" id="billMobileGrandTotal">${sym}${grandTotal.toFixed(2)}</span>
             </div>
           `;
         }
@@ -28293,7 +28450,6 @@ export async function onRequestPost(context) {
     };
     window.renderBillTable = renderBillTable;
 
-    // Build custom WeChat bill text honoring user checkboxes (#chkBillTextPriceQty, #chkBillTextManualShip, #chkBillTextShipShare, #chkBillTextPayShare, #chkBillTextDiscShare, #chkBillAttachTracking)
     function buildCustomWeChatBillText() {
       const title = document.getElementById('billTitleInput')?.value || '保健品采购对账单';
       const sym = document.getElementById('billCurrencySelect')?.value || '¥';
@@ -28313,7 +28469,6 @@ export async function onRequestPost(context) {
         const q = Number(r.qty) || 0;
         const manualShip = Number(r.shipping) || 0;
 
-        // Calculate row subtotal based on active components (or full table subtotal if included)
         let rowSub = up * q;
         if (showManualShip || manualShip > 0) rowSub += manualShip;
         if (showShipShare) rowSub += parts.ship;
@@ -28369,8 +28524,7 @@ export async function onRequestPost(context) {
       return lines.join('\n');
     }
 
-    function initV7180Events() {
-      // 1. Initialize default 1-month lookback dates on #billStartDate and #billEndDate immediately
+    function initV7190Events() {
       const sEl = document.getElementById('billStartDate');
       const eEl = document.getElementById('billEndDate');
       if (sEl && eEl) {
@@ -28378,7 +28532,6 @@ export async function onRequestPost(context) {
         eEl.value = TODAY_STR;
       }
 
-      // 2. Replace #btnCopyBillText click handler so it uses our checkbox-filtered buildCustomWeChatBillText()
       const oldCopyBtn = document.getElementById('btnCopyBillText');
       if (oldCopyBtn && oldCopyBtn.parentNode) {
         const newCopyBtn = oldCopyBtn.cloneNode(true);
@@ -28389,7 +28542,6 @@ export async function onRequestPost(context) {
         });
       }
 
-      // 3. Handle input edits inside #billMobileCardsList so mobile card edits sync with state.billItems & table
       const mobileList = document.getElementById('billMobileCardsList');
       if (mobileList) {
         mobileList.addEventListener('input', (e) => {
@@ -28428,7 +28580,6 @@ export async function onRequestPost(context) {
         });
       }
 
-      // 4. Quick date range buttons ([data-bill-quick-range]) and recipient auto-extract
       document.addEventListener('click', (e) => {
         const rangeBtn = e.target.closest('[data-bill-quick-range]');
         if (rangeBtn) {
@@ -28461,19 +28612,18 @@ export async function onRequestPost(context) {
           extractBillFromOrderRange(matched, `${sDate}至${eDate} ${rec === 'ALL' ? '全部收件人' : rec}采购对账单`);
         });
       }
-
-      // 5. Raise #floatingBackToTopDock on mobile so it never overlaps bottom buttons
-      const floatDock = document.getElementById('floatingBackToTopDock');
-      if (floatDock) {
-        floatDock.classList.remove('bottom-5');
-        floatDock.classList.add('bottom-20', 'sm:bottom-5');
-      }
     }
 
     if (document.readyState === 'loading') {
-      window.addEventListener('DOMContentLoaded', initV7180Events);
+      window.addEventListener('DOMContentLoaded', () => {
+        initV7160Events();
+        initV7170Events();
+        initV7190Events();
+      });
     } else {
-      initV7180Events();
+      initV7160Events();
+      initV7170Events();
+      initV7190Events();
     }
 
 
@@ -28490,8 +28640,34 @@ export async function onRequestPost(context) {
     }
   </script>
 
+  <!-- v7.17.0 NEW: MOBILE BOTTOM THUMB-FRIENDLY APP NAVIGATION DOCK (< 768px) -->
+  <nav id="mobileBottomNavDock" class="md:hidden fixed bottom-0 left-0 right-0 z-40 bg-white/95 backdrop-blur-md border-t border-slate-200 shadow-[0_-4px_20px_rgba(15,23,42,0.08)] px-2 py-1.5 flex items-center justify-around select-none" style="padding-bottom: max(0.375rem, env(safe-area-inset-bottom));">
+    <button type="button" data-mobile-nav-tab="dashboard" class="mobile-bottom-nav-btn flex flex-col items-center justify-center py-1 px-2.5 rounded-xl text-emerald-800 font-extrabold transition relative">
+      <span class="text-base leading-none">🚚</span>
+      <span class="text-[10px] mt-0.5">物流看板</span>
+      <span id="mobNavBadgeTransit" class="absolute -top-0.5 right-0.5 bg-amber-400 text-slate-950 text-[9px] font-black px-1.5 py-0.1 rounded-full shadow-2xs">0</span>
+    </button>
+    <button type="button" data-mobile-nav-tab="orders" class="mobile-bottom-nav-btn flex flex-col items-center justify-center py-1 px-2.5 rounded-xl text-slate-500 font-semibold transition relative">
+      <span class="text-base leading-none">📋</span>
+      <span class="text-[10px] mt-0.5">订单总表</span>
+      <span id="mobNavBadgeOrders" class="text-[9px] font-mono text-slate-400 hidden"></span>
+    </button>
+    <button type="button" id="btnMobileDockNewOrder" class="flex flex-col items-center justify-center -mt-4 bg-gradient-to-r from-emerald-600 to-teal-600 text-white rounded-2xl px-3.5 py-2 shadow-lg border-2 border-white font-extrabold active:scale-95 transition">
+      <span class="text-sm leading-none">＋记一单</span>
+      <span class="text-[9px] text-emerald-100 mt-0.5">新单/小程序</span>
+    </button>
+    <button type="button" data-mobile-nav-tab="products" class="mobile-bottom-nav-btn flex flex-col items-center justify-center py-1 px-2.5 rounded-xl text-slate-500 font-semibold transition">
+      <span class="text-base leading-none">🏷️</span>
+      <span class="text-[10px] mt-0.5">单价库</span>
+    </button>
+    <button type="button" data-mobile-nav-tab="analytics" class="mobile-bottom-nav-btn flex flex-col items-center justify-center py-1 px-2.5 rounded-xl text-slate-500 font-semibold transition">
+      <span class="text-base leading-none">🧾</span>
+      <span class="text-[10px] mt-0.5">对账统计</span>
+    </button>
+  </nav>
+
   <!-- v7.10.0 NEW: FLOATING BACK-TO-TOP & MODULE QUICK ELEVATOR DOCK -->
-  <div id="floatingBackToTopDock" class="fixed bottom-5 right-4 sm:right-6 z-40 hidden flex flex-col items-end gap-1.5 transition-all duration-200">
+  <div id="floatingBackToTopDock" class="fixed bottom-16 md:bottom-5 right-3 sm:right-6 z-40 hidden flex flex-col items-end gap-1.5 transition-all duration-200">
     <!-- Context-aware quick jump buttons when in Products or Orders tab -->
     <div id="floatingQuickJumpMenu" class="flex flex-col items-end gap-1 bg-slate-900/90 backdrop-blur-md text-white p-1.5 rounded-2xl shadow-xl border border-slate-700/80 text-[11px]">
       <button type="button" data-float-jump="trendStudio" class="float-jump-prod px-2.5 py-1 rounded-xl hover:bg-emerald-600/90 font-bold flex items-center gap-1 transition whitespace-nowrap" title="直达顶部已核实商品单价趋势工作台并切换商品">
@@ -28536,53 +28712,5 @@ export async function onRequestPost(context) {
     </div>
   </div>
 
-  <!-- v7.18.0 MOBILE BOTTOM NAVIGATION BAR (<640px) -->
-  <nav id="mobileBottomNavBar" class="sm:hidden fixed bottom-0 inset-x-0 z-40 bg-white/95 backdrop-blur-md border-t border-slate-200 shadow-2xl px-2 py-1 grid grid-cols-5 items-center text-[11px] select-none">
-    <button type="button" data-mobile-tab="dashboard" class="mobile-nav-item flex flex-col items-center justify-center py-1 text-emerald-800 font-bold relative">
-      <span class="text-base leading-none">🚚</span>
-      <span class="mt-0.5">物流看板</span>
-    </button>
-    <button type="button" data-mobile-tab="orders" class="mobile-nav-item flex flex-col items-center justify-center py-1 text-slate-600 font-medium">
-      <span class="text-base leading-none">📋</span>
-      <span class="mt-0.5">订单总表</span>
-    </button>
-    <div class="flex items-center justify-center -mt-3">
-      <button type="button" id="btnMobileBottomAddOrder" class="bg-gradient-to-r from-emerald-600 to-teal-600 text-white rounded-2xl px-3 py-1.5 shadow-lg border-2 border-white flex flex-col items-center justify-center leading-tight">
-        <span class="text-xs font-extrabold">＋记一单</span>
-        <span class="text-[9px] text-emerald-100">新单/小程序</span>
-      </button>
-    </div>
-    <button type="button" data-mobile-tab="products" class="mobile-nav-item flex flex-col items-center justify-center py-1 text-slate-600 font-medium">
-      <span class="text-base leading-none">🏷️</span>
-      <span class="mt-0.5">单价库</span>
-    </button>
-    <button type="button" data-mobile-tab="analytics" class="mobile-nav-item flex flex-col items-center justify-center py-1 text-slate-600 font-medium">
-      <span class="text-base leading-none">🧾</span>
-      <span class="mt-0.5">对账统计</span>
-    </button>
-  </nav>
-  <script>
-    (function() {
-      const mainEl = document.querySelector('main');
-      if (mainEl) mainEl.classList.add('pb-24', 'sm:pb-8');
-      document.addEventListener('click', (e) => {
-        const mTab = e.target.closest('[data-mobile-tab]');
-        if (mTab) {
-          const t = mTab.getAttribute('data-mobile-tab');
-          const topBtn = document.querySelector(`.nav-tab[data-tab="${t}"]`);
-          if (topBtn) topBtn.click();
-          document.querySelectorAll('.mobile-nav-item').forEach(btn => {
-            const isAct = btn.getAttribute('data-mobile-tab') === t;
-            btn.className = `mobile-nav-item flex flex-col items-center justify-center py-1 ${isAct ? 'text-emerald-800 font-extrabold bg-emerald-50/80 rounded-xl' : 'text-slate-600 font-medium'}`;
-          });
-          window.scrollTo({ top: 0, behavior: 'smooth' });
-          return;
-        }
-        if (e.target.closest('#btnMobileBottomAddOrder')) {
-          if (typeof openOrderModal === 'function') openOrderModal(null, false);
-        }
-      });
-    })();
-  </script>
 </body>
 </html>
