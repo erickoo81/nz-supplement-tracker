@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>纽澳跨境采购与快递追踪管家 v7.21.0 (Build 20261119.2058)</title>
+  <title>纽澳跨境采购与快递追踪管家 v7.22.0 (Build 20261119.2155)</title>
   <script src="https://cdn.tailwindcss.com/3.4.17"></script>
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
   <script defer src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
@@ -410,9 +410,9 @@
               <span id="uiIcon-appTitle" class="hidden"></span>
               <span id="uiText-appTitle">纽澳跨境采购与快递追踪管家</span>
             </h1>
-            <button type="button" id="btnHeaderVersionBadge" class="inline-flex items-center gap-1 text-xs bg-gradient-to-r from-amber-400 to-amber-300 hover:from-amber-300 hover:to-amber-200 text-slate-950 font-extrabold px-2.5 py-0.5 rounded-full shadow-xs transition cursor-pointer" title="当前正式稳定版本：v7.21.0 (Build 20261119.2058)（遵循 vMAJOR.MINOR.PATCH + Build Tag 规范 · 点击查看版本规范与更新日志）">
+            <button type="button" id="btnHeaderVersionBadge" class="inline-flex items-center gap-1 text-xs bg-gradient-to-r from-amber-400 to-amber-300 hover:from-amber-300 hover:to-amber-200 text-slate-950 font-extrabold px-2.5 py-0.5 rounded-full shadow-xs transition cursor-pointer" title="当前正式稳定版本：v7.22.0 (Build 20261119.2155)（遵循 vMAJOR.MINOR.PATCH + Build Tag 规范 · 点击查看版本规范与更新日志）">
               <span id="uiIcon-appVersion">🚀</span>
-              <span id="uiText-appVersion">v7.21.0 (Build 20261119.2058)</span>
+              <span id="uiText-appVersion">v7.22.0 (Build 20261119.2155)</span>
             </button>
             <button type="button" id="btnHeaderCfStatusPill" class="inline-flex items-center gap-1 text-[11px] bg-emerald-900/90 hover:bg-emerald-800 text-emerald-100 border border-emerald-600/70 font-semibold px-2.5 py-0.5 rounded-full transition cursor-pointer" title="点击打开 Cloudflare KV 边缘云同步设置 (方案B)">
               <span id="headerCfStatusDot" class="w-2 h-2 rounded-full bg-amber-400 inline-block"></span>
@@ -424,33 +424,32 @@
       </div>
 
       <div class="flex items-center gap-1.5 sm:gap-2 flex-wrap">
-        <button id="btnOpenNewOrder" class="bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-xs sm:text-sm px-3.5 py-2 rounded-lg shadow-xs transition flex items-center gap-1" title="新建采购订单（内含网页粘贴自动填单 / 门店直购录入 / 复制上一单）">
+        <button id="btnOpenNewOrder" class="h-9 bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-xs sm:text-sm px-3.5 rounded-lg shadow-xs transition inline-flex items-center justify-center gap-1 whitespace-nowrap" title="新建采购订单（内含网页粘贴自动填单 / 门店直购录入 / 复制上一单）">
           <span id="uiIcon-btnNewOrder">＋</span>
           <span id="uiText-btnNewOrder">新增订单</span>
         </button>
-        <button id="btnOpenSmartImportModal" class="bg-gradient-to-r from-amber-300 to-amber-400 hover:from-amber-200 hover:to-amber-300 text-slate-950 font-bold text-xs sm:text-sm px-3.5 py-2 rounded-lg shadow-xs transition flex items-center gap-1" title="导入数据中心：Excel表格增量导入 / 网页订单粘贴解析 / 浏览器抓单小书签">
+        <button id="btnOpenSmartImportModal" class="h-9 bg-gradient-to-r from-amber-300 to-amber-400 hover:from-amber-200 hover:to-amber-300 text-slate-950 font-bold text-xs sm:text-sm px-3.5 rounded-lg shadow-xs transition inline-flex items-center justify-center gap-1 whitespace-nowrap" title="导入数据中心：Excel表格增量导入 / 网页订单粘贴解析 / 浏览器抓单小书签">
           <span id="uiIcon-btnBatchImport">📥</span>
           <span id="uiText-btnBatchImport">智能导单</span>
           <span id="headerUnreadPill" class="hidden px-1.5 py-0.5 text-[11px] rounded-full bg-rose-600 text-white font-extrabold animate-pulse">0未读</span>
         </button>
-        <button id="btnOpenSyncModal" class="bg-emerald-900 hover:bg-emerald-800 text-emerald-100 text-xs sm:text-sm px-3 py-2 rounded-lg border border-emerald-700 transition flex items-center gap-1" title="Cloudflare KV 实时云同步 / 云端时间机器历史回滚 / 本地全量备份包">
+        <button id="btnOpenSyncModal" class="h-9 bg-emerald-900 hover:bg-emerald-800 text-emerald-100 text-xs sm:text-sm px-3 rounded-lg border border-emerald-700 transition inline-flex items-center justify-center gap-1 whitespace-nowrap" title="Cloudflare KV 实时云同步 / 云端时间机器历史回滚 / 本地全量备份包">
           <span id="uiIcon-btnSyncBackup">☁️</span>
           <span id="uiText-btnSyncBackup">云端与备份</span>
         </button>
-        <button id="btnHeaderCmdPalette" type="button" class="bg-emerald-950/75 hover:bg-emerald-800 text-emerald-100 text-xs px-2.5 py-2 rounded-lg border border-emerald-500/40 transition flex items-center gap-1.5 shadow-2xs" title="全局瞬时搜索订单/运单/商品与快捷操作（快捷键 Ctrl+K 或 ⌘K）">
+        <button id="btnHeaderCmdPalette" type="button" class="h-9 bg-emerald-900/90 hover:bg-emerald-800 text-emerald-100 text-xs sm:text-sm px-3 rounded-lg border border-emerald-700 transition inline-flex items-center justify-center gap-1 whitespace-nowrap" title="全局瞬时搜索订单、运单号、商品与快捷指令（支持快捷键 Ctrl+K 或 ⌘K）">
           <span>🔍</span>
-          <span class="hidden sm:inline font-semibold">速查</span>
-          <kbd class="px-1.5 py-0.5 text-[10px] font-mono rounded bg-emerald-900/90 border border-emerald-600/60 text-emerald-200">⌘K</kbd>
+          <span class="hidden sm:inline font-medium">速查</span>
         </button>
-        <button id="btnHeaderHealthDoctor" type="button" class="bg-teal-900/85 hover:bg-teal-800 text-teal-100 text-xs px-2.5 py-2 rounded-lg border border-teal-400/40 transition flex items-center gap-1 shadow-2xs" title="一键扫描缺失运单、疑似重复订单、异常单价、待结代购与未设好价商品">
+        <button id="btnHeaderHealthDoctor" type="button" class="h-9 bg-emerald-900/90 hover:bg-emerald-800 text-emerald-100 text-xs sm:text-sm px-3 rounded-lg border border-emerald-700 transition inline-flex items-center justify-center gap-1 whitespace-nowrap" title="一键扫描缺失运单、疑似重复订单、异常单价、待结代购与未设好价商品">
           <span>🩺</span>
-          <span class="hidden sm:inline font-semibold">体检</span>
-          <span id="headerHealthIssueBadge" class="hidden px-1.5 py-0.2 text-[10px] rounded-full bg-amber-400 text-slate-950 font-extrabold">0</span>
+          <span class="hidden sm:inline font-medium">体检</span>
+          <span id="headerHealthIssueBadge" class="hidden px-1.5 py-0.5 text-[10px] leading-none rounded-full bg-amber-400 text-slate-950 font-extrabold">0</span>
         </button>
-        <button id="btnOpenScrapeRulesModalHeader" class="bg-emerald-800/90 hover:bg-emerald-700 text-teal-100 text-xs sm:text-sm px-3 py-2 rounded-lg border border-teal-400/40 transition flex items-center gap-1" title="统一管理：8套主题与自定义配色、界面名称/图标修改、抓单自学习规则库、超链接模板">
+        <button id="btnOpenScrapeRulesModalHeader" class="h-9 bg-emerald-800/90 hover:bg-emerald-700 text-teal-100 text-xs sm:text-sm px-3 rounded-lg border border-teal-400/40 transition inline-flex items-center justify-center gap-1 whitespace-nowrap" title="统一管理：8套主题配色、大牌字体风格、界面名称/图标修改、抓单自学习规则库、超链接模板">
           <span id="uiIcon-btnRulesSettings">⚙️</span>
           <span id="uiText-btnRulesSettings">个性化与规则</span>
-          <span id="headerScrapeRulesBadge" class="px-1.5 py-0.2 text-[10px] rounded-full bg-teal-400 text-slate-950 font-extrabold">0</span>
+          <span id="headerScrapeRulesBadge" class="px-1.5 py-0.5 text-[10px] leading-none rounded-full bg-teal-400 text-slate-950 font-extrabold">0</span>
         </button>
         <button id="btnOpenLinkRulesModal" class="hidden" aria-hidden="true"></button>
         <button id="btnQuickCloudPullHeader" class="hidden" aria-hidden="true">
@@ -458,17 +457,17 @@
           <span id="uiText-btnCloudPull">云端拉取</span>
         </button>
         <!-- Explicit Save / Undo / Cancel Action Group -->
-        <div class="flex items-center gap-1 bg-emerald-900/95 border border-emerald-700/90 rounded-lg p-1 shadow-inner">
-          <button id="btnHeaderUndo" type="button" disabled class="disabled:opacity-40 disabled:cursor-not-allowed bg-emerald-800 hover:bg-emerald-700 text-emerald-100 text-xs px-2.5 py-1.5 rounded-md transition flex items-center gap-1" title="撤销上一步操作 (快捷键 Ctrl+Z)">
+        <div class="h-9 inline-flex items-center gap-1 bg-emerald-900/95 border border-emerald-700/90 rounded-lg px-1 shadow-inner">
+          <button id="btnHeaderUndo" type="button" disabled class="h-7 disabled:opacity-40 disabled:cursor-not-allowed bg-emerald-800 hover:bg-emerald-700 text-emerald-100 text-xs px-2.5 rounded-md transition inline-flex items-center gap-1 whitespace-nowrap" title="撤销上一步操作 (快捷键 Ctrl+Z)">
             <span id="uiIcon-btnUndo">↩️</span><span id="uiText-btnUndo">撤销</span><span id="headerUndoCount" class="font-mono text-[11px]"></span>
           </button>
-          <button id="btnHeaderDiscard" type="button" disabled class="disabled:opacity-40 disabled:cursor-not-allowed bg-rose-900/80 hover:bg-rose-800 text-rose-100 text-xs px-2.5 py-1.5 rounded-md transition flex items-center gap-1" title="取消所有未保存的修改，还原到上次保存的状态">
+          <button id="btnHeaderDiscard" type="button" disabled class="h-7 disabled:opacity-40 disabled:cursor-not-allowed bg-rose-900/80 hover:bg-rose-800 text-rose-100 text-xs px-2.5 rounded-md transition inline-flex items-center gap-1 whitespace-nowrap" title="取消所有未保存的修改，还原到上次保存的状态">
             <span id="uiIcon-btnDiscard">🗑️</span><span id="uiText-btnDiscard">还原</span>
           </button>
-          <button id="btnHeaderSave" type="button" class="bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs px-3 py-1.5 rounded-md shadow transition flex items-center gap-1" title="将当前修改保存到浏览器本地数据库（若已开启云端联动则同步上传云端）">
+          <button id="btnHeaderSave" type="button" class="h-7 bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs px-3 rounded-md shadow transition inline-flex items-center gap-1 whitespace-nowrap" title="将当前修改保存到浏览器本地数据库（若已开启云端联动则同步上传云端）">
             <span id="headerSaveIcon">💾</span>
             <span id="headerSaveText">保存</span>
-            <span id="headerDirtyBadge" class="hidden px-1.5 py-0.2 text-[10px] rounded-full bg-amber-300 text-slate-950 font-extrabold">0</span>
+            <span id="headerDirtyBadge" class="hidden px-1.5 py-0.5 text-[10px] leading-none rounded-full bg-amber-300 text-slate-950 font-extrabold">0</span>
           </button>
         </div>
       </div>
@@ -3233,7 +3232,7 @@
         <div>
           <h3 class="text-base font-bold flex items-center gap-2 flex-wrap">
             <span>⚙️ 个性化与规则中心</span>
-            <span class="text-[11px] bg-amber-400 text-slate-950 font-extrabold px-2.5 py-0.5 rounded-full">v7.21.0 (Build 20261119.2058) · SemVer标准版本管理</span>
+            <span class="text-[11px] bg-amber-400 text-slate-950 font-extrabold px-2.5 py-0.5 rounded-full">v7.22.0 (Build 20261119.2155) · SemVer标准版本管理</span>
           </h3>
           <p class="text-xs text-emerald-200 mt-0.5">一站式归纳管理：8套主题皮肤与自定义调色盘 · 全系统选项名称/图标/注释自由修改 · 抓单自学习规则 · 454条超链接模板</p>
         </div>
@@ -3271,7 +3270,7 @@
         <div class="bg-gradient-to-r from-emerald-50 via-teal-50 to-amber-50 border-2 border-emerald-300 rounded-xl p-4 space-y-3">
           <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-emerald-200/80 pb-2.5">
             <div class="flex items-center gap-2 flex-wrap">
-              <span class="px-2.5 py-1 rounded-full bg-emerald-900 text-amber-300 font-extrabold text-xs font-mono">v7.21.0 (Build 20261119.2058)</span>
+              <span class="px-2.5 py-1 rounded-full bg-emerald-900 text-amber-300 font-extrabold text-xs font-mono">v7.22.0 (Build 20261119.2155)</span>
               <span class="font-extrabold text-slate-900 text-sm">严格执行的版本号规则（Semantic Versioning + Build Tag）</span>
             </div>
             <button type="button" id="btnJumpToLabelsTab" class="bg-white hover:bg-slate-50 text-emerald-900 border border-emerald-300 font-bold px-3 py-1.5 rounded-lg shadow-2xs transition text-xs shrink-0">
@@ -3280,101 +3279,150 @@
           </div>
           <div class="text-xs text-slate-700 leading-relaxed space-y-2">
             <p>系统遵循标准的 <code class="bg-white px-1.5 py-0.5 rounded border font-mono font-bold text-emerald-900">vMAJOR.MINOR.PATCH (Build YYYYMMDD.HHMM)</code> 规则，版本号已固化在<strong>网页左上角标识、页面标题（第6行 &lt;title&gt;）与浏览器控制台输出</strong>中，确保每次热更新上线后一眼就能核对生效状态：</p>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-3 pt-1">
-              <div class="bg-white/90 rounded-lg p-3 border border-emerald-200 space-y-1">
-                <div class="font-extrabold text-emerald-950">📌 当前正式稳定版本：<span class="font-mono text-emerald-700">v7.21.0 (Build 20261119.2058)</span></div>
-              <div class="text-[11px] text-emerald-900 bg-white/80 border border-emerald-200 rounded-lg px-2.5 py-1.5 mt-1">
-                <strong>✨ v7.21.0 架构拍平与撤销引擎全链路修复：</strong>① <strong>全量拍平 61 处历史猴子补丁与 12 个分散启动器</strong>（消除多层运行期函数覆写与嵌套闭包链，统一为单入口扁平调度管线与单一 `DOMContentLoaded` 引导器，调用栈更清晰、维护成本骤降）；② <strong>撤销（↩️）按钮 100% 可用性修复</strong>（补齐 `lastKnownStateSnapshot` 自动兜底快照，覆盖全部 67 处数据修改路径与跨 F5 刷新基线回退，彻底杜绝「有未存修改却无法撤销」问题）；③ <strong>修复 `extractBillFromOrderRange` 守卫条件</strong>并严格遵循 SemVer 规范定版为次版本 `v7.21.0`。<br/><strong class="text-slate-600">📌 v7.20.0 历史特性保留：</strong>① <strong>12项深层Bug全清零</strong>（修复智能设好价/达标徽标、跨店比价入口与商品卡「＋比价」、家庭药箱「⚡补货开单」、KPI5双币与代购结算下钻、汇率敏感度速算条、2026在途代购误判已结算、只读退出按钮恢复、按频次排序NaN、实时商品别名归一化）；② <strong>无损瘦身与流畅度提速</strong>（清除1,000+行死代码与无效CSS，新增商品字典O(1)索引缓存与全局搜索150ms防抖，启用卡片滚动渲染优化）；③ <strong>UI视觉精修与两大新功能</strong>（新增全局 ⌘K/Ctrl+K 瞬时搜索与快捷指令面板、一键数据健康体检中心）。<br/><strong class="text-slate-600">📌 v7.19.0 历史特性保留：</strong>① <strong>全局1720px宽屏布局 + 账单页与订单表零遮挡重构</strong>（主容器拓宽至1720px/97vw；去除账单输入框上下微调箭头遮挡并加宽单价列；修复总计汇总行优惠换行导致的高低不平；右侧收件人透视表取消省略号截断并锁定件数徽标单行显示；修复订单总表左侧日期过宽、代购已结清竖排挤压与右侧操作列裁切）；② <strong>全系统升级为「明欢 MINGHUAN」同款现代几何无衬线字体体系</strong>（全局统一 Plus Jakarta Sans + PingFang SC / Microsoft YaHei UI + tabular-nums 等宽对齐数字，消除旧版打字机等宽字体割裂感）；③ <strong>全局冗余代码清理与6项深层Bug修复</strong>（清理6处被完全覆盖的死代码函数、消除商品库与趋势图重复渲染、修复启动阶段4次重复价格同步等）；④ ① <strong>彻底修复电脑端订单表右侧「操作列」被截断 & 分包商品名省略号截断问题</strong>（拓宽桌面主容器至 1480px/1620px 并支持「🖥️ 全屏铺满」一键切换、取消分包商品 `truncate` 强制单行截断改为完整自动换行展示、将右侧「操作列」重构为紧凑双排按钮组并将代购结清微标移入金额列，确保7大列100%同屏完整显示无遮挡）；② <strong>彻底移除「⚠️超一年 / 超过365天」冗余标识</strong>（消除日期列与收件人列挤压重叠）；③ <strong>手机+电脑双端深度自适应升级与新功能</strong>（新增手机端底部大拇指固定导航坞、手机端订单筛选抽屉一键折叠、KPI在途穿透面板手机端免横滑卡片视图、首页在途包裹「按收件人/快递公司」秒级快筛胶囊条与一键复制在途进度发微信）；④ ① <strong>修复拆包商品关联刷新丢失 Bug（四重持久化保险）</strong>（新增独立轻量级分包绑定保险箱 Vault、消除 localStorage 历史草稿快照配额溢出、修复云端自动拉取覆盖本地分包绑定、保存订单即刻同步持久化）；② <strong>订单总表列宽比例与行高紧凑度重构</strong>（收窄左侧「下单日期」「收件人」冗余留白，拓宽右侧「运费/总计」与「快递包裹追踪」，将「微信支付」「✅已核验」「🎫券省」合并为单行横向微标排列，单品订单行高立降 40%）；③ ① <strong>首屏秒开性能优化</strong>（合并启动阶段重复全量渲染与价格同步、异步加载900KB Excel解析库与Web字体、优先渲染首屏核心看板并渐进挂载后台页签）；② <strong>一单多品拆包「包裹⇄商品」智能预绑定与随时自由修改</strong>（多品拆多包自动1对1预关联商品与数量，支持勾选/取消与修改每包件数，并在在途追踪卡、KPI穿透表、订单总表、详单凭证、微信通知与催件话术全链路精准展示）。
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-3 pt-1 items-stretch">
+              <div class="lg:col-span-7 bg-white/95 rounded-xl p-3.5 border border-emerald-200 flex flex-col justify-between gap-2">
+                <div class="space-y-2">
+                  <div class="flex items-center justify-between gap-2 flex-wrap">
+                    <div class="font-extrabold text-emerald-950">📌 当前正式稳定版本：<span class="font-mono text-emerald-700">v7.22.0 (Build 20261119.2155)</span></div>
+                    <span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800 border border-emerald-200">单文件零构建 · KV兼容</span>
+                  </div>
+                  <div class="text-[11px] text-emerald-950 bg-emerald-50/70 border border-emerald-200/80 rounded-lg px-3 py-2 space-y-1">
+                    <div class="font-bold text-emerald-900">✨ v7.22.0 界面精修与字体风格升级：</div>
+                    <ul class="list-disc pl-4 space-y-0.5 text-slate-700">
+                      <li><strong>顶栏按钮全局统一</strong>：全站顶栏操作钮统一 <code class="font-mono bg-white px-1 rounded border">h-9</code> 高度与字号，移除「🔍 速查」多余快捷键胶囊（移至悬停提示）。</li>
+                      <li><strong>大牌字体风格一键切换</strong>：保留现有明欢几何无衬线默认体，新增 Apple 原生、Stripe/Notion、Wise 财务数字、Airbnb 圆润、Medium 衬线混排共 6 套大牌字体。</li>
+                      <li><strong>主题面板与版本卡片重构</strong>：压缩预设主题与自定义调色盘纵向篇幅，折叠历史日志让左右卡片高度均衡对齐。</li>
+                    </ul>
+                  </div>
+                </div>
+                <details class="group bg-slate-50/90 border border-slate-200/80 rounded-lg px-3 py-1.5 text-[11px] text-slate-600">
+                  <summary class="cursor-pointer font-bold text-slate-700 hover:text-emerald-800 select-none flex items-center justify-between">
+                    <span>📜 展开查看近期历史版本日志（v7.21.0 / v7.20.0 / v7.19.0）</span>
+                    <span class="text-[10px] text-slate-400 group-open:rotate-180 transition-transform">▼</span>
+                  </summary>
+                  <div class="mt-2 pt-2 border-t border-slate-200 space-y-1.5 leading-relaxed">
+                    <div><strong class="text-slate-800">v7.21.0</strong>：全量拍平 60 处历史猴子补丁与 12 个分散启动器；重构撤销（↩️）引擎增加 <code class="font-mono">lastKnownStateSnapshot</code> 自动快照与跨 F5 刷新基线回退。</div>
+                    <div><strong class="text-slate-800">v7.20.0</strong>：修复 12 项深层 Bug（智能设好价、跨店比价入口、家庭药箱补货开单、KPI 5 双币下钻、汇率敏感度条、2026 代购状态等）；新增商品 O(1) 缓存与搜索防抖、全局速查面板、一键数据健康体检中心。</div>
+                    <div><strong class="text-slate-800">v7.19.0</strong>：全局 1720px 超宽视口零遮挡、明欢同款现代几何无衬线字体体系、对账单微调箭头清理与冗余死代码清理。</div>
+                  </div>
+                </details>
               </div>
-                <ul class="list-disc pl-4 space-y-1 text-[11px] text-slate-600">
-                  <li><strong>主版本号（7）</strong>：独立 <code class="font-mono">.html</code> 全功能前端，100% 保持既有订单/商品库数据结构与抓单映射规则完全兼容，支持 Cloudflare KV 实时云同步与亲友免登录只读门户。</li>
-                  <li><strong>次版本号（15）</strong>：融合双版本优势升级——新增<strong>「汇率单一取数中枢（getRates/toNzd/toCny）」</strong>消除硬编码汇率分叉、新增<strong>「对账单订单级运费/手续费/优惠三列按金额比例分摊（ORDER_FEE_V2）」</strong>、新增<strong>「parseYmdLocal 跨时区零漂移日期解析与超一年历史漏填角标」</strong>、新增<strong>「全渲染面 H()/safeUrl()/safeImgUrl() XSS 防护、RFC4180 CSV 标准转义与无阻塞安全自检面板」</strong>。</li>
-                  <li><strong>修订号（0）</strong>：开启只读客户门户本地存储写保护、统一 10 秒网络请求超时控制（fetchWithTimeout）、恢复真实收件人抓单映射规则并内置本地存档实体自愈清洗。</li>
-                </ul>
-              </div>
-              <div class="bg-white/90 rounded-lg p-3 border border-amber-200 space-y-1">
-                <div class="font-extrabold text-amber-950">🔄 未来热更新版本递增规则：</div>
-                <ul class="list-disc pl-4 space-y-1 text-[11px] text-slate-600">
-                  <li><strong>小修复（Patch）</strong>：微调按钮排版、改动文案、调整某个计算公式或提示语时递增修订号，如更新为 <code class="font-mono font-bold text-slate-800">v7.9.1 (Build 20261030.xxxx)</code>；</li>
-                  <li><strong>新功能（Minor）</strong>：新增电商抓单渠道、新分析看板、新对账或比价模块时递增次版本号，如更新为 <code class="font-mono font-bold text-slate-800">v7.10.0 (Build YYYYMMDD.HHMM)</code>；</li>
-                  <li><strong>架构级升级（Major）</strong>：切换底层存储引擎或全局大改版时递增主版本号，如更新为 <code class="font-mono font-bold text-slate-800">v8.0.0 (Build YYYYMMDD.HHMM)</code>。</li>
-                </ul>
+              <div class="lg:col-span-5 flex flex-col gap-2.5 justify-between">
+                <div class="bg-white/95 rounded-xl p-3.5 border border-amber-200 space-y-1.5 flex-1">
+                  <div class="font-extrabold text-amber-950">🔄 未来热更新版本递增规则（固定规范）：</div>
+                  <ul class="list-disc pl-4 space-y-1 text-[11px] text-slate-600">
+                    <li><strong>小修复（Patch）</strong>：微调排版、文案、公式或修 Bug 时递增修订号，如 <code class="font-mono font-bold text-slate-800">v7.22.1</code>；</li>
+                    <li><strong>新功能（Minor）</strong>：新增功能模块、看板、字体或架构内部优化（保持存储兼容）时递增次版本号，如 <code class="font-mono font-bold text-slate-800">v7.23.0</code>；</li>
+                    <li><strong>架构级升级（Major）</strong>：切换底层存储引擎（如迁移至 D1/R2）或全局大改版时递增主版本号，如 <code class="font-mono font-bold text-slate-800">v8.0.0</code>。</li>
+                  </ul>
+                </div>
+                <div class="bg-white/95 rounded-xl px-3.5 py-2.5 border border-slate-200 grid grid-cols-3 gap-2 text-center">
+                  <div class="bg-emerald-50/70 rounded-lg py-1.5 px-1">
+                    <div class="text-[10px] text-slate-500">运行期补丁</div>
+                    <div class="text-xs font-extrabold text-emerald-700 font-mono">0 处（已拍平）</div>
+                  </div>
+                  <div class="bg-teal-50/70 rounded-lg py-1.5 px-1">
+                    <div class="text-[10px] text-slate-500">启动引导器</div>
+                    <div class="text-xs font-extrabold text-teal-700 font-mono">1 个统一入口</div>
+                  </div>
+                  <div class="bg-amber-50/70 rounded-lg py-1.5 px-1">
+                    <div class="text-[10px] text-slate-500">撤销兜底</div>
+                    <div class="text-xs font-extrabold text-amber-700 font-mono">100% 全覆盖</div>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
         </div>
 
-        <!-- Preset Themes Grid -->
-        <div class="space-y-2.5">
-          <div class="flex items-center justify-between">
-            <h4 class="text-sm font-bold text-slate-800 flex items-center gap-1.5">
-              <span>🌈 选择预设美学主题（点击即刻切换全站配色）</span>
-            </h4>
-            <span class="text-[11px] text-slate-500">精选 7 套纽澳风情高颜值配色 + 1 套自由调色盘</span>
-          </div>
-          <div id="themePresetCardsGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3"></div>
-        </div>
-
-        <!-- Custom Theme Color Picker Studio -->
-        <div class="border border-slate-200 rounded-xl p-4 bg-slate-50/70 space-y-3.5">
-          <div class="flex flex-wrap items-center justify-between gap-2">
-            <div>
-              <h4 class="text-sm font-bold text-slate-800 flex items-center gap-1.5">
-                <span>🎨 自定义专属主题调色盘 & 卡片圆角风格</span>
+        <!-- Compact Appearance Studio: Preset Themes + Big-Tech Font Styles + Collapsible Custom Palette -->
+        <div class="space-y-3">
+          <!-- Row 1: Compact Preset Themes -->
+          <div class="space-y-1.5">
+            <div class="flex items-center justify-between flex-wrap gap-2">
+              <h4 class="text-xs sm:text-sm font-bold text-slate-800 flex items-center gap-1.5">
+                <span>🌈 预设美学主题</span>
+                <span class="text-[11px] font-normal text-slate-500">点击即刻切换全站配色（8套）</span>
               </h4>
-              <p class="text-[11px] text-slate-500">拖动取色器即可实时预览并生成属于您的独一无二配色方案</p>
+              <div class="flex items-center gap-2">
+                <label class="inline-flex items-center gap-1.5 text-[11px] text-slate-600 bg-slate-100 px-2.5 py-1 rounded-lg border border-slate-200">
+                  <span class="font-bold">圆角:</span>
+                  <select id="customCardRadiusSelect" class="text-xs bg-transparent font-bold text-slate-800 focus:outline-none cursor-pointer">
+                    <option value="1rem">标准 (16px)</option>
+                    <option value="1.5rem">超柔 (24px)</option>
+                    <option value="0.5rem">干练 (8px)</option>
+                  </select>
+                </label>
+                <button type="button" id="btnResetDefaultTheme" class="text-[11px] text-rose-600 hover:bg-rose-50 px-2 py-1 rounded-lg border border-transparent hover:border-rose-200 font-semibold transition">🔄 恢复默认</button>
+              </div>
             </div>
-            <div class="flex items-center gap-2">
-              <button type="button" id="btnResetDefaultTheme" class="text-xs text-rose-600 hover:underline px-2 py-1">🔄 恢复默认翡翠主题</button>
-              <button type="button" id="btnApplyCustomTheme" class="bg-emerald-700 hover:bg-emerald-600 text-white font-bold px-3.5 py-1.5 rounded-lg shadow-xs transition">✨ 启用自定义配色</button>
-            </div>
+            <div id="themePresetCardsGrid" class="grid grid-cols-2 sm:grid-cols-4 gap-2"></div>
           </div>
 
-          <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 pt-1">
-            <label class="bg-white p-2.5 rounded-xl border border-slate-200 flex flex-col gap-1.5 cursor-pointer hover:border-slate-400 transition">
-              <span class="text-[11px] font-bold text-slate-700">1. 顶栏渐变起色</span>
-              <div class="flex items-center gap-2">
-                <input type="color" id="customColorHeaderStart" value="#022c22" class="w-8 h-8 rounded cursor-pointer border-0 p-0 bg-transparent" />
-                <span id="customHexHeaderStart" class="font-mono text-[11px] text-slate-500">#022c22</span>
-              </div>
-            </label>
-            <label class="bg-white p-2.5 rounded-xl border border-slate-200 flex flex-col gap-1.5 cursor-pointer hover:border-slate-400 transition">
-              <span class="text-[11px] font-bold text-slate-700">2. 顶栏渐变止色</span>
-              <div class="flex items-center gap-2">
-                <input type="color" id="customColorHeaderEnd" value="#0f4c45" class="w-8 h-8 rounded cursor-pointer border-0 p-0 bg-transparent" />
-                <span id="customHexHeaderEnd" class="font-mono text-[11px] text-slate-500">#0f4c45</span>
-              </div>
-            </label>
-            <label class="bg-white p-2.5 rounded-xl border border-slate-200 flex flex-col gap-1.5 cursor-pointer hover:border-slate-400 transition">
-              <span class="text-[11px] font-bold text-slate-700">3. 导航选中主色</span>
-              <div class="flex items-center gap-2">
-                <input type="color" id="customColorPrimary" value="#059669" class="w-8 h-8 rounded cursor-pointer border-0 p-0 bg-transparent" />
-                <span id="customHexPrimary" class="font-mono text-[11px] text-slate-500">#059669</span>
-              </div>
-            </label>
-            <label class="bg-white p-2.5 rounded-xl border border-slate-200 flex flex-col gap-1.5 cursor-pointer hover:border-slate-400 transition">
-              <span class="text-[11px] font-bold text-slate-700">4. 核心按钮强调色</span>
-              <div class="flex items-center gap-2">
-                <input type="color" id="customColorAccent" value="#f59e0b" class="w-8 h-8 rounded cursor-pointer border-0 p-0 bg-transparent" />
-                <span id="customHexAccent" class="font-mono text-[11px] text-slate-500">#f59e0b</span>
-              </div>
-            </label>
-            <label class="bg-white p-2.5 rounded-xl border border-slate-200 flex flex-col gap-1.5 cursor-pointer hover:border-slate-400 transition">
-              <span class="text-[11px] font-bold text-slate-700">5. 页面全局背景色</span>
-              <div class="flex items-center gap-2">
-                <input type="color" id="customColorPageBg" value="#f0f5f3" class="w-8 h-8 rounded cursor-pointer border-0 p-0 bg-transparent" />
-                <span id="customHexPageBg" class="font-mono text-[11px] text-slate-500">#f0f5f3</span>
-              </div>
-            </label>
-            <div class="bg-white p-2.5 rounded-xl border border-slate-200 flex flex-col justify-between gap-1.5">
-              <span class="text-[11px] font-bold text-slate-700">6. 卡片圆角弧度</span>
-              <select id="customCardRadiusSelect" class="w-full text-xs border border-slate-300 rounded-lg px-2 py-1.5 bg-slate-50 font-medium">
-                <option value="1rem">标准圆润 (16px)</option>
-                <option value="1.5rem">超柔大圆角 (24px)</option>
-                <option value="0.5rem">干练微圆角 (8px)</option>
-              </select>
+          <!-- Row 2: Big-Tech Font Style Switcher (v7.22.0 NEW) -->
+          <div class="space-y-1.5 pt-1">
+            <div class="flex items-center justify-between flex-wrap gap-2">
+              <h4 class="text-xs sm:text-sm font-bold text-slate-800 flex items-center gap-1.5">
+                <span>🔤 大牌软件字体风格</span>
+                <span class="text-[11px] font-normal text-slate-500">保留现有默认字体，新增 5 款国际一线软件同款排版，点击即切并自动云同步</span>
+              </h4>
             </div>
+            <div id="fontStylePresetGrid" class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2"></div>
           </div>
+
+          <!-- Row 3: Collapsible Custom Color Picker Studio -->
+          <details class="group border border-slate-200 rounded-xl bg-slate-50/80 overflow-hidden">
+            <summary class="cursor-pointer px-3.5 py-2.5 flex flex-wrap items-center justify-between gap-2 select-none hover:bg-slate-100/70 transition">
+              <div class="flex items-center gap-2">
+                <span class="text-xs sm:text-sm font-bold text-slate-800">🎨 高级自定义专属调色盘</span>
+                <span class="text-[11px] text-slate-500">展开自由微调顶栏渐变、主色、强调色与页面背景色</span>
+              </div>
+              <span class="text-[11px] font-bold text-emerald-700 group-open:hidden">展开调色盘 ▼</span>
+              <span class="text-[11px] font-bold text-slate-500 hidden group-open:inline">收起调色盘 ▲</span>
+            </summary>
+            <div class="px-3.5 pb-3.5 pt-2 border-t border-slate-200/80 space-y-2.5">
+              <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2 items-stretch">
+                <label class="bg-white px-2.5 py-2 rounded-lg border border-slate-200 flex flex-col gap-1 cursor-pointer hover:border-slate-400 transition">
+                  <span class="text-[11px] font-bold text-slate-700">1. 顶栏起色</span>
+                  <div class="flex items-center gap-2">
+                    <input type="color" id="customColorHeaderStart" value="#022c22" class="w-7 h-7 rounded cursor-pointer border-0 p-0 bg-transparent" />
+                    <span id="customHexHeaderStart" class="font-mono text-[11px] text-slate-500">#022c22</span>
+                  </div>
+                </label>
+                <label class="bg-white px-2.5 py-2 rounded-lg border border-slate-200 flex flex-col gap-1 cursor-pointer hover:border-slate-400 transition">
+                  <span class="text-[11px] font-bold text-slate-700">2. 顶栏止色</span>
+                  <div class="flex items-center gap-2">
+                    <input type="color" id="customColorHeaderEnd" value="#0f4c45" class="w-7 h-7 rounded cursor-pointer border-0 p-0 bg-transparent" />
+                    <span id="customHexHeaderEnd" class="font-mono text-[11px] text-slate-500">#0f4c45</span>
+                  </div>
+                </label>
+                <label class="bg-white px-2.5 py-2 rounded-lg border border-slate-200 flex flex-col gap-1 cursor-pointer hover:border-slate-400 transition">
+                  <span class="text-[11px] font-bold text-slate-700">3. 导航主色</span>
+                  <div class="flex items-center gap-2">
+                    <input type="color" id="customColorPrimary" value="#059669" class="w-7 h-7 rounded cursor-pointer border-0 p-0 bg-transparent" />
+                    <span id="customHexPrimary" class="font-mono text-[11px] text-slate-500">#059669</span>
+                  </div>
+                </label>
+                <label class="bg-white px-2.5 py-2 rounded-lg border border-slate-200 flex flex-col gap-1 cursor-pointer hover:border-slate-400 transition">
+                  <span class="text-[11px] font-bold text-slate-700">4. 强调按钮</span>
+                  <div class="flex items-center gap-2">
+                    <input type="color" id="customColorAccent" value="#f59e0b" class="w-7 h-7 rounded cursor-pointer border-0 p-0 bg-transparent" />
+                    <span id="customHexAccent" class="font-mono text-[11px] text-slate-500">#f59e0b</span>
+                  </div>
+                </label>
+                <label class="bg-white px-2.5 py-2 rounded-lg border border-slate-200 flex flex-col gap-1 cursor-pointer hover:border-slate-400 transition">
+                  <span class="text-[11px] font-bold text-slate-700">5. 页面背景</span>
+                  <div class="flex items-center gap-2">
+                    <input type="color" id="customColorPageBg" value="#f0f5f3" class="w-7 h-7 rounded cursor-pointer border-0 p-0 bg-transparent" />
+                    <span id="customHexPageBg" class="font-mono text-[11px] text-slate-500">#f0f5f3</span>
+                  </div>
+                </label>
+                <div class="flex items-center justify-center">
+                  <button type="button" id="btnApplyCustomTheme" class="w-full h-full bg-emerald-700 hover:bg-emerald-600 text-white font-bold px-3 py-2 rounded-lg text-xs shadow-xs transition">✨ 应用自定义配色</button>
+                </div>
+              </div>
+            </div>
+          </details>
         </div>
       </div>
 
@@ -4101,13 +4149,13 @@
     };
 
     // 版本号唯一来源：APP_VERSION + BUILD_TAG（CURRENT_SEMVER / CURRENT_BUILD_TAG 等冗余常量已删除）
-    const APP_VERSION = 'v7.21.0';
-    const BUILD_TAG = 'Build 20261119.2058';
+    const APP_VERSION = 'v7.22.0';
+    const BUILD_TAG = 'Build 20261119.2155';
     const APP_VERSION_LABEL = `${APP_VERSION} (${BUILD_TAG})`;
     console.info('%c[纽澳跨境采购与快递追踪管家] 当前正式稳定版本: ' + APP_VERSION_LABEL + ' | Semantic Versioning + Build Tag 已生效', 'background:#064e3b;color:#fde68a;padding:4px 10px;border-radius:6px;font-weight:bold;');
     const DEFAULT_UI_CUSTOM_LABELS = {
       appTitle: { icon: '', text: '纽澳跨境采购与快递追踪管家', note: '支持一单多包拆单追踪 · 采购单价与运费核算 · 电脑与手机多端同步', labelTitle: '系统主标题 & 副标题说明', group: 'header', emojiPresets: ['🇳🇿', '🦘', '🌿', '📦', '🛡️'] },
-      appVersion: { icon: '🚀', text: APP_VERSION_LABEL, note: '当前正式稳定版本：v7.21.0 (Build 20261119.2058)（1720px超宽视口零遮挡 · 明欢同款全局无衬线等宽数字字体 · 账单对齐与免微调箭头 · 冗余代码清理与性能优化）· 点击查看版本规则', labelTitle: '顶部版本号标识 (SemVer + Build Tag)', group: 'header', emojiPresets: ['🚀', '✨', '🏷️', '💎', '🔥'] },
+      appVersion: { icon: '🚀', text: APP_VERSION_LABEL, note: '当前正式稳定版本：v7.22.0 (Build 20261119.2155)（1720px超宽视口零遮挡 · 明欢同款全局无衬线等宽数字字体 · 账单对齐与免微调箭头 · 冗余代码清理与性能优化）· 点击查看版本规则', labelTitle: '顶部版本号标识 (SemVer + Build Tag)', group: 'header', emojiPresets: ['🚀', '✨', '🏷️', '💎', '🔥'] },
       btnNewOrder: { icon: '＋', text: '新增订单', note: '新建采购订单（内含网页粘贴自动填单 / 门店直购录入 / 复制上一单）', labelTitle: '顶部按钮 1：新增订单', group: 'topbar', emojiPresets: ['＋', '🛒', '✍️', '⚡', '🛍️'] },
       btnBatchImport: { icon: '📥', text: '智能导单', note: '专用于导入新采购订单：Excel表格差异导入 / 网页订单粘贴解析 / 浏览器抓单小书签', labelTitle: '顶部按钮 2：智能导单', group: 'topbar', emojiPresets: ['📥', '📂', '📊', '⚡', '📑'] },
       btnSyncBackup: { icon: '☁️', text: '云端与备份', note: '专用于多端云同步与备份：Cloudflare KV 实时云同步 / 历史时间机器回滚 / 本地 JSON 备份包', labelTitle: '顶部按钮 3：云端与备份', group: 'topbar', emojiPresets: ['☁️', '🔄', '📲', '💾', '🛡️'] },
@@ -4978,7 +5026,7 @@
 
       if (dirtyCount > 0) {
         if (btnSave) {
-          btnSave.className = 'bg-amber-400 hover:bg-amber-300 text-slate-950 font-extrabold text-xs px-3 py-1.5 rounded-md shadow transition flex items-center gap-1 unsaved-pulse';
+          btnSave.className = 'h-7 bg-amber-400 hover:bg-amber-300 text-slate-950 font-extrabold text-xs px-3 rounded-md shadow transition inline-flex items-center gap-1 whitespace-nowrap unsaved-pulse';
         }
         const customSave = (state.uiCustomLabels && state.uiCustomLabels.btnSave) || DEFAULT_UI_CUSTOM_LABELS.btnSave;
         if (saveIcon) saveIcon.textContent = customSave.icon || '💾';
@@ -4996,7 +5044,7 @@
         }
       } else {
         if (btnSave) {
-          btnSave.className = 'bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs px-3 py-1.5 rounded-md shadow transition flex items-center gap-1';
+          btnSave.className = 'h-7 bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs px-3 rounded-md shadow transition inline-flex items-center gap-1 whitespace-nowrap';
         }
         const customSave = (state.uiCustomLabels && state.uiCustomLabels.btnSave) || DEFAULT_UI_CUSTOM_LABELS.btnSave;
         if (saveIcon) saveIcon.textContent = '✅';
@@ -15134,8 +15182,9 @@
       const body = document.body;
       const root = document.documentElement;
 
-      // Apply card radius
+      // Apply card radius & font style
       root.style.setProperty('--theme-card-radius', tCfg.cardRadius || '1rem');
+      if (typeof applyFontStyleToDOM === 'function') applyFontStyleToDOM(tCfg.fontStyle || 'minghuan_default');
 
       if (tCfg.themeId === 'custom') {
         body.setAttribute('data-theme', 'custom');
@@ -28337,11 +28386,130 @@ export async function onRequestPost(context) {
           computeDataHealthReport();
         }, 300);
       });
-      console.log('🚀 纽澳跨境采购与快递追踪管家 v7.21.0 (Build 20261119.2058) 已就绪 · 12项Bug已修复 · ⌘K速查 & 🩺健康体检已激活');
+      console.log('🚀 纽澳跨境采购与快递追踪管家 v7.22.0 (Build 20261119.2155) 已就绪 · 12项Bug已修复 · ⌘K速查 & 🩺健康体检已激活');
     })();
 
   
     // =========================================================================
+
+    // =========================================================================
+    // 🔤 v7.22.0 BIG-TECH FONT STYLE ENGINE (6 Curated Presets + Cloud Sync)
+    // =========================================================================
+    const APP_FONT_PRESETS = [
+      {
+        id: 'minghuan_default',
+        name: '明欢几何无衬线',
+        brand: '默认 · Vercel / Linear 风',
+        sample: 'NZ$128.50 纽澳采购',
+        css: "'Plus Jakarta Sans', 'Inter', -apple-system, BlinkMacSystemFont, 'PingFang SC', 'HarmonyOS Sans SC', 'Microsoft YaHei UI', 'Microsoft YaHei', 'Noto Sans SC', sans-serif",
+        letterSpacing: '-0.01em',
+        googleFontUrl: null
+      },
+      {
+        id: 'apple_sf',
+        name: 'Apple 原生清晰体',
+        brand: 'Apple / macOS / iOS',
+        sample: 'NZ$128.50 极简原生',
+        css: "-apple-system, BlinkMacSystemFont, 'SF Pro Display', 'SF Pro Text', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif",
+        letterSpacing: '-0.005em',
+        googleFontUrl: null
+      },
+      {
+        id: 'notion_stripe',
+        name: '效率高密无衬线',
+        brand: 'Stripe / Notion / 飞书',
+        sample: 'NZ$128.50 表格利器',
+        css: "'Inter', 'Noto Sans SC', -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif",
+        letterSpacing: '-0.015em',
+        googleFontUrl: 'https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;700&display=swap'
+      },
+      {
+        id: 'wise_finance',
+        name: '财务精准数字体',
+        brand: 'Wise / Bloomberg 终端',
+        sample: 'NZ$128.50 账单清晰',
+        css: "'DM Sans', 'JetBrains Mono', 'PingFang SC', 'Microsoft YaHei', sans-serif",
+        letterSpacing: '0em',
+        googleFontUrl: 'https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700;800&family=JetBrains+Mono:wght@500;700&display=swap'
+      },
+      {
+        id: 'airbnb_soft',
+        name: '轻盈圆润人文体',
+        brand: 'Airbnb / 温和账本风',
+        sample: 'NZ$128.50 柔和护眼',
+        css: "'Nunito', 'PingFang SC', 'HarmonyOS Sans SC', 'Microsoft YaHei', sans-serif",
+        letterSpacing: '0.005em',
+        googleFontUrl: 'https://fonts.googleapis.com/css2?family=Nunito:wght@500;600;700;800&display=swap'
+      },
+      {
+        id: 'editorial_serif',
+        name: '杂志编辑衬线风',
+        brand: 'Medium / 高端报表风',
+        sample: 'NZ$128.50 书卷质感',
+        css: "'Noto Serif SC', 'Georgia', 'Songti SC', 'STSong', 'Plus Jakarta Sans', serif",
+        letterSpacing: '0.01em',
+        googleFontUrl: 'https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@500;700&display=swap'
+      }
+    ];
+
+    const _loadedFontUrls = new Set();
+    function ensureGoogleFontLoaded(url) {
+      if (!url || _loadedFontUrls.has(url)) return;
+      _loadedFontUrls.add(url);
+      const link = document.createElement('link');
+      link.rel = 'stylesheet';
+      link.href = url;
+      document.head.appendChild(link);
+    }
+
+    function applyFontStyleToDOM(fontId) {
+      const preset = APP_FONT_PRESETS.find(f => f.id === fontId) || APP_FONT_PRESETS[0];
+      if (preset.googleFontUrl) ensureGoogleFontLoaded(preset.googleFontUrl);
+      document.documentElement.style.setProperty('--app-font-sans', preset.css);
+      document.body.style.letterSpacing = preset.letterSpacing || '-0.01em';
+      renderFontStylePresetGrid(preset.id);
+    }
+
+    function renderFontStylePresetGrid(activeFontId) {
+      const grid = document.getElementById('fontStylePresetGrid');
+      if (!grid) return;
+      const curId = activeFontId || (state && state.uiThemeConfig && state.uiThemeConfig.fontStyle) || 'minghuan_default';
+      grid.innerHTML = APP_FONT_PRESETS.map(f => {
+        const active = f.id === curId;
+        return `
+          <button type="button" data-font-preset="${f.id}" class="text-left p-2.5 rounded-xl border transition cursor-pointer flex flex-col justify-between gap-1 ${active ? 'border-emerald-600 bg-emerald-50/90 ring-2 ring-emerald-500/30 shadow-xs' : 'border-slate-200 bg-white hover:border-emerald-400 hover:bg-slate-50'}">
+            <div class="flex items-center justify-between gap-1">
+              <span class="text-xs font-extrabold text-slate-800 truncate">${f.name}</span>
+              ${active ? '<span class="text-[10px] font-bold text-emerald-700 shrink-0">✓ 当前</span>' : ''}
+            </div>
+            <div class="text-[10px] text-slate-500 truncate">${f.brand}</div>
+            <div class="text-[11px] font-bold text-emerald-900 bg-slate-100/80 rounded px-1.5 py-0.5 truncate mt-0.5" style="font-family:${f.css.replace(/"/g, '&quot;')}">${f.sample}</div>
+          </button>
+        `;
+      }).join('');
+    }
+
+    registerAppBootTask('v722_font_engine', () => {
+      const curFont = (state && state.uiThemeConfig && state.uiThemeConfig.fontStyle) || 'minghuan_default';
+      applyFontStyleToDOM(curFont);
+      const grid = document.getElementById('fontStylePresetGrid');
+      if (grid) {
+        grid.addEventListener('click', (e) => {
+          const btn = e.target.closest('[data-font-preset]');
+          if (!btn) return;
+          const fid = btn.getAttribute('data-font-preset');
+          const preset = APP_FONT_PRESETS.find(f => f.id === fid);
+          if (!preset) return;
+          if (typeof recordBeforeAction === 'function') recordBeforeAction(`切换字体风格为「${preset.name}」`);
+          state.uiThemeConfig = mergeUiThemeConfig(state.uiThemeConfig);
+          state.uiThemeConfig.fontStyle = fid;
+          applyFontStyleToDOM(fid);
+          if (typeof saveState === 'function') saveState(`切换字体风格为「${preset.name}」`);
+          if (typeof showToast === 'function') showToast(`🔤 已切换为「${preset.name}」（${preset.brand}）`);
+        });
+      }
+    });
+
     // 🧩 v7.21.0 FLAT FUNCTION DISPATCHERS (Zero Runtime Monkey-Patching)
     // =========================================================================
     function addFormItemRow(...args) { return _flat1_addFormItemRow.apply(this, args); }
