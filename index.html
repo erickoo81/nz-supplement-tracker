@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>纽澳跨境采购与快递追踪管家 v7.22.0 (Build 20261119.2155)</title>
+  <title>纽澳跨境采购与快递追踪管家 v7.24.0 (Build 20261119.2300)</title>
   <script src="https://cdn.tailwindcss.com/3.4.17"></script>
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
   <script defer src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
@@ -410,9 +410,9 @@
               <span id="uiIcon-appTitle" class="hidden"></span>
               <span id="uiText-appTitle">纽澳跨境采购与快递追踪管家</span>
             </h1>
-            <button type="button" id="btnHeaderVersionBadge" class="inline-flex items-center gap-1 text-xs bg-gradient-to-r from-amber-400 to-amber-300 hover:from-amber-300 hover:to-amber-200 text-slate-950 font-extrabold px-2.5 py-0.5 rounded-full shadow-xs transition cursor-pointer" title="当前正式稳定版本：v7.22.0 (Build 20261119.2155)（遵循 vMAJOR.MINOR.PATCH + Build Tag 规范 · 点击查看版本规范与更新日志）">
+            <button type="button" id="btnHeaderVersionBadge" class="inline-flex items-center gap-1 text-xs bg-gradient-to-r from-amber-400 to-amber-300 hover:from-amber-300 hover:to-amber-200 text-slate-950 font-extrabold px-2.5 py-0.5 rounded-full shadow-xs transition cursor-pointer" title="当前正式稳定版本：v7.24.0 (Build 20261119.2300)（遵循 vMAJOR.MINOR.PATCH + Build Tag 规范 · 点击查看版本规范与更新日志）">
               <span id="uiIcon-appVersion">🚀</span>
-              <span id="uiText-appVersion">v7.22.0 (Build 20261119.2155)</span>
+              <span id="uiText-appVersion">v7.24.0 (Build 20261119.2300)</span>
             </button>
             <button type="button" id="btnHeaderCfStatusPill" class="inline-flex items-center gap-1 text-[11px] bg-emerald-900/90 hover:bg-emerald-800 text-emerald-100 border border-emerald-600/70 font-semibold px-2.5 py-0.5 rounded-full transition cursor-pointer" title="点击打开 Cloudflare KV 边缘云同步设置 (方案B)">
               <span id="headerCfStatusDot" class="w-2 h-2 rounded-full bg-amber-400 inline-block"></span>
@@ -440,6 +440,11 @@
         <button id="btnHeaderCmdPalette" type="button" class="h-9 bg-emerald-900/90 hover:bg-emerald-800 text-emerald-100 text-xs sm:text-sm px-3 rounded-lg border border-emerald-700 transition inline-flex items-center justify-center gap-1 whitespace-nowrap" title="全局瞬时搜索订单、运单号、商品与快捷指令（支持快捷键 Ctrl+K 或 ⌘K）">
           <span>🔍</span>
           <span class="hidden sm:inline font-medium">速查</span>
+        </button>
+        <button id="btnHeaderReminderCenter" type="button" class="h-9 bg-emerald-900/90 hover:bg-emerald-800 text-emerald-100 text-xs sm:text-sm px-3 rounded-lg border border-emerald-700 transition inline-flex items-center justify-center gap-1 whitespace-nowrap" title="智能提醒中心：物流超时/拆单掉队、代购待结算、临期补货、好价达标与自定义备忘（支持导出手机日历 .ics）">
+          <span>🔔</span>
+          <span class="hidden sm:inline font-medium">提醒</span>
+          <span id="headerReminderBadge" class="hidden px-1.5 py-0.5 text-[10px] leading-none rounded-full bg-rose-500 text-white font-extrabold">0</span>
         </button>
         <button id="btnHeaderHealthDoctor" type="button" class="h-9 bg-emerald-900/90 hover:bg-emerald-800 text-emerald-100 text-xs sm:text-sm px-3 rounded-lg border border-emerald-700 transition inline-flex items-center justify-center gap-1 whitespace-nowrap" title="一键扫描缺失运单、疑似重复订单、异常单价、待结代购与未设好价商品">
           <span>🩺</span>
@@ -3232,7 +3237,7 @@
         <div>
           <h3 class="text-base font-bold flex items-center gap-2 flex-wrap">
             <span>⚙️ 个性化与规则中心</span>
-            <span class="text-[11px] bg-amber-400 text-slate-950 font-extrabold px-2.5 py-0.5 rounded-full">v7.22.0 (Build 20261119.2155) · SemVer标准版本管理</span>
+            <span class="text-[11px] bg-amber-400 text-slate-950 font-extrabold px-2.5 py-0.5 rounded-full">v7.24.0 (Build 20261119.2300) · SemVer标准版本管理</span>
           </h3>
           <p class="text-xs text-emerald-200 mt-0.5">一站式归纳管理：8套主题皮肤与自定义调色盘 · 全系统选项名称/图标/注释自由修改 · 抓单自学习规则 · 454条超链接模板</p>
         </div>
@@ -3270,7 +3275,7 @@
         <div class="bg-gradient-to-r from-emerald-50 via-teal-50 to-amber-50 border-2 border-emerald-300 rounded-xl p-4 space-y-3">
           <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-emerald-200/80 pb-2.5">
             <div class="flex items-center gap-2 flex-wrap">
-              <span class="px-2.5 py-1 rounded-full bg-emerald-900 text-amber-300 font-extrabold text-xs font-mono">v7.22.0 (Build 20261119.2155)</span>
+              <span class="px-2.5 py-1 rounded-full bg-emerald-900 text-amber-300 font-extrabold text-xs font-mono">v7.24.0 (Build 20261119.2300)</span>
               <span class="font-extrabold text-slate-900 text-sm">严格执行的版本号规则（Semantic Versioning + Build Tag）</span>
             </div>
             <button type="button" id="btnJumpToLabelsTab" class="bg-white hover:bg-slate-50 text-emerald-900 border border-emerald-300 font-bold px-3 py-1.5 rounded-lg shadow-2xs transition text-xs shrink-0">
@@ -3283,24 +3288,26 @@
               <div class="lg:col-span-7 bg-white/95 rounded-xl p-3.5 border border-emerald-200 flex flex-col justify-between gap-2">
                 <div class="space-y-2">
                   <div class="flex items-center justify-between gap-2 flex-wrap">
-                    <div class="font-extrabold text-emerald-950">📌 当前正式稳定版本：<span class="font-mono text-emerald-700">v7.22.0 (Build 20261119.2155)</span></div>
+                    <div class="font-extrabold text-emerald-950">📌 当前正式稳定版本：<span class="font-mono text-emerald-700">v7.24.0 (Build 20261119.2300)</span></div>
                     <span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800 border border-emerald-200">单文件零构建 · KV兼容</span>
                   </div>
                   <div class="text-[11px] text-emerald-950 bg-emerald-50/70 border border-emerald-200/80 rounded-lg px-3 py-2 space-y-1">
-                    <div class="font-bold text-emerald-900">✨ v7.22.0 界面精修与字体风格升级：</div>
+                    <div class="font-bold text-emerald-900">✨ v7.24.0 离线自动邮件/Webhook 推送 + 海关防撞车预警：</div>
                     <ul class="list-disc pl-4 space-y-0.5 text-slate-700">
-                      <li><strong>顶栏按钮全局统一</strong>：全站顶栏操作钮统一 <code class="font-mono bg-white px-1 rounded border">h-9</code> 高度与字号，移除「🔍 速查」多余快捷键胶囊（移至悬停提示）。</li>
-                      <li><strong>大牌字体风格一键切换</strong>：保留现有明欢几何无衬线默认体，新增 Apple 原生、Stripe/Notion、Wise 财务数字、Airbnb 圆润、Medium 衬线混排共 6 套大牌字体。</li>
-                      <li><strong>主题面板与版本卡片重构</strong>：压缩预设主题与自定义调色盘纵向篇幅，折叠历史日志让左右卡片高度均衡对齐。</li>
+                      <li><strong>关掉网页也准时提醒（Cloudflare Cron + Resend）</strong>：新增离线推送配置台，支持收件邮箱、Webhook/Bark 推送地址、长时间未签收分级告警（14天常规/21天紧急）与每周日简报，并支持一键测试与导出 Worker 部署脚本。</li>
+                      <li><strong>新增「🛂 海关防撞车预警」</strong>：自动监测同一收件人近 7 天内 ≥ 2 单寄回国在途，提醒错开发货避免同批查验或补税。</li>
+                      <li><strong>云端 KV 配置直通</strong>：推送开关、邮箱、阈值与延后记录统一写入 <code class="font-mono bg-white px-1 rounded border">nz_tracker_latest_v7</code>，后台 Cron 零重复维护。</li>
                     </ul>
                   </div>
                 </div>
                 <details class="group bg-slate-50/90 border border-slate-200/80 rounded-lg px-3 py-1.5 text-[11px] text-slate-600">
                   <summary class="cursor-pointer font-bold text-slate-700 hover:text-emerald-800 select-none flex items-center justify-between">
-                    <span>📜 展开查看近期历史版本日志（v7.21.0 / v7.20.0 / v7.19.0）</span>
+                    <span>📜 展开查看近期历史版本日志（v7.23.0 / v7.22.0 / v7.21.0 / v7.20.0 / v7.19.0）</span>
                     <span class="text-[10px] text-slate-400 group-open:rotate-180 transition-transform">▼</span>
                   </summary>
                   <div class="mt-2 pt-2 border-t border-slate-200 space-y-1.5 leading-relaxed">
+                    <div><strong class="text-slate-800">v7.23.0</strong>：新增「🔔 智能提醒中心」（五大跨境自动预警、自定义备忘、Snooze 延后、桌面通知、微信汇总复制及 <code class="font-mono">.ics</code> 日历导出）。</div>
+                    <div><strong class="text-slate-800">v7.22.0</strong>：顶栏按钮全局统一 <code class="font-mono">h-9</code> 等高排版；新增 6 套大牌软件字体风格一键切换；重构主题面板与版本说明 7:5 均衡分栏。</div>
                     <div><strong class="text-slate-800">v7.21.0</strong>：全量拍平 60 处历史猴子补丁与 12 个分散启动器；重构撤销（↩️）引擎增加 <code class="font-mono">lastKnownStateSnapshot</code> 自动快照与跨 F5 刷新基线回退。</div>
                     <div><strong class="text-slate-800">v7.20.0</strong>：修复 12 项深层 Bug（智能设好价、跨店比价入口、家庭药箱补货开单、KPI 5 双币下钻、汇率敏感度条、2026 代购状态等）；新增商品 O(1) 缓存与搜索防抖、全局速查面板、一键数据健康体检中心。</div>
                     <div><strong class="text-slate-800">v7.19.0</strong>：全局 1720px 超宽视口零遮挡、明欢同款现代几何无衬线字体体系、对账单微调箭头清理与冗余死代码清理。</div>
@@ -3311,8 +3318,8 @@
                 <div class="bg-white/95 rounded-xl p-3.5 border border-amber-200 space-y-1.5 flex-1">
                   <div class="font-extrabold text-amber-950">🔄 未来热更新版本递增规则（固定规范）：</div>
                   <ul class="list-disc pl-4 space-y-1 text-[11px] text-slate-600">
-                    <li><strong>小修复（Patch）</strong>：微调排版、文案、公式或修 Bug 时递增修订号，如 <code class="font-mono font-bold text-slate-800">v7.22.1</code>；</li>
-                    <li><strong>新功能（Minor）</strong>：新增功能模块、看板、字体或架构内部优化（保持存储兼容）时递增次版本号，如 <code class="font-mono font-bold text-slate-800">v7.23.0</code>；</li>
+                    <li><strong>小修复（Patch）</strong>：微调排版、文案、公式或修 Bug 时递增修订号，如 <code class="font-mono font-bold text-slate-800">v7.24.1</code>；</li>
+                    <li><strong>新功能（Minor）</strong>：新增功能模块、看板、字体或架构内部优化（保持存储兼容）时递增次版本号，如 <code class="font-mono font-bold text-slate-800">v7.25.0</code>；</li>
                     <li><strong>架构级升级（Major）</strong>：切换底层存储引擎（如迁移至 D1/R2）或全局大改版时递增主版本号，如 <code class="font-mono font-bold text-slate-800">v8.0.0</code>。</li>
                   </ul>
                 </div>
@@ -3818,6 +3825,125 @@
     </div>
   </div>
 
+
+  <!-- ===================================================================== -->
+  <!-- v7.23.0 NEW MODAL: SMART REMINDER & ALERT CENTER (对标明欢物管提醒引擎) -->
+  <!-- ===================================================================== -->
+  <div id="modalReminderCenter" class="hidden fixed inset-0 z-[92] bg-slate-950/60 backdrop-blur-xs flex items-center justify-center p-3">
+    <div class="bg-white rounded-2xl shadow-2xl border border-slate-200 w-full max-w-4xl max-h-[90vh] flex flex-col overflow-hidden">
+      <!-- Header -->
+      <div class="px-5 py-3.5 bg-gradient-to-r from-emerald-950 via-teal-900 to-slate-900 text-white flex flex-wrap items-center justify-between gap-2">
+        <div>
+          <h3 class="text-base sm:text-lg font-extrabold flex items-center gap-2">
+            🔔 智能提醒中心
+            <span class="text-[11px] font-mono bg-amber-400 text-slate-950 px-2 py-0.5 rounded-full">v7.23.0</span>
+          </h3>
+          <p class="text-[11px] text-emerald-200/90 mt-0.5">自动监测跨境物流超时、拆单掉队、代购待结算、保质期临期、好价达标与自定义备忘</p>
+        </div>
+        <div class="flex items-center gap-1.5">
+          <button id="btnReminderDesktopNotify" type="button" class="text-[11px] bg-white/10 hover:bg-white/20 text-emerald-100 border border-white/20 px-2.5 py-1.5 rounded-lg font-semibold transition" title="开启浏览器桌面弹窗提醒">🖥️ 桌面通知</button>
+          <button id="btnReminderCopyWeChat" type="button" class="text-[11px] bg-emerald-600 hover:bg-emerald-500 text-white px-2.5 py-1.5 rounded-lg font-bold transition" title="一键复制今日全部待办提醒文案发微信">💬 复制微信汇总</button>
+          <button id="btnReminderExportIcs" type="button" class="text-[11px] bg-amber-400 hover:bg-amber-300 text-slate-950 px-2.5 py-1.5 rounded-lg font-bold transition" title="导出 .ics 日历文件，直接导入 iPhone / Mac / Google 日历">📅 导出日历(.ics)</button>
+          <button id="btnCloseReminderCenter" type="button" class="text-emerald-200 hover:text-white text-xl font-bold px-2 py-0.5 rounded-lg hover:bg-white/10 transition">✕</button>
+        </div>
+      </div>
+
+      <!-- Category Filter Pills + Threshold Settings Bar -->
+      <div class="px-4 py-2.5 bg-slate-50 border-b border-slate-200 flex flex-wrap items-center justify-between gap-2">
+        <div id="reminderCategoryTabs" class="flex flex-wrap items-center gap-1.5 text-xs"></div>
+        <details class="text-[11px] text-slate-600 relative">
+          <summary class="cursor-pointer font-bold text-emerald-800 hover:text-emerald-950 select-none px-2 py-1 rounded-lg bg-white border border-slate-200">⚙️ 预警阈值设置</summary>
+          <div class="mt-1.5 p-3 bg-white border border-slate-200 rounded-xl shadow-lg grid grid-cols-3 gap-2.5 min-w-[290px] sm:absolute sm:right-0 sm:z-20">
+            <label class="flex flex-col gap-1">
+              <span class="font-bold text-slate-700">在途超时(天)</span>
+              <input id="remCfgTransitDays" type="number" min="3" max="90" value="14" class="border border-slate-300 rounded-lg px-2 py-1 text-xs font-mono font-bold text-center" />
+            </label>
+            <label class="flex flex-col gap-1">
+              <span class="font-bold text-slate-700">缺运单预警(天)</span>
+              <input id="remCfgMissingTrackDays" type="number" min="1" max="30" value="3" class="border border-slate-300 rounded-lg px-2 py-1 text-xs font-mono font-bold text-center" />
+            </label>
+            <label class="flex flex-col gap-1">
+              <span class="font-bold text-slate-700">保质临期(天)</span>
+              <input id="remCfgExpiryDays" type="number" min="7" max="365" value="60" class="border border-slate-300 rounded-lg px-2 py-1 text-xs font-mono font-bold text-center" />
+            </label>
+            <button id="btnSaveReminderThresholds" type="button" class="col-span-3 bg-emerald-700 hover:bg-emerald-600 text-white font-bold py-1.5 rounded-lg text-xs transition">💾 保存阈值并立即重算</button>
+          </div>
+        </details>
+      </div>
+
+
+      <!-- v7.24.0 NEW: Offline Headless Push Config Drawer (关掉网页也提醒) -->
+      <details id="offlinePushConfigDrawer" class="group bg-indigo-50/60 border-b border-indigo-200/80 text-xs">
+        <summary class="cursor-pointer px-4 py-2 flex flex-wrap items-center justify-between gap-2 select-none hover:bg-indigo-100/50 transition">
+          <div class="flex items-center gap-2 flex-wrap">
+            <span class="font-extrabold text-indigo-950">📡 离线自动推送（关掉网页也提醒 · Cloudflare Cron + Resend / Bark）</span>
+            <span id="offlinePushStatusPill" class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-100 text-emerald-800 border border-emerald-200">已启用</span>
+          </div>
+          <span class="text-[11px] font-bold text-indigo-700 group-open:hidden">展开配置邮箱与部署脚本 ▼</span>
+          <span class="text-[11px] font-bold text-slate-500 hidden group-open:inline">收起配置 ▲</span>
+        </summary>
+        <div class="px-4 pb-3.5 pt-2 border-t border-indigo-200/70 space-y-2.5 bg-white/80">
+          <div class="grid grid-cols-1 sm:grid-cols-12 gap-2.5 items-end">
+            <label class="sm:col-span-4 flex flex-col gap-1">
+              <span class="text-[11px] font-bold text-slate-700">📧 接收提醒邮箱（多个用逗号分隔）</span>
+              <input id="remCfgEmailTo" type="text" placeholder="your@email.com" class="border border-slate-300 rounded-lg px-2.5 py-1.5 text-xs bg-white" />
+            </label>
+            <label class="sm:col-span-4 flex flex-col gap-1">
+              <span class="text-[11px] font-bold text-slate-700">📲 可选：Bark / Webhook 推送地址</span>
+              <input id="remCfgWebhookUrl" type="url" placeholder="https://api.day.app/你的Key/（留空则仅发邮件）" class="border border-slate-300 rounded-lg px-2.5 py-1.5 text-xs bg-white" />
+            </label>
+            <label class="sm:col-span-4 flex flex-col gap-1">
+              <span class="text-[11px] font-bold text-slate-700">🔗 可选：Cron Worker 测试地址</span>
+              <input id="remCfgWorkerUrl" type="url" placeholder="https://nz-parcel-notifier.你的域名.workers.dev" class="border border-slate-300 rounded-lg px-2.5 py-1.5 text-xs bg-white" />
+            </label>
+          </div>
+          <div class="flex flex-wrap items-center gap-3 text-[11px] text-slate-700 bg-slate-50 px-3 py-2 rounded-lg border border-slate-200">
+            <label class="inline-flex items-center gap-1 font-bold text-emerald-900 cursor-pointer"><input id="remChkPushEnabled" type="checkbox" checked class="rounded" /> 开启每日定时推送</label>
+            <label class="inline-flex items-center gap-1 cursor-pointer"><input id="remChkLogistics" type="checkbox" checked class="rounded" /> 🚚 长时间未签收/拆单掉队</label>
+            <label class="inline-flex items-center gap-1 cursor-pointer"><input id="remChkCustoms" type="checkbox" checked class="rounded" /> 🛂 海关防撞车(7天≥2单)</label>
+            <label class="inline-flex items-center gap-1 cursor-pointer"><input id="remChkDaigou" type="checkbox" checked class="rounded" /> 💰 代购已签收未结</label>
+            <label class="inline-flex items-center gap-1 cursor-pointer"><input id="remChkExpiry" type="checkbox" checked class="rounded" /> 💊 药箱临期</label>
+            <label class="inline-flex items-center gap-1 cursor-pointer"><input id="remChkWeekly" type="checkbox" checked class="rounded" /> 📊 每周日采购简报</label>
+          </div>
+          <div class="flex flex-wrap items-center justify-between gap-2">
+            <div class="flex flex-wrap items-center gap-1.5">
+              <button id="btnSaveOfflinePushCfg" type="button" class="bg-emerald-700 hover:bg-emerald-600 text-white font-bold px-3 py-1.5 rounded-lg text-[11px] transition">💾 保存推送设置（记得点顶栏保存同步到KV）</button>
+              <button id="btnTestOfflinePushNow" type="button" class="bg-indigo-600 hover:bg-indigo-500 text-white font-bold px-3 py-1.5 rounded-lg text-[11px] transition">🧪 立即测试离线推送</button>
+            </div>
+            <div class="flex flex-wrap items-center gap-1.5">
+              <button id="btnCopyCronWorkerCode" type="button" class="bg-white hover:bg-slate-100 text-slate-700 border border-slate-300 font-bold px-2.5 py-1.5 rounded-lg text-[11px] transition">📋 复制 Cron Worker 代码</button>
+              <button id="btnDownloadCronWorkerCode" type="button" class="bg-amber-400 hover:bg-amber-300 text-slate-950 font-bold px-2.5 py-1.5 rounded-lg text-[11px] transition">⬇️ 下载 nz_parcel_cron_notifier.js</button>
+            </div>
+          </div>
+        </div>
+      </details>
+
+      <!-- Quick Add Custom Reminder Form -->
+      <div class="px-4 py-2.5 bg-emerald-50/50 border-b border-emerald-100 flex flex-wrap items-center gap-2 text-xs">
+        <span class="font-bold text-emerald-900 shrink-0">📌 新增自定义提醒：</span>
+        <input id="remNewTitleInput" type="text" placeholder="例如：黑五前核对鱼油与护肝片库存 / 提醒妈妈查收包裹..." class="flex-1 min-w-[200px] border border-emerald-300/80 rounded-lg px-2.5 py-1.5 bg-white text-xs focus:outline-none focus:ring-2 focus:ring-emerald-400" />
+        <input id="remNewDateInput" type="date" class="border border-emerald-300/80 rounded-lg px-2 py-1.5 bg-white text-xs font-mono" />
+        <select id="remNewPrioritySelect" class="border border-emerald-300/80 rounded-lg px-2 py-1.5 bg-white text-xs font-semibold">
+          <option value="high">🔴 高优</option>
+          <option value="medium" selected>🟡 常规</option>
+          <option value="low">🟢 备忘</option>
+        </select>
+        <button id="btnAddCustomReminder" type="button" class="bg-emerald-700 hover:bg-emerald-600 text-white font-bold px-3 py-1.5 rounded-lg text-xs transition shrink-0">＋ 添加提醒</button>
+      </div>
+
+      <!-- Main Reminder List -->
+      <div id="reminderCenterList" class="flex-1 overflow-y-auto custom-scroll p-4 space-y-2.5 text-xs bg-slate-50/40"></div>
+
+      <!-- Footer -->
+      <div class="px-5 py-2.5 bg-slate-50 border-t border-slate-200 flex flex-wrap items-center justify-between gap-2 text-[11px] text-slate-500">
+        <span id="reminderCenterFooterStats">正在扫描全站提醒事项...</span>
+        <div class="flex items-center gap-2">
+          <button id="btnReminderRestoreSnoozed" type="button" class="text-slate-600 hover:text-emerald-800 hover:underline font-medium">🔄 恢复已延后/已忽略提醒</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <!-- ===================================================================== -->
   <!-- v7.20.0 NEW MODAL 2: DATA HEALTH & INTEGRITY DOCTOR                   -->
   <!-- ===================================================================== -->
@@ -4149,13 +4275,13 @@
     };
 
     // 版本号唯一来源：APP_VERSION + BUILD_TAG（CURRENT_SEMVER / CURRENT_BUILD_TAG 等冗余常量已删除）
-    const APP_VERSION = 'v7.22.0';
-    const BUILD_TAG = 'Build 20261119.2155';
+    const APP_VERSION = 'v7.24.0';
+    const BUILD_TAG = 'Build 20261119.2300';
     const APP_VERSION_LABEL = `${APP_VERSION} (${BUILD_TAG})`;
     console.info('%c[纽澳跨境采购与快递追踪管家] 当前正式稳定版本: ' + APP_VERSION_LABEL + ' | Semantic Versioning + Build Tag 已生效', 'background:#064e3b;color:#fde68a;padding:4px 10px;border-radius:6px;font-weight:bold;');
     const DEFAULT_UI_CUSTOM_LABELS = {
       appTitle: { icon: '', text: '纽澳跨境采购与快递追踪管家', note: '支持一单多包拆单追踪 · 采购单价与运费核算 · 电脑与手机多端同步', labelTitle: '系统主标题 & 副标题说明', group: 'header', emojiPresets: ['🇳🇿', '🦘', '🌿', '📦', '🛡️'] },
-      appVersion: { icon: '🚀', text: APP_VERSION_LABEL, note: '当前正式稳定版本：v7.22.0 (Build 20261119.2155)（1720px超宽视口零遮挡 · 明欢同款全局无衬线等宽数字字体 · 账单对齐与免微调箭头 · 冗余代码清理与性能优化）· 点击查看版本规则', labelTitle: '顶部版本号标识 (SemVer + Build Tag)', group: 'header', emojiPresets: ['🚀', '✨', '🏷️', '💎', '🔥'] },
+      appVersion: { icon: '🚀', text: APP_VERSION_LABEL, note: '当前正式稳定版本：v7.24.0 (Build 20261119.2300)（1720px超宽视口零遮挡 · 明欢同款全局无衬线等宽数字字体 · 账单对齐与免微调箭头 · 冗余代码清理与性能优化）· 点击查看版本规则', labelTitle: '顶部版本号标识 (SemVer + Build Tag)', group: 'header', emojiPresets: ['🚀', '✨', '🏷️', '💎', '🔥'] },
       btnNewOrder: { icon: '＋', text: '新增订单', note: '新建采购订单（内含网页粘贴自动填单 / 门店直购录入 / 复制上一单）', labelTitle: '顶部按钮 1：新增订单', group: 'topbar', emojiPresets: ['＋', '🛒', '✍️', '⚡', '🛍️'] },
       btnBatchImport: { icon: '📥', text: '智能导单', note: '专用于导入新采购订单：Excel表格差异导入 / 网页订单粘贴解析 / 浏览器抓单小书签', labelTitle: '顶部按钮 2：智能导单', group: 'topbar', emojiPresets: ['📥', '📂', '📊', '⚡', '📑'] },
       btnSyncBackup: { icon: '☁️', text: '云端与备份', note: '专用于多端云同步与备份：Cloudflare KV 实时云同步 / 历史时间机器回滚 / 本地 JSON 备份包', labelTitle: '顶部按钮 3：云端与备份', group: 'topbar', emojiPresets: ['☁️', '🔄', '📲', '💾', '🛡️'] },
@@ -4644,6 +4770,7 @@
         courierTemplates: state.courierTemplates,
         customScrapeRules: state.customScrapeRules,
         uiThemeConfig: state.uiThemeConfig,
+        reminderConfig: state.reminderConfig,
         uiCustomLabels: state.uiCustomLabels
       });
     }
@@ -10278,6 +10405,7 @@
           courierTemplates: state.courierTemplates,
           customScrapeRules: state.customScrapeRules,
           uiThemeConfig: state.uiThemeConfig,
+        reminderConfig: state.reminderConfig,
           uiCustomLabels: state.uiCustomLabels
         };
         return obj;
@@ -17700,7 +17828,7 @@ export async function onRequestPost(context) {
         if (prodTabBtn) prodTabBtn.classList.add('hidden');
       } else {
         if (banner) banner.classList.add('hidden');
-        ['btnOpenNewOrder', 'btnOpenSmartImportModal', 'btnOpenSyncModal', 'btnOpenScrapeRulesModalHeader', 'btnHeaderUndo', 'btnHeaderDiscard', 'btnHeaderSave', 'btnHeaderCmdPalette', 'btnHeaderHealthDoctor', 'filterRecipient'].forEach(id => {
+        ['btnOpenNewOrder', 'btnOpenSmartImportModal', 'btnOpenSyncModal', 'btnOpenScrapeRulesModalHeader', 'btnHeaderUndo', 'btnHeaderDiscard', 'btnHeaderSave', 'btnHeaderCmdPalette', 'btnHeaderReminderCenter', 'btnHeaderHealthDoctor', 'filterRecipient'].forEach(id => {
           const el = document.getElementById(id);
           if (el) el.classList.remove('hidden');
         });
@@ -28128,6 +28256,7 @@ export async function onRequestPost(context) {
         const quickActions = [
           { icon: '＋', title: '新建采购订单', sub: '打开新增订单弹窗（支持网页粘贴解析）', tag: '快捷指令', run: () => document.getElementById('btnOpenNewOrder')?.click() },
           { icon: '📥', title: '智能导单 / Excel 增量同步', sub: '打开批量导入与抓单中心', tag: '快捷指令', run: () => document.getElementById('btnOpenSmartImportModal')?.click() },
+          { icon: '🔔', title: '打开智能提醒中心', sub: '物流超时、代购待结、临期补货、好价达标与日历导出', tag: '新功能', run: () => openReminderCenterModal() },
           { icon: '🩺', title: '打开一键数据健康体检中心', sub: '扫描缺运单、重复单、异常价与待结代购', tag: '新功能', run: () => openHealthDoctorModal() },
           { icon: '🛒', title: '跨店比价与寄回国拆箱计算器', sub: '跳转到商品库跨店比价台', tag: '快捷指令', run: () => { document.querySelector('.nav-tab[data-tab="products"]')?.click(); setTimeout(() => document.getElementById('btnToggleSmartCartOptimizer')?.click(), 80); } },
           { icon: '🎯', title: '智能批量设置商品好价线', sub: '按历史最低核实价×1.03批量设置提醒线', tag: '快捷指令', run: () => runBatchAutoSetTargetPrices() },
@@ -28386,7 +28515,7 @@ export async function onRequestPost(context) {
           computeDataHealthReport();
         }, 300);
       });
-      console.log('🚀 纽澳跨境采购与快递追踪管家 v7.22.0 (Build 20261119.2155) 已就绪 · 12项Bug已修复 · ⌘K速查 & 🩺健康体检已激活');
+      console.log('🚀 纽澳跨境采购与快递追踪管家 v7.24.0 (Build 20261119.2300) 已就绪 · 12项Bug已修复 · ⌘K速查 & 🩺健康体检已激活');
     })();
 
   
@@ -28508,6 +28637,633 @@ export async function onRequestPost(context) {
           if (typeof showToast === 'function') showToast(`🔤 已切换为「${preset.name}」（${preset.brand}）`);
         });
       }
+    });
+
+
+    // =========================================================================
+    // 🔔 v7.23.0 SMART REMINDER & ALERT ENGINE (Tailored for NZ/AU Cross-Border)
+    // =========================================================================
+    const DEFAULT_REMINDER_CONFIG = {
+      transitOverdueDays: 14,
+      missingTrackDays: 3,
+      expiryWarnDays: 60,
+      snoozedUntil: {},
+      dismissedIds: {},
+      customReminders: []
+    };
+
+    function getReminderConfig() {
+      if (!state) return JSON.parse(JSON.stringify(DEFAULT_REMINDER_CONFIG));
+      if (!state.reminderConfig || typeof state.reminderConfig !== 'object') {
+        state.reminderConfig = JSON.parse(JSON.stringify(DEFAULT_REMINDER_CONFIG));
+      }
+      const cfg = state.reminderConfig;
+      if (!cfg.snoozedUntil || typeof cfg.snoozedUntil !== 'object') cfg.snoozedUntil = {};
+      if (!cfg.dismissedIds || typeof cfg.dismissedIds !== 'object') cfg.dismissedIds = {};
+      if (!Array.isArray(cfg.customReminders)) cfg.customReminders = [];
+      if (!(Number(cfg.transitOverdueDays) > 0)) cfg.transitOverdueDays = 14;
+      if (!(Number(cfg.missingTrackDays) > 0)) cfg.missingTrackDays = 3;
+      if (!(Number(cfg.expiryWarnDays) > 0)) cfg.expiryWarnDays = 60;
+      return cfg;
+    }
+
+    let _activeReminderFilter = 'ALL';
+
+    function computeAllSmartReminders() {
+      const cfg = getReminderConfig();
+      const todayMs = new Date(TODAY_STR + 'T00:00:00').getTime();
+      const dayMs = 86400000;
+      const items = [];
+
+      const orders = (typeof getActiveOrders === 'function' ? getActiveOrders() : (state.orders || [])).filter(o => o && !o.cancelled);
+
+      // 1. Logistics Overdue, Missing Tracking & Split-Parcel Lag
+      orders.forEach(o => {
+        const st = typeof getOrderStatus === 'function' ? getOrderStatus(o) : '';
+        const isSelfPickup = o.recipient === '自用' || o.merchant === 'CW';
+        if (isSelfPickup || st === 'DELIVERED') return;
+        const ordMs = o.orderDate ? new Date(o.orderDate + 'T00:00:00').getTime() : NaN;
+        const daysSince = isNaN(ordMs) ? 0 : Math.floor((todayMs - ordMs) / dayMs);
+        const parcels = Array.isArray(o.parcels) ? o.parcels : [];
+        const hasMissingTrack = parcels.length === 0 || parcels.some(p => !String(p.trackingNo || '').trim());
+
+        if (hasMissingTrack && daysSince >= cfg.missingTrackDays) {
+          items.push({
+            id: `rem_notrack_${o.id}`,
+            cat: 'LOGISTICS',
+            priority: daysSince >= 7 ? 'high' : 'medium',
+            icon: '📭',
+            title: `缺运单催录：${o.recipient || '未知'} · ${o.merchant || ''}（下单已 ${daysSince} 天）`,
+            desc: `订单 ${o.orderNo || o.id}（${o.orderDate || ''}）尚未补全快递单号，建议登录商家后台核查发货进度。`,
+            dueDate: TODAY_STR,
+            actionLabel: '✏️ 补录运单',
+            actionType: 'EDIT_ORDER',
+            actionTarget: o.id
+          });
+        } else if (daysSince >= cfg.transitOverdueDays) {
+          const tracks = parcels.map(p => p.trackingNo).filter(Boolean).join(', ');
+          items.push({
+            id: `rem_overdue_${o.id}`,
+            cat: 'LOGISTICS',
+            priority: daysSince >= cfg.transitOverdueDays + 7 ? 'high' : 'medium',
+            icon: '🚚',
+            title: `在途超时 ${daysSince} 天：${o.recipient || '未知'} · ${o.merchant || ''}`,
+            desc: `下单日 ${o.orderDate || ''}，运单号：${tracks || '未填'}。建议查验清关状态或联系快递客服。`,
+            dueDate: TODAY_STR,
+            actionLabel: '📋 查看详单',
+            actionType: 'VIEW_ORDER',
+            actionTarget: o.id
+          });
+        }
+
+        // Split-parcel lag: some delivered, some still pending > 5 days
+        if (parcels.length > 1) {
+          const delivDates = parcels.map(p => p.deliveredDate).filter(Boolean).sort();
+          const undelivCount = parcels.filter(p => !p.deliveredDate).length;
+          if (delivDates.length > 0 && undelivCount > 0) {
+            const firstDelivMs = new Date(delivDates[0] + 'T00:00:00').getTime();
+            const lagDays = isNaN(firstDelivMs) ? 0 : Math.floor((todayMs - firstDelivMs) / dayMs);
+            if (lagDays >= 5) {
+              items.push({
+                id: `rem_splitlag_${o.id}`,
+                cat: 'LOGISTICS',
+                priority: 'high',
+                icon: '⚠️',
+                title: `拆单掉队预警：${o.recipient || ''} 仍有 ${undelivCount}/${parcels.length} 个包裹未签收`,
+                desc: `同单首包已于 ${delivDates[0]} 签收（已隔 ${lagDays} 天），请重点追踪掉队包裹。`,
+                dueDate: TODAY_STR,
+                actionLabel: '📋 追踪拆单',
+                actionType: 'VIEW_ORDER',
+                actionTarget: o.id
+              });
+            }
+          }
+        }
+      });
+
+
+      // 1B. v7.24.0 Customs Collision Radar (Same recipient >= 2 in-transit orders within 7 days)
+      const _rec7dMap = {};
+      orders.forEach(o => {
+        const st = typeof getOrderStatus === 'function' ? getOrderStatus(o) : '';
+        if (o.recipient === '自用' || o.merchant === 'CW' || st === 'DELIVERED') return;
+        const ordMs = o.orderDate ? new Date(o.orderDate + 'T00:00:00').getTime() : NaN;
+        const daysSince = isNaN(ordMs) ? 999 : Math.floor((todayMs - ordMs) / dayMs);
+        if (daysSince <= 7 && o.recipient) {
+          if (!_rec7dMap[o.recipient]) _rec7dMap[o.recipient] = [];
+          _rec7dMap[o.recipient].push(o);
+        }
+      });
+      Object.entries(_rec7dMap).forEach(([rec, list]) => {
+        if (list.length >= 2) {
+          items.push({
+            id: `rem_customs_${rec}_${TODAY_STR.slice(0, 7)}`,
+            cat: 'CUSTOMS',
+            priority: 'medium',
+            icon: '🛂',
+            title: `海关防撞车提醒：「${rec}」近 7 天已有 ${list.length} 单寄回国在途`,
+            desc: `涉及订单：${list.map(x => `${x.orderDate || ''} ${x.merchant || ''}`).join('、')}。建议下一单错开发货或更换备用收件人，避免中国海关同批查验/补税。`,
+            dueDate: TODAY_STR,
+            actionLabel: '📋 筛选该收件人',
+            actionType: 'FILTER_REC',
+            actionTarget: rec
+          });
+        }
+      });
+
+      // 2. Friend Daigou Unsettled Payment Reminders (Delivered or > 7 days old in 2026+)
+      const daigouByRec = {};
+      orders.forEach(o => {
+        const yr = Number(o.year) || parseInt(String(o.orderDate || '').slice(0, 4), 10) || 0;
+        if (yr < 2026) return;
+        if (typeof isFriendDaigouOrder === 'function' && isFriendDaigouOrder(o) && !o.paymentSettled) {
+          const rec = o.recipient || '朋友代购';
+          const m = typeof calcOrderMoney === 'function' ? calcOrderMoney(o) : { totalNzd: 0, totalRmb: 0 };
+          const st = typeof getOrderStatus === 'function' ? getOrderStatus(o) : '';
+          if (!daigouByRec[rec]) daigouByRec[rec] = { count: 0, deliveredCount: 0, nzd: 0, rmb: 0, latestId: o.id };
+          daigouByRec[rec].count++;
+          if (st === 'DELIVERED') daigouByRec[rec].deliveredCount++;
+          daigouByRec[rec].nzd += Number(m.totalNzd || 0);
+          daigouByRec[rec].rmb += Number(m.totalRmb || 0);
+        }
+      });
+      Object.entries(daigouByRec).forEach(([rec, info]) => {
+        items.push({
+          id: `rem_daigou_${rec}`,
+          cat: 'DAIGOU',
+          priority: info.deliveredCount > 0 ? 'high' : 'medium',
+          icon: '💰',
+          title: `代购待结算：${rec}（${info.count} 单未结，其中 ${info.deliveredCount} 单已签收）`,
+          desc: `合计约 NZ$${info.nzd.toFixed(2)}（约 ¥${info.rmb.toFixed(0)}）。可一键跳转对账单生成微信催收/结算清单。`,
+          dueDate: TODAY_STR,
+          actionLabel: '🧾 去生成账单',
+          actionType: 'GOTO_BILL',
+          actionTarget: rec
+        });
+      });
+
+      // 3. Product Expiry Warnings (Family Supplement Cabinet)
+      const expiryMap = (state && state.productExpiryDates && typeof state.productExpiryDates === 'object') ? state.productExpiryDates : {};
+      Object.entries(expiryMap).forEach(([prodName, expDate]) => {
+        if (!expDate) return;
+        const expMs = new Date(expDate + 'T00:00:00').getTime();
+        if (isNaN(expMs)) return;
+        const daysLeft = Math.floor((expMs - todayMs) / dayMs);
+        if (daysLeft <= cfg.expiryWarnDays) {
+          items.push({
+            id: `rem_exp_${prodName}_${expDate}`,
+            cat: 'RESTOCK',
+            priority: daysLeft <= 14 ? 'high' : 'medium',
+            icon: '💊',
+            title: daysLeft < 0 ? `已过期 ${Math.abs(daysLeft)} 天：${prodName}` : `保质期临期（剩 ${daysLeft} 天）：${prodName}`,
+            desc: `登记效期至 ${expDate}，请及时核对家庭药箱存量并安排消耗或补货。`,
+            dueDate: expDate,
+            actionLabel: '🏷️ 查看商品',
+            actionType: 'SEARCH_PROD',
+            actionTarget: prodName
+          });
+        }
+      });
+
+      // 4. Target Good-Price Hit Radar
+      const seriesMap = typeof buildAllProductsVerifiedPriceSeriesMap === 'function' ? buildAllProductsVerifiedPriceSeriesMap() : {};
+      (state.products || []).forEach(p => {
+        const target = Number(p && p.targetNzdPrice);
+        if (!(target > 0)) return;
+        const series = seriesMap[p.name] || [];
+        let latestNzd = 0;
+        let latestDate = '';
+        for (let i = series.length - 1; i >= 0; i--) {
+          const v = Number(series[i].nzdUnit || series[i].nzdPrice || 0);
+          if (v > 0) { latestNzd = v; latestDate = series[i].date || ''; break; }
+        }
+        if (latestNzd > 0 && latestNzd <= target + 0.001) {
+          items.push({
+            id: `rem_goodprice_${p.name}`,
+            cat: 'PRICE',
+            priority: 'low',
+            icon: '🎯',
+            title: `好价达标：${p.name}（最新 NZ$${latestNzd.toFixed(2)} ≤ 心愿线 NZ$${target.toFixed(2)}）`,
+            desc: `最近核实于 ${latestDate || '近期'}，当前处于历史低位区间，适合加入跨店比价囤货。`,
+            dueDate: TODAY_STR,
+            actionLabel: '🛒 加入比价',
+            actionType: 'ADD_CART_OPT',
+            actionTarget: p.name
+          });
+        }
+      });
+
+      // 5. Custom User Reminders
+      cfg.customReminders.forEach(cr => {
+        if (!cr || cr.done) return;
+        const dStr = cr.dueDate || TODAY_STR;
+        const dMs = new Date(dStr + 'T00:00:00').getTime();
+        const diffDays = isNaN(dMs) ? 0 : Math.floor((dMs - todayMs) / dayMs);
+        const dueLabel = diffDays < 0 ? `已逾期 ${Math.abs(diffDays)} 天` : (diffDays === 0 ? '今日到期' : `${diffDays} 天后到期`);
+        items.push({
+          id: cr.id,
+          cat: 'CUSTOM',
+          priority: diffDays <= 0 ? 'high' : (cr.priority || 'medium'),
+          icon: '📌',
+          title: cr.title,
+          desc: `计划日期：${dStr}（${dueLabel}）`,
+          dueDate: dStr,
+          isCustom: true,
+          actionLabel: '✅ 标记完成',
+          actionType: 'DONE_CUSTOM',
+          actionTarget: cr.id
+        });
+      });
+
+      // Filter out snoozed & dismissed
+      const activeItems = items.filter(it => {
+        if (cfg.dismissedIds[it.id]) return false;
+        const snz = cfg.snoozedUntil[it.id];
+        if (snz && snz > TODAY_STR) return false;
+        return true;
+      });
+
+      // Sort: high -> medium -> low
+      const priRank = { high: 0, medium: 1, low: 2 };
+      activeItems.sort((a, b) => (priRank[a.priority] ?? 1) - (priRank[b.priority] ?? 1));
+
+      // Update Header Bell Badge
+      const badge = document.getElementById('headerReminderBadge');
+      if (badge) {
+        const urgentCnt = activeItems.filter(it => it.priority === 'high' || it.cat !== 'PRICE').length;
+        badge.textContent = String(urgentCnt);
+        badge.classList.toggle('hidden', urgentCnt === 0);
+      }
+
+      return { all: items, active: activeItems };
+    }
+
+    function renderReminderCenterModal() {
+      const cfg = getReminderConfig();
+      const { all, active } = computeAllSmartReminders();
+
+      const t1 = document.getElementById('remCfgTransitDays');
+      const t2 = document.getElementById('remCfgMissingTrackDays');
+      const t3 = document.getElementById('remCfgExpiryDays');
+      if (t1) t1.value = cfg.transitOverdueDays;
+      if (t2) t2.value = cfg.missingTrackDays;
+      if (t3) t3.value = cfg.expiryWarnDays;
+
+      const cats = [
+        { id: 'ALL', label: '全部待办', count: active.length },
+        { id: 'LOGISTICS', label: '🚚 物流超时', count: active.filter(x => x.cat === 'LOGISTICS').length },
+        { id: 'CUSTOMS', label: '🛂 海关防撞车', count: active.filter(x => x.cat === 'CUSTOMS').length },
+        { id: 'DAIGOU', label: '💰 代购待结', count: active.filter(x => x.cat === 'DAIGOU').length },
+        { id: 'RESTOCK', label: '💊 临期/药箱', count: active.filter(x => x.cat === 'RESTOCK').length },
+        { id: 'PRICE', label: '🎯 好价达标', count: active.filter(x => x.cat === 'PRICE').length },
+        { id: 'CUSTOM', label: '📌 自定义备忘', count: active.filter(x => x.cat === 'CUSTOM').length },
+      ];
+
+      const tabsEl = document.getElementById('reminderCategoryTabs');
+      if (tabsEl) {
+        tabsEl.innerHTML = cats.map(c => `
+          <button type="button" data-rem-cat="${c.id}" class="px-2.5 py-1 rounded-lg font-bold transition ${c.id === _activeReminderFilter ? 'bg-emerald-700 text-white shadow-2xs' : 'bg-white text-slate-600 border border-slate-200 hover:bg-emerald-50'}">
+            ${c.label} <span class="ml-0.5 font-mono ${c.id === _activeReminderFilter ? 'text-amber-300' : 'text-slate-400'}">(${c.count})</span>
+          </button>
+        `).join('');
+      }
+
+      const shown = _activeReminderFilter === 'ALL' ? active : active.filter(x => x.cat === _activeReminderFilter);
+      const listEl = document.getElementById('reminderCenterList');
+      if (listEl) {
+        if (shown.length === 0) {
+          listEl.innerHTML = `<div class="py-12 text-center text-slate-400 space-y-1"><div class="text-2xl">🎉</div><div class="font-bold text-slate-600">当前分类下暂无待处理提醒</div><div class="text-[11px]">所有包裹、代购结算与备忘均处于健康状态</div></div>`;
+        } else {
+          const priBadge = p => p === 'high'
+            ? '<span class="px-1.5 py-0.5 rounded bg-rose-100 text-rose-700 font-extrabold text-[10px]">紧急</span>'
+            : (p === 'medium' ? '<span class="px-1.5 py-0.5 rounded bg-amber-100 text-amber-800 font-bold text-[10px]">关注</span>' : '<span class="px-1.5 py-0.5 rounded bg-emerald-100 text-emerald-800 font-bold text-[10px]">机会</span>');
+          listEl.innerHTML = shown.map(it => `
+            <div class="bg-white rounded-xl border ${it.priority === 'high' ? 'border-rose-200/90' : 'border-slate-200'} p-3 shadow-2xs flex flex-col sm:flex-row sm:items-center justify-between gap-2.5">
+              <div class="flex items-start gap-2.5 min-w-0">
+                <span class="text-lg shrink-0 mt-0.5">${it.icon}</span>
+                <div class="min-w-0 space-y-0.5">
+                  <div class="flex items-center gap-1.5 flex-wrap">
+                    ${priBadge(it.priority)}
+                    <span class="font-extrabold text-slate-800">${H(it.title)}</span>
+                  </div>
+                  <div class="text-[11px] text-slate-500 leading-relaxed">${H(it.desc)}</div>
+                </div>
+              </div>
+              <div class="flex items-center gap-1.5 shrink-0 flex-wrap justify-end">
+                <button type="button" data-rem-act="${it.actionType}" data-rem-target="${H(it.actionTarget)}" data-rem-id="${H(it.id)}" class="bg-emerald-700 hover:bg-emerald-600 text-white font-bold px-2.5 py-1 rounded-lg text-[11px] transition">${H(it.actionLabel)}</button>
+                ${!it.isCustom ? `<button type="button" data-rem-snooze="${H(it.id)}" data-rem-days="3" class="bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold px-2 py-1 rounded-lg text-[11px] transition" title="3 天内不再提示">⏰ 延后3天</button>` : ''}
+                <button type="button" data-rem-dismiss="${H(it.id)}" data-rem-custom="${it.isCustom ? '1' : '0'}" class="bg-slate-50 hover:bg-rose-50 text-slate-500 hover:text-rose-600 border border-slate-200 px-2 py-1 rounded-lg text-[11px] transition" title="标记已处理/忽略">✓ 已处理</button>
+              </div>
+            </div>
+          `).join('');
+        }
+      }
+
+      const footerEl = document.getElementById('reminderCenterFooterStats');
+      if (footerEl) {
+        const hiddenCnt = Math.max(0, all.length - active.length);
+        footerEl.textContent = `共检出 ${active.length} 项活跃提醒（另有 ${hiddenCnt} 项已延后或已处理）· 自动随本地/Cloudflare KV 同步`;
+      }
+    }
+
+    function exportRemindersToIcs() {
+      const { active } = computeAllSmartReminders();
+      if (active.length === 0) {
+        if (typeof showToast === 'function') showToast('当前暂无待导出提醒');
+        return;
+      }
+      const pad = n => String(n).padStart(2, '0');
+      const now = new Date();
+      const dtStamp = `${now.getUTCFullYear()}${pad(now.getUTCMonth()+1)}${pad(now.getUTCDate())}T${pad(now.getUTCHours())}${pad(now.getUTCMinutes())}${pad(now.getUTCSeconds())}Z`;
+      const escIcs = s => String(s || '').replace(/\\/g, '\\\\').replace(/;/g, '\\;').replace(/,/g, '\\,').replace(/\n/g, '\\n');
+      const events = active.slice(0, 30).map((it, idx) => {
+        const dClean = String(it.dueDate || TODAY_STR).replace(/-/g, '');
+        return [
+          'BEGIN:VEVENT',
+          `UID:nz-tracker-${idx}-${Date.now()}@minghuan`,
+          `DTSTAMP:${dtStamp}`,
+          `DTSTART;VALUE=DATE:${dClean}`,
+          `SUMMARY:${escIcs('[纽澳采购提醒] ' + it.title)}`,
+          `DESCRIPTION:${escIcs(it.desc)}`,
+          'END:VEVENT'
+        ].join('\r\n');
+      }).join('\r\n');
+      const ics = ['BEGIN:VCALENDAR', 'VERSION:2.0', 'PRODID:-//NZ-AU Tracker//v7.23.0//CN', events, 'END:VCALENDAR'].join('\r\n');
+      const blob = new Blob([ics], { type: 'text/calendar;charset=utf-8' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `纽澳采购提醒_${TODAY_STR}.ics`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      setTimeout(() => URL.revokeObjectURL(url), 1000);
+      if (typeof showToast === 'function') showToast(`📅 已导出 ${Math.min(30, active.length)} 条提醒为 .ics 日历文件，双击即可导入手机/电脑日历！`);
+    }
+
+    function openReminderCenterModal() {
+      const m = document.getElementById('modalReminderCenter');
+      if (!m) return;
+      const dateInp = document.getElementById('remNewDateInput');
+      if (dateInp && !dateInp.value) dateInp.value = TODAY_STR;
+      renderReminderCenterModal();
+      m.classList.remove('hidden');
+    }
+
+    registerAppBootTask('v723_reminder_engine', () => {
+      const modal = document.getElementById('modalReminderCenter');
+      document.getElementById('btnHeaderReminderCenter')?.addEventListener('click', openReminderCenterModal);
+      document.getElementById('btnCloseReminderCenter')?.addEventListener('click', () => modal?.classList.add('hidden'));
+      modal?.addEventListener('click', (e) => { if (e.target === modal) modal.classList.add('hidden'); });
+
+      document.getElementById('reminderCategoryTabs')?.addEventListener('click', (e) => {
+        const btn = e.target.closest('[data-rem-cat]');
+        if (!btn) return;
+        _activeReminderFilter = btn.getAttribute('data-rem-cat') || 'ALL';
+        renderReminderCenterModal();
+      });
+
+      document.getElementById('btnSaveReminderThresholds')?.addEventListener('click', () => {
+        const cfg = getReminderConfig();
+        if (typeof recordBeforeAction === 'function') recordBeforeAction('调整智能提醒阈值');
+        cfg.transitOverdueDays = Math.max(3, parseInt(document.getElementById('remCfgTransitDays')?.value || '14', 10) || 14);
+        cfg.missingTrackDays = Math.max(1, parseInt(document.getElementById('remCfgMissingTrackDays')?.value || '3', 10) || 3);
+        cfg.expiryWarnDays = Math.max(7, parseInt(document.getElementById('remCfgExpiryDays')?.value || '60', 10) || 60);
+        if (typeof saveState === 'function') saveState('调整智能提醒阈值');
+        renderReminderCenterModal();
+        if (typeof showToast === 'function') showToast('⚙️ 已更新提醒阈值并重新扫描');
+      });
+
+      document.getElementById('btnAddCustomReminder')?.addEventListener('click', () => {
+        const titleInp = document.getElementById('remNewTitleInput');
+        const dateInp = document.getElementById('remNewDateInput');
+        const priSel = document.getElementById('remNewPrioritySelect');
+        const title = String(titleInp?.value || '').trim();
+        if (!title) { if (typeof showToast === 'function') showToast('请先输入提醒内容'); return; }
+        const cfg = getReminderConfig();
+        if (typeof recordBeforeAction === 'function') recordBeforeAction(`新增自定义提醒：${title}`);
+        cfg.customReminders.unshift({
+          id: 'rem_custom_' + Date.now(),
+          title,
+          dueDate: dateInp?.value || TODAY_STR,
+          priority: priSel?.value || 'medium',
+          done: false
+        });
+        if (titleInp) titleInp.value = '';
+        if (typeof saveState === 'function') saveState(`新增自定义提醒：${title}`);
+        renderReminderCenterModal();
+        if (typeof showToast === 'function') showToast(`📌 已添加自定义提醒：「${title}」`);
+      });
+
+      document.getElementById('reminderCenterList')?.addEventListener('click', (e) => {
+        const actBtn = e.target.closest('[data-rem-act]');
+        if (actBtn) {
+          const type = actBtn.getAttribute('data-rem-act');
+          const target = actBtn.getAttribute('data-rem-target');
+          if (type === 'DONE_CUSTOM') {
+            const cfg = getReminderConfig();
+            const item = cfg.customReminders.find(x => x.id === target);
+            if (item) {
+              if (typeof recordBeforeAction === 'function') recordBeforeAction(`完成自定义提醒：${item.title}`);
+              item.done = true;
+              if (typeof saveState === 'function') saveState(`完成自定义提醒：${item.title}`);
+              renderReminderCenterModal();
+            }
+            return;
+          }
+          modal?.classList.add('hidden');
+          if (type === 'EDIT_ORDER' && typeof openOrderModal === 'function') openOrderModal(target);
+          else if (type === 'VIEW_ORDER' && typeof openOrderQuickViewModal === 'function') openOrderQuickViewModal(target);
+          else if (type === 'GOTO_BILL') {
+            document.querySelector('.nav-tab[data-tab="analytics"]')?.click();
+            setTimeout(() => {
+              const recSel = document.getElementById('billRecipientSelect');
+              if (recSel) { recSel.value = target; recSel.dispatchEvent(new Event('change')); }
+            }, 120);
+          } else if (type === 'FILTER_REC') {
+            document.querySelector('.nav-tab[data-tab="orders"]')?.click();
+            const recF = document.getElementById('filterRecipient');
+            if (recF) { recF.value = target; if (typeof renderOrdersTab === 'function') renderOrdersTab(); }
+          } else if (type === 'SEARCH_PROD') {
+            document.querySelector('.nav-tab[data-tab="products"]')?.click();
+            const sInp = document.getElementById('prodSearchInput');
+            if (sInp) { sInp.value = target; if (typeof renderProductsTab === 'function') renderProductsTab(); }
+          } else if (type === 'ADD_CART_OPT') {
+            document.querySelector('.nav-tab[data-tab="products"]')?.click();
+            if (!Array.isArray(window.smartCartOptimizerItems)) window.smartCartOptimizerItems = [];
+            if (!window.smartCartOptimizerItems.some(it => it.product === target)) {
+              window.smartCartOptimizerItems.push({ product: target, qty: 2 });
+            }
+            if (typeof renderSmartCartOptimizer === 'function') renderSmartCartOptimizer();
+            setTimeout(() => document.getElementById('btnToggleSmartCartOptimizer')?.click(), 100);
+          }
+          return;
+        }
+
+        const snzBtn = e.target.closest('[data-rem-snooze]');
+        if (snzBtn) {
+          const rid = snzBtn.getAttribute('data-rem-snooze');
+          const days = parseInt(snzBtn.getAttribute('data-rem-days') || '3', 10) || 3;
+          const until = new Date(Date.now() + days * 86400000).toISOString().slice(0, 10);
+          const cfg = getReminderConfig();
+          if (typeof recordBeforeAction === 'function') recordBeforeAction('延后提醒 3 天');
+          cfg.snoozedUntil[rid] = until;
+          if (typeof saveState === 'function') saveState('延后提醒 3 天');
+          renderReminderCenterModal();
+          if (typeof showToast === 'function') showToast(`⏰ 已延后提醒至 ${until}`);
+          return;
+        }
+
+        const disBtn = e.target.closest('[data-rem-dismiss]');
+        if (disBtn) {
+          const rid = disBtn.getAttribute('data-rem-dismiss');
+          const isCust = disBtn.getAttribute('data-rem-custom') === '1';
+          const cfg = getReminderConfig();
+          if (typeof recordBeforeAction === 'function') recordBeforeAction('标记提醒已处理');
+          if (isCust) {
+            const c = cfg.customReminders.find(x => x.id === rid);
+            if (c) c.done = true;
+          } else {
+            cfg.dismissedIds[rid] = TODAY_STR;
+          }
+          if (typeof saveState === 'function') saveState('标记提醒已处理');
+          renderReminderCenterModal();
+          if (typeof showToast === 'function') showToast('✅ 已标记为已处理');
+        }
+      });
+
+      document.getElementById('btnReminderRestoreSnoozed')?.addEventListener('click', () => {
+        const cfg = getReminderConfig();
+        if (typeof recordBeforeAction === 'function') recordBeforeAction('恢复全部已延后/已忽略提醒');
+        cfg.snoozedUntil = {};
+        cfg.dismissedIds = {};
+        if (typeof saveState === 'function') saveState('恢复全部已延后/已忽略提醒');
+        renderReminderCenterModal();
+        if (typeof showToast === 'function') showToast('🔄 已恢复所有延后/忽略的系统提醒');
+      });
+
+      document.getElementById('btnReminderCopyWeChat')?.addEventListener('click', () => {
+        const { active } = computeAllSmartReminders();
+        if (active.length === 0) { if (typeof showToast === 'function') showToast('当前暂无待办提醒'); return; }
+        const lines = [`🔔 纽澳跨境采购提醒汇总（${TODAY_STR}）`, ...active.slice(0, 15).map((it, i) => `${i + 1}. ${it.icon} ${it.title}`)];
+        if (typeof copyTextToClipboard === 'function') copyTextToClipboard(lines.join('\n'), '今日提醒汇总');
+      });
+
+      document.getElementById('btnReminderExportIcs')?.addEventListener('click', exportRemindersToIcs);
+
+      document.getElementById('btnReminderDesktopNotify')?.addEventListener('click', () => {
+        if (!('Notification' in window)) {
+          if (typeof showToast === 'function') showToast('当前浏览器不支持桌面通知，可使用「导出日历(.ics)」实现手机强提醒');
+          return;
+        }
+        Notification.requestPermission().then(perm => {
+          if (perm === 'granted') {
+            const { active } = computeAllSmartReminders();
+            const urgent = active.filter(x => x.priority === 'high');
+            new Notification('🔔 纽澳跨境采购提醒已开启', {
+              body: urgent.length > 0 ? `当前有 ${urgent.length} 项紧急待办（如：${urgent[0].title}）` : `共 ${active.length} 项待办提醒，系统状态良好！`
+            });
+            if (typeof showToast === 'function') showToast('🖥️ 已开启浏览器桌面通知！');
+          } else {
+            if (typeof showToast === 'function') showToast('桌面通知权限未授予，请使用「导出日历(.ics)」同步到手机日历');
+          }
+        });
+      });
+
+      setTimeout(() => computeAllSmartReminders(), 350);
+    });
+
+
+    // =========================================================================
+    // 📡 v7.24.0 OFFLINE HEADLESS PUSH CONFIG & WORKER GENERATOR
+    // =========================================================================
+    const V724_CRON_WORKER_SOURCE = "/**\n * 纽澳跨境采购与快递追踪管家 v7.24.0 - 离线自动提醒推送引擎 (Cloudflare Worker + Cron Trigger)\n * =========================================================================================\n * 功能：无需打开网页，每天定时读取 Cloudflare KV (nz_tracker_latest_v7) 中的最新订单与提醒配置，\n *      自动检测「长时间未签收」「拆单掉队」「缺运单」「海关防撞车」「代购待结」「临期药箱」\n *      「自定义备忘」及「每周日采购简报」，通过 Resend 邮件（及可选 Bark/Webhook）自动推送！\n *\n * 3 步极简部署（Cloudflare 免费额度即可永久运行）：\n * 1. 在 Cloudflare Dashboard -> Workers & Pages -> Create Worker -> 粘贴本文件全部代码并部署。\n * 2. Settings -> Bindings：绑定与你 Pages 站点相同的 KV 命名空间，变量名填 `NZ_TRACKER_KV`。\n * 3. Settings -> Variables & Secrets：\n *      - RESEND_API_KEY   : 你的 Resend API Key (re_xxxx，与明欢物管可共用同一个)\n *      - NOTIFY_FROM      : 发件人，如 \"纽澳采购管家 <onboarding@resend.dev>\" 或你已验证域名邮箱\n *      - NOTIFY_TO        : 默认收件邮箱（若网页端已配置则优先使用网页端填写的邮箱）\n *      - SYNC_PASSCODE    : 与网页端一致的同步口令（用于手动触发测试推送鉴权）\n * 4. Settings -> Triggers -> Cron Triggers：添加定时表达式 `0 20 * * *`（每天奥克兰 9:00 AM NZDT / 8:00 AM NZST）。\n */\n\nconst KV_KEY_LATEST = 'nz_tracker_latest_v7';\nconst KV_KEY_LAST_PUSH = 'nz_tracker_last_push_meta_v724';\n\nfunction getKv(env) {\n  if (!env) return null;\n  if (env.NZ_TRACKER_KV && typeof env.NZ_TRACKER_KV.get === 'function') return env.NZ_TRACKER_KV;\n  for (const k of Object.keys(env)) {\n    const b = env[k];\n    if (b && typeof b === 'object' && typeof b.get === 'function' && typeof b.put === 'function') return b;\n  }\n  return null;\n}\n\nfunction nzTodayStr() {\n  // Format YYYY-MM-DD in Pacific/Auckland timezone\n  const parts = new Intl.DateTimeFormat('en-CA', {\n    timeZone: 'Pacific/Auckland',\n    year: 'numeric',\n    month: '2-digit',\n    day: '2-digit'\n  }).formatToParts(new Date());\n  const get = t => (parts.find(p => p.type === t) || {}).value || '';\n  return `${get('year')}-${get('month')}-${get('day')}`;\n}\n\nfunction getOrderStatusServer(o) {\n  if (!o) return 'PENDING';\n  if (o.cancelled) return 'CANCELLED';\n  const parcels = Array.isArray(o.parcels) ? o.parcels : [];\n  if (parcels.length === 0) return o.deliveredDate ? 'DELIVERED' : 'PENDING';\n  const deliv = parcels.filter(p => Boolean(p && p.deliveredDate)).length;\n  if (deliv === parcels.length) return 'DELIVERED';\n  if (deliv > 0) return 'PARTIAL';\n  return 'IN_TRANSIT';\n}\n\nfunction isFriendDaigou(o) {\n  const rec = String((o && o.recipient) || '').trim();\n  return Boolean(rec) && rec !== 'HOME' && rec !== '自用' && rec !== '家里';\n}\n\nfunction escHtml(s) {\n  return String(s || '')\n    .replace(/&/g, '&amp;')\n    .replace(/</g, '&lt;')\n    .replace(/>/g, '&gt;')\n    .replace(/\"/g, '&quot;');\n}\n\nfunction scanOfflineAlerts(state, todayStr) {\n  const cfg = Object.assign({\n    transitOverdueDays: 14,\n    urgentOverdueDays: 21,\n    missingTrackDays: 3,\n    expiryWarnDays: 60,\n    customsWindowDays: 7,\n    enableLogistics: true,\n    enableCustoms: true,\n    enableDaigou: true,\n    enableExpiry: true,\n    enableCustom: true,\n    enableWeeklyDigest: true,\n    snoozedUntil: {},\n    dismissedIds: {},\n    customReminders: []\n  }, (state && state.reminderConfig) || {});\n\n  const todayMs = new Date(todayStr + 'T00:00:00Z').getTime();\n  const dayMs = 86400000;\n  const orders = (Array.isArray(state.orders) ? state.orders : []).filter(o => o && !o.cancelled);\n\n  const alerts = [];\n  const inTransitByRec7d = {};\n  let inTransitTotal = 0;\n  let deliveredLast7d = 0;\n\n  for (const o of orders) {\n    const st = getOrderStatusServer(o);\n    const isSelf = o.recipient === '自用' || o.merchant === 'CW';\n    const ordMs = o.orderDate ? new Date(o.orderDate + 'T00:00:00Z').getTime() : NaN;\n    const daysSince = isNaN(ordMs) ? 0 : Math.floor((todayMs - ordMs) / dayMs);\n    const parcels = Array.isArray(o.parcels) ? o.parcels : [];\n\n    // Count recent deliveries for weekly digest\n    if (st === 'DELIVERED') {\n      const latestDeliv = parcels.map(p => p.deliveredDate).filter(Boolean).sort().pop() || o.deliveredDate || '';\n      if (latestDeliv) {\n        const dMs = new Date(latestDeliv + 'T00:00:00Z').getTime();\n        if (!isNaN(dMs) && (todayMs - dMs) <= 7 * dayMs) deliveredLast7d++;\n      }\n    }\n\n    if (!isSelf && st !== 'DELIVERED') {\n      inTransitTotal++;\n      const hasMissingTrack = parcels.length === 0 || parcels.some(p => !String(p.trackingNo || '').trim());\n\n      // Customs collision tracking (same recipient >= 2 in-transit orders within 7 days)\n      if (cfg.enableCustoms && daysSince <= cfg.customsWindowDays && o.recipient) {\n        if (!inTransitByRec7d[o.recipient]) inTransitByRec7d[o.recipient] = [];\n        inTransitByRec7d[o.recipient].push(o);\n      }\n\n      if (cfg.enableLogistics) {\n        if (hasMissingTrack && daysSince >= cfg.missingTrackDays) {\n          alerts.push({\n            id: `rem_notrack_${o.id}`,\n            level: daysSince >= 7 ? 'HIGH' : 'MED',\n            icon: '📭',\n            cat: '缺运单催录',\n            title: `${o.recipient || '未知'} · ${o.merchant || ''}（下单 ${daysSince} 天仍缺运单号）`,\n            detail: `订单 ${o.orderNo || o.id}（${o.orderDate || ''}）`\n          });\n        } else if (daysSince >= cfg.transitOverdueDays) {\n          const tracks = parcels.map(p => p.trackingNo).filter(Boolean).join(', ');\n          const isUrgent = daysSince >= (cfg.urgentOverdueDays || 21);\n          alerts.push({\n            id: `rem_overdue_${o.id}`,\n            level: isUrgent ? 'HIGH' : 'MED',\n            icon: isUrgent ? '🚨' : '🚚',\n            cat: isUrgent ? '超长未签收告警' : '在途超时提醒',\n            title: `${o.recipient || '未知'} · ${o.merchant || ''} 已在途 ${daysSince} 天未签收`,\n            detail: `下单日 ${o.orderDate || ''} · 运单：${tracks || '未填'}`\n          });\n        }\n\n        // Split-parcel lag\n        if (parcels.length > 1) {\n          const delivDates = parcels.map(p => p.deliveredDate).filter(Boolean).sort();\n          const undelivCount = parcels.filter(p => !p.deliveredDate).length;\n          if (delivDates.length > 0 && undelivCount > 0) {\n            const lagDays = Math.floor((todayMs - new Date(delivDates[0] + 'T00:00:00Z').getTime()) / dayMs);\n            if (lagDays >= 5) {\n              alerts.push({\n                id: `rem_splitlag_${o.id}`,\n                level: 'HIGH',\n                icon: '⚠️',\n                cat: '拆单掉队预警',\n                title: `${o.recipient || ''} 同单仍有 ${undelivCount}/${parcels.length} 包未签收`,\n                detail: `首包已于 ${delivDates[0]} 签收（相隔 ${lagDays} 天）`\n              });\n            }\n          }\n        }\n      }\n    }\n\n    // Friend Daigou delivered but unsettled\n    if (cfg.enableDaigou && isFriendDaigou(o) && !o.paymentSettled) {\n      const yr = Number(o.year) || parseInt(String(o.orderDate || '').slice(0, 4), 10) || 0;\n      if (yr >= 2026 && st === 'DELIVERED') {\n        alerts.push({\n          id: `rem_daigou_ord_${o.id}`,\n          level: 'MED',\n          icon: '💰',\n          cat: '代购已签收待结款',\n          title: `${o.recipient} · ${o.merchant || ''}（${o.orderDate || ''}）已签收尚未结清`,\n          detail: `订单号：${o.orderNo || o.id}`\n        });\n      }\n    }\n  }\n\n  // Customs collision alerts\n  if (cfg.enableCustoms) {\n    for (const [rec, list] of Object.entries(inTransitByRec7d)) {\n      if (list.length >= 2) {\n        alerts.push({\n          id: `rem_customs_${rec}_${todayStr.slice(0, 7)}`,\n          level: 'MED',\n          icon: '🛂',\n          cat: '海关防撞车提醒',\n          title: `收件人「${rec}」近 ${cfg.customsWindowDays} 天有 ${list.length} 单寄回国在途`,\n          detail: `建议错开下一批发货或更换备用收件人，避免中国海关同批查验/补税。`\n        });\n      }\n    }\n  }\n\n  // Product expiry warnings\n  if (cfg.enableExpiry && state.productExpiryDates && typeof state.productExpiryDates === 'object') {\n    for (const [prod, expDate] of Object.entries(state.productExpiryDates)) {\n      if (!expDate) continue;\n      const daysLeft = Math.floor((new Date(expDate + 'T00:00:00Z').getTime() - todayMs) / dayMs);\n      if (!isNaN(daysLeft) && daysLeft <= cfg.expiryWarnDays) {\n        alerts.push({\n          id: `rem_exp_${prod}_${expDate}`,\n          level: daysLeft <= 14 ? 'HIGH' : 'MED',\n          icon: '💊',\n          cat: '药箱临期预警',\n          title: daysLeft < 0 ? `${prod} 已过期 ${Math.abs(daysLeft)} 天` : `${prod} 将在 ${daysLeft} 天后到期`,\n          detail: `登记效期：${expDate}`\n        });\n      }\n    }\n  }\n\n  // Custom dated reminders due today / overdue / tomorrow\n  if (cfg.enableCustom && Array.isArray(cfg.customReminders)) {\n    for (const cr of cfg.customReminders) {\n      if (!cr || cr.done) continue;\n      const dStr = cr.dueDate || todayStr;\n      const diff = Math.floor((new Date(dStr + 'T00:00:00Z').getTime() - todayMs) / dayMs);\n      if (!isNaN(diff) && diff <= 1) {\n        alerts.push({\n          id: cr.id,\n          level: diff <= 0 ? 'HIGH' : 'MED',\n          icon: '📌',\n          cat: '个人备忘到期',\n          title: cr.title,\n          detail: diff < 0 ? `已逾期 ${Math.abs(diff)} 天（原定 ${dStr}）` : (diff === 0 ? '今日到期' : `明日到期（${dStr}）`)\n        });\n      }\n    }\n  }\n\n  // Filter out snoozed / dismissed\n  const active = alerts.filter(a => {\n    if (cfg.dismissedIds && cfg.dismissedIds[a.id]) return false;\n    const snz = cfg.snoozedUntil && cfg.snoozedUntil[a.id];\n    if (snz && snz > todayStr) return false;\n    return true;\n  });\n\n  const rank = { HIGH: 0, MED: 1, LOW: 2 };\n  active.sort((a, b) => (rank[a.level] ?? 1) - (rank[b.level] ?? 1));\n\n  return {\n    cfg,\n    active,\n    stats: {\n      totalOrders: orders.length,\n      inTransitTotal,\n      deliveredLast7d\n    }\n  };\n}\n\nfunction buildHtmlEmail(todayStr, active, stats, isWeeklyDigest) {\n  const highCnt = active.filter(a => a.level === 'HIGH').length;\n  const rowsHtml = active.length === 0\n    ? `<p style=\"color:#047857;font-weight:bold;padding:12px;background:#ecfdf5;border-radius:8px;\">✅ 当前所有寄回国包裹、代购结算与药箱状态全部正常，无异常预警！</p>`\n    : active.map(a => `\n        <tr>\n          <td style=\"padding:10px 12px;border-bottom:1px solid #e2e8f0;font-size:13px;\">\n            <span style=\"display:inline-block;padding:2px 7px;border-radius:999px;font-size:11px;font-weight:700;${a.level === 'HIGH' ? 'background:#ffe4e6;color:#be123c;' : 'background:#fef3c7;color:#92400e;'}\">${a.icon} ${escHtml(a.cat)}</span>\n            <div style=\"font-weight:700;color:#0f172a;margin-top:4px;\">${escHtml(a.title)}</div>\n            <div style=\"color:#64748b;font-size:12px;margin-top:2px;\">${escHtml(a.detail)}</div>\n          </td>\n        </tr>\n      `).join('');\n\n  return `\n    <div style=\"font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Microsoft YaHei',sans-serif;max-width:640px;margin:0 auto;background:#ffffff;border:1px solid #e2e8f0;border-radius:14px;overflow:hidden;\">\n      <div style=\"background:linear-gradient(135deg,#022c22,#065f46);color:#ffffff;padding:18px 22px;\">\n        <div style=\"font-size:18px;font-weight:800;\">🔔 纽澳跨境采购与快递追踪管家 · 离线自动提醒</div>\n        <div style=\"font-size:12px;color:#a7f3d0;margin-top:4px;\">日期：${todayStr}（奥克兰时间）${isWeeklyDigest ? ' · 含本周采购与物流简报' : ''}</div>\n      </div>\n      <div style=\"padding:14px 22px;background:#f8fafc;border-bottom:1px solid #e2e8f0;font-size:13px;color:#334155;\">\n        当前在途订单：<strong>${stats.inTransitTotal} 单</strong> ｜ 近7天已签收：<strong>${stats.deliveredLast7d} 单</strong> ｜ 本次预警：<strong style=\"color:${highCnt > 0 ? '#be123c' : '#047857'};\">${active.length} 项（紧急 ${highCnt} 项）</strong>\n      </div>\n      <table style=\"width:100%;border-collapse:collapse;\">${rowsHtml}</table>\n      <div style=\"padding:12px 22px;background:#f8fafc;font-size:11px;color:#64748b;border-top:1px solid #e2e8f0;\">\n        由 Cloudflare Worker Cron 自动巡检发送 · 如需调整超时天数、关闭推送或延后某条提醒，请打开「纽澳跨境采购管家 -> 🔔 提醒 -> 📡 离线推送设置」并保存同步至云端。\n      </div>\n    </div>\n  `;\n}\n\nasync function dispatchNotifications(env, { isManualTest = false } = {}) {\n  const kv = getKv(env);\n  if (!kv) return { ok: false, error: '未绑定 KV 命名空间 (NZ_TRACKER_KV)' };\n\n  const raw = await kv.get(KV_KEY_LATEST);\n  if (!raw) return { ok: false, error: 'KV 中暂无同步数据，请先在网页端点击「保存/云端推送」' };\n\n  const parsed = JSON.parse(raw);\n  const state = parsed && parsed.state ? parsed.state : parsed;\n  const todayStr = nzTodayStr();\n  const isSunday = new Date().getUTCDay() === 6; // UTC Sat evening = NZ Sunday morning\n  const { cfg, active, stats } = scanOfflineAlerts(state, todayStr);\n\n  if (!isManualTest && cfg.emailPushEnabled === false) {\n    return { ok: true, skipped: true, reason: '网页端已关闭离线推送开关' };\n  }\n\n  const isWeeklyDigest = Boolean(isSunday && cfg.enableWeeklyDigest);\n  if (!isManualTest && active.length === 0 && !isWeeklyDigest) {\n    return { ok: true, skipped: true, reason: '今日无待预警事项，已静默跳过' };\n  }\n\n  const results = [];\n\n  // 1. Send Resend Email\n  const toRaw = String(cfg.emailTo || env.NOTIFY_TO || '').trim();\n  const recipients = toRaw.split(/[,;，；\\s]+/).map(s => s.trim()).filter(Boolean);\n  if (env.RESEND_API_KEY && recipients.length > 0) {\n    const highCnt = active.filter(a => a.level === 'HIGH').length;\n    const subject = isManualTest\n      ? `[测试] 🔔 纽澳跨境采购离线提醒连通成功（当前 ${active.length} 项待办）`\n      : (active.length > 0\n          ? `🔔 纽澳快递提醒：${highCnt > 0 ? `${highCnt}项紧急 / ` : ''}共 ${active.length} 项待处理（${todayStr}）`\n          : `📊 纽澳跨境采购每周简报（${todayStr}）`);\n\n    const res = await fetch('https://api.resend.com/emails', {\n      method: 'POST',\n      headers: {\n        'Authorization': `Bearer ${env.RESEND_API_KEY}`,\n        'Content-Type': 'application/json'\n      },\n      body: JSON.stringify({\n        from: env.NOTIFY_FROM || '纽澳采购管家 <onboarding@resend.dev>',\n        to: recipients,\n        subject,\n        html: buildHtmlEmail(todayStr, active, stats, isWeeklyDigest)\n      })\n    });\n    const body = await res.json().catch(() => ({}));\n    results.push({ channel: 'resend', ok: res.ok, status: res.status, body });\n  } else {\n    results.push({ channel: 'resend', ok: false, skipped: true, reason: '未配置 RESEND_API_KEY 或收件邮箱' });\n  }\n\n  // 2. Optional Bark / Webhook Push (iPhone Bark / Server酱 / Telegram / 企业微信)\n  const webhookUrl = String(cfg.webhookUrl || env.NOTIFY_WEBHOOK_URL || '').trim();\n  if (webhookUrl && (webhookUrl.startsWith('https://') || webhookUrl.startsWith('http://'))) {\n    const summaryText = active.length > 0\n      ? active.slice(0, 8).map((a, i) => `${i + 1}. ${a.icon} ${a.title}`).join('\\n')\n      : `本周在途 ${stats.inTransitTotal} 单，近7天签收 ${stats.deliveredLast7d} 单，无异常预警。`;\n    try {\n      const wRes = await fetch(webhookUrl, {\n        method: 'POST',\n        headers: { 'Content-Type': 'application/json' },\n        body: JSON.stringify({\n          title: `🔔 纽澳快递提醒 (${todayStr})`,\n          body: summaryText,\n          text: `🔔 纽澳快递提醒 (${todayStr})\\n${summaryText}`,\n          count: active.length\n        })\n      });\n      results.push({ channel: 'webhook', ok: wRes.ok, status: wRes.status });\n    } catch (e) {\n      results.push({ channel: 'webhook', ok: false, error: String(e) });\n    }\n  }\n\n  await kv.put(KV_KEY_LAST_PUSH, JSON.stringify({ pushedAt: new Date().toISOString(), todayStr, alertCount: active.length, results }));\n  return { ok: true, todayStr, alertCount: active.length, results };\n}\n\nexport default {\n  // Cloudflare Cron Trigger Entrypoint (每天自动运行，无需打开网页)\n  async scheduled(event, env, ctx) {\n    ctx.waitUntil(dispatchNotifications(env, { isManualTest: false }));\n  },\n\n  // Manual HTTP Test Endpoint (供网页端「立即测试推送」按钮调用)\n  async fetch(request, env) {\n    const cors = {\n      'Access-Control-Allow-Origin': request.headers.get('Origin') || '*',\n      'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',\n      'Access-Control-Allow-Headers': 'Content-Type, X-Sync-Passcode',\n      'Content-Type': 'application/json; charset=utf-8'\n    };\n    if (request.method === 'OPTIONS') return new Response(null, { status: 204, headers: cors });\n\n    const requiredPass = String(env.SYNC_PASSCODE || env.PASSCODE || '').trim();\n    const provided = String(request.headers.get('X-Sync-Passcode') || new URL(request.url).searchParams.get('passcode') || '').trim();\n    if (!requiredPass || provided !== requiredPass) {\n      return new Response(JSON.stringify({ ok: false, error: '口令校验失败（需在 Worker 环境变量配置 SYNC_PASSCODE）' }), { status: 401, headers: cors });\n    }\n\n    const result = await dispatchNotifications(env, { isManualTest: true });\n    return new Response(JSON.stringify(result), { status: result.ok ? 200 : 500, headers: cors });\n  }\n};\n";
+
+    function syncOfflinePushConfigUI() {
+      const cfg = getReminderConfig();
+      const setVal = (id, v) => { const el = document.getElementById(id); if (el) el.value = v || ''; };
+      const setChk = (id, v) => { const el = document.getElementById(id); if (el) el.checked = v !== false; };
+      setVal('remCfgEmailTo', cfg.emailTo || '');
+      setVal('remCfgWebhookUrl', cfg.webhookUrl || '');
+      setVal('remCfgWorkerUrl', cfg.workerUrl || '');
+      setChk('remChkPushEnabled', cfg.emailPushEnabled !== false);
+      setChk('remChkLogistics', cfg.enableLogistics !== false);
+      setChk('remChkCustoms', cfg.enableCustoms !== false);
+      setChk('remChkDaigou', cfg.enableDaigou !== false);
+      setChk('remChkExpiry', cfg.enableExpiry !== false);
+      setChk('remChkWeekly', cfg.enableWeeklyDigest !== false);
+      const pill = document.getElementById('offlinePushStatusPill');
+      if (pill) {
+        const on = cfg.emailPushEnabled !== false && Boolean(cfg.emailTo || cfg.webhookUrl);
+        pill.textContent = on ? '已配置 · 随KV生效' : '待填邮箱/Webhook';
+        pill.className = on
+          ? 'px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-100 text-emerald-800 border border-emerald-200'
+          : 'px-2 py-0.5 rounded-full text-[10px] font-bold bg-amber-100 text-amber-800 border border-amber-200';
+      }
+    }
+
+    registerAppBootTask('v724_offline_push_ui', () => {
+      document.getElementById('btnHeaderReminderCenter')?.addEventListener('click', () => {
+        setTimeout(syncOfflinePushConfigUI, 20);
+      });
+
+      document.getElementById('btnSaveOfflinePushCfg')?.addEventListener('click', () => {
+        const cfg = getReminderConfig();
+        if (typeof recordBeforeAction === 'function') recordBeforeAction('更新离线自动推送配置');
+        cfg.emailTo = String(document.getElementById('remCfgEmailTo')?.value || '').trim();
+        cfg.webhookUrl = String(document.getElementById('remCfgWebhookUrl')?.value || '').trim();
+        cfg.workerUrl = String(document.getElementById('remCfgWorkerUrl')?.value || '').trim();
+        cfg.emailPushEnabled = Boolean(document.getElementById('remChkPushEnabled')?.checked);
+        cfg.enableLogistics = Boolean(document.getElementById('remChkLogistics')?.checked);
+        cfg.enableCustoms = Boolean(document.getElementById('remChkCustoms')?.checked);
+        cfg.enableDaigou = Boolean(document.getElementById('remChkDaigou')?.checked);
+        cfg.enableExpiry = Boolean(document.getElementById('remChkExpiry')?.checked);
+        cfg.enableWeeklyDigest = Boolean(document.getElementById('remChkWeekly')?.checked);
+        if (typeof saveState === 'function') saveState('更新离线自动推送配置');
+        syncOfflinePushConfigUI();
+        if (typeof showToast === 'function') showToast('💾 离线推送配置已暂存！点击顶栏「💾 保存」同步到 Cloudflare KV 后后台定时任务即刻生效');
+      });
+
+      document.getElementById('btnTestOfflinePushNow')?.addEventListener('click', async () => {
+        const workerUrl = String(document.getElementById('remCfgWorkerUrl')?.value || (getReminderConfig().workerUrl) || '').trim();
+        if (!workerUrl) {
+          if (typeof showToast === 'function') showToast('请先填写你的 Cloudflare Cron Worker 地址（部署下方脚本后获得）');
+          return;
+        }
+        const passcode = (window.cfConfigState && window.cfConfigState.passcode) || '';
+        try {
+          if (typeof showToast === 'function') showToast('🧪 正在触发离线推送测试...');
+          const res = await fetchWithTimeout(workerUrl, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', 'X-Sync-Passcode': passcode }
+          }, 12000);
+          const data = await res.json().catch(() => ({}));
+          if (res.ok && data.ok) {
+            if (typeof showToast === 'function') showToast(`✅ 测试推送成功！已检出 ${data.alertCount || 0} 项提醒，请查收邮箱/手机通知`);
+          } else {
+            if (typeof showToast === 'function') showToast(`⚠️ 测试失败：${data.error || ('HTTP ' + res.status)}`);
+          }
+        } catch (err) {
+          if (typeof showToast === 'function') showToast(`⚠️ 无法连接 Worker：${err.message || err}`);
+        }
+      });
+
+      document.getElementById('btnCopyCronWorkerCode')?.addEventListener('click', () => {
+        if (typeof copyTextToClipboard === 'function') copyTextToClipboard(V724_CRON_WORKER_SOURCE, 'Cloudflare Cron Worker 脚本');
+      });
+
+      document.getElementById('btnDownloadCronWorkerCode')?.addEventListener('click', () => {
+        const blob = new Blob([V724_CRON_WORKER_SOURCE], { type: 'application/javascript;charset=utf-8' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'nz_parcel_cron_notifier.js';
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        setTimeout(() => URL.revokeObjectURL(url), 1000);
+        if (typeof showToast === 'function') showToast('⬇️ 已下载 nz_parcel_cron_notifier.js，粘贴到 Cloudflare Worker 即可上线');
+      });
     });
 
     // 🧩 v7.21.0 FLAT FUNCTION DISPATCHERS (Zero Runtime Monkey-Patching)
