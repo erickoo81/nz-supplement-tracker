@@ -227,7 +227,9 @@ export async function onRequestGet(context) {
     return Response.json({ ok: true, skipped: true, reason: '今日无待办提醒，已静默跳过发信', todayStr });
   }
 
-  const fromEmail = env.FROM_EMAIL || env.NOTIFY_FROM_EMAIL || 'onboarding@resend.dev';
+  const rawFrom = String(env.FROM_EMAIL || env.NOTIFY_FROM_EMAIL || 'onboarding@resend.dev').trim();
+  const fromName = String(env.FROM_NAME || '纽澳跨境采购管家').trim();
+  const fromEmail = rawFrom.includes('<') ? rawFrom : `${fromName} <${rawFrom}>`;
   const appUrl = env.APP_URL || url.origin;
   const subject = alerts.length > 0
     ? `🔔 [纽澳采购提醒 ${todayStr}] 有 ${alerts.length} 项待处理（${alerts[0].title.slice(0, 24)}...）`
