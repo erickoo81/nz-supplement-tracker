@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>纽澳跨境采购与快递追踪管家 v7.25.0 (Build 20261123.0015)</title>
+  <title>纽澳跨境采购与快递追踪管家 v7.25.1 (Build 20261123.0115)</title>
   <script src="https://cdn.tailwindcss.com/3.4.17"></script>
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
   <script defer src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
@@ -395,25 +395,248 @@
         overflow-y: visible !important;
       }
     }
+
+    /* === v7.25.1 Critical Pre-Tailwind Header Lock (Eliminates FOUC & Vertical CLS Jump on Load/Refresh) === */
+    .hidden { display: none !important; }
+    header#appMainHeader {
+      position: sticky;
+      top: 0;
+      z-index: 30;
+      color: #ffffff;
+      box-sizing: border-box;
+    }
+    #appHeaderTopBar {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.5rem 0.75rem;
+      width: 100%;
+      max-width: 1720px;
+      margin-left: auto;
+      margin-right: auto;
+      padding: 0.5rem 0.625rem;
+      box-sizing: border-box;
+    }
+    @media (min-width: 640px) {
+      #appHeaderTopBar { padding: 0.75rem 1.25rem; }
+    }
+    @media (min-width: 1024px) {
+      #appHeaderTopBar { width: 97vw; }
+    }
+    #appHeaderBrand {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      min-width: 0;
+      flex-shrink: 1;
+    }
+    #appHeaderLogo {
+      width: 40px !important;
+      height: 40px !important;
+      min-width: 40px;
+      min-height: 40px;
+      flex-shrink: 0;
+      border-radius: 0.75rem;
+      object-fit: cover;
+      display: block;
+    }
+    #appHeaderTitleRow {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+    }
+    @media (min-width: 640px) {
+      #appHeaderTitleRow { flex-wrap: nowrap; }
+    }
+    #appHeaderTitleRow h1 {
+      margin: 0;
+      font-size: 1rem;
+      line-height: 1.5rem;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 0.375rem;
+      white-space: nowrap;
+    }
+    @media (min-width: 640px) {
+      #appHeaderTitleRow h1 { font-size: 1.125rem; line-height: 1.75rem; }
+    }
+    #uiNote-appTitle {
+      margin: 0.125rem 0 0 0;
+      font-size: 0.75rem;
+      line-height: 1rem;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    #appHeaderActionBar {
+      display: flex;
+      align-items: center;
+      gap: 0.375rem;
+      flex-wrap: nowrap;
+      overflow-x: auto;
+      scrollbar-width: none;
+      -ms-overflow-style: none;
+      padding-top: 7px;
+      padding-bottom: 3px;
+      margin-top: -7px;
+      margin-bottom: -3px;
+      min-height: 46px;
+      box-sizing: border-box;
+      max-width: 100%;
+    }
+    #appHeaderActionBar::-webkit-scrollbar { display: none; }
+    @media (min-width: 640px) {
+      #appHeaderActionBar { gap: 0.5rem; }
+    }
+    #appHeaderActionBar > button:not(.hidden) {
+      position: relative;
+      height: 36px;
+      min-height: 36px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.25rem;
+      white-space: nowrap;
+      flex-shrink: 0;
+      border-radius: 0.5rem;
+      padding: 0 0.75rem;
+      font-size: 0.875rem;
+      line-height: 1.25rem;
+      box-sizing: border-box;
+      border: 1px solid rgba(255, 255, 255, 0.16);
+      background-color: rgba(255, 255, 255, 0.11);
+      color: #ecfdf5;
+      cursor: pointer;
+    }
+    #appHeaderActionBar > #btnOpenNewOrder,
+    #appHeaderActionBar > #btnOpenSmartImportModal {
+      padding: 0 0.875rem;
+      border-color: transparent;
+      background-color: #f59e0b;
+      color: #020617;
+      font-weight: 700;
+    }
+    #appHeaderActionBar > #btnOpenSmartImportModal {
+      background: linear-gradient(to right, #fcd34d, #fbbf24);
+    }
+    #appHeaderSaveGroup {
+      height: 36px;
+      min-height: 36px;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.25rem;
+      flex-shrink: 0;
+      border-radius: 0.5rem;
+      padding: 0 0.25rem;
+      box-sizing: border-box;
+      border: 1px solid rgba(255, 255, 255, 0.16);
+      background-color: rgba(255, 255, 255, 0.11);
+    }
+    #appHeaderSaveGroup > button {
+      height: 28px;
+      min-height: 28px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.25rem;
+      white-space: nowrap;
+      flex-shrink: 0;
+      border-radius: 0.375rem;
+      padding: 0 0.625rem;
+      font-size: 0.75rem;
+      line-height: 1rem;
+      box-sizing: border-box;
+    }
+    #btnHeaderSave {
+      min-width: 76px;
+    }
+    #headerUnreadPill,
+    #headerReminderBadge,
+    #headerHealthIssueBadge,
+    #headerScrapeRulesBadge {
+      position: absolute !important;
+      top: -6px !important;
+      right: -6px !important;
+      z-index: 10;
+      pointer-events: none;
+      line-height: 1;
+    }
+    #btnHeaderVersionBadge,
+    #btnHeaderCfStatusPill {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.25rem;
+      white-space: nowrap;
+      flex-shrink: 0;
+      border-radius: 9999px;
+      padding: 0.125rem 0.625rem;
+      line-height: 1.25;
+      box-sizing: border-box;
+    }
+    #appMainNavBar {
+      border-top: 1px solid rgba(255, 255, 255, 0.12);
+    }
+    #appMainNavInner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.5rem;
+      width: 100%;
+      max-width: 1720px;
+      margin-left: auto;
+      margin-right: auto;
+      padding: 0.375rem 0.625rem;
+      box-sizing: border-box;
+      min-height: 44px;
+    }
+    @media (min-width: 640px) {
+      #appMainNavInner { padding: 0.375rem 1.25rem; }
+    }
+    @media (min-width: 1024px) {
+      #appMainNavInner { width: 97vw; }
+    }
+    #mainNav {
+      display: flex;
+      align-items: center;
+      gap: 0.25rem;
+      white-space: nowrap;
+    }
+    @media (min-width: 640px) {
+      #mainNav { gap: 0.5rem; }
+    }
+    #mainNav > button:not(.hidden) {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.25rem;
+      white-space: nowrap;
+      height: 32px;
+      padding: 0 0.75rem;
+      border-radius: 0.5rem;
+      font-size: 0.875rem;
+      box-sizing: border-box;
+    }
   </style>
 </head>
 <body class="min-h-screen flex flex-col overflow-x-hidden max-w-full">
-  <script>try{if(localStorage.getItem("NZ_TRACKER_DESKTOP_FULL_BLEED")==="1")document.body.classList.add("desktop-full-bleed");}catch(e){}</script>
+  <script>(function(){try{if(localStorage.getItem("NZ_TRACKER_DESKTOP_FULL_BLEED")==="1")document.body.classList.add("desktop-full-bleed");var fCss=localStorage.getItem("NZ_TRACKER_FONT_CSS_FAST");if(fCss)document.documentElement.style.setProperty("--app-font-sans",fCss);var fLs=localStorage.getItem("NZ_TRACKER_FONT_LS_FAST");if(fLs)document.body.style.letterSpacing=fLs;var th=localStorage.getItem("NZ_TRACKER_THEME_ID_FAST");if(th&&th!=="custom")document.body.setAttribute("data-theme",th);}catch(e){}})();</script>
 
   <!-- Top Header -->
-  <header class="bg-emerald-950 text-white shadow-md sticky top-0 z-30">
-    <div class="max-w-[1720px] w-full lg:w-[97vw] app-layout-container mx-auto px-2.5 sm:px-5 py-2 sm:py-3 flex flex-wrap items-center justify-between gap-2 sm:gap-3">
-      <div class="flex items-center gap-3">
-        <img src="data:image/jpeg;base64,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" alt="App Icon" class="w-10 h-10 rounded-xl object-cover border border-emerald-700 shadow-sm max-w-full h-auto" />
-        <div>
-          <div class="flex items-center gap-2 flex-wrap">
-            <h1 class="text-base sm:text-lg font-bold tracking-tight flex items-center gap-1.5">
+  <header id="appMainHeader" class="bg-emerald-950 text-white shadow-md sticky top-0 z-30">
+    <div id="appHeaderTopBar" class="max-w-[1720px] w-full lg:w-[97vw] app-layout-container mx-auto px-2.5 sm:px-5 py-2 sm:py-3 flex flex-wrap items-center justify-between gap-2 sm:gap-3">
+      <div id="appHeaderBrand" class="flex items-center gap-3">
+        <img src="data:image/jpeg;base64,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" alt="App Icon" id="appHeaderLogo" width="40" height="40" class="w-10 h-10 rounded-xl object-cover border border-emerald-700 shadow-sm shrink-0" />
+        <div class="min-w-0">
+          <div id="appHeaderTitleRow" class="flex items-center gap-2 flex-wrap sm:flex-nowrap">
+            <h1 class="text-base sm:text-lg font-bold tracking-tight flex items-center gap-1.5 whitespace-nowrap">
               <span id="uiIcon-appTitle" class="hidden"></span>
               <span id="uiText-appTitle">纽澳跨境采购与快递追踪管家</span>
             </h1>
-            <button type="button" id="btnHeaderVersionBadge" class="inline-flex items-center gap-1 text-xs bg-gradient-to-r from-amber-400 to-amber-300 hover:from-amber-300 hover:to-amber-200 text-slate-950 font-extrabold px-2.5 py-0.5 rounded-full shadow-xs transition cursor-pointer" title="当前正式稳定版本：v7.25.0 (Build 20261123.0015)（遵循 vMAJOR.MINOR.PATCH + Build Tag 规范 · 点击查看版本规范与更新日志）">
+            <button type="button" id="btnHeaderVersionBadge" class="inline-flex items-center gap-1 text-xs bg-gradient-to-r from-amber-400 to-amber-300 hover:from-amber-300 hover:to-amber-200 text-slate-950 font-extrabold px-2.5 py-0.5 rounded-full shadow-xs transition cursor-pointer" title="当前正式稳定版本：v7.25.1 (Build 20261123.0115)（遵循 vMAJOR.MINOR.PATCH + Build Tag 规范 · 点击查看版本规范与更新日志）">
               <span id="uiIcon-appVersion">🚀</span>
-              <span id="uiText-appVersion">v7.25.0 (Build 20261123.0015)</span>
+              <span id="uiText-appVersion">v7.25.1 (Build 20261123.0115)</span>
             </button>
             <button type="button" id="btnHeaderCfStatusPill" class="inline-flex items-center gap-1 text-[11px] bg-emerald-900/90 hover:bg-emerald-800 text-emerald-100 border border-emerald-600/70 font-semibold px-2.5 py-0.5 rounded-full transition cursor-pointer" title="点击打开 Cloudflare KV 边缘云同步设置 (方案B)">
               <span id="headerCfStatusDot" class="w-2 h-2 rounded-full bg-amber-400 inline-block"></span>
@@ -424,7 +647,7 @@
         </div>
       </div>
 
-      <div class="flex items-center gap-1.5 sm:gap-2 flex-wrap">
+      <div id="appHeaderActionBar" class="flex items-center gap-1.5 sm:gap-2 flex-nowrap">
         <button id="btnOpenNewOrder" class="h-9 bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-xs sm:text-sm px-3.5 rounded-lg shadow-xs transition inline-flex items-center justify-center gap-1 whitespace-nowrap" title="新建采购订单（内含网页粘贴自动填单 / 门店直购录入 / 复制上一单）">
           <span id="uiIcon-btnNewOrder">＋</span>
           <span id="uiText-btnNewOrder">新增订单</span>
@@ -463,7 +686,7 @@
           <span id="uiText-btnCloudPull">云端拉取</span>
         </button>
         <!-- Explicit Save / Undo / Cancel Action Group -->
-        <div class="h-9 inline-flex items-center gap-1 bg-emerald-900/95 border border-emerald-700/90 rounded-lg px-1 shadow-inner">
+        <div id="appHeaderSaveGroup" class="h-9 inline-flex items-center gap-1 bg-emerald-900/95 border border-emerald-700/90 rounded-lg px-1 shadow-inner shrink-0">
           <button id="btnHeaderUndo" type="button" disabled class="h-7 disabled:opacity-40 disabled:cursor-not-allowed bg-emerald-800 hover:bg-emerald-700 text-emerald-100 text-xs px-2.5 rounded-md transition inline-flex items-center gap-1 whitespace-nowrap" title="撤销上一步操作 (快捷键 Ctrl+Z)">
             <span id="uiIcon-btnUndo">↩️</span><span id="uiText-btnUndo">撤销</span><span id="headerUndoCount" class="font-mono text-[11px]"></span>
           </button>
@@ -480,8 +703,8 @@
     </div>
 
     <!-- Navigation Bar -->
-    <div class="bg-emerald-900/80 border-t border-emerald-800/80">
-      <div class="max-w-[1720px] w-full lg:w-[97vw] app-layout-container mx-auto px-2.5 sm:px-5 py-1.5 flex items-center justify-between gap-2 overflow-x-auto custom-scroll">
+    <div id="appMainNavBar" class="bg-emerald-900/80 border-t border-emerald-800/80">
+      <div id="appMainNavInner" class="max-w-[1720px] w-full lg:w-[97vw] app-layout-container mx-auto px-2.5 sm:px-5 py-1.5 flex items-center justify-between gap-2 overflow-x-auto custom-scroll">
         <nav class="flex items-center gap-1 sm:gap-2" id="mainNav">
           <button id="navBtn-dashboard" data-tab="dashboard" class="nav-tab tab-active text-xs sm:text-sm font-medium px-3 py-1.5 rounded-lg transition whitespace-nowrap" title="查看在途包裹、签收工作台与多维统计图表">
             <span id="uiIcon-navDashboard">🚚</span> <span id="uiText-navDashboard">物流看板</span> <span id="navBadgeTransit" class="ml-1 px-1.5 py-0.5 text-xs rounded-full bg-amber-400 text-slate-950 font-bold">0</span>
@@ -3241,7 +3464,7 @@
         <div>
           <h3 class="text-base font-bold flex items-center gap-2 flex-wrap">
             <span>⚙️ 个性化与规则中心</span>
-            <span class="text-[11px] bg-amber-400 text-slate-950 font-extrabold px-2.5 py-0.5 rounded-full">v7.25.0 (Build 20261123.0015) · SemVer标准版本管理</span>
+            <span class="text-[11px] bg-amber-400 text-slate-950 font-extrabold px-2.5 py-0.5 rounded-full">v7.25.1 (Build 20261123.0115) · SemVer标准版本管理</span>
           </h3>
           <p class="text-xs text-emerald-200 mt-0.5">一站式归纳管理：8套主题皮肤与自定义调色盘 · 全系统选项名称/图标/注释自由修改 · 抓单自学习规则 · 454条超链接模板</p>
         </div>
@@ -3279,7 +3502,7 @@
         <div class="bg-gradient-to-r from-emerald-50 via-teal-50 to-amber-50 border-2 border-emerald-300 rounded-xl p-4 space-y-3">
           <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-emerald-200/80 pb-2.5">
             <div class="flex items-center gap-2 flex-wrap">
-              <span class="px-2.5 py-1 rounded-full bg-emerald-900 text-amber-300 font-extrabold text-xs font-mono">v7.25.0 (Build 20261123.0015)</span>
+              <span class="px-2.5 py-1 rounded-full bg-emerald-900 text-amber-300 font-extrabold text-xs font-mono">v7.25.1 (Build 20261123.0115)</span>
               <span class="font-extrabold text-slate-900 text-sm">严格执行的版本号规则（Semantic Versioning + Build Tag）</span>
             </div>
             <button type="button" id="btnJumpToLabelsTab" class="bg-white hover:bg-slate-50 text-emerald-900 border border-emerald-300 font-bold px-3 py-1.5 rounded-lg shadow-2xs transition text-xs shrink-0">
@@ -3292,10 +3515,12 @@
               <div class="lg:col-span-7 bg-white/95 rounded-xl p-3.5 border border-emerald-200 flex flex-col justify-between gap-2">
                 <div class="space-y-2">
                   <div class="flex items-center justify-between gap-2 flex-wrap">
-                    <div class="font-extrabold text-emerald-950">📌 当前正式稳定版本：<span class="font-mono text-emerald-700">v7.25.0 (Build 20261123.0015)</span></div>
+                    <div class="font-extrabold text-emerald-950">📌 当前正式稳定版本：<span class="font-mono text-emerald-700">v7.25.1 (Build 20261123.0115)</span></div>
                     <span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800 border border-emerald-200">单文件零构建 · KV兼容</span>
                   </div>
                   <div class="text-[11px] text-emerald-950 bg-emerald-50/70 border border-emerald-200/80 rounded-lg px-3 py-2 space-y-1">
+                    <div class="font-bold text-emerald-900 mb-1">🛠️ v7.25.1 顶栏按钮零跳动（Pre-Tailwind 首帧锁定）补丁：</div>
+                    <p class="text-[11px] text-slate-600 leading-relaxed mb-2">基于 v7.25.0 完整功能增量合入：① 顶栏与导航栏增加 Pre-Tailwind 静态首帧布局锁（彻底消除 Tailwind CDN 异步解析前的垂直跳动与按钮折行）；② 首帧前同步恢复主题色、字体与宽屏状态，刷新零闪烁。</p>
                     <div class="font-bold text-emerald-900">✨ v7.25.0 智能好价引擎升级 + 提醒中心一键批处理 + 微信/邮件双通道：</div>
                     <ul class="list-disc pl-4 space-y-0.5 text-slate-700">
                       <li><strong>好价防刷屏与精准算法升级</strong>：智能设好价改为「多价商品追平史低 ×1.00、单价商品降 5% ×0.95」，新增 180 天报价时效过滤与较历史均价省幅排序，彻底告别陈年旧价刷屏；商品库新增「🔥 只看达标」一键筛选。</li>
@@ -4298,13 +4523,13 @@
     };
 
     // 版本号唯一来源：APP_VERSION + BUILD_TAG（CURRENT_SEMVER / CURRENT_BUILD_TAG 等冗余常量已删除）
-    const APP_VERSION = 'v7.25.0';
-    const BUILD_TAG = 'Build 20261123.0015';
+    const APP_VERSION = 'v7.25.1';
+    const BUILD_TAG = 'Build 20261123.0115';
     const APP_VERSION_LABEL = `${APP_VERSION} (${BUILD_TAG})`;
     console.info('%c[纽澳跨境采购与快递追踪管家] 当前正式稳定版本: ' + APP_VERSION_LABEL + ' | Semantic Versioning + Build Tag 已生效', 'background:#064e3b;color:#fde68a;padding:4px 10px;border-radius:6px;font-weight:bold;');
     const DEFAULT_UI_CUSTOM_LABELS = {
       appTitle: { icon: '', text: '纽澳跨境采购与快递追踪管家', note: '支持一单多包拆单追踪 · 采购单价与运费核算 · 电脑与手机多端同步', labelTitle: '系统主标题 & 副标题说明', group: 'header', emojiPresets: ['🇳🇿', '🦘', '🌿', '📦', '🛡️'] },
-      appVersion: { icon: '🚀', text: APP_VERSION_LABEL, note: '当前正式稳定版本：v7.25.0 (Build 20261123.0015)（1720px超宽视口零遮挡 · 明欢同款全局无衬线等宽数字字体 · 账单对齐与免微调箭头 · 冗余代码清理与性能优化）· 点击查看版本规则', labelTitle: '顶部版本号标识 (SemVer + Build Tag)', group: 'header', emojiPresets: ['🚀', '✨', '🏷️', '💎', '🔥'] },
+      appVersion: { icon: '🚀', text: APP_VERSION_LABEL, note: '当前正式稳定版本：v7.25.1 (Build 20261123.0115)（1720px超宽视口零遮挡 · 明欢同款全局无衬线等宽数字字体 · 账单对齐与免微调箭头 · 冗余代码清理与性能优化）· 点击查看版本规则', labelTitle: '顶部版本号标识 (SemVer + Build Tag)', group: 'header', emojiPresets: ['🚀', '✨', '🏷️', '💎', '🔥'] },
       btnNewOrder: { icon: '＋', text: '新增订单', note: '新建采购订单（内含网页粘贴自动填单 / 门店直购录入 / 复制上一单）', labelTitle: '顶部按钮 1：新增订单', group: 'topbar', emojiPresets: ['＋', '🛒', '✍️', '⚡', '🛍️'] },
       btnBatchImport: { icon: '📥', text: '智能导单', note: '专用于导入新采购订单：Excel表格差异导入 / 网页订单粘贴解析 / 浏览器抓单小书签', labelTitle: '顶部按钮 2：智能导单', group: 'topbar', emojiPresets: ['📥', '📂', '📊', '⚡', '📑'] },
       btnSyncBackup: { icon: '☁️', text: '云端与备份', note: '专用于多端云同步与备份：Cloudflare KV 实时云同步 / 历史时间机器回滚 / 本地 JSON 备份包', labelTitle: '顶部按钮 3：云端与备份', group: 'topbar', emojiPresets: ['☁️', '🔄', '📲', '💾', '🛡️'] },
@@ -15337,6 +15562,7 @@
       root.style.setProperty('--theme-card-radius', tCfg.cardRadius || '1rem');
       if (typeof applyFontStyleToDOM === 'function') applyFontStyleToDOM(tCfg.fontStyle || 'minghuan_default');
 
+      try { localStorage.setItem('NZ_TRACKER_THEME_ID_FAST', tCfg.themeId || 'emerald'); } catch (e) {}
       if (tCfg.themeId === 'custom') {
         body.setAttribute('data-theme', 'custom');
         const hs = tCfg.customHeaderStart || '#022c22';
@@ -28586,7 +28812,7 @@ export async function onRequestPost(context) {
         window.updateGoodPriceHitBadgeCount();
         computeDataHealthReport();
       });
-      console.log('🚀 纽澳跨境采购与快递追踪管家 v7.25.0 (Build 20261123.0015) 已就绪 · 12项Bug已修复 · ⌘K速查 & 🩺健康体检已激活');
+      console.log('🚀 纽澳跨境采购与快递追踪管家 v7.25.1 (Build 20261123.0115) 已就绪 · 12项Bug已修复 · ⌘K速查 & 🩺健康体检已激活');
     })();
 
   
@@ -28667,6 +28893,7 @@ export async function onRequestPost(context) {
       if (preset.googleFontUrl) ensureGoogleFontLoaded(preset.googleFontUrl);
       document.documentElement.style.setProperty('--app-font-sans', preset.css);
       document.body.style.letterSpacing = preset.letterSpacing || '-0.01em';
+      try { localStorage.setItem('NZ_TRACKER_FONT_CSS_FAST', preset.css || ''); localStorage.setItem('NZ_TRACKER_FONT_LS_FAST', preset.letterSpacing || '-0.01em'); } catch (e) {}
       renderFontStylePresetGrid(preset.id);
     }
 
