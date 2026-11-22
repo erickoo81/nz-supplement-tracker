@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>纽澳跨境采购与快递追踪管家 v7.24.0 (Build 20261119.2300)</title>
+  <title>纽澳跨境采购与快递追踪管家 v7.24.1 (Build 20261122.2342)</title>
   <script src="https://cdn.tailwindcss.com/3.4.17"></script>
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
   <script defer src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
@@ -374,7 +374,7 @@
       background-color: #f8fafc;
     }
     button {
-      transition: all 0.16s cubic-bezier(0.16, 1, 0.3, 1);
+      transition: background-color 0.16s ease, border-color 0.16s ease, color 0.16s ease, box-shadow 0.16s ease, transform 0.16s cubic-bezier(0.16, 1, 0.3, 1);
     }
     button:active:not(:disabled) {
       transform: scale(0.98);
@@ -398,6 +398,7 @@
   </style>
 </head>
 <body class="min-h-screen flex flex-col overflow-x-hidden max-w-full">
+  <script>try{if(localStorage.getItem("NZ_TRACKER_DESKTOP_FULL_BLEED")==="1")document.body.classList.add("desktop-full-bleed");}catch(e){}</script>
 
   <!-- Top Header -->
   <header class="bg-emerald-950 text-white shadow-md sticky top-0 z-30">
@@ -410,13 +411,13 @@
               <span id="uiIcon-appTitle" class="hidden"></span>
               <span id="uiText-appTitle">纽澳跨境采购与快递追踪管家</span>
             </h1>
-            <button type="button" id="btnHeaderVersionBadge" class="inline-flex items-center gap-1 text-xs bg-gradient-to-r from-amber-400 to-amber-300 hover:from-amber-300 hover:to-amber-200 text-slate-950 font-extrabold px-2.5 py-0.5 rounded-full shadow-xs transition cursor-pointer" title="当前正式稳定版本：v7.24.0 (Build 20261119.2300)（遵循 vMAJOR.MINOR.PATCH + Build Tag 规范 · 点击查看版本规范与更新日志）">
+            <button type="button" id="btnHeaderVersionBadge" class="inline-flex items-center gap-1 text-xs bg-gradient-to-r from-amber-400 to-amber-300 hover:from-amber-300 hover:to-amber-200 text-slate-950 font-extrabold px-2.5 py-0.5 rounded-full shadow-xs transition cursor-pointer" title="当前正式稳定版本：v7.24.1 (Build 20261122.2342)（遵循 vMAJOR.MINOR.PATCH + Build Tag 规范 · 点击查看版本规范与更新日志）">
               <span id="uiIcon-appVersion">🚀</span>
-              <span id="uiText-appVersion">v7.24.0 (Build 20261119.2300)</span>
+              <span id="uiText-appVersion">v7.24.1 (Build 20261122.2342)</span>
             </button>
             <button type="button" id="btnHeaderCfStatusPill" class="inline-flex items-center gap-1 text-[11px] bg-emerald-900/90 hover:bg-emerald-800 text-emerald-100 border border-emerald-600/70 font-semibold px-2.5 py-0.5 rounded-full transition cursor-pointer" title="点击打开 Cloudflare KV 边缘云同步设置 (方案B)">
               <span id="headerCfStatusDot" class="w-2 h-2 rounded-full bg-amber-400 inline-block"></span>
-              <span id="headerCfStatusText">CF云同步: 待配置</span>
+              <span id="headerCfStatusText" class="inline-block max-w-[140px] truncate align-bottom">CF云同步: 待配置</span>
             </button>
           </div>
           <p id="uiNote-appTitle" class="text-xs text-emerald-200/90 mt-0.5">支持一单多包拆单追踪 · 采购单价与运费核算 · 电脑与手机多端同步</p>
@@ -428,10 +429,10 @@
           <span id="uiIcon-btnNewOrder">＋</span>
           <span id="uiText-btnNewOrder">新增订单</span>
         </button>
-        <button id="btnOpenSmartImportModal" class="h-9 bg-gradient-to-r from-amber-300 to-amber-400 hover:from-amber-200 hover:to-amber-300 text-slate-950 font-bold text-xs sm:text-sm px-3.5 rounded-lg shadow-xs transition inline-flex items-center justify-center gap-1 whitespace-nowrap" title="导入数据中心：Excel表格增量导入 / 网页订单粘贴解析 / 浏览器抓单小书签">
+        <button id="btnOpenSmartImportModal" class="relative h-9 bg-gradient-to-r from-amber-300 to-amber-400 hover:from-amber-200 hover:to-amber-300 text-slate-950 font-bold text-xs sm:text-sm px-3.5 rounded-lg shadow-xs transition inline-flex items-center justify-center gap-1 whitespace-nowrap" title="导入数据中心：Excel表格增量导入 / 网页订单粘贴解析 / 浏览器抓单小书签">
           <span id="uiIcon-btnBatchImport">📥</span>
           <span id="uiText-btnBatchImport">智能导单</span>
-          <span id="headerUnreadPill" class="hidden px-1.5 py-0.5 text-[11px] rounded-full bg-rose-600 text-white font-extrabold animate-pulse">0未读</span>
+          <span id="headerUnreadPill" class="hidden absolute -top-1.5 -right-1.5 z-10 pointer-events-none px-1.5 py-0.5 text-[10px] leading-none rounded-full bg-rose-600 text-white font-extrabold shadow-sm">0未读</span>
         </button>
         <button id="btnOpenSyncModal" class="h-9 bg-emerald-900 hover:bg-emerald-800 text-emerald-100 text-xs sm:text-sm px-3 rounded-lg border border-emerald-700 transition inline-flex items-center justify-center gap-1 whitespace-nowrap" title="Cloudflare KV 实时云同步 / 云端时间机器历史回滚 / 本地全量备份包">
           <span id="uiIcon-btnSyncBackup">☁️</span>
@@ -441,20 +442,20 @@
           <span>🔍</span>
           <span class="hidden sm:inline font-medium">速查</span>
         </button>
-        <button id="btnHeaderReminderCenter" type="button" class="h-9 bg-emerald-900/90 hover:bg-emerald-800 text-emerald-100 text-xs sm:text-sm px-3 rounded-lg border border-emerald-700 transition inline-flex items-center justify-center gap-1 whitespace-nowrap" title="智能提醒中心：物流超时/拆单掉队、代购待结算、临期补货、好价达标与自定义备忘（支持导出手机日历 .ics）">
+        <button id="btnHeaderReminderCenter" type="button" class="relative h-9 bg-emerald-900/90 hover:bg-emerald-800 text-emerald-100 text-xs sm:text-sm px-3 rounded-lg border border-emerald-700 transition inline-flex items-center justify-center gap-1 whitespace-nowrap" title="智能提醒中心：物流超时/拆单掉队、代购待结算、临期补货、好价达标与自定义备忘（支持导出手机日历 .ics）">
           <span>🔔</span>
           <span class="hidden sm:inline font-medium">提醒</span>
-          <span id="headerReminderBadge" class="hidden px-1.5 py-0.5 text-[10px] leading-none rounded-full bg-rose-500 text-white font-extrabold">0</span>
+          <span id="headerReminderBadge" class="hidden absolute -top-1.5 -right-1.5 z-10 pointer-events-none px-1.5 py-0.5 text-[10px] leading-none rounded-full bg-rose-500 text-white font-extrabold shadow-sm">0</span>
         </button>
-        <button id="btnHeaderHealthDoctor" type="button" class="h-9 bg-emerald-900/90 hover:bg-emerald-800 text-emerald-100 text-xs sm:text-sm px-3 rounded-lg border border-emerald-700 transition inline-flex items-center justify-center gap-1 whitespace-nowrap" title="一键扫描缺失运单、疑似重复订单、异常单价、待结代购与未设好价商品">
+        <button id="btnHeaderHealthDoctor" type="button" class="relative h-9 bg-emerald-900/90 hover:bg-emerald-800 text-emerald-100 text-xs sm:text-sm px-3 rounded-lg border border-emerald-700 transition inline-flex items-center justify-center gap-1 whitespace-nowrap" title="一键扫描缺失运单、疑似重复订单、异常单价、待结代购与未设好价商品">
           <span>🩺</span>
           <span class="hidden sm:inline font-medium">体检</span>
-          <span id="headerHealthIssueBadge" class="hidden px-1.5 py-0.5 text-[10px] leading-none rounded-full bg-amber-400 text-slate-950 font-extrabold">0</span>
+          <span id="headerHealthIssueBadge" class="hidden absolute -top-1.5 -right-1.5 z-10 pointer-events-none px-1.5 py-0.5 text-[10px] leading-none rounded-full bg-amber-400 text-slate-950 font-extrabold shadow-sm">0</span>
         </button>
-        <button id="btnOpenScrapeRulesModalHeader" class="h-9 bg-emerald-800/90 hover:bg-emerald-700 text-teal-100 text-xs sm:text-sm px-3 rounded-lg border border-teal-400/40 transition inline-flex items-center justify-center gap-1 whitespace-nowrap" title="统一管理：8套主题配色、大牌字体风格、界面名称/图标修改、抓单自学习规则库、超链接模板">
+        <button id="btnOpenScrapeRulesModalHeader" class="relative h-9 bg-emerald-800/90 hover:bg-emerald-700 text-teal-100 text-xs sm:text-sm px-3 rounded-lg border border-teal-400/40 transition inline-flex items-center justify-center gap-1 whitespace-nowrap" title="统一管理：8套主题配色、大牌字体风格、界面名称/图标修改、抓单自学习规则库、超链接模板">
           <span id="uiIcon-btnRulesSettings">⚙️</span>
           <span id="uiText-btnRulesSettings">个性化与规则</span>
-          <span id="headerScrapeRulesBadge" class="px-1.5 py-0.5 text-[10px] leading-none rounded-full bg-teal-400 text-slate-950 font-extrabold">0</span>
+          <span id="headerScrapeRulesBadge" class="absolute -top-1.5 -right-1.5 z-10 pointer-events-none px-1.5 py-0.5 text-[10px] leading-none rounded-full bg-teal-400 text-slate-950 font-extrabold shadow-sm">0</span>
         </button>
         <button id="btnOpenLinkRulesModal" class="hidden" aria-hidden="true"></button>
         <button id="btnQuickCloudPullHeader" class="hidden" aria-hidden="true">
@@ -3237,7 +3238,7 @@
         <div>
           <h3 class="text-base font-bold flex items-center gap-2 flex-wrap">
             <span>⚙️ 个性化与规则中心</span>
-            <span class="text-[11px] bg-amber-400 text-slate-950 font-extrabold px-2.5 py-0.5 rounded-full">v7.24.0 (Build 20261119.2300) · SemVer标准版本管理</span>
+            <span class="text-[11px] bg-amber-400 text-slate-950 font-extrabold px-2.5 py-0.5 rounded-full">v7.24.1 (Build 20261122.2342) · SemVer标准版本管理</span>
           </h3>
           <p class="text-xs text-emerald-200 mt-0.5">一站式归纳管理：8套主题皮肤与自定义调色盘 · 全系统选项名称/图标/注释自由修改 · 抓单自学习规则 · 454条超链接模板</p>
         </div>
@@ -3275,7 +3276,7 @@
         <div class="bg-gradient-to-r from-emerald-50 via-teal-50 to-amber-50 border-2 border-emerald-300 rounded-xl p-4 space-y-3">
           <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-emerald-200/80 pb-2.5">
             <div class="flex items-center gap-2 flex-wrap">
-              <span class="px-2.5 py-1 rounded-full bg-emerald-900 text-amber-300 font-extrabold text-xs font-mono">v7.24.0 (Build 20261119.2300)</span>
+              <span class="px-2.5 py-1 rounded-full bg-emerald-900 text-amber-300 font-extrabold text-xs font-mono">v7.24.1 (Build 20261122.2342)</span>
               <span class="font-extrabold text-slate-900 text-sm">严格执行的版本号规则（Semantic Versioning + Build Tag）</span>
             </div>
             <button type="button" id="btnJumpToLabelsTab" class="bg-white hover:bg-slate-50 text-emerald-900 border border-emerald-300 font-bold px-3 py-1.5 rounded-lg shadow-2xs transition text-xs shrink-0">
@@ -3288,11 +3289,16 @@
               <div class="lg:col-span-7 bg-white/95 rounded-xl p-3.5 border border-emerald-200 flex flex-col justify-between gap-2">
                 <div class="space-y-2">
                   <div class="flex items-center justify-between gap-2 flex-wrap">
-                    <div class="font-extrabold text-emerald-950">📌 当前正式稳定版本：<span class="font-mono text-emerald-700">v7.24.0 (Build 20261119.2300)</span></div>
+                    <div class="font-extrabold text-emerald-950">📌 当前正式稳定版本：<span class="font-mono text-emerald-700">v7.24.1 (Build 20261122.2342)</span></div>
                     <span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800 border border-emerald-200">单文件零构建 · KV兼容</span>
                   </div>
                   <div class="text-[11px] text-emerald-950 bg-emerald-50/70 border border-emerald-200/80 rounded-lg px-3 py-2 space-y-1">
-                    <div class="font-bold text-emerald-900">✨ v7.24.0 离线自动邮件/Webhook 推送 + 海关防撞车预警：</div>
+                    <div class="font-bold text-emerald-900">✨ v7.24.1 顶栏按钮零跳动（CLS 根治）小修复补丁：</div>
+                    <ul class="list-disc pl-4 space-y-0.5 text-slate-700 mb-1.5">
+                      <li><strong>角标右上角悬浮（0 宽度抖动）</strong>：将顶栏未读、提醒、体检、规则与待存角标改为绝对定位悬浮，加载前后按钮宽度零变化。</li>
+                      <li><strong>首帧同步定型</strong>：提前在首帧应用宽屏模式、取消 300ms 延迟角标跳变、收窄全局 <code class="font-mono bg-white px-1 rounded border">button</code> 过渡属性，彻底根治刷新时按钮条上窜下跳。</li>
+                    </ul>
+                    <div class="font-bold text-slate-700">📌 v7.24.0 离线自动邮件/Webhook 推送 + 海关防撞车预警：</div>
                     <ul class="list-disc pl-4 space-y-0.5 text-slate-700">
                       <li><strong>关掉网页也准时提醒（Cloudflare Cron + Resend）</strong>：新增离线推送配置台，支持收件邮箱、Webhook/Bark 推送地址、长时间未签收分级告警（14天常规/21天紧急）与每周日简报，并支持一键测试与导出 Worker 部署脚本。</li>
                       <li><strong>新增「🛂 海关防撞车预警」</strong>：自动监测同一收件人近 7 天内 ≥ 2 单寄回国在途，提醒错开发货避免同批查验或补税。</li>
@@ -3318,7 +3324,7 @@
                 <div class="bg-white/95 rounded-xl p-3.5 border border-amber-200 space-y-1.5 flex-1">
                   <div class="font-extrabold text-amber-950">🔄 未来热更新版本递增规则（固定规范）：</div>
                   <ul class="list-disc pl-4 space-y-1 text-[11px] text-slate-600">
-                    <li><strong>小修复（Patch）</strong>：微调排版、文案、公式或修 Bug 时递增修订号，如 <code class="font-mono font-bold text-slate-800">v7.24.1</code>；</li>
+                    <li><strong>小修复（Patch）</strong>：微调排版、文案、公式或修 Bug 时递增修订号，如 <code class="font-mono font-bold text-slate-800">v7.24.2</code>；</li>
                     <li><strong>新功能（Minor）</strong>：新增功能模块、看板、字体或架构内部优化（保持存储兼容）时递增次版本号，如 <code class="font-mono font-bold text-slate-800">v7.25.0</code>；</li>
                     <li><strong>架构级升级（Major）</strong>：切换底层存储引擎（如迁移至 D1/R2）或全局大改版时递增主版本号，如 <code class="font-mono font-bold text-slate-800">v8.0.0</code>。</li>
                   </ul>
@@ -4275,13 +4281,13 @@
     };
 
     // 版本号唯一来源：APP_VERSION + BUILD_TAG（CURRENT_SEMVER / CURRENT_BUILD_TAG 等冗余常量已删除）
-    const APP_VERSION = 'v7.24.0';
-    const BUILD_TAG = 'Build 20261119.2300';
+    const APP_VERSION = 'v7.24.1';
+    const BUILD_TAG = 'Build 20261122.2342';
     const APP_VERSION_LABEL = `${APP_VERSION} (${BUILD_TAG})`;
     console.info('%c[纽澳跨境采购与快递追踪管家] 当前正式稳定版本: ' + APP_VERSION_LABEL + ' | Semantic Versioning + Build Tag 已生效', 'background:#064e3b;color:#fde68a;padding:4px 10px;border-radius:6px;font-weight:bold;');
     const DEFAULT_UI_CUSTOM_LABELS = {
       appTitle: { icon: '', text: '纽澳跨境采购与快递追踪管家', note: '支持一单多包拆单追踪 · 采购单价与运费核算 · 电脑与手机多端同步', labelTitle: '系统主标题 & 副标题说明', group: 'header', emojiPresets: ['🇳🇿', '🦘', '🌿', '📦', '🛡️'] },
-      appVersion: { icon: '🚀', text: APP_VERSION_LABEL, note: '当前正式稳定版本：v7.24.0 (Build 20261119.2300)（1720px超宽视口零遮挡 · 明欢同款全局无衬线等宽数字字体 · 账单对齐与免微调箭头 · 冗余代码清理与性能优化）· 点击查看版本规则', labelTitle: '顶部版本号标识 (SemVer + Build Tag)', group: 'header', emojiPresets: ['🚀', '✨', '🏷️', '💎', '🔥'] },
+      appVersion: { icon: '🚀', text: APP_VERSION_LABEL, note: '当前正式稳定版本：v7.24.1 (Build 20261122.2342)（1720px超宽视口零遮挡 · 明欢同款全局无衬线等宽数字字体 · 账单对齐与免微调箭头 · 冗余代码清理与性能优化）· 点击查看版本规则', labelTitle: '顶部版本号标识 (SemVer + Build Tag)', group: 'header', emojiPresets: ['🚀', '✨', '🏷️', '💎', '🔥'] },
       btnNewOrder: { icon: '＋', text: '新增订单', note: '新建采购订单（内含网页粘贴自动填单 / 门店直购录入 / 复制上一单）', labelTitle: '顶部按钮 1：新增订单', group: 'topbar', emojiPresets: ['＋', '🛒', '✍️', '⚡', '🛍️'] },
       btnBatchImport: { icon: '📥', text: '智能导单', note: '专用于导入新采购订单：Excel表格差异导入 / 网页订单粘贴解析 / 浏览器抓单小书签', labelTitle: '顶部按钮 2：智能导单', group: 'topbar', emojiPresets: ['📥', '📂', '📊', '⚡', '📑'] },
       btnSyncBackup: { icon: '☁️', text: '云端与备份', note: '专用于多端云同步与备份：Cloudflare KV 实时云同步 / 历史时间机器回滚 / 本地 JSON 备份包', labelTitle: '顶部按钮 3：云端与备份', group: 'topbar', emojiPresets: ['☁️', '🔄', '📲', '💾', '🛡️'] },
@@ -28510,12 +28516,10 @@ export async function onRequestPost(context) {
 
       // Run initial badge updates cleanly after page init
       registerAppBootTask('stage_12', () => {
-        setTimeout(() => {
-          window.updateGoodPriceHitBadgeCount();
-          computeDataHealthReport();
-        }, 300);
+        window.updateGoodPriceHitBadgeCount();
+        computeDataHealthReport();
       });
-      console.log('🚀 纽澳跨境采购与快递追踪管家 v7.24.0 (Build 20261119.2300) 已就绪 · 12项Bug已修复 · ⌘K速查 & 🩺健康体检已激活');
+      console.log('🚀 纽澳跨境采购与快递追踪管家 v7.24.1 (Build 20261122.2342) 已就绪 · 12项Bug已修复 · ⌘K速查 & 🩺健康体检已激活');
     })();
 
   
@@ -29170,7 +29174,7 @@ export async function onRequestPost(context) {
         });
       });
 
-      setTimeout(() => computeAllSmartReminders(), 350);
+      computeAllSmartReminders();
     });
 
 
